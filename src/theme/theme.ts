@@ -23,7 +23,7 @@ export const CotatoLightTheme = {
     },
     // gray //
     gray5: '#F4F4F4',
-    gray10: 'EEEDEC',
+    gray10: '#EEEDEC',
     gray20: '#DFDDDA',
     gray30: '#C6C4C1',
     gray40: '#AAA9A6',
@@ -104,6 +104,9 @@ export const CotatoLightTheme = {
   },
 };
 
+/**
+ * Will be updated soon
+ */
 export const CotatoDarkTheme = {
   colors: {
     common: {
@@ -112,7 +115,7 @@ export const CotatoDarkTheme = {
     },
     // gray //
     gray5: '#F4F4F4',
-    gray10: 'EEEDEC',
+    gray10: '#EEEDEC',
     gray20: '#DFDDDA',
     gray30: '#C6C4C1',
     gray40: '#AAA9A6',
