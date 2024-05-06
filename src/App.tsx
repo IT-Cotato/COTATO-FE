@@ -18,14 +18,14 @@ import HomeHeader from '@components/HomeHeader';
 import CSPage from '@pages/CS/CSPage';
 import fetchUserData from '@utils/fetchUserData';
 import { ThemeProvider } from 'styled-components';
-import { LegacyTheme } from '@theme/theme';
+import { CotatoLightTheme } from '@theme/theme';
 
 function App() {
   const location = useLocation();
   const { data: userData } = fetchUserData();
   return (
     <div className="App">
-      <ThemeProvider theme={LegacyTheme}>
+      <ThemeProvider theme={CotatoLightTheme}>
         <GlobalStyle />
         <div className="wrapper">
           <div className="contentWrapper">
