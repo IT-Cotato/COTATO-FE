@@ -149,8 +149,8 @@ const InputBox = styled.input<{ filled: boolean }>`
   width: 60px;
   height: 60px;
   border-radius: 20px;
-  border: 1px solid ${({ theme }) => theme.color.darkGrey};
-  ${({ filled, theme }) => filled && `border: 3px solid` + theme.color.lightBlue};
+  border: 1px solid #7b7b7b;
+  ${({ filled }) => filled && `border: 3px solid` + '#D2E0FB'};
   border-radius: 16px;
   background: #fff;
   text-align: center;
