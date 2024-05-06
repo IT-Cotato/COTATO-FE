@@ -49,7 +49,7 @@ const Footer = () => {
 export default Footer;
 
 const Wrapper = styled.div<{ totalHeight: number }>`
-  background-color: ${({ theme }) => theme.color.lightBlue};
+  background-color: #d2e0fb;
   width: 100%;
   height: 472px;
   padding: 120px 200px 60px 200px;
