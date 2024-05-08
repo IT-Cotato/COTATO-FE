@@ -13,7 +13,7 @@ export const media = {
   /**
    * 400px 이하, 대부분의 모바일 환경에 적용
    */
-  xs: (...args) => css`
+  mobile: (...args) => css`
     @media (max-width: ${device.mobile}) {
       ${css(...args)};
     }
@@ -21,7 +21,7 @@ export const media = {
   /**
    * 576px 이하, 모바일 landscape 환경
    */
-  sm: (...args) => css`
+  landscape: (...args) => css`
     @media (max-width: ${device.landscape}) {
       ${css(...args)};
     }
@@ -29,7 +29,7 @@ export const media = {
   /**
    * 768px 이하
    */
-  md: (...args) => css`
+  tablet: (...args) => css`
     @media (max-width: ${device.tablet}) {
       ${css(...args)};
     }
@@ -37,7 +37,7 @@ export const media = {
   /**
    * 1024px 이하
    */
-  lg: (...args) => css`
+  laptop: (...args) => css`
     @media (max-width: ${device.laptop}) {
       ${css(...args)};
     }
@@ -45,7 +45,7 @@ export const media = {
   /**
    * 1280px 이하
    */
-  xl: (...args) => css`
+  desktop: (...args) => css`
     @media (max-width: ${device.desktop}) {
       ${css(...args)};
     }
@@ -53,7 +53,7 @@ export const media = {
   /**
    * 1440px 이하
    */
-  xxl: (...args) => css`
+  wide: (...args) => css`
     @media (max-width: ${device.wide}) {
       ${css(...args)};
     }
