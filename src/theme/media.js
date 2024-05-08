@@ -2,11 +2,11 @@ import { css } from 'styled-components';
 
 const device = {
   xs: '400px',
-  sm: '600px',
-  md: '900px',
-  lg: '1280px',
-  xl: '1440px',
-  xxl: '1920px',
+  sm: '576px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+  xxl: '1440px',
 };
 
 export const media = {
@@ -19,7 +19,7 @@ export const media = {
     }
   `,
   /**
-   * 600px 이하, 모바일 landscape 환경
+   * 576px 이하, 모바일 landscape 환경
    */
   sm: (...args) => css`
     @media (max-width: ${device.sm}) {
@@ -27,7 +27,7 @@ export const media = {
     }
   `,
   /**
-   * 900px 이하
+   * 768px 이하
    */
   md: (...args) => css`
     @media (max-width: ${device.md}) {
@@ -35,7 +35,7 @@ export const media = {
     }
   `,
   /**
-   * 1280px 이하
+   * 1024px 이하
    */
   lg: (...args) => css`
     @media (max-width: ${device.lg}) {
@@ -43,7 +43,7 @@ export const media = {
     }
   `,
   /**
-   * 1440px 이하
+   * 1280px 이하
    */
   xl: (...args) => css`
     @media (max-width: ${device.xl}) {
@@ -51,7 +51,7 @@ export const media = {
     }
   `,
   /**
-   * 1920px 이하
+   * 1440px 이하
    */
   xxl: (...args) => css`
     @media (max-width: ${device.xxl}) {
