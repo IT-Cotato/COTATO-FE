@@ -1,3 +1,18 @@
+/**
+ * You can use this like...
+ * 
+ * const StyledComponent = styled.div`
+  color: ${({ theme }) => theme.colors.gray80};
+  `;
+ *
+ * In media query with `media.js` like this 
+ *   ${media.md`
+ *   width: 500px;
+ *   background-size: 500px 100px;
+ *   color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.secondary5};
+ *   `}
+ */
+
 export const LegacyTheme = {
   color: {
     white: '#FFFFFF',
@@ -194,5 +209,6 @@ export const CotatoDarkTheme = {
 };
 
 export type LegacyThemeType = typeof LegacyTheme;
+export type CotatoThemeType = typeof CotatoLightTheme;
 export type CotatoLightThemeType = typeof CotatoLightTheme;
 export type CotatoDarkThemeType = typeof CotatoDarkTheme;
