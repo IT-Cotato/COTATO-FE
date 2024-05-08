@@ -9,6 +9,7 @@ import JoinHover from '@assets/join_us_hover.svg';
 import JoinPressed from '@assets/join_us_pressed.svg';
 import styled from 'styled-components';
 import HomeFirstSectionCotato from './HomeFirstSectionCotato';
+import { media } from '@theme/media';
 
 //
 //
@@ -23,6 +24,12 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: flex-start;
   font-family: 'Ycomputer';
+  ${media.lg`
+    padding: 2rem 5rem;
+  `}
+  ${media.md`
+    padding: 2rem 0rem;
+  `}
 `;
 
 const StyledTitleDiv = styled.div`
@@ -70,6 +77,16 @@ const HomeSloganImgDiv = styled.div`
       display: inline-block;
     }
   }
+
+  ${media.md`
+    width: 500px;
+    background-size: 500px 100px;
+  `}
+  ${media.sm`
+    width: 300px;
+    background-size: 300px 100px;
+    // TODO: add font-size, margins
+  `}
 
   @keyframes anim__spring__hover {
     0% {

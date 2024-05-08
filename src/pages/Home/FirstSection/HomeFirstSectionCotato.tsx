@@ -8,6 +8,7 @@ import HoverC from '@assets/C_hover.svg';
 import HoverO from '@assets/O_hover.svg';
 import HoverT from '@assets/T_hover.svg';
 import HoverA from '@assets/A_hover.svg';
+import { media } from '@theme/media';
 
 //
 //
@@ -92,6 +93,47 @@ const Character = styled.div<CharacterProps>`
       transform: scaleY(1);
     }
   }
+  ${media.lg`
+    width: 105px;
+    height: 140px;
+    background-size: 105px 105px;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+    &:hover {
+      height: 200px;
+      background-size: 180px 200px;
+    }
+  `}
+
+  ${media.md`
+    width: 90px;
+    height: 120px;
+    background-size: 90px 90px;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    &:hover {
+      height: 180px;
+      background-size: 150px 180px;
+    }
+  `}
+  ${media.sm`
+    width: 75px;
+    height: 100px;
+    background-size: 75px 75px;
+    &:hover {
+      height: 150px;
+      background-size: 120px 150px;
+    }
+  `}
+  ${media.xs`
+    width: 60px;
+    height: 80px;
+    background-size: 60px 60px;
+    &:hover {
+      height: 120px;
+      background-size: 90px 120px;
+    }
+  `}
 `;
 
 //
@@ -113,7 +155,7 @@ const HomeFirstSectionCotato = () => {
       <DefaultCharacter src={DefaultO} hoversrc={HoverO} margin="30px 0 0 30px" />
       <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="60px 0 0 0" scale={1.3} />
       <DefaultCharacter src={DefaultA} hoversrc={HoverA} margin="140px 0 0 0" />
-      <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="0 0 0 0" scale={1.3} />
+      <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="20px 0 0 0" scale={1.3} />
       <DefaultCharacter src={DefaultO} hoversrc={HoverO} margin="120px 0 0 0" />
     </Wrapper>
   );
