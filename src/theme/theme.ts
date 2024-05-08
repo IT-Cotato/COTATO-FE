@@ -6,7 +6,7 @@
   `;
  *
  * In media query with `media.js` like this 
- *   ${media.md`
+ *   ${media.mobile`
  *   width: 500px;
  *   background-size: 500px 100px;
  *   color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.secondary5};

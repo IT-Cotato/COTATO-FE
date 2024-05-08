@@ -1,12 +1,12 @@
 import { css } from 'styled-components';
 
 const device = {
-  xs: '400px',
-  sm: '576px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1280px',
-  xxl: '1440px',
+  mobile: '400px',
+  landscape: '576px',
+  tablet: '768px',
+  laptop: '1024px',
+  desktop: '1280px',
+  wide: '1440px',
 };
 
 export const media = {
@@ -14,7 +14,7 @@ export const media = {
    * 400px 이하, 대부분의 모바일 환경에 적용
    */
   xs: (...args) => css`
-    @media (max-width: ${device.xs}) {
+    @media (max-width: ${device.mobile}) {
       ${css(...args)};
     }
   `,
@@ -22,7 +22,7 @@ export const media = {
    * 576px 이하, 모바일 landscape 환경
    */
   sm: (...args) => css`
-    @media (max-width: ${device.sm}) {
+    @media (max-width: ${device.landscape}) {
       ${css(...args)};
     }
   `,
@@ -30,7 +30,7 @@ export const media = {
    * 768px 이하
    */
   md: (...args) => css`
-    @media (max-width: ${device.md}) {
+    @media (max-width: ${device.tablet}) {
       ${css(...args)};
     }
   `,
@@ -38,7 +38,7 @@ export const media = {
    * 1024px 이하
    */
   lg: (...args) => css`
-    @media (max-width: ${device.lg}) {
+    @media (max-width: ${device.laptop}) {
       ${css(...args)};
     }
   `,
@@ -46,7 +46,7 @@ export const media = {
    * 1280px 이하
    */
   xl: (...args) => css`
-    @media (max-width: ${device.xl}) {
+    @media (max-width: ${device.desktop}) {
       ${css(...args)};
     }
   `,
@@ -54,7 +54,7 @@ export const media = {
    * 1440px 이하
    */
   xxl: (...args) => css`
-    @media (max-width: ${device.xxl}) {
+    @media (max-width: ${device.wide}) {
       ${css(...args)};
     }
   `,
