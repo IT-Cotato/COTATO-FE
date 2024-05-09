@@ -1,60 +1,60 @@
 import { css } from 'styled-components';
 
 const device = {
-  xs: '400px',
-  sm: '600px',
-  md: '900px',
-  lg: '1280px',
-  xl: '1440px',
-  xxl: '1920px',
+  mobile: '400px',
+  landscape: '576px',
+  tablet: '768px',
+  laptop: '1024px',
+  desktop: '1280px',
+  wide: '1440px',
 };
 
 export const media = {
   /**
    * 400px 이하, 대부분의 모바일 환경에 적용
    */
-  xs: (...args) => css`
-    @media (max-width: ${device.xs}) {
+  mobile: (...args) => css`
+    @media (max-width: ${device.mobile}) {
       ${css(...args)};
     }
   `,
   /**
-   * 600px 이하, 모바일 landscape 환경
+   * 576px 이하, 모바일 landscape 환경
    */
-  sm: (...args) => css`
-    @media (max-width: ${device.sm}) {
+  landscape: (...args) => css`
+    @media (max-width: ${device.landscape}) {
       ${css(...args)};
     }
   `,
   /**
-   * 900px 이하
+   * 768px 이하
    */
-  md: (...args) => css`
-    @media (max-width: ${device.md}) {
+  tablet: (...args) => css`
+    @media (max-width: ${device.tablet}) {
+      ${css(...args)};
+    }
+  `,
+  /**
+   * 1024px 이하
+   */
+  laptop: (...args) => css`
+    @media (max-width: ${device.laptop}) {
       ${css(...args)};
     }
   `,
   /**
    * 1280px 이하
    */
-  lg: (...args) => css`
-    @media (max-width: ${device.lg}) {
+  desktop: (...args) => css`
+    @media (max-width: ${device.desktop}) {
       ${css(...args)};
     }
   `,
   /**
    * 1440px 이하
    */
-  xl: (...args) => css`
-    @media (max-width: ${device.xl}) {
-      ${css(...args)};
-    }
-  `,
-  /**
-   * 1920px 이하
-   */
-  xxl: (...args) => css`
-    @media (max-width: ${device.xxl}) {
+  wide: (...args) => css`
+    @media (max-width: ${device.wide}) {
       ${css(...args)};
     }
   `,
