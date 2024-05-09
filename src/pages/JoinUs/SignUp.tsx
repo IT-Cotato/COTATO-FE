@@ -365,7 +365,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   font-size: 0.8rem;
   font-weight: 300;
   border-radius: 8px;
-  background: ${({ theme }) => theme.color.green};
+  background: #85c88a;
   color: #fff;
   border: none;
   position: absolute;
@@ -375,7 +375,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   ${(props) =>
     props.disable &&
     `
-    background: ${props.theme.color.lightGreen};
+    background: #D7E5CA;
     pointer-events: none;
     cursor: default;
   `}

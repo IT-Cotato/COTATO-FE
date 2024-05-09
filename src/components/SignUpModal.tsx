@@ -32,7 +32,7 @@ const Container = styled.div`
   justify-content: center;
   background-color: #fff;
   border-radius: 20px;
-  border: 2px solid ${({ theme }) => theme.color.darkGrey};
+  border: 2px solid #7b7b7b;
   img {
     width: 68px;
     margin-bottom: 28px;
@@ -46,7 +46,7 @@ const Container = styled.div`
     margin-top: 0;
   }
   p {
-    color: ${({ theme }) => theme.color.darkGrey};
+    color: #7b7b7b;
     font-family: NanumSquareRound;
     font-size: 0.9rem;
     font-weight: 400;
@@ -58,7 +58,7 @@ const Container = styled.div`
     font-weight: 400;
     border-radius: 12px;
     margin-top: 28px;
-    background-color: ${({ theme }) => theme.color.green};
+    background-color: #85c88a;
     color: #fff;
     font-family: NanumSquareRound;
     border: none;

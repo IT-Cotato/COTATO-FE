@@ -794,7 +794,7 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
       }
     }
     button:last-child {
-      background: ${props.theme.color.lightGrey};
+      background: #CECCCC;
       &:hover {
         cursor: default;
     }
