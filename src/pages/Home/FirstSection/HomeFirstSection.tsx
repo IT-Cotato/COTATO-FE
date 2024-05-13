@@ -24,10 +24,10 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: flex-start;
   font-family: 'Ycomputer';
-  ${media.lg`
+  ${media.laptop`
     padding: 2rem 5rem;
   `}
-  ${media.md`
+  ${media.tablet`
     padding: 2rem 0rem;
   `}
 `;
@@ -78,11 +78,11 @@ const HomeSloganImgDiv = styled.div`
     }
   }
 
-  ${media.md`
+  ${media.landscape`
     width: 500px;
     background-size: 500px 100px;
   `}
-  ${media.sm`
+  ${media.mobile`
     width: 300px;
     background-size: 300px 100px;
     // TODO: add font-size, margins

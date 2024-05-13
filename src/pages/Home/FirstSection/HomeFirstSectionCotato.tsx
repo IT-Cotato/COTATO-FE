@@ -93,7 +93,7 @@ const Character = styled.div<CharacterProps>`
       transform: scaleY(1);
     }
   }
-  ${media.lg`
+  ${media.laptop`
     width: 105px;
     height: 140px;
     background-size: 105px 105px;
@@ -105,7 +105,7 @@ const Character = styled.div<CharacterProps>`
     }
   `}
 
-  ${media.md`
+  ${media.tablet`
     width: 90px;
     height: 120px;
     background-size: 90px 90px;
@@ -116,7 +116,7 @@ const Character = styled.div<CharacterProps>`
       background-size: 150px 180px;
     }
   `}
-  ${media.sm`
+  ${media.landscape`
     width: 75px;
     height: 100px;
     background-size: 75px 75px;
@@ -125,7 +125,7 @@ const Character = styled.div<CharacterProps>`
       background-size: 120px 150px;
     }
   `}
-  ${media.xs`
+  ${media.mobile`
     width: 60px;
     height: 80px;
     background-size: 60px 60px;
