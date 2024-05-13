@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     padding: 2rem 5rem;
   `}
   ${media.tablet`
-    padding: 2rem 0rem;
+    padding: 4rem 0rem;
   `}
 `;
 
@@ -40,6 +40,9 @@ const StyledTitleDiv = styled.div`
   height: fit-content;
   color: ${({ theme }) => theme.colors.gray80};
   margin-top: 1rem;
+  ${media.landscape`
+    margin-top: 0;
+  `}
 `;
 
 const HomeSlogan = styled.div`
@@ -50,6 +53,9 @@ const HomeSlogan = styled.div`
   width: 100%;
   margin-top: 1rem;
   cursor: pointer;
+  ${media.landscape`
+    margin-top: 0;
+  `}
 `;
 
 const HomeSloganImgDiv = styled.div`
@@ -79,13 +85,15 @@ const HomeSloganImgDiv = styled.div`
   }
 
   ${media.landscape`
-    width: 500px;
-    background-size: 500px 100px;
+    width: 400px;
+    background-size: 400px 100px;
+    height: 5rem;
+    align-items: center;
   `}
+
   ${media.mobile`
     width: 300px;
     background-size: 300px 100px;
-    // TODO: add font-size, margins
   `}
 
   @keyframes anim__spring__hover {
@@ -142,6 +150,17 @@ const HomeSloganText = styled.div`
     }
     letter-spacing: ${({ theme }) => theme.size.sm};
   }
+
+  ${media.landscape`
+  font-size: 0.5rem;
+  margin-bottom: 0.75rem;
+  `}
+
+  ${media.mobile`
+    width: 350px;
+    background-size: 350px 100px;
+    text-align: center;
+  `}
 `;
 
 const FryDiv = styled.div`
@@ -151,6 +170,9 @@ const FryDiv = styled.div`
   width: 100%;
   height: 100%;
   margin-top: 1rem;
+  ${media.landscape`
+    margin-top: 0;
+  `}
 `;
 
 const StyledFries = styled.div`
@@ -184,6 +206,11 @@ const StyledFries = styled.div`
       transform: rotate(0deg);
     }
   }
+
+  ${media.landscape`
+    width: 15rem;
+    height: 25rem;    
+  `}
 `;
 
 const StyledJoinDiv = styled.div`
@@ -216,6 +243,11 @@ const StyledJoin = styled.div`
     background-size: contain;
     background-position-y: bottom;
   }
+
+  ${media.landscape`
+    width: 10rem;
+    height: 8rem;
+  `}
 `;
 
 //

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import DefaultC from '@assets/C.svg';
 import DefaultO from '@assets/O.svg';
-import DefaultT from '@assets/T.svg';
+import DefaultT from '@assets/T2.svg';
 import DefaultA from '@assets/A.svg';
 import HoverC from '@assets/C_hover.svg';
 import HoverO from '@assets/O_hover.svg';
@@ -36,6 +36,13 @@ const Wrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   margin-top: 50px;
+  ${media.tablet`
+    margin-top: 20px;
+  `}
+  ${media.landscape`
+    margin-top: 0px;
+    transform: translate(-50%, -50%);
+  `}
 `;
 
 const Character = styled.div<CharacterProps>`
@@ -101,7 +108,7 @@ const Character = styled.div<CharacterProps>`
     margin-right: 5px !important;
     &:hover {
       height: 200px;
-      background-size: 180px 200px;
+      background-size: 180px 200px;      
     }
   `}
 
