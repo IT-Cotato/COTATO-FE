@@ -244,7 +244,7 @@ const ResultWrapper = styled.div`
     margin-bottom: 84px;
     text-align: center;
     span {
-      color: ${({ theme }) => theme.color.green};
+      color: #85c88a;
     }
   }
 `;

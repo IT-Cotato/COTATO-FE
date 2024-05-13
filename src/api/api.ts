@@ -24,12 +24,10 @@ let isRefreshing = false;
 
 api.interceptors.response.use(
   (res) => res,
-  // response 에러 처리
   async (error) => {
     const { config, response } = error;
 
-    // 토큰 만료
-    if (response.status === 401 && response.data.errorCode === 'TOKEN_EXPIRED') {
+    if (response.data.code === 'T-001') {
       if (!isRefreshing) {
         isRefreshing = true;
 
@@ -38,7 +36,6 @@ api.interceptors.response.use(
           config.headers.Authorization = `Bearer ${response.data.accessToken}`;
           localStorage.setItem('token', response.data.accessToken);
 
-          // queue에 쌓인 요청들을 다시 보냄
           refreshAndRetryQueue.forEach(({ config, resolve, reject }) => {
             api
               .request(config)
