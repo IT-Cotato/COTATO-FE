@@ -16,7 +16,7 @@ const HomeSecondSection = () => {
     pauseOnHover: true,
     slidesToShow: 4,
     slidesToScroll: 1,
-    // draggable: false,
+    draggable: false,
     initialSlide: 1,
     variableWidth: true,
   };
@@ -58,6 +58,10 @@ const Wrapper = styled.section`
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+  .slick-slider {
+    height: 400px;
+    margin-left: 200px;
+  }
 `;
 
 const Title = styled.div`
