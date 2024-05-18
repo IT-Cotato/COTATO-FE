@@ -150,7 +150,7 @@ const LoginButton = styled.button`
   height: 52px;
   border-radius: 10px;
   border: 1px solid #d7e5ca;
-  background: ${({ theme }) => theme.color.lightGreen};
+  background: #d7e5ca;
   margin-top: 48px;
   font-size: 1.1rem;
   font-weight: 400;
@@ -193,7 +193,7 @@ const LinkContainer = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  color: ${({ theme }) => theme.color.grey};
+  color: #5e5e5e;
   text-align: center;
   text-decoration: none;
   font-size: 0.9rem;
