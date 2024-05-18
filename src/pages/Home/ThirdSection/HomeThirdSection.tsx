@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import image from '@assets/section3.svg';
 
 const HomeThirdSection = () => {
   return (
     <Wrapper>
-      <img src="https://raw.githubusercontent.com/MinJaeSon/assets/e46458def78fa241b52db612b70760c78fd62bc3/section3.svg" />
+      <img src={image} />
     </Wrapper>
   );
 };
@@ -18,6 +19,6 @@ const Wrapper = styled.section`
   justify-content: center;
   align-items: center;
   img {
-    width: 1000px;
+    width: 700px;
   }
 `;
