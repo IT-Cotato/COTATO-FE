@@ -28,6 +28,7 @@ const DescriptionWrapper = styled.div`
 
 const MainText = styled.span`
   font-family: Ycomputer;
+  color: ${({ theme }) => theme.colors.gray80};
 
   &.md {
     font-size: ${({ theme }) => theme.fontSize.md};
@@ -45,7 +46,12 @@ const SubTextContainer = styled.div`
   > p {
     font-family: Ycomputer;
     font-size: ${({ theme }) => theme.fontSize.md};
+    color: ${({ theme }) => theme.colors.gray80};
     line-height: 180%;
+
+    > a {
+      color: ${({ theme }) => theme.colors.gray80};
+    }
   }
 `;
 
@@ -73,7 +79,9 @@ const Footer = () => {
           <MainText className="md">코테이토</MainText>
         </p>
         <SubTextContainer>
-          <p>E-mail. itcotato@gmail.com</p>
+          <p>
+            E-mail. <a href="mailto:itcotato@gmail.com">itcotato@gmail.com</a>
+          </p>
           <p>© Cotato. 2024 All rights reserved. | 대학생 IT 연합 동아리 코테이토</p>
           <p>Cotato 2024 HomePage v1.0</p>
         </SubTextContainer>
