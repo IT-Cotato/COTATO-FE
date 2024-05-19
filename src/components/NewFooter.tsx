@@ -26,9 +26,15 @@ const DescriptionWrapper = styled.div`
   gap: 1.6rem;
 `;
 
-const MainText = styled.p`
+const MainText = styled.span`
   font-family: Ycomputer;
-  font-size: ${({ theme }) => theme.fontSize.lg};
+
+  &.md {
+    font-size: ${({ theme }) => theme.fontSize.md};
+  }
+  &.lg {
+    font-size: ${({ theme }) => theme.fontSize.lg};
+  }
 `;
 
 const SubTextContainer = styled.div`
@@ -61,7 +67,11 @@ const Footer = () => {
   const renderDescription = useCallback(
     () => (
       <DescriptionWrapper>
-        <MainText>Cotato 코테이토</MainText>
+        <p>
+          <MainText className="lg">Cotato</MainText>
+          &nbsp; &nbsp;
+          <MainText className="md">코테이토</MainText>
+        </p>
         <SubTextContainer>
           <p>E-mail. itcotato@gmail.com</p>
           <p>© Cotato. 2024 All rights reserved. | 대학생 IT 연합 동아리 코테이토</p>
