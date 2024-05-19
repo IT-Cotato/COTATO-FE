@@ -1,16 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import image from '@assets/section3.svg';
+import { ReactComponent as ClubMembers } from '@assets/home_section3.svg';
+
+//
+//
+//
 
 const HomeThirdSection = () => {
   return (
     <Wrapper>
-      <img src={image} />
+      <ClubMembers style={{ width: '700px' }} />
     </Wrapper>
   );
 };
 
 export default HomeThirdSection;
+
+//
+//
+//
 
 const Wrapper = styled.section`
   width: 100%;
@@ -18,7 +26,4 @@ const Wrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  img {
-    width: 700px;
-  }
 `;
