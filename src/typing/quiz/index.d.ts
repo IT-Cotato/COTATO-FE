@@ -1,19 +1,53 @@
-export interface ChoiceInfo {
+export interface ChoiceRequestType {
+  content: string;
+  number: number;
+  isAnswer: string;
+}
+
+export interface MultipleQuizRequestType {
+  number: number;
+  question: string;
+  image: string;
+  choices: ChoiceRequestType[];
+}
+
+export interface ShortAnswerRequestType {
+  answer: string;
+}
+
+export interface ShortQuizRequestType {
+  number: number;
+  question: string;
+  image: string;
+  shortAnswer: ShortAnswerRequestType[];
+}
+
+export interface QuizzesRequestType {
+  multiples: MultipleQuizRequestType[];
+  shortQuizzes: ShortQuizRequestType[];
+}
+
+/**
+ * @api {post} /v1/api/quiz/adds?educationId=상수
+ */
+export type PostV1ApiQuizAddsRequest = QuizzesRequestType;
+
+export interface ChoiceResponseType {
   choiceId: number;
   number: number;
   content: string;
   isCorrect: string;
 }
 
-export interface MultipleQuizInfo {
+export interface MultipleQuizResponseType {
   id: number;
   number: number;
   question: string;
   image: string;
-  choices: ChoiceInfo[];
+  choices: ChoiceResponseType[];
 }
 
-export interface ShortAnswerInfo {
+export interface ShortAnswerResponseType {
   answer: string;
 }
 
@@ -22,18 +56,18 @@ export interface ShortQuizInfo {
   number: number;
   question: string;
   image: string;
-  shortAnswer: ShortAnswerInfo[];
+  shortAnswer: ShortAnswerResponseType[];
 }
 
-export interface AllQuizzes {
-  multiples: MultipleQuizInfo[];
-  shortQuizzes: ShortQuizInfo[];
+export interface QuizzesResposeType {
+  multiples: MultipleQuizResponseType[];
+  shortQuizzes: ShortAnswerResponseType[];
 }
 
 /**
  * @api {get} /v1/api/quiz/all?educationId={educationId}
  */
-export type GetV1ApiQuizAllResponse = AllQuizzes;
+export type GetV1ApiQuizAllResponse = QuizzesResposeType;
 
 /**
  * @api {get} /v1/api/quiz/{quizId}
@@ -66,6 +100,14 @@ export interface QuizResultInfo {
   scoreId: number;
   scorerName: string;
   backFourNumber: string;
+}
+
+/**
+ * @api {post} /v1/api/quiz/cs-admin/answer/add
+ */
+export interface PostV1QuizCsAdminAnswerAddRequest {
+  quizId: number;
+  answer: string;
 }
 
 /**
