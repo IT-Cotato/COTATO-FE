@@ -12,5 +12,5 @@ import { CotatoThemeType } from './theme';
  * Will be replaced this in v2.
  */
 declare module 'styled-components' {
-  export interface DefaultTheme extends CotatoLightThemeType, CotatoDarkThemeType {}
+  export interface DefaultTheme extends CotatoThemeType {}
 }
