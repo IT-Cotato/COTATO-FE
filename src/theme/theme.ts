@@ -35,6 +35,7 @@ export const CotatoLightTheme = {
     common: {
       white: '#FFFFFF',
       black: '#000000',
+      black_white_white: '#FAFAFA',
     },
     // gray //
     gray5: '#F4F4F4',
