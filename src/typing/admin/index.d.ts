@@ -18,6 +18,31 @@ export type GetV1ApiAdminApplicantsResponse = ApplyMemberInfo[];
 export type GetV1ApiAdminRejectApplicantsResponse = ApplyMemberInfo[];
 
 /**
+ * @api {patch} /v1/api/admin/approve
+ */
+export interface PatchV1ApiAdminApproveRequest {
+  memberId: number;
+  position: string;
+  generationId: number;
+}
+
+/**
+ * @api {patch} /v1/api/admin/reject
+ */
+export interface PatchV1ApiAdminRejectRequest {
+  memberId: number;
+}
+
+/**
+ * @api {patch} /v1/api/admin/reapprove
+ */
+export interface PatchV1ApiAdminReapproveRequest {
+  memberId: number;
+  position: string;
+  generationId: number;
+}
+
+/**
  * @api {get} /v1/api/admin/active-members
  */
 export interface GetV1ApiAdminActiveMembersResponse {
@@ -29,6 +54,21 @@ export interface GetV1ApiAdminActiveMembersResponse {
 }
 
 /**
+ * @api {patch} /v1/api/admin/active-members/role
+ */
+export interface GetV1ApiAdminActiveMembersRoleRequest {
+  memberId: number;
+  role: string;
+}
+
+/**
+ * @api {patch} /v1/api/admin/active-members/to-old-members
+ */
+export interface PatchV1ApiAdminActiveMembersToOldMembersRequest {
+  memberIds: number[];
+}
+
+/**
  * @api {get} /v1/api/admin/old-members
  */
 export interface GetV1ApiAdminOldMembersResponse {
@@ -37,4 +77,11 @@ export interface GetV1ApiAdminOldMembersResponse {
   position: string;
   generationNumber: number;
   role: string;
+}
+
+/**
+ * @api {patch} /v1/api/admin/old-members/role
+ */
+export interface GetV1ApiAdminOldMembersRoleRequest {
+  memberId: number;
 }

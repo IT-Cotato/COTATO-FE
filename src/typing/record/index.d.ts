@@ -1,8 +1,22 @@
 /**
  * @api {post} /api/v1/record/reply
  */
+export interface PostV1ApiRecordReplyRequest {
+  quizId: number;
+  memberId: number;
+  input: string;
+}
+
 export interface PostV1ApiRecordReplyResponse {
   result: boolean;
+}
+
+/**
+ * @api {post} /v1/api/record/regrade
+ */
+export interface PostV1ApiRecordRegradeRequest {
+  quizId: number;
+  newAnswer: string;
 }
 
 export interface RecordInfo {

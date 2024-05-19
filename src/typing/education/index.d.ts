@@ -1,6 +1,12 @@
 /**
  * @api {post} /v1/api/education/add
  */
+export interface PostV1ApiEducationAddRequest {
+  subject: string;
+  sessionId: number;
+  educationNum: number;
+}
+
 export interface PostV1ApiEducationAddResponse {
   education: number;
 }
@@ -10,6 +16,23 @@ export interface PostV1ApiEducationAddResponse {
  */
 export interface GetV1ApiEducationStatusResponse {
   status: string;
+}
+
+/**
+ * @api {patch} /v1/api/education/status
+ */
+export interface PatchV1ApiEducationStatusRequest {
+  educationId: number;
+  status: string;
+}
+
+/**
+ * @api {patch} /v1/api/education
+ */
+export interface PatchV1ApiEducationRequest {
+  educationId: number;
+  newSubject: string;
+  newNumber: number;
 }
 
 export interface EducationInfo {
