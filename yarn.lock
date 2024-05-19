@@ -9846,6 +9846,11 @@ svgo@^2.7.0:
     picocolors "^1.0.0"
     stable "^0.1.8"
 
+swiper@^11.1.2:
+  version "11.1.2"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.1.2.tgz#f16f198aa14f9975eb184772b1c73e874e62e6d2"
+  integrity sha512-09Dw9Ek/AwYYh0mmNn+THKPIWZpX0dPUOiTGl9TGsG93WISLMA6V9Obsn/53L1whePWo3gBYfb7fjwUslJbhQA==
+
 swr@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/swr/-/swr-2.2.4.tgz#03ec4c56019902fbdc904d78544bd7a9a6fa3f07"
