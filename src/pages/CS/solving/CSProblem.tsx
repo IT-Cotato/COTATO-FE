@@ -16,8 +16,6 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
-import { set } from 'date-fns';
-import BgWinner from './BgWinner';
 
 type Problem = {
   id: number; // 문제의 PK
@@ -58,17 +56,17 @@ const CSProblem: React.FC<CSProblemProps> = ({
     console.log('data is undefined');
   }
 
-  const [showHeader, setShowHeader] = useState(false);
+  const [showHeader, setShowHeader] = useState<boolean>(false);
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
-  const [biggerImg, setBiggerImg] = useState(false);
-  const [selectNum, setSelectNum] = useState(0);
+  const [biggerImg, setBiggerImg] = useState<boolean>(false);
+  const [selectNum, setSelectNum] = useState<number>(0);
   const [selected, setSelected] = useState<string[]>([]); // 최종적으로 선택한 선지번호 리스트
-  const [shortAns, setShortAns] = useState('');
-  const [showCorrect, setShowCorrect] = useState(false);
-  const [showIncorrect, setShowIncorrect] = useState(false);
-  const [showExplaination, setShowExplaination] = useState(false);
-  const [returnToWaiting, setReturnToWaiting] = useState(false);
+  const [shortAns, setShortAns] = useState<string>('');
+  const [showCorrect, setShowCorrect] = useState<boolean>(false);
+  const [showIncorrect, setShowIncorrect] = useState<boolean>(false);
+  const [showExplaination, setShowExplaination] = useState<boolean>(false);
+  const [returnToWaiting, setReturnToWaiting] = useState<boolean>(false);
 
   const inputRef = useRef<any>();
 
@@ -221,9 +219,9 @@ const CSProblem: React.FC<CSProblemProps> = ({
           .catch((err) => {
             console.error(err);
             console.log(quizId, data.memberId, input);
-            if (err.response.data.message === 'cannot access this quiz') {
+            if (err.response.data.code === 'Q-401') {
               alert('아직 제출 기한이 아닙니다.');
-            } else if (err.response.data.message === 'Already Correct') {
+            } else if (err.response.data.code === 'Q-303') {
               alert('이미 정답 처리되었습니다.');
             }
           });
