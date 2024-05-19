@@ -3,6 +3,17 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import title from '@assets/home_section2_title.svg';
+import it from '@assets/home_it_card.svg';
+import cs from '@assets/home_cs_card.svg';
+import networking from '@assets/home_networking_card.svg';
+import hackerthon from '@assets/home_hackerthon_card.svg';
+import devtalk from '@assets/home_devtalk_card.svg';
+import demoday from '@assets/home_demoday_card.svg';
+
+//
+//
+//
 
 const HomeSecondSection = () => {
   const settings = {
@@ -24,28 +35,28 @@ const HomeSecondSection = () => {
   return (
     <Wrapper>
       <Title>
-        <img src="https://raw.githubusercontent.com/MinJaeSon/assets/852045fa8f2ebd6b2f4515cdd50e68aa89c3d665/section2_title.svg" />
+        <img src={title} />
         <p>코테이토의 활동을 소개할게요!</p>
       </Title>
       <Contents {...settings}>
         <div style={{ width: '300px' }} />
         <StyledDiv>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/3cb6d33e5755fdbe411f66ef6081a8d857df8b64/IT.svg" />
+          <img src={it} alt="IT이슈" />
         </StyledDiv>
         <StyledDiv>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/3cb6d33e5755fdbe411f66ef6081a8d857df8b64/CS.svg" />
+          <img src={cs} alt="CS교육" />
         </StyledDiv>
         <StyledDiv>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/3cb6d33e5755fdbe411f66ef6081a8d857df8b64/Networking.svg" />
+          <img src={networking} alt="네트워킹" />
         </StyledDiv>
         <StyledDiv>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/3cb6d33e5755fdbe411f66ef6081a8d857df8b64/Hackertone.svg" />
+          <img src={hackerthon} alt="해커톤" />
         </StyledDiv>
         <StyledDiv>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/3cb6d33e5755fdbe411f66ef6081a8d857df8b64/Devtalk.svg" />
+          <img src={devtalk} alt="데브토크" />
         </StyledDiv>
         <StyledDiv>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/3cb6d33e5755fdbe411f66ef6081a8d857df8b64/Demoday.svg" />
+          <img src={demoday} alt="데모데이" />
         </StyledDiv>
       </Contents>
     </Wrapper>
@@ -53,6 +64,10 @@ const HomeSecondSection = () => {
 };
 
 export default HomeSecondSection;
+
+//
+//
+//
 
 const Wrapper = styled.section`
   width: 100%;
