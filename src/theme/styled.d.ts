@@ -1,5 +1,5 @@
 import 'styled-components';
-import { LegacyThemeType, CotatoDarkThemeType, CotatoLightThemeType } from './theme';
+import { CotatoThemeType } from './theme';
 
 /**
  * Will be deprecated in v2.

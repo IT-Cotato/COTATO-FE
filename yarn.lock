@@ -2429,6 +2429,7 @@
     "@types/history" "^4.7.11"
     "@types/react" "*"
 
+
 "@types/react-slick@^0.23.13":
   version "0.23.13"
   resolved "https://registry.yarnpkg.com/@types/react-slick/-/react-slick-0.23.13.tgz#037434e73a58063047b121e08565f7185d811f36"
@@ -9667,6 +9668,11 @@ svgo@^2.7.0:
     csso "^4.2.0"
     picocolors "^1.0.0"
     stable "^0.1.8"
+
+swiper@^11.1.2:
+  version "11.1.2"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.1.2.tgz#f16f198aa14f9975eb184772b1c73e874e62e6d2"
+  integrity sha512-09Dw9Ek/AwYYh0mmNn+THKPIWZpX0dPUOiTGl9TGsG93WISLMA6V9Obsn/53L1whePWo3gBYfb7fjwUslJbhQA==
 
 swr@^2.2.4:
   version "2.2.4"
