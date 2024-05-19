@@ -1,5 +1,5 @@
 /**
- * You can use this like...
+ * You can use theme like...
  * 
  * const StyledComponent = styled.div`
   color: ${({ theme }) => theme.colors.gray80};
@@ -12,6 +12,11 @@
  *   color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.secondary5};
  *   `}
  */
+
+/** @deprecated
+ *  Use CotatoTheme since v2
+ * */
+export type LegacyThemeType = typeof LegacyTheme;
 
 export const LegacyTheme = {
   color: {
@@ -30,10 +35,97 @@ export const LegacyTheme = {
   },
 };
 
-export const CotatoLightTheme = {
+export type CotatoThemeType = {
   colors: {
     common: {
-      white: '#FFFFFF',
+      white: string;
+      black: string;
+    };
+    gray5: string;
+    gray10: string;
+    gray20: string;
+    gray30: string;
+    gray40: string;
+    gray50: string;
+    gray60: string;
+    gray70: string;
+    gray80: string;
+    gray80_1: string;
+    gray80_2: string;
+    gray90: string;
+    gray100: string;
+    primary5: string;
+    primary10: string;
+    primary20: string;
+    primary30: string;
+    primary40: string;
+    primary50: string;
+    primary60: string;
+    primary70: string;
+    primary80: string;
+    primary90: string;
+    primary100: string;
+    secondary5: string;
+    secondary10: string;
+    secondary20: string;
+    secondary30: string;
+    secondary40: string;
+    secondary50: string;
+    secondary60: string;
+    secondary70: string;
+    secondary80: string;
+    secondary90: string;
+    secondary100: string;
+    sub1: {
+      10: string;
+      20: string;
+      40: string;
+      60: string;
+      80: string;
+      100: string;
+    };
+    sub2: {
+      10: string;
+      20: string;
+      40: string;
+      40_1: string;
+      40_2: string;
+      60: string;
+      80: string;
+      100: string;
+    };
+    sub3: {
+      10: string;
+      20: string;
+      40: string;
+      60: string;
+      80: string;
+      100: string;
+    };
+  };
+  fontSize: {
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    xxl: string;
+  };
+  size: {
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    xxl: string;
+    '3xl': string;
+  };
+};
+
+export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
+  colors: {
+    common: {
+      white: '#FAFAFA',
       black: '#000000',
     },
     // gray //
@@ -46,6 +138,8 @@ export const CotatoLightTheme = {
     gray60: '#6A6967',
     gray70: '#4E4C49',
     gray80: '#363532',
+    gray80_1: '#363532',
+    gray80_2: '#363532',
     gray90: '#242321',
     gray100: '#1A1918',
     // primary //
@@ -86,6 +180,8 @@ export const CotatoLightTheme = {
       10: '#88ACF4',
       20: '#5C8EF3',
       40: '#3270ED',
+      40_1: '#3270ED',
+      40_2: '#3270ED',
       60: '#235DD1',
       80: '#1D4CAC',
       100: '#183A7E',
@@ -117,13 +213,13 @@ export const CotatoLightTheme = {
     xxl: '1.4rem',
     '3xl': '1.6rem',
   },
-};
+});
 
-export const CotatoDarkTheme = {
+export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
   colors: {
     common: {
-      white: '#FFFFFF',
-      black: '#000000',
+      white: CotatoLightTheme.colors.gray100,
+      black: CotatoLightTheme.colors.common.white,
     },
     // gray //
     gray5: '#F4F4F4',
@@ -132,9 +228,11 @@ export const CotatoDarkTheme = {
     gray30: '#C6C4C1',
     gray40: '#AAA9A6',
     gray50: '#8F8D89',
-    gray60: '#6A6967',
+    gray60: CotatoLightTheme.colors.gray30,
     gray70: '#4E4C49',
-    gray80: '#363532',
+    gray80: CotatoLightTheme.colors.gray30,
+    gray80_1: CotatoLightTheme.colors.gray20,
+    gray80_2: CotatoLightTheme.colors.gray30,
     gray90: '#242321',
     gray100: '#1A1918',
     // primary //
@@ -147,8 +245,8 @@ export const CotatoDarkTheme = {
     primary60: '#FFDA58',
     primary70: '#FFD027',
     primary80: '#FFC700',
-    primary90: '#FFB500',
-    primary100: '#FFA000',
+    primary90: CotatoLightTheme.colors.primary80,
+    primary100: CotatoLightTheme.colors.secondary60,
     // secondary //
     secondary5: '#FFF4ED',
     secondary10: '#FFE7D5',
@@ -175,6 +273,8 @@ export const CotatoDarkTheme = {
       10: '#88ACF4',
       20: '#5C8EF3',
       40: '#3270ED',
+      40_1: CotatoLightTheme.colors.sub3[40],
+      40_2: CotatoLightTheme.colors.sub2[10],
       60: '#235DD1',
       80: '#1D4CAC',
       100: '#183A7E',
@@ -206,9 +306,4 @@ export const CotatoDarkTheme = {
     xxl: '1.4rem',
     '3xl': '1.6rem',
   },
-};
-
-export type LegacyThemeType = typeof LegacyTheme;
-export type CotatoThemeType = typeof CotatoLightTheme;
-export type CotatoLightThemeType = typeof CotatoLightTheme;
-export type CotatoDarkThemeType = typeof CotatoDarkTheme;
+});
