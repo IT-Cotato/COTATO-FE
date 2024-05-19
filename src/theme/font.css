@@ -44,3 +44,10 @@
   font-weight: 700;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Ycomputer';
+  src: url('@assets/fonts/Ycomputer.otf') format('opentype');
+  font-style: normal;
+  font-weight: 400;
+}
