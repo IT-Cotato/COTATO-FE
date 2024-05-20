@@ -63,16 +63,23 @@ const SubTextContainer = styled.div`
 //
 //
 
+const COTATO_INSTA_URL = 'https://www.instagram.com/cotato_official_?igsh=aDh2ZGZqazBpMmtp';
+const COTATO_YOUTUBE_URL = 'https://www.youtube.com/@ITCotato';
+const COTATO_GITHUB_URL = 'https://github.com/IT-Cotato';
+const COTATO_CAFE_URL = 'https://cafe.naver.com/cotato';
+
+//
+//
+//
+
 const Footer = () => {
   const renderSns = useCallback(
     () => (
       <SnsWrapper>
-        <Insta
-          onClick={() => open('https://www.instagram.com/cotato_official_?igsh=aDh2ZGZqazBpMmtp')}
-        />
-        <Youtube onClick={() => open('https://www.youtube.com/@ITCotato')} />
-        <Github onClick={() => open('https://github.com/IT-Cotato')} />
-        <Cafe onClick={() => open('https://cafe.naver.com/cotato')} />
+        <Insta onClick={() => open(COTATO_INSTA_URL)} />
+        <Youtube onClick={() => open(COTATO_YOUTUBE_URL)} />
+        <Github onClick={() => open(COTATO_GITHUB_URL)} />
+        <Cafe onClick={() => open(COTATO_CAFE_URL)} />
       </SnsWrapper>
     ),
     [],
