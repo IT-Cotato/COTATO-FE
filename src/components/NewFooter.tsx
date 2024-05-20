@@ -5,6 +5,10 @@ import { ReactComponent as Youtube } from '@/assets/footer_youtube.svg';
 import { ReactComponent as Github } from '@/assets/footer_github.svg';
 import { ReactComponent as Cafe } from '@/assets/footer_cafe.svg';
 
+//
+//
+//
+
 const FooterWrapper = styled.footer`
   display: flex;
   flex-direction: column;
@@ -54,6 +58,10 @@ const SubTextContainer = styled.div`
     }
   }
 `;
+
+//
+//
+//
 
 const Footer = () => {
   const renderSns = useCallback(

@@ -7,6 +7,10 @@ import { NavLink } from 'react-router-dom';
 import fetchUserData from '@utils/fetchUserData';
 import { MemberData } from '@/typing/db';
 
+//
+//
+//
+
 const HeaderWrapper = styled.header`
   display: flex;
   width: 100%;
@@ -53,6 +57,10 @@ const MemberNav = styled.div`
   gap: ${({ theme }) => theme.size.sm};
 `;
 
+//
+//
+//
+
 const navList = [
   { name: 'Home', path: '/' },
   { name: 'About us', path: '/about' },
@@ -61,6 +69,10 @@ const navList = [
   { name: 'FAQ', path: '/faq' },
   { name: 'CS Quiz', path: '/cs' },
 ];
+
+//
+//
+//
 
 const Header = () => {
   const user: MemberData = fetchUserData().data;
