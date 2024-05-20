@@ -101,7 +101,7 @@ const Header = () => {
 
   const renderMember = () => {
     if (!user) {
-      return <></>;
+      return null;
     }
 
     return (
@@ -116,7 +116,7 @@ const Header = () => {
 
   const renderLogin = () => {
     if (user) {
-      return <></>;
+      return null;
     }
 
     return (
