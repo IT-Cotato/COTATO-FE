@@ -61,7 +61,7 @@ const MemberNav = styled.div`
 //
 //
 
-const navList = [
+const NAV_LIST = [
   { name: 'Home', path: '/' },
   { name: 'About us', path: '/about' },
   { name: 'Project', path: '/projects' },
@@ -85,13 +85,9 @@ const Header = () => {
 
   const renderNav = () => (
     <NavContainer>
-      {navList.map((tab) => (
-        <NavItem
-          key={uuid()}
-          to={tab.path}
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          {tab.name}
+      {NAV_LIST.map((navItem) => (
+        <NavItem key={uuid()} to={navItem.path}>
+          {navItem.name}
         </NavItem>
       ))}
       {user ? renderMember() : renderLogin()}
@@ -104,7 +100,7 @@ const Header = () => {
     }
 
     return (
-      <NavItem key={navList.length} to={'/mypage'}>
+      <NavItem key={uuid()} to={'/mypage'}>
         <MemberNav>
           <MemberIcon />
           {user.memberName}
