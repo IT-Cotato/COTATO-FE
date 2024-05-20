@@ -47,7 +47,7 @@
 
 @font-face {
   font-family: 'Ycomputer';
-  src: url('@assets/fonts/Ycomputer.ttf');
-  font-weight: 400;
+  src: url('@assets/fonts/Ycomputer.otf') format('opentype');
   font-style: normal;
+  font-weight: 400;
 }
