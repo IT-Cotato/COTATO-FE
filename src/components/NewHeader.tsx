@@ -18,7 +18,7 @@ const HeaderWrapper = styled.header`
   padding: 1rem 2.4rem;
   justify-content: space-around;
   align-items: center;
-  background: ${({ theme }) => theme.black_white_white};
+  background: ${({ theme }) => theme.colors.common.white};
 `;
 
 const LogoLink = styled(NavLink)`
