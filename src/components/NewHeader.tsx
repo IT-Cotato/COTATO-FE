@@ -6,6 +6,7 @@ import { ReactComponent as MemberIcon } from '@/assets/header_member_icon.svg';
 import { NavLink } from 'react-router-dom';
 import fetchUserData from '@utils/fetchUserData';
 import { MemberData } from '@/typing/db';
+import { v4 as uuid } from 'uuid';
 
 //
 //
@@ -85,8 +86,12 @@ const Header = () => {
 
   const renderNav = () => (
     <NavContainer>
-      {navList.map((tab, i) => (
-        <NavItem key={i} to={tab.path} className={({ isActive }) => (isActive ? 'active' : '')}>
+      {navList.map((tab) => (
+        <NavItem
+          key={uuid()}
+          to={tab.path}
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
           {tab.name}
         </NavItem>
       ))}
