@@ -20,6 +20,6 @@ export interface GetV1ApiMemberMemberIdMypageResponse {
   email: string;
   name: string;
   generationNumber: number;
-  memberPositoin: string;
+  memberPosition: string;
   phoneNumber: string;
 }

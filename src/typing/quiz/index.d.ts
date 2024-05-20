@@ -103,6 +103,17 @@ export interface QuizResultInfo {
 }
 
 /**
+ * @api {get} /v1/api/quiz/cs-admin?quizId={quizId}
+ */
+export interface GetV1ApiQuizCsAdminResponse {
+  quizId: number;
+  quizType: string;
+  quizNumber: number;
+  question: string;
+  answer: string[];
+}
+
+/**
  * @api {post} /v1/api/quiz/cs-admin/answer/add
  */
 export interface PostV1QuizCsAdminAnswerAddRequest {

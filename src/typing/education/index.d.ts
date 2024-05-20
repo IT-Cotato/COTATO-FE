@@ -61,12 +61,12 @@ export interface KingMemberInfo {
 }
 
 /**
- * @api {get} /v1/api/education?educationId={educationId}
+ * @api {get} /v1/api/education/result/kings?educationId={educationId}
  */
 export type GetV1ApiEducationResultKingsResponse = KingMemberInfo[];
 
 /**
- * @api {get} /v1/api/education?educationId={educationId}
+ * @api {get} /v1/api/education/result/winner?educationId={educationId}
  */
 export interface GetV1ApiEducationResultWinnerResponse {
   memberId: number;

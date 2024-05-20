@@ -11,9 +11,9 @@ export interface MyHallOfFameInfo {
 }
 
 /**
- * @api {get} /v1/mypage/hall-of-fame?generationNumber={generationNumber}
+ * @api {get} /v1/api/mypage/hall-of-fame?generationId={generationId}
  */
-export interface GetV1MypageHallOfFameResponse {
+export interface GetV1ApiMypageHallOfFameResponse {
   scorerInfo: HallOfFameInfo[];
   answerInfo: HallOfFameInfo[];
   myInfo: MyHallOfFameInfo;
