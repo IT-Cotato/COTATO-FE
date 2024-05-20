@@ -20,7 +20,19 @@ const FooterWrapper = styled.footer`
 
 const SnsWrapper = styled.div`
   display: flex;
-  gap: 2.4rem;
+  gap: 2.6rem;
+`;
+
+const SnsBackground = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.common.white};
+  filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.25));
+  cursor: pointer;
 `;
 
 const DescriptionWrapper = styled.div`
@@ -75,10 +87,18 @@ const COTATO_CAFE_URL = 'https://cafe.naver.com/cotato';
 const Footer = () => {
   const renderSns = () => (
     <SnsWrapper>
-      <Insta onClick={() => open(COTATO_INSTA_URL)} />
-      <Youtube onClick={() => open(COTATO_YOUTUBE_URL)} />
-      <Github onClick={() => open(COTATO_GITHUB_URL)} />
-      <Cafe onClick={() => open(COTATO_CAFE_URL)} />
+      <SnsBackground>
+        <Insta onClick={() => open(COTATO_INSTA_URL)} />
+      </SnsBackground>
+      <SnsBackground>
+        <Youtube onClick={() => open(COTATO_YOUTUBE_URL)} />
+      </SnsBackground>
+      <SnsBackground>
+        <Github onClick={() => open(COTATO_GITHUB_URL)} />
+      </SnsBackground>
+      <SnsBackground>
+        <Cafe onClick={() => open(COTATO_CAFE_URL)} />
+      </SnsBackground>
     </SnsWrapper>
   );
 
