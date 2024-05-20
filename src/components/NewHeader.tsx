@@ -5,7 +5,6 @@ import { ReactComponent as Login } from '@/assets/header_login.svg';
 import { ReactComponent as MemberIcon } from '@/assets/header_member_icon.svg';
 import { NavLink } from 'react-router-dom';
 import fetchUserData from '@utils/fetchUserData';
-import { MemberData } from '@/typing/db';
 import { v4 as uuid } from 'uuid';
 
 //
@@ -76,7 +75,7 @@ const navList = [
 //
 
 const Header = () => {
-  const user: MemberData = fetchUserData().data;
+  const { data: user } = fetchUserData();
 
   const renderLogo = () => (
     <LogoLink to={'/'}>
