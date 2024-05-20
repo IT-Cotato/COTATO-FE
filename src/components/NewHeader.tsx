@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '@/assets/header_logo.svg';
 import { ReactComponent as Login } from '@/assets/header_login.svg';
@@ -77,30 +77,24 @@ const navList = [
 const Header = () => {
   const user: MemberData = fetchUserData().data;
 
-  const renderLogo = useCallback(
-    () => (
-      <LogoLink to={'/'}>
-        <Logo />
-      </LogoLink>
-    ),
-    [],
+  const renderLogo = () => (
+    <LogoLink to={'/'}>
+      <Logo />
+    </LogoLink>
   );
 
-  const renderNav = useCallback(
-    () => (
-      <NavContainer>
-        {navList.map((tab, i) => (
-          <NavItem key={i} to={tab.path} className={({ isActive }) => (isActive ? 'active' : '')}>
-            {tab.name}
-          </NavItem>
-        ))}
-        {user ? renderMember() : renderLogin()}
-      </NavContainer>
-    ),
-    [user],
+  const renderNav = () => (
+    <NavContainer>
+      {navList.map((tab, i) => (
+        <NavItem key={i} to={tab.path} className={({ isActive }) => (isActive ? 'active' : '')}>
+          {tab.name}
+        </NavItem>
+      ))}
+      {user ? renderMember() : renderLogin()}
+    </NavContainer>
   );
 
-  const renderMember = useCallback(() => {
+  const renderMember = () => {
     if (!user) {
       return <></>;
     }
@@ -113,9 +107,9 @@ const Header = () => {
         </MemberNav>
       </NavItem>
     );
-  }, [user]);
+  };
 
-  const renderLogin = useCallback(() => {
+  const renderLogin = () => {
     if (user) {
       return <></>;
     }
@@ -125,7 +119,7 @@ const Header = () => {
         <Login />
       </LoginLink>
     );
-  }, [user]);
+  };
 
   return (
     <HeaderWrapper>

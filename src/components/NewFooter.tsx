@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as Insta } from '@/assets/footer_insta.svg';
 import { ReactComponent as Youtube } from '@/assets/footer_youtube.svg';
@@ -73,36 +73,30 @@ const COTATO_CAFE_URL = 'https://cafe.naver.com/cotato';
 //
 
 const Footer = () => {
-  const renderSns = useCallback(
-    () => (
-      <SnsWrapper>
-        <Insta onClick={() => open(COTATO_INSTA_URL)} />
-        <Youtube onClick={() => open(COTATO_YOUTUBE_URL)} />
-        <Github onClick={() => open(COTATO_GITHUB_URL)} />
-        <Cafe onClick={() => open(COTATO_CAFE_URL)} />
-      </SnsWrapper>
-    ),
-    [],
+  const renderSns = () => (
+    <SnsWrapper>
+      <Insta onClick={() => open(COTATO_INSTA_URL)} />
+      <Youtube onClick={() => open(COTATO_YOUTUBE_URL)} />
+      <Github onClick={() => open(COTATO_GITHUB_URL)} />
+      <Cafe onClick={() => open(COTATO_CAFE_URL)} />
+    </SnsWrapper>
   );
 
-  const renderDescription = useCallback(
-    () => (
-      <DescriptionWrapper>
+  const renderDescription = () => (
+    <DescriptionWrapper>
+      <p>
+        <MainText className="lg">Cotato</MainText>
+        &nbsp; &nbsp;
+        <MainText className="md">코테이토</MainText>
+      </p>
+      <SubTextContainer>
         <p>
-          <MainText className="lg">Cotato</MainText>
-          &nbsp; &nbsp;
-          <MainText className="md">코테이토</MainText>
+          E-mail. <a href="mailto:itcotato@gmail.com">itcotato@gmail.com</a>
         </p>
-        <SubTextContainer>
-          <p>
-            E-mail. <a href="mailto:itcotato@gmail.com">itcotato@gmail.com</a>
-          </p>
-          <p>© Cotato. 2024 All rights reserved. | 대학생 IT 연합 동아리 코테이토</p>
-          <p>Cotato 2024 HomePage v1.0</p>
-        </SubTextContainer>
-      </DescriptionWrapper>
-    ),
-    [],
+        <p>© Cotato. 2024 All rights reserved. | 대학생 IT 연합 동아리 코테이토</p>
+        <p>Cotato 2024 HomePage v1.0</p>
+      </SubTextContainer>
+    </DescriptionWrapper>
   );
 
   return (
