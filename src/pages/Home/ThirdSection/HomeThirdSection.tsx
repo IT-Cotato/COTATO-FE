@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as ClubMembers } from '@assets/home_section3.svg';
+import TeamMember from './SvgComponent/TeamMemberSvgComponent';
 
 //
 //
@@ -9,7 +9,9 @@ import { ReactComponent as ClubMembers } from '@assets/home_section3.svg';
 const HomeThirdSection = () => {
   return (
     <Wrapper>
-      <ClubMembers style={{ width: '700px' }} />
+      <SvgDiv>
+        <TeamMember />
+      </SvgDiv>
     </Wrapper>
   );
 };
@@ -22,8 +24,22 @@ export default HomeThirdSection;
 
 const Wrapper = styled.section`
   width: 100%;
-  margin-top: 100px;
+  height: 180vh;
+  margin-top: 650px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const SvgDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 900px;
+  height: 180vh;
 `;
