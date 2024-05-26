@@ -52,6 +52,8 @@ export interface GetV1ApiAuthEmailResponse {
  */
 export interface PostV1ApiAuthVerificationRequest {
   email: string;
+  code: string;
+  type: 'sign-up';
 }
 
 /**
@@ -59,6 +61,8 @@ export interface PostV1ApiAuthVerificationRequest {
  */
 export interface GetV1ApiAuthVerificationRequest {
   email: string;
+  code: string;
+  type: 'find-password';
 }
 
 export interface GetV1ApiAuthVerifycationResponse {

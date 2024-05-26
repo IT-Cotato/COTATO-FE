@@ -5,9 +5,9 @@ export interface PostV1ApiSessionAddRequest {
   generationId: number;
   sessionImage: string;
   description: string;
-  ItIssue: string;
-  Networking: string;
-  CSEducation: string;
+  itIssue: string;
+  networking: string;
+  csEducation: string;
 }
 
 export interface PostV1ApiSessionAddResponse {
@@ -20,7 +20,7 @@ export interface PostV1ApiSessionAddResponse {
  */
 export interface PatchV1ApiSessionUpdateRequest {
   sessionId: number;
-  sessionImage: string;
+  sessionImage: File;
   description: string;
   isPhotoUpdated: boolean;
   itIssue: string;
@@ -49,7 +49,7 @@ export interface PatchV1ApiSessionDescriptionRequest {
  */
 export interface PatchV1ApiSessionUpdatePhotoRequest {
   sessionId: number;
-  sessionImage: string;
+  sessionImage: File;
 }
 
 export interface SeesionInfo {
