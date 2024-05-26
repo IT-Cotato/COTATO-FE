@@ -3,7 +3,7 @@
  */
 export interface PostV1ApiGenerationAddRequest {
   generationNumber: number;
-  SessionCount: number;
+  sessionCount: number;
   startDate: string;
   endDate: string;
 }

@@ -7,7 +7,7 @@ export interface ChoiceRequestType {
 export interface MultipleQuizRequestType {
   number: number;
   question: string;
-  image: string;
+  image: File;
   choices: ChoiceRequestType[];
 }
 
@@ -18,7 +18,7 @@ export interface ShortAnswerRequestType {
 export interface ShortQuizRequestType {
   number: number;
   question: string;
-  image: string;
+  image: File;
   shortAnswer: ShortAnswerRequestType[];
 }
 
@@ -51,7 +51,7 @@ export interface ShortAnswerResponseType {
   answer: string;
 }
 
-export interface ShortQuizInfo {
+export interface ShortQuizResponseType {
   id: number;
   number: number;
   question: string;
@@ -61,7 +61,7 @@ export interface ShortQuizInfo {
 
 export interface QuizzesResposeType {
   multiples: MultipleQuizResponseType[];
-  shortQuizzes: ShortAnswerResponseType[];
+  shortQuizzes: ShortQuizResponseType[];
 }
 
 /**
