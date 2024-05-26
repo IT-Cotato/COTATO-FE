@@ -6,6 +6,11 @@ import 'swiper/css/pagination';
 
 import { Mousewheel, Pagination } from 'swiper/modules';
 import styled from 'styled-components';
+import HomeFirstSection from './FirstSection/HomeFirstSection';
+import HomeSecondSection from './SecondSection/HomeSecondSection';
+import HomeThirdSection from './ThirdSection/HomeThirdSection';
+import HomeBackgroundSvgComponent from './HomeBackgroundSvgComponent';
+import Footer from '@components/NewFooter';
 
 //
 //
@@ -13,6 +18,52 @@ import styled from 'styled-components';
 
 const SWIPER_SPEED = 700;
 const SWIPER_SLIDES_PER_VIEW = 1;
+
+//
+//
+//
+
+const HomeSlide = () => {
+  const mouseWheelOption = {
+    forceToAxis: true,
+    sensitivity: 1,
+    releaseOnEdges: true,
+  };
+
+  return (
+    <>
+      <StyledSwiper
+        direction="vertical"
+        speed={SWIPER_SPEED}
+        slidesPerView={SWIPER_SLIDES_PER_VIEW}
+        modules={[Mousewheel, Pagination]}
+        mousewheel={mouseWheelOption}
+        autoHeight={true}
+      >
+        <HomeBackgroundSvgComponent />
+        {/* First Section */}
+        <StyledSwiperSlide>
+          <HomeFirstSection />
+        </StyledSwiperSlide>
+        {/* Second Section */}
+        <StyledSwiperSlide>
+          <HomeSecondSection />
+        </StyledSwiperSlide>
+        {/* Third Section */}
+        <StyledSwiperSlide>
+          <HomeThirdSection />
+        </StyledSwiperSlide>
+        <SwiperSlide />
+        {/* Footer */}
+        <FooterSwiperSlide>
+          <Footer />
+        </FooterSwiperSlide>
+      </StyledSwiper>
+    </>
+  );
+};
+
+export default HomeSlide;
 
 //
 //
@@ -40,31 +91,8 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   height: 100%;
 `;
 
-//
-//
-//
-
-const HomeSlide = () => {
-  return (
-    <StyledSwiper
-      direction="vertical"
-      speed={SWIPER_SPEED}
-      slidesPerView={SWIPER_SLIDES_PER_VIEW}
-      modules={[Mousewheel, Pagination]}
-      mousewheel={true}
-    >
-      {/* Will be replaced with Section */}
-      <StyledSwiperSlide>
-        <div>Slide 1</div>
-      </StyledSwiperSlide>
-      <StyledSwiperSlide>
-        <div>Slide 2</div>
-      </StyledSwiperSlide>
-      <StyledSwiperSlide>
-        <div>Slide 3</div>
-      </StyledSwiperSlide>
-    </StyledSwiper>
-  );
-};
-
-export default HomeSlide;
+const FooterSwiperSlide = styled(SwiperSlide)`
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+`;
