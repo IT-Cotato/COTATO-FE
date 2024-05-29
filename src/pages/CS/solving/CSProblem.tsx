@@ -8,6 +8,7 @@ import bubble1 from '@assets/bubble_1.svg';
 import bubble2 from '@assets/bubble_2.svg';
 import bubble3 from '@assets/bubble_3.svg';
 import explaination from '@assets/explaination.svg';
+import podori from '@assets/podori.jpg';
 import MemberHeader from '@components/MemberHeader';
 import api from '@/api/api';
 import useSWR from 'swr';
@@ -16,7 +17,6 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
-import { set } from 'date-fns';
 import BgWinner from './BgWinner';
 
 type Problem = {
@@ -69,6 +69,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const [showIncorrect, setShowIncorrect] = useState(false);
   const [showExplaination, setShowExplaination] = useState(false);
   const [returnToWaiting, setReturnToWaiting] = useState(false);
+  const [count, setCount] = useState(0);
+  const [notice, setNotice] = useState(false);
 
   const inputRef = useRef<any>();
 
@@ -92,6 +94,26 @@ const CSProblem: React.FC<CSProblemProps> = ({
       if (el) el.style.height = `${maxHeight}px`;
     });
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        setCount((prevCount) => prevCount + 1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    const intervalId = setInterval(() => {
+      console.log(`1초 간 ${count}번 누름`);
+      setCount(0);
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      clearInterval(intervalId);
+    };
+  }, [count]);
 
   useEffect(() => {
     alignBtnHeights();
@@ -176,7 +198,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     }
   };
 
-  const submitProblem = () => {
+  const submitProblem1 = () => {
     // 문제 제출하기
     const input = quizData?.choices ? selected : [shortAns];
 
@@ -231,6 +253,57 @@ const CSProblem: React.FC<CSProblemProps> = ({
     }
   };
 
+  const submitProblem = () => {
+    const input = quizData?.choices ? selected : [shortAns];
+
+    if (!data) {
+      return;
+    } else {
+      if (!submitAllowed) {
+        alert('아직 제출 기한이 아닙니다.');
+        if (count >= 3) {
+          setNotice(true);
+          setTimeout(() => setNotice(false), 5000);
+          // console.log('광클 에바지');
+        }
+        return;
+      } else if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
+        alert('답안을 입력 후 제출해주세요.');
+        return;
+      } else {
+        api
+          .post(
+            '/v1/api/record/reply',
+            {
+              quizId: quizId,
+              memberId: data.memberId,
+              inputs: input,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            },
+          )
+          .then((res) => {
+            if (res.data.result === 'true') {
+              setShowCorrect(true);
+              if ((quizData?.number as number) !== 10) {
+                setTimeout(() => setReturnToWaiting(true), 2500);
+              } else {
+                setReturnToWaiting(false);
+              }
+            } else {
+              setShowIncorrect(true);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  };
+
   const propsForMemberHeader = {
     showHeader,
     setShowHeader,
@@ -246,6 +319,13 @@ const CSProblem: React.FC<CSProblemProps> = ({
   return (
     <Wrapper>
       {showHeader ? <MemberHeader {...propsForMemberHeader} /> : null}
+      {notice && (
+        <img
+          src={podori}
+          alt="포돌짱"
+          style={{ position: 'fixed', marginTop: '60px', width: '500px' }}
+        />
+      )}
       <ProgressContainer>
         <ProgressBar progress={(quizData?.number as number) * 10} />
       </ProgressContainer>
@@ -318,7 +398,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
         )}
         <ButtonContainer disabled={!submitAllowed}>
           {quizData?.number === 10 ? null : <button onClick={nextProblem}>다음문제</button>}
-          <button onClick={submitProblem}>제출하기</button>
+          <button onClick={!notice ? submitProblem : undefined}>제출하기</button>
         </ButtonContainer>
       </QuizContainer>
       {showCorrect && <BgCorrect />}
