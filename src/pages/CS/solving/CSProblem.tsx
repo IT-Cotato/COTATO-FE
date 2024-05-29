@@ -198,61 +198,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
     }
   };
 
-  const submitProblem1 = () => {
-    // 문제 제출하기
-    const input = quizData?.choices ? selected : [shortAns];
-
-    if (!data) {
-      console.log('data is not loaded yet');
-      return; // data가 undefined라면(아직 불러와지지 않았다면) 함수 종료
-    } else {
-      if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
-        alert(selected + '답안을 입력 후 제출해주세요.');
-        return;
-      } else {
-        api
-          .post(
-            '/v1/api/record/reply',
-            {
-              quizId: quizId,
-              memberId: data.memberId,
-              inputs: input,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            },
-          )
-          .then((res) => {
-            console.log(res);
-            if (res.data.result === 'true') {
-              setShowCorrect(true);
-              if (submitAllowed) {
-                // 정답인데 아직 문제가 닫히지 않은 경우 대기화면으로 보냄
-                if ((quizData?.number as number) !== 10) {
-                  setTimeout(() => setReturnToWaiting(true), 2500);
-                } else {
-                  setReturnToWaiting(false);
-                }
-              }
-            } else {
-              setShowIncorrect(true);
-            }
-          })
-          .catch((err) => {
-            console.error(err);
-            console.log(quizId, data.memberId, input);
-            if (err.response.data.message === 'cannot access this quiz') {
-              alert('아직 제출 기한이 아닙니다.');
-            } else if (err.response.data.message === 'Already Correct') {
-              alert('이미 정답 처리되었습니다.');
-            }
-          });
-      }
-    }
-  };
-
   const submitProblem = () => {
     const input = quizData?.choices ? selected : [shortAns];
 
