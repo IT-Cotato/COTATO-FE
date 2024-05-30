@@ -50,7 +50,7 @@ const BgKingKing: React.FC<BgKingKingProps> = ({ quizId }) => {
 
   const fetchKing = async (educationId: number) => {
     await api
-      .get('/v1/api/education/result/kings', {
+      .get('/v1/api/education/kings', {
         params: {
           educationId: educationId,
         },
