@@ -1,30 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CSManageLayout from '@pages/CS/manage/CSManageLayout';
 import { css, styled } from 'styled-components';
-import { IQuizAdminScorer, IQuizAdminSubmit } from '@/typing/db';
+import { IQuizAdmin, IQuizAdminScorer, IQuizAdminSubmit } from '@/typing/db';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import AddAnswer from '@pages/CS/manage/scorer/AddAnswer';
+import ToggleButton from '@components/ToggleButton';
+import api from '@/api/api';
+import { ToastContainer, toast } from 'react-toastify';
+import WaitPopup from '@pages/CS/manage/WaitPopup';
 
 const QuizScorer = () => {
   const [searchParams] = useSearchParams();
   const quizId = searchParams.get('quizId');
+  const educationId = searchParams.get('educationId');
 
+  const { data: educationStatus } = useSWR(
+    `/v1/api/education/status?educationId=${educationId}`,
+    fetcher,
+  );
+  const { data: quizList, mutate: quizListMutate } = useSWR(
+    `/v1/api/quiz/cs-admin/all?educationId=${educationId}`,
+    fetcher,
+  );
   const { data: quiz } = useSWR<IQuizAdminScorer>(
     `/v1/api/quiz/cs-admin?quizId=${quizId}`,
     fetcher,
   );
   const { data: record } = useSWR(`/v1/api/record/all?quizId=${quizId}`, fetcher, {
-    refreshInterval: 1000,
+    // refreshInterval: 1000,
   });
 
   const [submits, setSubmits] = useState<IQuizAdminSubmit[]>();
   const [scorer, setScorer] = useState<IQuizAdminScorer>();
+  const [quizStatus, setQuizStatus] = useState('');
+  const [quizStart, setQuizStart] = useState('');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    quizList?.quizzes.forEach((quizData: IQuizAdmin) => {
+      if (quizData.quizId === Number(quizId)) {
+        setQuizStatus(quizData.status);
+        setQuizStart(quizData.start);
+      }
+    });
+  }, [quizList]);
 
   useEffect(() => {
     const newSubmitList: IQuizAdminSubmit[] = record?.records;
@@ -33,51 +58,122 @@ const QuizScorer = () => {
     setScorer(record?.scorer);
   }, [record]);
 
+  const onClickApproach = useCallback(() => {
+    if (educationStatus.status !== 'ONGOING') {
+      toast.error('교육을 시작해주세요.');
+      return;
+    }
+
+    let path = '';
+    if (quizStatus === 'QUIZ_OFF') {
+      path = '/v1/api/socket/access';
+    } else if (quizStatus === 'QUIZ_ON') {
+      path = '/v1/api/socket/deny';
+    }
+
+    api
+      .patch(path, { quizId: quizId })
+      .then(() => {
+        quizListMutate();
+      })
+      .catch((err) => {
+        console.error(err);
+        quizListMutate();
+      });
+  }, [quizStatus, quizStart, educationStatus]);
+
+  const onClickQuizStart = useCallback(() => {
+    if (educationStatus.status !== 'ONGOING') {
+      toast.error('교육을 시작해주세요.');
+      return;
+    }
+
+    if (quizStatus === 'QUIZ_OFF') {
+      toast.error('문제 접근을 허용해주세요.');
+      return;
+    }
+
+    let path = '';
+    if (quizStart === 'QUIZ_OFF') {
+      path = '/v1/api/socket/start';
+      setIsPopupOpen(true);
+    } else if (quizStart === 'QUIZ_ON') {
+      path = '/v1/api/socket/stop';
+    }
+
+    api
+      .patch(path, { quizId: quizId })
+      .then(() => {
+        setIsPopupOpen(false);
+        quizListMutate();
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsPopupOpen(false);
+        quizListMutate();
+      });
+  }, [quizStart, educationStatus, quizStatus]);
+
   return (
-    <CSManageLayout header="CS 문제별 득점자 확인">
-      <QuizScorerWrapper>
-        <TitleWrapper>
-          <p className="quiz-number">문제{quiz?.quizNumber}</p>
-          <p className="question">{quiz?.question}</p>
-        </TitleWrapper>
-        <ColumnDivision>
-          <HalfContainer width="55%">
-            <p>제출 순 나열</p>
-            <SubmitBox>
-              {submits?.map((submit, index) => (
-                <SubmitContent key={index}>
-                  <p>
-                    {submit.memberName}({submit.backFourNumber})
-                  </p>
-                  <SubmitResult>
+    <>
+      <CSManageLayout header="CS 문제별 득점자 확인">
+        <QuizScorerWrapper>
+          <TitleWrapper>
+            <p className="quiz-number">문제{quiz?.quizNumber}</p>
+            <p className="question">{quiz?.question}</p>
+          </TitleWrapper>
+          <ColumnDivision>
+            <HalfContainer width="55%">
+              <p>제출 순 나열</p>
+              <SubmitBox>
+                {submits?.map((submit, index) => (
+                  <SubmitContent key={index}>
                     <p>
-                      {submit.reply}
-                      {quiz?.quizType === 'MULTIPLE_QUIZ' && '번'}
+                      {submit.memberName}({submit.backFourNumber})
                     </p>
-                  </SubmitResult>
-                </SubmitContent>
-              ))}
-            </SubmitBox>
-          </HalfContainer>
-          <HalfContainer width="45%">
-            <p>득점자</p>
-            <ScorerBox>
-              <p>{scorer?.memberName ? `${scorer.memberName}(${scorer.backFourNumber})` : ''}</p>
-            </ScorerBox>
-            <p>문제 정답</p>
-            <AnswerBox>
-              {quiz?.answer.map((ans, idx) => (
-                <p key={idx}>
-                  {ans}
-                  {quiz.quizType === 'MULTIPLE_QUIZ' && '번'}
-                </p>
-              ))}
-            </AnswerBox>
-            <AddAnswer quizId={quizId} quizType={quiz?.quizType} />
-          </HalfContainer>
-        </ColumnDivision>
-      </QuizScorerWrapper>
-    </CSManageLayout>
+                    <SubmitResult>
+                      <p>
+                        {submit.reply}
+                        {quiz?.quizType === 'MULTIPLE_QUIZ' && '번'}
+                      </p>
+                    </SubmitResult>
+                  </SubmitContent>
+                ))}
+              </SubmitBox>
+            </HalfContainer>
+            <HalfContainer width="45%">
+              <p>득점자</p>
+              <ScorerBox>
+                <p>{scorer?.memberName ? `${scorer.memberName}(${scorer.backFourNumber})` : ''}</p>
+              </ScorerBox>
+              <p>문제 정답</p>
+              <AnswerBox>
+                {quiz?.answer.map((ans, idx) => (
+                  <p key={idx}>
+                    {ans}
+                    {quiz.quizType === 'MULTIPLE_QUIZ' && '번'}
+                  </p>
+                ))}
+              </AnswerBox>
+              <AddAnswer quizId={quizId} quizType={quiz?.quizType} />
+              <p>문제 제어</p>
+              <ControlBox>
+                <ControlButtonWrapper>
+                  <p>접근</p>
+                  <ToggleButton toggled={quizStatus === 'QUIZ_ON'} onClick={onClickApproach} />
+                </ControlButtonWrapper>
+                <ControlButtonWrapper>
+                  <p>문제풀이 시작</p>
+                  <ToggleButton toggled={quizStart === 'QUIZ_ON'} onClick={onClickQuizStart} />
+                </ControlButtonWrapper>
+              </ControlBox>
+            </HalfContainer>
+          </ColumnDivision>
+        </QuizScorerWrapper>
+      </CSManageLayout>
+      <WaitPopup isOpen={isPopupOpen} />
+      <ToastContainer position="top-center" autoClose={2000} />
+    </>
   );
 };
 
@@ -200,6 +296,24 @@ const AnswerBox = styled(Box)`
   > p {
     ${fontStyle};
     color: #85c88a;
+    margin: 8px;
+  }
+`;
+
+const ControlBox = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const ControlButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 16px;
+  > p {
+    ${fontStyle};
     margin: 8px;
   }
 `;
