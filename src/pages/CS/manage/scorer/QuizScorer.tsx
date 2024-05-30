@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import CSManageLayout from '@pages/CS/manage/CSManageLayout';
 import { css, styled } from 'styled-components';
 import { IQuizAdmin, IQuizAdminScorer, IQuizAdminSubmit } from '@/typing/db';
@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import WaitPopup from '@pages/CS/manage/WaitPopup';
 
 const QuizScorer = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const quizId = searchParams.get('quizId');
   const educationId = searchParams.get('educationId');
@@ -40,7 +41,7 @@ const QuizScorer = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [quiz]);
 
   useEffect(() => {
     quizList?.quizzes.forEach((quizData: IQuizAdmin) => {
@@ -114,6 +115,38 @@ const QuizScorer = () => {
       });
   }, [quizStart, educationStatus, quizStatus]);
 
+  const handlePrevQuizButton = useCallback(() => {
+    if (quiz?.quizNumber === 1) {
+      toast.error('1번 문제입니다.');
+      return;
+    }
+
+    let prevQuizId = 0;
+    quizList?.quizzes.forEach((quizData: IQuizAdmin) => {
+      if (quizData.quizNumber === Number(quiz?.quizNumber) - 1) {
+        prevQuizId = quizData.quizId;
+      }
+    });
+
+    navigate(`/cs/manage/quizscorer?educationId=${educationId}&quizId=${prevQuizId}`);
+  }, [quiz, quizList]);
+
+  const handleNextQuizButton = useCallback(() => {
+    if (quiz?.quizNumber === 10) {
+      toast.error('10번 문제입니다.');
+      return;
+    }
+
+    let prevQuizId = 0;
+    quizList?.quizzes.forEach((quizData: IQuizAdmin) => {
+      if (quizData.quizNumber === Number(quiz?.quizNumber) + 1) {
+        prevQuizId = quizData.quizId;
+      }
+    });
+
+    navigate(`/cs/manage/quizscorer?educationId=${educationId}&quizId=${prevQuizId}`);
+  }, [quiz, quizList]);
+
   return (
     <>
       <CSManageLayout header="CS 문제별 득점자 확인">
@@ -167,6 +200,10 @@ const QuizScorer = () => {
                   <ToggleButton toggled={quizStart === 'QUIZ_ON'} onClick={onClickQuizStart} />
                 </ControlButtonWrapper>
               </ControlBox>
+              <QuizMoveWrapper>
+                <button onClick={handlePrevQuizButton}>이전 문제</button>
+                <button onClick={handleNextQuizButton}>다음 문제</button>
+              </QuizMoveWrapper>
             </HalfContainer>
           </ColumnDivision>
         </QuizScorerWrapper>
@@ -305,15 +342,38 @@ const ControlBox = styled(Box)`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-bottom: 28px;
 `;
 
 const ControlButtonWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
   padding: 0 16px;
   > p {
     ${fontStyle};
     margin: 8px;
+  }
+`;
+
+const QuizMoveWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 8px;
+
+  > button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #bebebe;
+    background: #feffff;
+    padding: 8px 20px;
+
+    color: #2e2e2e;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
   }
 `;

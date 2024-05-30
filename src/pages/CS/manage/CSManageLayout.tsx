@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as ArrowBack } from '@assets/arrow_back.svg';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 interface Props {
   header: string;
@@ -10,10 +10,22 @@ interface Props {
 
 const CSManageLayout = ({ header, children }: Props) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const educationId = searchParams.get('educationId');
+
+  const handlePrevButton = useCallback(() => {
+    if (location.pathname === '/cs/manage') {
+      navigate('/cs');
+    } else {
+      navigate(`/cs/manage?educationId=${educationId}`);
+    }
+  }, [location.pathname]);
 
   return (
     <CSManageWrapper>
-      <BackButton width={24} height={24} onClick={() => navigate(-1)} />
+      <BackButton width={24} height={24} onClick={handlePrevButton} />
       <CSManageHeader>
         <h3>{header}</h3>
       </CSManageHeader>
