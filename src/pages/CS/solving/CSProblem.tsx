@@ -201,7 +201,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const submitProblem = () => {
     const input = quizData?.choices ? selected : [shortAns];
 
-    if (!data) {
+    if (!data || notice) {
       return;
     } else {
       if (!submitAllowed) {
@@ -343,7 +343,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
         )}
         <ButtonContainer disabled={!submitAllowed}>
           {quizData?.number === 10 ? null : <button onClick={nextProblem}>다음문제</button>}
-          <button onClick={!notice ? submitProblem : undefined}>제출하기</button>
+          <button onClick={submitProblem}>제출하기</button>
         </ButtonContainer>
       </QuizContainer>
       {showCorrect && <BgCorrect />}
