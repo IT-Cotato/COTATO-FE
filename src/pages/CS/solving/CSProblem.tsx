@@ -105,7 +105,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     window.addEventListener('keydown', handleKeyDown);
 
     const intervalId = setInterval(() => {
-      console.log(`1초 간 ${count}번 누름`);
+      // console.log(`1초 간 ${count}번 누름`);
       setCount(0);
     }, 1000);
 
