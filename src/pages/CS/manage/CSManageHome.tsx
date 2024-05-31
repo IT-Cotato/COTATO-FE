@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { IQuizAdmin } from '@/typing/db';
 import api from '@/api/api';
+import { toast } from 'react-toastify';
 
 const CSManageHome = () => {
   const [searchParams] = useSearchParams();
@@ -22,17 +23,12 @@ const CSManageHome = () => {
     fetcher,
   );
   const [quizzes, setQuizzes] = useState<IQuizAdmin[]>();
-  const [quizNineStart, setQuizNineStart] = useState('');
 
   useEffect(() => {
     if (quizData) {
       const quizArr: IQuizAdmin[] = quizData.quizzes;
       quizArr.sort((left, right) => left.quizNumber - right.quizNumber);
       setQuizzes(quizArr);
-
-      if (quizData.quizzes.length === 10) {
-        setQuizNineStart(quizData.quizzes.find((quiz: IQuizAdmin) => quiz.quizNumber === 9).start);
-      }
     }
   }, [quizData]);
 
@@ -57,35 +53,114 @@ const CSManageHome = () => {
       });
   }, [educationStatus?.status]);
 
+  const handleKingKingButton = useCallback(() => {
+    if (educationStatus?.status !== 'ONGOING') {
+      alert('교육을 시작해주세요.');
+      return;
+    }
+
+    if (confirm('킹킹 진출자를 계산하시겠습니까?')) {
+      api
+        .post(`/v1/api/education/kings?educationId=${educationId}`)
+        .then(() => {
+          submitKingKing();
+        })
+        .catch((err) => {
+          if (err.response.data.code === 'K-301') {
+            submitKingKing();
+          } else {
+            console.error(err);
+            toast.error('킹킹 진출자 계산이 실패했습니다.');
+          }
+        });
+    }
+  }, [educationId, educationStatus, quizData]);
+
+  const submitKingKing = useCallback(() => {
+    api
+      .post(`/v1/api/socket/kings?educationId=${educationId}`)
+      .then(() => {
+        toast.success('킹킹 진출자 계산이 완료되었습니다.');
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('킹킹 진출자 계산이 실패했습니다.');
+      });
+  }, [educationId]);
+
+  const handleWinnerButton = useCallback(() => {
+    if (educationStatus?.status !== 'ONGOING') {
+      alert('교육을 시작해주세요.');
+      return;
+    }
+
+    if (confirm('우승자를 계산하시겠습니까?')) {
+      api
+        .post(`/v1/api/education/winner?educationId=${educationId}`)
+        .then(() => {
+          submitWinner();
+        })
+        .catch((err) => {
+          if (err.response.data.code === 'W-301') {
+            submitWinner();
+          } else {
+            console.error(err);
+            toast.error('우승자 계산이 실패했습니다.');
+          }
+        });
+    }
+  }, [educationId, quizData]);
+
+  const submitWinner = useCallback(() => {
+    api
+      .post(`/v1/api/socket/winner?educationId=${educationId}`)
+      .then(() => {
+        toast.success('우승자 계산이 완료되었습니다.');
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('우승자 계산이 실패했습니다.');
+      });
+  }, [educationId]);
+
   const onClickCheckAllScorer = useCallback(() => {
     navigate(`allscorer?educationId=${educationId}`);
   }, []);
 
   return (
-    <CSManageLayout header="CS 문제풀이 관리">
-      <ManageWrapper>
-        <ButtonWrapper>
-          <Button color="#477FEB" onClick={onClickQuizButton}>
-            {educationStatus?.status === 'ONGOING' ? '교육 종료하기' : '교육 시작하기'}
-          </Button>
-          <Button color="#000" onClick={onClickCheckAllScorer}>
-            전체 득점자 확인
-          </Button>
-        </ButtonWrapper>
-        <QuizContentsWrapper>
-          {quizzes?.map((quiz) => (
-            <QuizContent
-              key={quiz.quizId}
-              quiz={quiz}
-              educationId={educationId}
-              educationStatus={educationStatus?.status}
-              quizStatus={quiz.status}
-              quizNineStart={quizNineStart}
-            />
-          ))}
-        </QuizContentsWrapper>
-      </ManageWrapper>
-    </CSManageLayout>
+    <>
+      <CSManageLayout header="CS 문제풀이 관리">
+        <ManageWrapper>
+          <ButtonWrapper>
+            <LeftButtonContainer>
+              <Button color="#477FEB" onClick={onClickQuizButton}>
+                {educationStatus?.status === 'ONGOING' ? '교육 종료하기' : '교육 시작하기'}
+              </Button>
+              <Button color="#477FEB" onClick={handleKingKingButton}>
+                킹킹 진출자 계산
+              </Button>
+              <Button color="#477FEB" onClick={handleWinnerButton}>
+                우승자 계산
+              </Button>
+            </LeftButtonContainer>
+            <Button color="#000" onClick={onClickCheckAllScorer}>
+              전체 득점자 확인
+            </Button>
+          </ButtonWrapper>
+          <QuizContentsWrapper>
+            {quizzes?.map((quiz) => (
+              <QuizContent
+                key={quiz.quizId}
+                quiz={quiz}
+                educationId={educationId}
+                educationStatus={educationStatus?.status}
+                quizStatus={quiz.status}
+              />
+            ))}
+          </QuizContentsWrapper>
+        </ManageWrapper>
+      </CSManageLayout>
+    </>
   );
 };
 
@@ -110,11 +185,18 @@ const Button = styled.button<{ color: string }>`
   border-radius: 5px;
   padding: 8px 32px;
   cursor: pointer;
+  min-width: 152px;
 
   color: ${(props) => props.color};
   font-family: Inter;
   font-size: 16px;
   font-weight: 500;
+`;
+
+const LeftButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
 `;
 
 const QuizContentsWrapper = styled.div`
