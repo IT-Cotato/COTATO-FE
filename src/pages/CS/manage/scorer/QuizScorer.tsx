@@ -30,7 +30,7 @@ const QuizScorer = () => {
     fetcher,
   );
   const { data: record } = useSWR(`/v1/api/record/all?quizId=${quizId}`, fetcher, {
-    // refreshInterval: 1000,
+    refreshInterval: 1000,
   });
 
   const [submits, setSubmits] = useState<IQuizAdminSubmit[]>();
