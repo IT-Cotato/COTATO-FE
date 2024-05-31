@@ -97,6 +97,7 @@ export default React.memo(AddAnswer);
 
 const Form = styled.form`
   width: 100%;
+  margin-bottom: 20px;
 
   > p {
     color: #000;
