@@ -8,7 +8,6 @@ import bubble1 from '@assets/bubble_1.svg';
 import bubble2 from '@assets/bubble_2.svg';
 import bubble3 from '@assets/bubble_3.svg';
 import explaination from '@assets/explaination.svg';
-import MemberHeader from '@components/MemberHeader';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -243,7 +242,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   return (
     <Wrapper>
-      {showHeader ? <MemberHeader {...propsForMemberHeader} /> : null}
       <ProgressContainer>
         <ProgressBar progress={(quizData?.number as number) * 10} />
       </ProgressContainer>
