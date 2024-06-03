@@ -13,6 +13,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards } from 'swiper/modules';
 import 'swiper/css/effect-cards';
 import { media } from '@theme/media';
+import styles from './style.module.css';
 
 //
 //
@@ -24,7 +25,7 @@ const HomeSecondSection = () => {
   return (
     <Wrapper>
       <Title>
-        <SectionTwoTitle fill={theme.colors.gray80_2} />
+        <SectionTwoTitle fill={theme.colors.gray80_2} className={styles['section_two_title']} />
         <p>코테이토의 활동을 소개할게요!</p>
       </Title>
       <StyledSwiper

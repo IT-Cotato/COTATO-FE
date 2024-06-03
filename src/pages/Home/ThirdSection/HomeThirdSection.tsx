@@ -33,6 +33,7 @@ const Wrapper = styled.section`
   align-items: center;
   ${media.landscape`
     margin-top: 0px;
+    height: 105vh;
   `}
 `;
 
@@ -54,7 +55,7 @@ const SvgDiv = styled.div`
     height: 105vh;
   `}
   ${media.mobile`
-    height: 100vh;
+    height: 90vh;
     width: 700px;
   `}
 `;
