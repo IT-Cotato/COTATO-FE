@@ -47,7 +47,7 @@ const BgWinner: React.FC<BgWinnerProps> = ({ quizId }) => {
 
   const fetchWinner = async (educationId: number) => {
     await api
-      .get('/v1/api/education/result/winner', {
+      .get('/v1/api/education/winner', {
         params: {
           educationId: educationId,
         },
