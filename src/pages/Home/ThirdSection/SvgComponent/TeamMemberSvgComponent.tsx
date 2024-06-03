@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import React from 'react';
 import { useTheme } from 'styled-components';
+import styles from './style.module.css';
 
 //
 //
@@ -23,6 +24,7 @@ const TeamMemberSvgComponent = () => {
       viewBox="0 0 994 1260"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={styles['team_member']}
     >
       <path
         d="M49 582.966H58.7161V573.252H238.463H418.21V582.966H427.926V1056.18H418.21V1065.89H238.463H58.7161V1061.04V1056.18H49V582.966Z"

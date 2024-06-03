@@ -3,12 +3,12 @@ import styled, { useTheme } from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ReactComponent as SectionTwoTitle } from '@assets/home_section2_title.svg';
-import it from '@assets/home_it_card.svg';
-import cs from '@assets/home_cs_card.svg';
-import networking from '@assets/home_networking_card.svg';
-import hackerthon from '@assets/home_hackerthon_card.svg';
-import devtalk from '@assets/home_devtalk_card.svg';
-import demoday from '@assets/home_demoday_card.svg';
+import it from '@assets/IT.svg';
+import cs from '@assets/CS.svg';
+import networking from '@assets/Networking.svg';
+import hackerthon from '@assets/Hackertone.svg';
+import devtalk from '@assets/Devtalk.svg';
+import demoday from '@assets/Demoday.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards } from 'swiper/modules';
 import 'swiper/css/effect-cards';
@@ -98,12 +98,11 @@ const Title = styled.div`
 
 const StyledSwiper = styled(Swiper)`
   height: 465px;
-  width: 350px;
+  width: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   ${media.tablet`
-    width: 300px;
     height: 400px;
   `}
   ${media.landscape`
@@ -119,7 +118,7 @@ const StyledSwiper = styled(Swiper)`
 const StyledSwiperSlide = styled(SwiperSlide)`
   img {
     border-radius: 4px;
-    width: 350px;
+    width: 300px;
   }
   ${media.tablet`
     width: 300px;

@@ -6,11 +6,13 @@ import 'swiper/css/pagination';
 
 import { Mousewheel, Pagination } from 'swiper/modules';
 import styled from 'styled-components';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import HomeFirstSection from './FirstSection/HomeFirstSection';
 import HomeSecondSection from './SecondSection/HomeSecondSection';
 import HomeThirdSection from './ThirdSection/HomeThirdSection';
 import HomeBackgroundSvgComponent from './HomeBackgroundSvgComponent';
-import Footer from '@components/NewFooter';
+import Footer from '@components/Footer';
+import { device } from '@theme/media';
 
 //
 //
@@ -18,17 +20,18 @@ import Footer from '@components/NewFooter';
 
 const SWIPER_SPEED = 700;
 const SWIPER_SLIDES_PER_VIEW = 1;
+const MOUSE_WHEEL_OPTION = {
+  forceToAxis: true,
+  sensitivity: 1,
+  releaseOnEdges: true,
+};
 
 //
 //
 //
 
 const HomeSlide = () => {
-  const mouseWheelOption = {
-    forceToAxis: true,
-    sensitivity: 1,
-    releaseOnEdges: true,
-  };
+  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
 
   return (
     <>
@@ -37,7 +40,7 @@ const HomeSlide = () => {
         speed={SWIPER_SPEED}
         slidesPerView={SWIPER_SLIDES_PER_VIEW}
         modules={[Mousewheel, Pagination]}
-        mousewheel={mouseWheelOption}
+        mousewheel={MOUSE_WHEEL_OPTION}
         autoHeight={true}
       >
         <HomeBackgroundSvgComponent />
@@ -53,7 +56,7 @@ const HomeSlide = () => {
         <StyledSwiperSlide>
           <HomeThirdSection />
         </StyledSwiperSlide>
-        <SwiperSlide />
+        {!isTabletOrSmaller && <SwiperSlide />}
         {/* Footer */}
         <FooterSwiperSlide>
           <Footer />
