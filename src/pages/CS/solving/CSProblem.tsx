@@ -9,7 +9,6 @@ import bubble2 from '@assets/bubble_2.svg';
 import bubble3 from '@assets/bubble_3.svg';
 import explaination from '@assets/explaination.svg';
 import podori from '@assets/podori.jpg';
-import MemberHeader from '@components/MemberHeader';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -263,7 +262,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   return (
     <Wrapper>
-      {showHeader ? <MemberHeader {...propsForMemberHeader} /> : null}
       {notice && (
         <img
           src={podori}
