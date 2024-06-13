@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Ellipse from './Ellipse';
-import Cursor from './Cursor';
 import AnimatedText from './AnimatedText';
 
 const Home = () => {
@@ -13,16 +12,11 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, 100);
 
+  console.log('Welcome!');
+
   return (
     <Wrapper>
       <Ground>
-        {/* <Cursor
-          imgSrc="https://velog.velcdn.com/images/ea_st_ring/post/fb798aac-3ce7-4de7-8070-7aa91370837b/image.svg"
-          top={'90vh'}
-          left={'30%'}
-          time={1}
-          width={'250px'}
-        /> */}
         <Ellipse top={'-450px'} left={'-10%'} time={20} delay={0.2} width="600px" height="600px" />
         <Ellipse top={'550px'} left={'20%'} time={0} delay={0} width="500px" height="500px" />
         <Ellipse top={'200px'} left={'50%'} time={5} delay={1} width="100px" height="100px" />
@@ -132,43 +126,6 @@ const TextBox = styled.div`
   }
   @media screen and (max-width: 768px) {
     margin-left: 80px;
-  }
-`;
-
-// const Ellipse = styled.img`
-//   position: absolute;
-//   width: 300px;
-//   top: 70vh;
-//   left: 5%;
-//   z-index: 1;
-//   animation: float 1s;
-//   @keyframes float {
-//     0% {
-//       transform: translateY(30vh);
-//     }
-//     100% {
-//       transform: translateY(0);
-//     }
-//   }
-// `;
-
-const BigEllipse = styled.img`
-  position: absolute;
-  width: 400px;
-  top: 65vh;
-  left: 85%;
-  z-index: 1;
-  animation: float 1.5s ease;
-  @keyframes float {
-    0% {
-      transform: translateY(30vh);
-    }
-    50% {
-      transform: translateY(30vh);
-    }
-    100% {
-      transform: translateY(0vh);
-    }
   }
 `;
 
