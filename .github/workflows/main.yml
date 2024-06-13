@@ -36,9 +36,13 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Create .env file
+      - name: Generate Environment Variables File for Production
         run: |
-          jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env env: SECRETS_CONTEXT: ${{ toJson(secrets) }}​
+          echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env.production
+          echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> .env.production
+        env:
+          REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: Deploy to production
         run: |
