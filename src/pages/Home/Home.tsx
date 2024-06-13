@@ -12,6 +12,8 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, 100);
 
+  console.log('Welcome!');
+
   return (
     <Wrapper>
       <Ground>
