@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import sns from '@assets/sns.svg';
 
 const Footer = () => {
   const totalHeight = document.documentElement.scrollHeight;
