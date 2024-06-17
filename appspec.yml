@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /frontend/production/build
+    destination: /home/ubuntu/frontend/production/build
     overwrite: yes
 file_exists_behavior: OVERWRITE
 
