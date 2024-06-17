@@ -52,7 +52,8 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Zip Build Folder
-        run: zip -r build-fe.zip build
+        run: zip -qq -r build-fe.zip build appspec.yml
+        shell: bash
 
       - name: Upload to S3
         run: |
