@@ -86,12 +86,26 @@ const Login = () => {
             onChange={handleChangePassword}
           />
         </InputBox>
-        <LoginButton type="submit">로그인</LoginButton>
+        <div style={{ height: '84px', display: 'flex', alignItems: 'end', marginTop: '12px' }}>
+          <LoginBtn
+            type="submit"
+            onMouseOver={() => setBtnState('hover')}
+            onMouseLeave={() => setBtnState('default')}
+            onClick={() => setBtnState('clicked')}
+          >
+            <img
+              src={
+                btnState === 'default' ? btnDefault : btnState === 'hover' ? btnHover : btnClicked
+              }
+              style={{ width: '120px' }}
+            />
+          </LoginBtn>
+        </div>
       </Form>
       <LinkContainer>
-        <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
-        <img src={line} />
         <StyledLink to="/findid">아이디 찾기</StyledLink>
+        <img src={line} />
+        <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
         <img src={line} />
         <StyledLink to="/joinus">회원가입</StyledLink>
       </LinkContainer>
@@ -99,32 +113,32 @@ const Login = () => {
   );
 };
 
-export default Login;
+//
+//
+//
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 120px;
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 40px;
-  }
+  margin-top: 48px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 240px;
   margin-bottom: 24px;
+  z-index: 100;
 `;
 
 const InputBox = styled.div`
   width: 600px;
   height: 52px;
-  border-radius: 10px;
-  border: 2px solid #d7e5ca;
-  background: #fff;
+  border-radius: 8px;
+  border: 2px solid ${({ theme }) => theme.colors.primary90};
+  background: ${({ theme }) => theme.colors.common.white};
   margin-bottom: 12px;
   display: flex;
   flex-direction: row;
@@ -135,6 +149,8 @@ const InputBox = styled.div`
     &:focus {
       outline: none;
     }
+    color: ${({ theme }) => theme.colors.gray60};
+    font-size: ${({ theme }) => theme.fontSize.xs};
   }
   img {
     width: 16px;
@@ -142,35 +158,11 @@ const InputBox = styled.div`
     margin-left: 20px;
     margin-right: 8px;
   }
-
-  @media screen and (max-width: 768px) {
-    width: 440px;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px;
-  }
 `;
 
-const LoginButton = styled.button`
-  width: 600px;
-  height: 52px;
-  border-radius: 10px;
-  border: 1px solid #d7e5ca;
-  background: #d7e5ca;
-  margin-top: 48px;
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #fff;
-  &:hover {
-    cursor: pointer;
-  }
-
-  @media screen and (max-width: 768px) {
-    width: 440px;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px;
-  }
+const LoginBtn = styled.button`
+  background: none;
+  border: none;
 `;
 
 const LinkContainer = styled.div`
@@ -178,33 +170,23 @@ const LinkContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 600px;
-  height: 52px;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0px 2px 1px 0px #cecccc inset;
+  width: fit-content;
+  height: fit-content;
+  padding: 8px 20px;
+  margin-top: 32px;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.common.white};
+  border: 2px solid ${({ theme }) => theme.colors.primary90};
   img {
-    margin: 0 8px;
-    height: 16px;
-  }
-
-  @media screen and (max-width: 768px) {
-    width: 440px;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px;
-    height: 48px;
-    margin-top: 20px;
+    margin: 0 20px;
   }
 `;
 
 const StyledLink = styled(Link)`
-  color: #5e5e5e;
+  color: ${({ theme }) => theme.colors.gray60};
   text-align: center;
   text-decoration: none;
-  font-size: 0.9rem;
-
-  @media screen and (max-width: 392px) {
-    font-size: 0.8rem;
-  }
+  font-size: ${({ theme }) => theme.fontSize.md};
 `;
+
+export default Login;
