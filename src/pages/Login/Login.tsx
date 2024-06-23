@@ -1,52 +1,58 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useState } from 'react';
-import { Link, redirect, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import line from '@assets/Line 1.svg';
+import { ReactComponent as WelcomeImg } from '@assets/login_welcome_img.svg';
+import idIcon from '@assets/login_id_icon.svg';
+import passwordIcon from '@assets/login_pw_icon.svg';
+import btnDefault from '@assets/login_btn_default.svg';
+import btnHover from '@assets/login_btn_hover.svg';
+import btnClicked from '@assets/login_btn_clicked.svg';
+import line from '@assets/login_line.svg';
+import { Link } from 'react-router-dom';
+import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import axios from 'axios';
-import api from '@/api/api';
+
+//
+//
+//
 
 const Login = () => {
-  const { data, error, mutate } = useSWR('/v1/api/member/info', fetcher, {
+  const [btnState, setBtnState] = useState('default');
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  const [isError, setIsError] = useState(false);
+
+  const { data, mutate } = useSWR('/v1/api/member/info', fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     // 서버 리소스를 한번 받아오고 나서는 다시 받아오지 않음
   });
 
-  const nagivate = useNavigate();
-
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState(false);
-
-  const onChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
   }, []);
 
-  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   }, []);
 
-  const onSubmit = useCallback(
+  const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      setLoginError(false);
+      setIsError(false);
       api
         .post('/login', {
           email: id,
           password: password,
         })
         .then((res) => {
-          console.log(res.headers.accesstoken);
           localStorage.setItem('token', res.headers.accesstoken);
           mutate('/v1/api/member/info'); // 로그인 후에는 swr 요청을 수동으로 해준다
         })
         .catch((error) => {
           console.log(error);
-          setLoginError(true);
+          setIsError(true);
           if (id === '' || password === '') {
             alert('아이디 또는 비밀번호를 입력해주세요');
           } else {
@@ -64,20 +70,20 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <h3>로그인</h3>
-      <Form onSubmit={onSubmit}>
+      <WelcomeImg style={{ position: 'absolute', zIndex: 10, width: '360px' }} />
+      <Form onSubmit={handleSubmit}>
         <InputBox>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/fc85a00960fa2f2a33ed4409b435484864454f73/icon_user.svg" />
-          <input type="text" id="id" name="id" placeholder="아이디" onChange={onChangeId} />
+          <img src={idIcon} />
+          <input type="text" id="id" name="id" placeholder="아이디" onChange={handleChangeId} />
         </InputBox>
         <InputBox>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/fc85a00960fa2f2a33ed4409b435484864454f73/icon_unlock.svg" />
+          <img src={passwordIcon} />
           <input
-            type="password"
-            id="password"
-            name="password"
+            type="text"
+            id="id"
+            name="id"
             placeholder="비밀번호"
-            onChange={onChangePassword}
+            onChange={handleChangePassword}
           />
         </InputBox>
         <LoginButton type="submit">로그인</LoginButton>
