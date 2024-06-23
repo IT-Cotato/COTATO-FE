@@ -79,9 +79,9 @@ const Login = () => {
         <InputBox>
           <img src={passwordIcon} />
           <input
-            type="text"
-            id="id"
-            name="id"
+            type="password"
+            id="password"
+            name="password"
             placeholder="비밀번호"
             onChange={handleChangePassword}
           />
