@@ -95,7 +95,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       console.log('WebSocket connected');
     };
     webSocket.current.onerror = (error) => {
-      console.log(error);
+      console.log('Websocket closed by error : ' + error);
     };
   };
 
