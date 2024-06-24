@@ -15,7 +15,7 @@ const AllScorer = () => {
     fetcher,
   );
   const { data: kingMembers } = useSWRImmutable<IKingMember[]>(
-    `/v1/api/education/result/kings?educationId=${educationId}`,
+    `/v1/api/education/kings?educationId=${educationId}`,
     fetcher,
   );
 

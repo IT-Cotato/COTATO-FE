@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Multiples, ShortQuizzes } from '@/typing/db';
-import axios from 'axios';
 import CSAdminUploadLayout from './CSAdminUploadLayout';
 import CSAdminUploadContent from './CSAdminUploadContent';
 import fetchUserData from '@utils/fetchUserData';
@@ -54,7 +53,7 @@ const CSAdminUpload = () => {
    */
   const fetchQuizData = async () => {
     await api
-      .get(process.env.REACT_APP_BASE_URL + '/v1/api/quiz/all', {
+      .get('/v1/api/quiz/all', {
         params: {
           educationId: educationId,
         },
