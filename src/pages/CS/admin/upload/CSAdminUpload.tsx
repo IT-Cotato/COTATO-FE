@@ -53,7 +53,7 @@ const CSAdminUpload = () => {
    */
   const fetchQuizData = async () => {
     await api
-      .get(process.env.REACT_APP_BASE_URL + '/v1/api/quiz/all', {
+      .get('/v1/api/quiz/all', {
         params: {
           educationId: educationId,
         },
