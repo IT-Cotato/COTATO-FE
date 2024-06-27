@@ -80,10 +80,9 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   // WebSocket 연결
   const connectWebSocket = () => {
     webSocket.current = new WebSocket(
-      process.env.REACT_APP_SOCKET_URL +
-        `/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
-          educationId.educationId
-        }`,
+      `/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
+        educationId.educationId
+      }`,
     );
     webSocket.current.onopen = () => {
       console.log('WebSocket connected');
