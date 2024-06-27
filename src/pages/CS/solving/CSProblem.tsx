@@ -8,7 +8,7 @@ import bubble1 from '@assets/bubble_1.svg';
 import bubble2 from '@assets/bubble_2.svg';
 import bubble3 from '@assets/bubble_3.svg';
 import explaination from '@assets/explaination.svg';
-import MemberHeader from '@components/MemberHeader';
+import podori from '@assets/podori.jpg';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -16,7 +16,6 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
-import { set } from 'date-fns';
 import BgWinner from './BgWinner';
 
 type Problem = {
@@ -58,17 +57,19 @@ const CSProblem: React.FC<CSProblemProps> = ({
     console.log('data is undefined');
   }
 
-  const [showHeader, setShowHeader] = useState(false);
+  const [showHeader, setShowHeader] = useState<boolean>(false);
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
-  const [biggerImg, setBiggerImg] = useState(false);
-  const [selectNum, setSelectNum] = useState(0);
+  const [biggerImg, setBiggerImg] = useState<boolean>(false);
+  const [selectNum, setSelectNum] = useState<number>(0);
   const [selected, setSelected] = useState<string[]>([]); // 최종적으로 선택한 선지번호 리스트
   const [shortAns, setShortAns] = useState('');
   const [showCorrect, setShowCorrect] = useState(false);
   const [showIncorrect, setShowIncorrect] = useState(false);
   const [showExplaination, setShowExplaination] = useState(false);
   const [returnToWaiting, setReturnToWaiting] = useState(false);
+  const [count, setCount] = useState(0);
+  const [notice, setNotice] = useState(false);
 
   const inputRef = useRef<any>();
 
@@ -92,6 +93,26 @@ const CSProblem: React.FC<CSProblemProps> = ({
       if (el) el.style.height = `${maxHeight}px`;
     });
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        setCount((prevCount) => prevCount + 1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    const intervalId = setInterval(() => {
+      // console.log(`1초 간 ${count}번 누름`);
+      setCount(0);
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      clearInterval(intervalId);
+    };
+  }, [count]);
 
   useEffect(() => {
     alignBtnHeights();
@@ -177,15 +198,21 @@ const CSProblem: React.FC<CSProblemProps> = ({
   };
 
   const submitProblem = () => {
-    // 문제 제출하기
     const input = quizData?.choices ? selected : [shortAns];
 
-    if (!data) {
-      console.log('data is not loaded yet');
-      return; // data가 undefined라면(아직 불러와지지 않았다면) 함수 종료
+    if (!data || notice) {
+      return;
     } else {
-      if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
-        alert(selected + '답안을 입력 후 제출해주세요.');
+      if (!submitAllowed) {
+        alert('아직 제출 기한이 아닙니다.');
+        if (count >= 3) {
+          setNotice(true);
+          setTimeout(() => setNotice(false), 5000);
+          // console.log('광클 에바지');
+        }
+        return;
+      } else if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
+        alert('답안을 입력 후 제출해주세요.');
         return;
       } else {
         api
@@ -203,29 +230,19 @@ const CSProblem: React.FC<CSProblemProps> = ({
             },
           )
           .then((res) => {
-            console.log(res);
             if (res.data.result === 'true') {
               setShowCorrect(true);
-              if (submitAllowed) {
-                // 정답인데 아직 문제가 닫히지 않은 경우 대기화면으로 보냄
-                if ((quizData?.number as number) !== 10) {
-                  setTimeout(() => setReturnToWaiting(true), 2500);
-                } else {
-                  setReturnToWaiting(false);
-                }
+              if ((quizData?.number as number) !== 10) {
+                setTimeout(() => setReturnToWaiting(true), 2500);
+              } else {
+                setReturnToWaiting(false);
               }
             } else {
               setShowIncorrect(true);
             }
           })
           .catch((err) => {
-            console.error(err);
-            console.log(quizId, data.memberId, input);
-            if (err.response.data.message === 'cannot access this quiz') {
-              alert('아직 제출 기한이 아닙니다.');
-            } else if (err.response.data.message === 'Already Correct') {
-              alert('이미 정답 처리되었습니다.');
-            }
+            console.log(err);
           });
       }
     }
@@ -245,7 +262,13 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   return (
     <Wrapper>
-      {showHeader ? <MemberHeader {...propsForMemberHeader} /> : null}
+      {notice && (
+        <img
+          src={podori}
+          alt="포돌짱"
+          style={{ position: 'fixed', marginTop: '60px', width: '500px' }}
+        />
+      )}
       <ProgressContainer>
         <ProgressBar progress={(quizData?.number as number) * 10} />
       </ProgressContainer>
