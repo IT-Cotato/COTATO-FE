@@ -1,4 +1,3 @@
-import React from 'react';
 import { MemberData } from '@/typing/db';
 import AdminIcon from '@/assets/role_admin_icon.svg';
 import GeneralIcon from '@/assets/role_general_icon.svg';
