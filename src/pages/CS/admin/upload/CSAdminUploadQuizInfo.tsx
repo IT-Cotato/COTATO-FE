@@ -176,7 +176,7 @@ const CSAdminUploadQuizInfo = ({ quiz, setQuiz, selected, educationId }: Props) 
     const sendData = async () => {
       await axios({
         method: 'POST',
-        url: process.env.REACT_APP_BASE_URL + '/v1/api/quiz/adds',
+        url: '/v1/api/quiz/adds',
         data: formData,
         params: {
           educationId: educationId,
