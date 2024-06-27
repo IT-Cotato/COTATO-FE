@@ -54,9 +54,9 @@ const SessionModal = ({
     if (session) {
       setTitle(getTitle(session.sessionNumber));
       setDescription(session.description);
-      setItIssue(session.itIssue === 'IT_ON');
-      setNetworking(session.networking === 'NW_ON');
-      setCsEdu(session.csEducation === 'CS_ON');
+      setItIssue(session.sessionContent.itIssue === 'IT_ON');
+      setNetworking(session.sessionContent.networking === 'NW_ON');
+      setCsEdu(session.sessionContent.csEducation === 'CS_ON');
     } else {
       setTitle(getTitle(lastWeek + 1));
     }
