@@ -56,7 +56,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
     console.log('data is undefined');
   }
 
-  const [showHeader, setShowHeader] = useState<boolean>(false);
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
   const [biggerImg, setBiggerImg] = useState<boolean>(false);
@@ -245,11 +244,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
           });
       }
     }
-  };
-
-  const propsForMemberHeader = {
-    showHeader,
-    setShowHeader,
   };
 
   if (showKingKing == true) {
