@@ -37,11 +37,11 @@ const Login = () => {
     // 서버 리소스를 한번 받아오고 나서는 다시 받아오지 않음
   });
 
-  const handleChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
   }, []);
 
-  const handleChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   }, []);
 
@@ -82,7 +82,7 @@ const Login = () => {
       <Form onSubmit={handleSubmit}>
         <InputBox>
           <img src={idIcon} />
-          <input type="text" id="id" name="id" placeholder="아이디" onChange={handleChangeId} />
+          <input type="text" id="id" name="id" placeholder="아이디" onChange={handleIdChange} />
         </InputBox>
         <InputBox>
           <img src={passwordIcon} />
@@ -91,7 +91,7 @@ const Login = () => {
             id="password"
             name="password"
             placeholder="비밀번호"
-            onChange={handleChangePassword}
+            onChange={handlePasswordChange}
           />
         </InputBox>
         <div style={{ height: '84px', display: 'flex', alignItems: 'end', marginTop: '12px' }}>
