@@ -5,7 +5,6 @@ import mobile from '@assets/bg_waiting_mobile.svg';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import api from '@/api/api';
 import CSProblem from './CSProblem';
-import BgWaiting from './BgWaiting';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BgWinner from './BgWinner';
 
@@ -35,11 +34,9 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const [allowSubmit, setAllowSubmit] = useState<boolean>(false);
   const [problemId, setProblemId] = useState<number>(0); // = quizId
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showHeader, setShowHeader] = useState<boolean>(true);
-  const propsForMemberHeader = {
-    showHeader,
-    setShowHeader,
-  };
+
   window.addEventListener('mousemove', (e) => {
     if (e.clientY < 150) {
       setShowHeader(true);
