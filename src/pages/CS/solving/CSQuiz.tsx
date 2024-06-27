@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import background from '@assets/bg_waiting.svg';
 import mobile from '@assets/bg_waiting_mobile.svg';
@@ -7,8 +7,6 @@ import api from '@/api/api';
 import CSProblem from './CSProblem';
 import BgWaiting from './BgWaiting';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { set } from 'date-fns';
-import BgKingKing from './BgKingKing';
 import BgWinner from './BgWinner';
 
 interface WaitingProps {
