@@ -41,12 +41,16 @@ export interface ICsOnSession {
 export interface ISession {
   sessionId: number;
   sessionNumber: number;
+  title: string;
   description: string;
   photoUrl: string;
   generationId: number;
-  csEducation: string;
-  itIssue: string;
-  networking: string;
+  sessionContent: {
+    itIssue: 'IT_ON' | 'IT_OFF';
+    networking: 'NW_ON' | 'NW_OFF';
+    csEducation: 'CS_ON' | 'CS_OFF';
+    devTalk: 'DEVTALK_ON' | 'DEVTALK_OFF';
+  };
 }
 
 export interface IEducation {
