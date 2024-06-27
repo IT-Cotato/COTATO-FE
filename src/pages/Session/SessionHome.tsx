@@ -98,7 +98,6 @@ const SessionHome = () => {
                   key={session.sessionId}
                   session={session}
                   handleModifyButton={handleModifyButton}
-                  sessionCount={selectedGeneration?.sessionCount}
                 />
               ))
             )}

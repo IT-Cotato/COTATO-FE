@@ -10,10 +10,9 @@ import cotato_icon from '@assets/cotato_icon.png';
 interface Props {
   session: ISession;
   handleModifyButton: (session: ISession) => void;
-  sessionCount?: number;
 }
 
-const SessionContent = ({ session, handleModifyButton, sessionCount }: Props) => {
+const SessionContent = ({ session, handleModifyButton }: Props) => {
   const { data: user } = useSWR('/v1/api/member/info', fetcher);
 
   const [isHover, setIsHover] = useState(false);
