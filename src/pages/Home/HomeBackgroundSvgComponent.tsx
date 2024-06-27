@@ -1,4 +1,5 @@
 import React from 'react';
+import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
 
 //
@@ -24,6 +25,7 @@ const HomeBackgroundSvgComponent = () => {
         width: '100vw',
         position: 'absolute',
         background: theme.colors.common.white,
+        transition: THEME_CHANGE_TRANSITION,
       }}
     >
       <circle cx="27" cy="4" r="4" fill={dotColor} />

@@ -16,7 +16,6 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
-import BgWinner from './BgWinner';
 
 type Problem = {
   id: number; // 문제의 PK
@@ -50,7 +49,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   showKingKing,
   setShowKingKing,
 }) => {
-  const { data, error, isLoading, mutate } = useSWR('/v1/api/member/info', fetcher);
+  const { data } = useSWR('/v1/api/member/info', fetcher);
   if (data) {
     // console.log(data);
   } else {

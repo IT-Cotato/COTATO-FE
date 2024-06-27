@@ -4,6 +4,9 @@ import { ReactComponent as Insta } from '@/assets/footer_insta.svg';
 import { ReactComponent as Youtube } from '@/assets/footer_youtube.svg';
 import { ReactComponent as Github } from '@/assets/footer_github.svg';
 import { ReactComponent as Cafe } from '@/assets/footer_cafe.svg';
+import { media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
+import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 
 //
 //
@@ -75,11 +78,30 @@ const FooterWrapper = styled.footer`
   padding: 6.25rem 6.25rem 3.125rem 6.25rem;
   gap: 6.25rem;
   background-color: ${({ theme }) => theme.colors.common.white};
+  transition: ${THEME_CHANGE_TRANSITION};
+  ${media.laptop`
+    padding: 6.25rem 3.125rem 3.125rem 3.125rem;
+  `}
+  ${media.tablet`
+    padding: 1.5rem 1.5rem 1.5rem 0;
+    gap: 1.5rem;
+  `}
+  ${media.mobile`
+    padding: 6.25rem 1.25rem 3.125rem 1.25rem;
+    gap: 1rem;
+  `}
 `;
 
 const SnsWrapper = styled.div`
   display: flex;
-  gap: 2.6rem;
+  gap: 2.5rem;
+
+  ${media.tablet`
+    gap: 2rem;
+  `}
+  ${media.mobile`
+    gap: 0.5rem;
+  `}
 `;
 
 const SnsBackground = styled.div`
@@ -98,7 +120,7 @@ const DescriptionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.6rem;
+  gap: 1.5rem;
 `;
 
 const MainText = styled.span`
@@ -128,4 +150,11 @@ const SubTextContainer = styled.div`
       color: ${({ theme }) => theme.colors.gray80};
     }
   }
+
+  ${media.tablet`
+    > p {
+      font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
+      margin: 0rem;
+    }
+  `}
 `;

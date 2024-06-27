@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import ResetPW from './ResetPW';
 import api from '@/api/api';
 
 interface EmailAuthProps {
@@ -9,7 +8,7 @@ interface EmailAuthProps {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email, setEmail }) => {
+const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
   const [inputs, setInputs] = useState<number[]>(Array(6).fill(null));
   const inputRef = useRef<any>([]);
 

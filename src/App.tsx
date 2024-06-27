@@ -14,34 +14,35 @@ import FindPWProcess from '@pages/Login/FindPWProcess';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
 import CSPage from '@pages/CS/CSPage';
-import { ThemeProvider } from 'styled-components';
-import { CotatoLightTheme } from '@theme/theme';
+
+import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 
 function App() {
+  //
+  //
+  //
+
   return (
     <div className="App">
-      <ThemeProvider theme={CotatoLightTheme}>
+      <CotatoThemeProvider>
         <GlobalStyle />
-        <div className="wrapper">
-          <div className="contentWrapper">
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/projects" element={<ReadyState />} />
-              <Route path="/team" element={<ReadyState />} />
-              <Route path="/cs/*" element={<CSPage />} />
-              <Route path="/session" element={<SessionHome />} />
-              <Route path="/signin" element={<Login />} />
-              <Route path="/findid" element={<FindID />} />
-              <Route path="/findpw" element={<FindPWProcess />} />
-              <Route path="/joinus" element={<SignUp />} />
-              <Route path="/mypage/*" element={<MyPage />} />
-              <Route path="/*" element={<NotFound />} />
-            </Routes>
-          </div>
-          {window.location.pathname !== '/' && <Footer />}
-        </div>
-      </ThemeProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<ReadyState />} />
+          <Route path="/team" element={<ReadyState />} />
+          <Route path="/cs/*" element={<CSPage />} />
+          <Route path="/session" element={<SessionHome />} />
+          <Route path="/signin" element={<Login />} />
+          <Route path="/findid" element={<FindID />} />
+          <Route path="/findpw" element={<FindPWProcess />} />
+          <Route path="/joinus" element={<SignUp />} />
+          <Route path="/mypage/*" element={<MyPage />} />
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+
+        {window.location.pathname !== '/' && <Footer />}
+      </CotatoThemeProvider>
     </div>
   );
 }
