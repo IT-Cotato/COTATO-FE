@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as WelcomeImg } from '@assets/login_welcome_img.svg';
+import WelcomeImg from '@assets/login_welcome_img.svg';
 import idIcon from '@assets/login_id_icon.svg';
 import passwordIcon from '@assets/login_pw_icon.svg';
 import btnDefault from '@assets/login_btn_default.svg';
@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import { media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
 
 //
 //
@@ -70,7 +72,7 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <WelcomeImg style={{ position: 'absolute', zIndex: 10, width: '360px' }} />
+      <BackImg src={WelcomeImg} />
       <Form onSubmit={handleSubmit}>
         <InputBox>
           <img src={idIcon} />
@@ -124,6 +126,16 @@ const Wrapper = styled.div`
   margin-top: 48px;
 `;
 
+const BackImg = styled.img`
+  position: absolute;
+  z-index: 10;
+  width: 360px;
+  ${media.mobile`
+  width: 284px;
+  margin-top: 72px;
+`}
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -158,6 +170,9 @@ const InputBox = styled.div`
     margin-left: 20px;
     margin-right: 8px;
   }
+  ${media.mobile`
+    width: 344px;
+  `}
 `;
 
 const LoginBtn = styled.button`
@@ -180,6 +195,11 @@ const LinkContainer = styled.div`
   img {
     margin: 0 20px;
   }
+  ${media.mobile`
+    img {
+      margin: 0 12px;
+    }
+  `}
 `;
 
 const StyledLink = styled(Link)`
@@ -187,6 +207,9 @@ const StyledLink = styled(Link)`
   text-align: center;
   text-decoration: none;
   font-size: ${({ theme }) => theme.fontSize.md};
+  ${media.mobile`
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
+  `}
 `;
 
 export default Login;
