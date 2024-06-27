@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Header from '@components/Header';
 import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
-import SessionHome from '@pages/Session/SessionHome';
+import Session from '@pages/Session/_Session';
 import SignUp from '@pages/JoinUs/SignUp';
 import MyPage from '@pages/MyPage/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
@@ -30,7 +30,7 @@ function App() {
               <Route path="/projects" element={<ReadyState />} />
               <Route path="/team" element={<ReadyState />} />
               <Route path="/cs/*" element={<CSPage />} />
-              <Route path="/session" element={<SessionHome />} />
+              <Route path="/session/*" element={<Session />} />
               <Route path="/signin" element={<Login />} />
               <Route path="/findid" element={<FindID />} />
               <Route path="/findpw" element={<FindPWProcess />} />
