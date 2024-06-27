@@ -5,7 +5,7 @@ import mobile from '@assets/bg_waiting_mobile.svg';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import api from '@/api/api';
 import CSProblem from './CSProblem';
-import MemberHeader from '@components/MemberHeader';
+import BgWaiting from './BgWaiting';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BgWinner from './BgWinner';
 
@@ -165,7 +165,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   return (
     <Wrapper>
-      {showHeader ? <MemberHeader {...propsForMemberHeader} /> : null}
       <Waiting>
         <Timer style={{ width: '68px' }} />
         <div>곧 문제가 시작됩니다. &nbsp;잠시만 기다려주세요!</div>

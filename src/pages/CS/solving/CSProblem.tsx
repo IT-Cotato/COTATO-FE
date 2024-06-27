@@ -9,7 +9,6 @@ import bubble2 from '@assets/bubble_2.svg';
 import bubble3 from '@assets/bubble_3.svg';
 import explaination from '@assets/explaination.svg';
 import podori from '@assets/podori.jpg';
-import MemberHeader from '@components/MemberHeader';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -57,11 +56,11 @@ const CSProblem: React.FC<CSProblemProps> = ({
     console.log('data is undefined');
   }
 
-  const [showHeader, setShowHeader] = useState(false);
+  const [showHeader, setShowHeader] = useState<boolean>(false);
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
-  const [biggerImg, setBiggerImg] = useState(false);
-  const [selectNum, setSelectNum] = useState(0);
+  const [biggerImg, setBiggerImg] = useState<boolean>(false);
+  const [selectNum, setSelectNum] = useState<number>(0);
   const [selected, setSelected] = useState<string[]>([]); // 최종적으로 선택한 선지번호 리스트
   const [shortAns, setShortAns] = useState('');
   const [showCorrect, setShowCorrect] = useState(false);
@@ -262,7 +261,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   return (
     <Wrapper>
-      {showHeader ? <MemberHeader {...propsForMemberHeader} /> : null}
       {notice && (
         <img
           src={podori}
