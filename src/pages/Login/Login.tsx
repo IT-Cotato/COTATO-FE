@@ -18,8 +18,14 @@ import { CotatoThemeType } from '@theme/theme';
 //
 //
 
+type btnStateType = 'default' | 'hover' | 'clicked';
+
+//
+//
+//
+
 const Login = () => {
-  const [btnState, setBtnState] = useState('default');
+  const [btnState, setBtnState] = useState<btnStateType>('default');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [isError, setIsError] = useState(false);
