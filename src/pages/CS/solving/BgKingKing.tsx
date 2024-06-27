@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import background from '@assets/bg_kingking.svg';
 import mobile from '@assets/bg_kingking_mobile.svg';
 import api from '@/api/api';
-import { set } from 'date-fns';
 import BgWaiting from './BgWaiting';
 
 type KingMembers = {
@@ -19,6 +18,7 @@ interface BgKingKingProps {
 const BgKingKing: React.FC<BgKingKingProps> = ({ quizId }) => {
   const [kingMembers, setKingMembers] = useState<KingMembers[]>([]);
   const [educationId, setEducationId] = useState<number>(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showWaiting, setShowWaiting] = useState<boolean>(false);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const BgKingKing: React.FC<BgKingKingProps> = ({ quizId }) => {
 
   const fetchKing = async (educationId: number) => {
     await api
-      .get('/v1/api/education/result/kings', {
+      .get('/v1/api/education/kings', {
         params: {
           educationId: educationId,
         },

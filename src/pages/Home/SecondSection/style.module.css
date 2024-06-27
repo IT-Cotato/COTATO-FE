@@ -1,0 +1,5 @@
+.section_two_title{
+    @media (max-width: 576px) {
+        width: 80% !important;
+      }
+}

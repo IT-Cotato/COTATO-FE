@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-const device = {
+export const device = {
   mobile: '400px',
   landscape: '576px',
   tablet: '768px',
