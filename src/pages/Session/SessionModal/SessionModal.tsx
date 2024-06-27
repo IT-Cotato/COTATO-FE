@@ -105,10 +105,12 @@ const SessionModal = ({
 
       const formData = new FormData();
       if (image) formData.append('sessionImage', image);
+      formData.append('title', title);
       formData.append('description', description);
       formData.append('itIssue', itIssue ? 'IT_ON' : 'IT_OFF');
       formData.append('networking', networking ? 'NW_ON' : 'NW_OFF');
       formData.append('csEducation', csEdu ? 'CS_ON' : 'CS_OFF');
+      formData.append('devTalk', 'DEVTALK_OFF');
 
       if (!session) {
         if (generationId) formData.append('generationId', generationId.toString());
@@ -133,7 +135,7 @@ const SessionModal = ({
           .catch((err) => console.error(err));
       }
     },
-    [session, image, generationId, itIssue, csEdu, networking, description, isImageUpdated],
+    [session, title, image, generationId, itIssue, csEdu, networking, description, isImageUpdated],
   );
 
   const closePopUp = useCallback(() => {
