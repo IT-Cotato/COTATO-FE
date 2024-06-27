@@ -50,7 +50,7 @@ const QuizScorer = () => {
         setQuizStart(quizData.start);
       }
     });
-  }, [quizList]);
+  }, [quizList, quizId]);
 
   useEffect(() => {
     const newSubmitList: IQuizAdminSubmit[] = record?.records;
