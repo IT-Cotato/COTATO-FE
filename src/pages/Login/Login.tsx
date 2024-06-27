@@ -13,6 +13,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
+import { ButtonContainer } from '@pages/MyPage/RoleApproveLayout';
 
 //
 //
@@ -94,7 +95,7 @@ const Login = () => {
             onChange={handlePasswordChange}
           />
         </InputBox>
-        <div style={{ height: '84px', display: 'flex', alignItems: 'end', marginTop: '12px' }}>
+        <ButtonContainer>
           <LoginBtn
             type="submit"
             onMouseOver={() => setBtnState('hover')}
@@ -108,7 +109,7 @@ const Login = () => {
               style={{ width: '120px' }}
             />
           </LoginBtn>
-        </div>
+        </ButtonContainer>
       </Form>
       <LinkContainer>
         <StyledLink to="/findid">아이디 찾기</StyledLink>
@@ -179,6 +180,13 @@ const InputBox = styled.div`
   ${media.mobile`
     width: 344px;
   `}
+`;
+
+const ButtonContainer = styled.div`
+  height: 84px;
+  display: flex;
+  align-items: end;
+  margin-top: '12px';
 `;
 
 const LoginBtn = styled.button`
