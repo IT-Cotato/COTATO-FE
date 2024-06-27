@@ -6,19 +6,38 @@ import { NavLink } from 'react-router-dom';
 import fetchUserData from '@utils/fetchUserData';
 import { v4 as uuid } from 'uuid';
 import { getMemberRoleIcon } from '@utils/getMemberRoleIcon';
+import { device, media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import MobileSideMenuDrawerButton from './MobileSideMenuDrawerButton';
+import { ReactComponent as ThemeDark } from '@/assets/theme_dark_icon.svg';
+import { ReactComponent as ThemeLight } from '@/assets/theme_light_icon.svg';
+import { Tooltip } from '@mui/material';
+import { ThemeContext } from '@theme/context/CotatoThemeProvider';
+import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
+import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
 
 //
 //
 //
 
-const NAV_LIST = [
+type NavItemName = 'Home' | 'About us' | 'Project' | 'Session' | 'FAQ' | 'CS Quiz';
+
+type NavItem = {
+  name: NavItemName;
+  path: string;
+};
+
+const NAV_LIST: NAV_LIST_TYPE = Object.freeze([
   { name: 'Home', path: '/' },
   { name: 'About us', path: '/about' },
   { name: 'Project', path: '/projects' },
   { name: 'Session', path: '/session' },
   { name: 'FAQ', path: '/faq' },
   { name: 'CS Quiz', path: '/cs' },
-];
+]);
+
+export type NAV_LIST_TYPE = ReadonlyArray<Readonly<NavItem>>;
 
 //
 //
@@ -26,13 +45,21 @@ const NAV_LIST = [
 
 const Header = () => {
   const { data: user } = fetchUserData();
+  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const { DefaultTheme, onChangeTheme } = React.useContext(ThemeContext);
 
+  /**
+   *
+   */
   const renderLogo = () => (
     <LogoLink to={'/'}>
       <Logo />
     </LogoLink>
   );
 
+  /**
+   *
+   */
   const renderNav = () => (
     <NavContainer>
       {NAV_LIST.map((navItem) => (
@@ -41,9 +68,26 @@ const Header = () => {
         </NavItem>
       ))}
       {user ? renderMember() : renderLogin()}
+      <StyledSwitchDiv>
+        <Tooltip arrow title="실험적 기능으로 아직 완벽하지 않을 수 있습니다." placement="top">
+          {DefaultTheme === COTATO_LIGHT_THEME ? (
+            <ThemeLight width={24} />
+          ) : (
+            <ThemeDark width={24} />
+          )}
+        </Tooltip>
+
+        <CotatoThemeToggleSwitch
+          checked={DefaultTheme === COTATO_LIGHT_THEME}
+          onChange={onChangeTheme}
+        />
+      </StyledSwitchDiv>
     </NavContainer>
   );
 
+  /**
+   *
+   */
   const renderMember = () => {
     if (!user) {
       return null;
@@ -59,6 +103,9 @@ const Header = () => {
     );
   };
 
+  /**
+   *
+   */
   const renderLogin = () => {
     if (user) {
       return null;
@@ -71,11 +118,33 @@ const Header = () => {
     );
   };
 
+  const renderHeader = () => {
+    if (isTabletOrSmaller) {
+      return null;
+    }
+    return (
+      <HeaderWrapper>
+        {renderLogo()}
+        {renderNav()}
+      </HeaderWrapper>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderMobileHeader = () => {
+    if (!isTabletOrSmaller) {
+      return null;
+    }
+    return <MobileSideMenuDrawerButton navList={NAV_LIST} />;
+  };
+
   return (
-    <HeaderWrapper>
-      {renderLogo()}
-      {renderNav()}
-    </HeaderWrapper>
+    <>
+      {renderHeader()}
+      {renderMobileHeader()}
+    </>
   );
 };
 
@@ -85,39 +154,45 @@ export default Header;
 //
 //
 
-//
-//
-//
-
 const HeaderWrapper = styled.header`
   display: flex;
   width: 100%;
-  padding: 0.5rem 2rem;
-  justify-content: space-around;
+  padding: 0.5rem 6rem;
   align-items: center;
   background: ${({ theme }) => theme.colors.common.white};
   position: absolute;
   top: 0;
   z-index: 100;
+  transition: ${THEME_CHANGE_TRANSITION};
+  ${media.desktop`
+    padding: 0.5rem 4rem;
+`}
+  ${media.laptop`
+    padding: 0.5rem 2rem;
+  `}
 `;
 
 const LogoLink = styled(NavLink)`
   display: flex;
   align-items: center;
-  margin: 0rem;
 `;
 
 const NavContainer = styled.div`
   display: flex;
+  align-self: stretch;
+  width: 70%;
   height: 3.5rem;
+  justify-content: space-around;
+  margin: auto;
   align-items: center;
-  gap: 2.25rem;
-  margin: 0 2rem;
+  gap: 2rem;
 `;
 
 const NavItem = styled(NavLink)`
+  min-width: fit-content;
   text-decoration: none;
-  font-family: Ycomputer;
+  font-family: 'Ycomputer';
+  text-align: center;
   color: ${({ theme }) => theme.colors.gray80_2};
   font-size: ${({ theme }) => theme.fontSize.md};
   padding: ${({ theme }) => theme.size.lg};
@@ -128,6 +203,19 @@ const NavItem = styled(NavLink)`
     color: ${({ theme }) => theme.colors.common.black};
     box-shadow: ${({ theme }) => theme.colors.sub2[60]} inset 0px -3px 0px 0px;
   }
+  ${media.desktop`
+    padding: 0.5rem;
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.sm};
+`}
+  ${media.laptop`
+    padding: 0rem;
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.sm};
+    &:hover,
+    &.active {
+      border: 2px solid ${({ theme }: { theme: CotatoThemeType }) => theme.colors.sub2[60]};
+      box-shadow:none;
+    }
+  `}
 `;
 
 const LoginLink = styled(NavLink)`
@@ -143,4 +231,16 @@ const MemberNav = styled.div`
 const MemberRoleIcon = styled.img`
   width: 1.5rem;
   height: 1.5rem;
+`;
+
+const StyledSwitchDiv = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+
+  > label {
+    margin-bottom: 0.5rem;
+  }
 `;
