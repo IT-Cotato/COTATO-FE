@@ -45,7 +45,7 @@ export interface ISession {
   description: string;
   photoUrl: string;
   generationId: number;
-  sessionContent: {
+  sessionContents: {
     itIssue: 'IT_ON' | 'IT_OFF';
     networking: 'NW_ON' | 'NW_OFF';
     csEducation: 'CS_ON' | 'CS_OFF';
