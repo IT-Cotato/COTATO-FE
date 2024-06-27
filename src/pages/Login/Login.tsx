@@ -13,7 +13,6 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
-import { ButtonContainer } from '@pages/MyPage/RoleApproveLayout';
 
 //
 //
@@ -81,20 +80,22 @@ const Login = () => {
     <Wrapper>
       <BackImg src={WelcomeImg} />
       <Form onSubmit={handleSubmit}>
-        <InputBox>
-          <img src={idIcon} />
-          <input type="text" id="id" name="id" placeholder="아이디" onChange={handleIdChange} />
-        </InputBox>
-        <InputBox>
-          <img src={passwordIcon} />
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="비밀번호"
-            onChange={handlePasswordChange}
-          />
-        </InputBox>
+        <InputContainer>
+          <InputBox>
+            <img src={idIcon} />
+            <input type="text" id="id" name="id" placeholder="아이디" onChange={handleIdChange} />
+          </InputBox>
+          <InputBox>
+            <img src={passwordIcon} />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="비밀번호"
+              onChange={handlePasswordChange}
+            />
+          </InputBox>
+        </InputContainer>
         <ButtonContainer>
           <LoginBtn
             type="submit"
@@ -130,7 +131,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 48px;
+  margin-top: 3.5rem;
 `;
 
 const BackImg = styled.img`
@@ -147,21 +148,27 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 240px;
-  margin-bottom: 24px;
+  margin-top: 14rem;
+  margin-bottom: 3.6rem;
   z-index: 100;
+`;
+
+const InputContainer = styled.div`
+  margin-bottom: 2rem;
 `;
 
 const InputBox = styled.div`
   width: 600px;
   height: 52px;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.colors.primary90};
   background: ${({ theme }) => theme.colors.common.white};
-  margin-bottom: 12px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  &:first-child {
+    margin-bottom: 1rem;
+  }
   input {
     border: none;
     width: 512px;
@@ -174,8 +181,8 @@ const InputBox = styled.div`
   img {
     width: 16px;
     height: 16px;
-    margin-left: 20px;
-    margin-right: 8px;
+    margin-left: 1.25rem;
+    margin-right: 0.8rem;
   }
   ${media.mobile`
     width: 344px;
@@ -183,10 +190,9 @@ const InputBox = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  height: 84px;
+  height: 5rem;
   display: flex;
   align-items: end;
-  margin-top: '12px';
 `;
 
 const LoginBtn = styled.button`
@@ -201,9 +207,8 @@ const LinkContainer = styled.div`
   justify-content: center;
   width: fit-content;
   height: fit-content;
-  padding: 8px 20px;
-  margin-top: 32px;
-  border-radius: 8px;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.5rem;
   background: ${({ theme }) => theme.colors.common.white};
   border: 2px solid ${({ theme }) => theme.colors.primary90};
   img {
