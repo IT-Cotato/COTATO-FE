@@ -52,9 +52,9 @@ const SessionContent = ({ session, handleModifyButton, sessionCount }: Props) =>
         <Title>
           <p>{session.sessionNumber === 0 ? 'OT' : `${session.sessionNumber}주차 세션`}</p>
           <EmojiWrapper>
-            {session.csEducation === 'CS_ON' && <SessionEmoji activity="CS" />}
-            {session.itIssue === 'IT_ON' && <SessionEmoji activity="IT" />}
-            {session.networking === 'NW_ON' && <SessionEmoji activity="NW" />}
+            {session.sessionContent.csEducation === 'CS_ON' && <SessionEmoji activity="CS" />}
+            {session.sessionContent.itIssue === 'IT_ON' && <SessionEmoji activity="IT" />}
+            {session.sessionContent.networking === 'NW_ON' && <SessionEmoji activity="NW" />}
           </EmojiWrapper>
         </Title>
       )}
