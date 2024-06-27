@@ -52,7 +52,7 @@ const SessionModal = ({
 
   const handleAfterOpen = useCallback(() => {
     if (session) {
-      setTitle(getTitle(session.sessionNumber));
+      setTitle(session.title);
       setDescription(session.description);
       setItIssue(session.sessionContents.itIssue === 'IT_ON');
       setNetworking(session.sessionContents.networking === 'NW_ON');
@@ -75,6 +75,13 @@ const SessionModal = ({
     setIsImageUpdated(false);
     document.body.style.overflow = 'unset';
   }, []);
+
+  const onChangeTitle = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setTitle(e.target.value);
+    },
+    [title],
+  );
 
   const onChangeItNews = useCallback(() => {
     setItIssue(!itIssue);
@@ -155,7 +162,7 @@ const SessionModal = ({
             setIsPopUpOpen={setIsPopUpOpen}
             setIsImageUpdated={setIsImageUpdated}
           />
-          <TextBox value={title} height="60px" readOnly={true} />
+          <TextBox value={title} height="60px" onChange={onChangeTitle} />
           <ToggleButtonBox>
             <p>it 뉴스</p>
             <ToggleButton toggled={itIssue} onClick={onChangeItNews} />
