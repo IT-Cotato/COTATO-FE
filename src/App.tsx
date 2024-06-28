@@ -30,9 +30,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ReadyState />} />
-          <Route path="/team" element={<ReadyState />} />
+          <Route path="/about" element={<ReadyState />} />
+          <Route path="/products" element={<ReadyState />} />
           <Route path="/cs/*" element={<CSPage />} />
           <Route path="/session" element={<SessionHome />} />
+          <Route path="/faq" element={<ReadyState />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/findid" element={<FindID />} />
           <Route path="/findpw" element={<FindPWProcess />} />
@@ -40,7 +42,6 @@ function App() {
           <Route path="/mypage/*" element={<MyPage />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
-
         {window.location.pathname !== '/' && <Footer />}
       </CotatoThemeProvider>
     </div>
