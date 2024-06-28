@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import HomeBackgroundSvgComponent from '@pages/Home/HomeBackgroundSvgComponent';
+import { ReactComponent as WorkingPotato } from '@assets/potato_working.svg';
 
 const ReadyState = () => {
   return (
     <Wrapper>
-      <img src="https://velog.velcdn.com/images/ea_st_ring/post/34acf66f-e31c-466a-ad2f-faddb3c3679f/image.svg" />
+      <HomeBackgroundSvgComponent />
+      <StyledWorkingPotato />
       <h1>페이지 준비중입니다. 조만간 뵙겠습니다.</h1>
       <button
         onClick={() => {
@@ -24,29 +27,39 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  img {
-    width: 60px;
-  }
+  background-color: rgba(255, 255, 255, 0);
+
   h1 {
-    color: #595959;
-    font-family: NanumSquareRound;
+    color: ${({ theme }) => theme.colors.gray80_2};
+    font-family: Ycomputer;
     font-size: 28px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
+    z-index: 100;
   }
   button {
     display: flex;
-    padding: 12px 32px;
+    padding: 16px 32px;
     justify-content: center;
     margin-top: 24px;
     font-size: 18px;
     align-items: center;
     gap: 10px;
     border-radius: 100px;
-    background-color: #1e1e1e;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.gray80_2};
+    background-color: ${({ theme }) => theme.colors.common.white};
+    font-family: Ycomputer;
     cursor: pointer;
+    border: 4px solid ${({ theme }) => theme.colors.primary100_1};
+    z-index: 100;
   }
+`;
+
+const StyledWorkingPotato = styled(WorkingPotato)`
+  z-index: 100;
+  width: 180px;
+  height: 140px;
+  margin-bottom: 16px;
 `;
 
 export default ReadyState;
