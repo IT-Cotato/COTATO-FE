@@ -120,9 +120,9 @@ const FlexBox = styled.div`
 `;
 
 const CSWrapper = styled.div`
+  flex-direction: column;
   display: flex;
   justify-content: center;
-  flex-direction: column;
   align-items: center;
   width: 70%;
   min-height: 100vh;
@@ -133,9 +133,7 @@ const CSWrapper = styled.div`
 `;
 
 const CSHeader = styled.h1`
-  margin: 144px 0 100px;
-
-  color: #1d1d1d;
+  color: ${({ theme }) => theme.colors.common.black};
   font-family: NanumSquareRound;
   font-size: 2.25rem;
   font-style: normal;
