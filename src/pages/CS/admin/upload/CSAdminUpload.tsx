@@ -42,7 +42,7 @@ const CSAdminUpload = () => {
       previewUrl: null,
     },
   ]);
-  const { data: userData } = fetchUserData();
+  const { data: userData, isLoading } = fetchUserData();
   const [params] = useSearchParams();
   const educationId = Number(params.get('educationId'));
   const educationNumber = params.get('educationNumber') || '';
@@ -95,6 +95,8 @@ const CSAdminUpload = () => {
   // TODO: utilize role check function
   //
   setTimeout(() => {
+    if (isLoading) return;
+
     if (!['ADMIN', 'EDUCATION'].includes(userData?.role as string)) {
       window.location.href = '/';
     }
