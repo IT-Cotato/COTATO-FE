@@ -33,9 +33,6 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build
-        run: yarn build
-
       - name: Generate Environment Variables File for Production
         run: |
           echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env.production
@@ -43,6 +40,9 @@ jobs:
         env:
           REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
           REACT_APP_SOCKET_URL: ${{ secrets.REACT_APP_SOCKET_URL }}
+
+      - name: Build
+        run: yarn build
 
       - name: Configure AWS Credentials 
         uses: aws-actions/configure-aws-credentials@v3 
