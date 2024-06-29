@@ -6,6 +6,7 @@ import { trackPromise } from 'react-promise-tracker';
 import { LoadingIndicator } from '../../../../components/LoadingIndicator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import fetchUserData from '@utils/fetchUserData';
 
 type QuizType = Multiples | ShortQuizzes;
 
@@ -190,7 +191,10 @@ const CSAdminUploadQuizInfo = ({ quiz, setQuiz, selected, educationId }: Props) 
           toast.success('성공적으로 저장되었습니다!');
         })
         .catch((error) => {
-          toast.error(error.message);
+          if (error.response.data.code === 'T-001') {
+            fetchUserData();
+          }
+          toast.error(error.response.data.message);
         });
     };
     trackPromise(sendData());
