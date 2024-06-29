@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import HomeBackgroundSvgComponent from '@pages/Home/HomeBackgroundSvgComponent';
 import { ReactComponent as WorkingPotato } from '@assets/potato_working.svg';
 
 const ReadyState = () => {
   return (
     <Wrapper>
-      <HomeBackgroundSvgComponent />
       <StyledWorkingPotato />
       <h1>페이지 준비중입니다. 조만간 뵙겠습니다.</h1>
       <button
@@ -31,7 +29,6 @@ const Wrapper = styled.div`
 
   h1 {
     color: ${({ theme }) => theme.colors.gray80_2};
-    font-family: Ycomputer;
     font-size: 28px;
     font-style: normal;
     font-weight: 500;
@@ -48,7 +45,6 @@ const Wrapper = styled.div`
     border-radius: 100px;
     color: ${({ theme }) => theme.colors.gray80_2};
     background-color: ${({ theme }) => theme.colors.common.white};
-    font-family: Ycomputer;
     cursor: pointer;
     border: 4px solid ${({ theme }) => theme.colors.primary100_1};
     z-index: 100;

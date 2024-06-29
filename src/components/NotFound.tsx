@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import HomeBackgroundSvgComponent from '@pages/Home/HomeBackgroundSvgComponent';
 import { ReactComponent as BittenPotato } from '@assets/potato_bitten.svg';
 
 const NotFound = () => {
   return (
     <Wrapper>
-      <HomeBackgroundSvgComponent />
       <StyledBittenPotato />
       <h1>요청하신 페이지를 찾을 수 없습니다.</h1>
       <button
@@ -34,7 +32,6 @@ const Wrapper = styled.div`
   }
   h1 {
     color: ${({ theme }) => theme.colors.gray80_2};
-    font-family: Ycomputer;
     font-size: 28px;
     font-style: normal;
     font-weight: 500;
@@ -51,7 +48,6 @@ const Wrapper = styled.div`
     border-radius: 100px;
     color: ${({ theme }) => theme.colors.gray80_2};
     background-color: ${({ theme }) => theme.colors.common.white};
-    font-family: Ycomputer;
     cursor: pointer;
     border: 4px solid ${({ theme }) => theme.colors.primary100_1};
     z-index: 100;

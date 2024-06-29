@@ -124,7 +124,6 @@ const DescriptionWrapper = styled.div`
 `;
 
 const MainText = styled.span`
-  font-family: Ycomputer;
   color: ${({ theme }) => theme.colors.gray80};
 
   &.md {
@@ -141,7 +140,6 @@ const SubTextContainer = styled.div`
   align-items: center;
 
   > p {
-    font-family: Ycomputer;
     font-size: ${({ theme }) => theme.fontSize.md};
     color: ${({ theme }) => theme.colors.gray80};
     line-height: 180%;

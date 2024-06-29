@@ -14,7 +14,7 @@ export type memberRoleType = Pick<MemberData, 'role'>;
 //
 //
 
-export const getMemberRoleIcon = (role: memberRoleType['role']) => {
+export const getMemberRoleIcon = (role?: memberRoleType['role']) => {
   switch (role) {
     case 'REFUSED':
       return GeneralIcon;
@@ -28,6 +28,8 @@ export const getMemberRoleIcon = (role: memberRoleType['role']) => {
       return AdminIcon;
     case 'ADMIN':
       return AdminIcon;
+    case undefined:
+      return GeneralIcon;
     default:
       return GeneralIcon;
   }

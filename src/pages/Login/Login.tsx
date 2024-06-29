@@ -28,6 +28,7 @@ const Login = () => {
   const [btnState, setBtnState] = useState<btnStateType>('default');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isError, setIsError] = useState(false);
 
   const { data, mutate } = useSWR('/v1/api/member/info', fetcher, {
@@ -129,9 +130,16 @@ const Login = () => {
 
 const Wrapper = styled.div`
   display: flex;
+  width: 100%;
+  height: 100vh;
+  padding: 4rem;
   flex-direction: column;
   align-items: center;
-  margin-top: 3.5rem;
+
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.colors.common.white} inset;
+    -webkit-text-fill-color: ${({ theme }) => theme.colors.gray60}; // 글자색 변경
+  }
 `;
 
 const BackImg = styled.img`
@@ -175,6 +183,9 @@ const InputBox = styled.div`
     &:focus {
       outline: none;
     }
+    caret-color: ${({ theme }) => theme.colors.primary90};
+    caret-shape: bar;
+    background-color: ${({ theme }) => theme.colors.common.white};
     color: ${({ theme }) => theme.colors.gray60};
     font-size: ${({ theme }) => theme.fontSize.xs};
   }
@@ -184,8 +195,11 @@ const InputBox = styled.div`
     margin-left: 1.25rem;
     margin-right: 0.8rem;
   }
+  ${media.landscape`
+    width: 350px;
+  `}
   ${media.mobile`
-    width: 344px;
+    width: 220px;
   `}
 `;
 

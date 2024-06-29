@@ -89,12 +89,10 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   padding: 2rem 10rem;
-  margin-top: 6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  font-family: 'Ycomputer';
   ${media.laptop`
     padding: 2rem 5rem;
   `}

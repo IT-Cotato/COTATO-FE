@@ -1,28 +1,32 @@
 import React from 'react';
 import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
+import { useWindowSize } from 'react-use';
 
 //
 //
 //
 
-const HomeBackgroundSvgComponent = () => {
+const GlobalBackgroundSvgComponent = () => {
   const theme = useTheme();
+  const { width, height } = useWindowSize();
+
   const dotColor = theme.colors.primary30;
   const pinkStarColor = theme.colors.sub1[20];
   const blueStarColor = theme.colors.sub2[20];
   const greenStarColor = theme.colors.sub3[20];
   const yellowStarColor = theme.colors.primary60;
   const orangeStarColor = theme.colors.secondary40;
+
   return (
     <svg
-      width="1440"
-      height="3998"
-      viewBox="0 0 1440 3998"
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        width: '100vw',
+        width: '100%',
         position: 'absolute',
         background: theme.colors.common.white,
         transition: THEME_CHANGE_TRANSITION,
@@ -1659,4 +1663,4 @@ const HomeBackgroundSvgComponent = () => {
   );
 };
 
-export default HomeBackgroundSvgComponent;
+export default GlobalBackgroundSvgComponent;
