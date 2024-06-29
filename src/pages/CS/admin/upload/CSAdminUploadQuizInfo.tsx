@@ -354,6 +354,8 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.primary5};
+  color: ${({ theme }) => theme.colors.gray100};
   padding: 32px;
   p {
     width: 100%;
