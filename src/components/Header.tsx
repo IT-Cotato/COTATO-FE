@@ -218,11 +218,6 @@ const NavItem = styled(NavLink)`
   ${media.laptop`
     padding: 0rem;
     font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.sm};
-    &:hover,
-    &.active {
-      border: 2px solid ${({ theme }: { theme: CotatoThemeType }) => theme.colors.sub2[60]};
-      box-shadow:none;
-    }
   `}
 `;
 
