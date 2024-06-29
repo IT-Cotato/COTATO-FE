@@ -62,9 +62,9 @@ export default MobileSideMenuDrawerButton;
 //
 
 const StyledMobileSideMenuDrawerButton = styled.div<{ $slidein: boolean }>`
-  position: absolute;
+  position: sticky;
   top: 3.5rem;
-  right: 0;
+  left: 100%;
   display: flex;
   width: 3rem;
   height: 4rem;

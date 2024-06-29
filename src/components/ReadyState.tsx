@@ -32,7 +32,6 @@ const Wrapper = styled.div`
     font-size: 28px;
     font-style: normal;
     font-weight: 500;
-    z-index: 100;
   }
   button {
     display: flex;
@@ -47,12 +46,10 @@ const Wrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.common.white};
     cursor: pointer;
     border: 4px solid ${({ theme }) => theme.colors.primary100_1};
-    z-index: 100;
   }
 `;
 
 const StyledWorkingPotato = styled(WorkingPotato)`
-  z-index: 100;
   width: 180px;
   height: 140px;
   margin-bottom: 16px;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '@/assets/header_logo.svg';
 import { ReactComponent as Login } from '@/assets/login.svg';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import fetchUserData from '@utils/fetchUserData';
 import { v4 as uuid } from 'uuid';
 import { getMemberRoleIcon } from '@utils/getMemberRoleIcon';
@@ -45,6 +45,7 @@ export type NAV_LIST_TYPE = ReadonlyArray<Readonly<NavItem>>;
 
 const Header = () => {
   const { data: user, isLoading: isUserLoading } = fetchUserData();
+  const location = useLocation();
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
   const { DefaultTheme, onChangeTheme } = React.useContext(ThemeContext);
 
@@ -137,6 +138,17 @@ const Header = () => {
     }
     return <MobileSideMenuDrawerButton navList={NAV_LIST} />;
   };
+
+  //
+  //
+  //
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  //
+  //
+  //
 
   return (
     <>
