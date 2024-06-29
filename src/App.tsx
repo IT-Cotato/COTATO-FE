@@ -21,6 +21,7 @@ import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgCompone
 function App() {
   const location = useLocation();
   const isInHome = location.pathname === '/';
+
   //
   //
   //
