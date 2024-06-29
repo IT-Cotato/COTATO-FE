@@ -90,7 +90,6 @@ const Header = () => {
    *
    */
   const renderProfile = () => {
-    console.log(isUserLoading, user);
     if (isUserLoading) {
       return (
         <Box minWidth="5.5rem" height="1rem">
