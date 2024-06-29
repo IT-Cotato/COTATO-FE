@@ -16,6 +16,7 @@ import NotFound from '@components/NotFound';
 import CSPage from '@pages/CS/CSPage';
 
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
+import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 
 function App() {
   //
@@ -27,6 +28,7 @@ function App() {
       <CotatoThemeProvider>
         <GlobalStyle />
         <Header />
+        <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ReadyState />} />

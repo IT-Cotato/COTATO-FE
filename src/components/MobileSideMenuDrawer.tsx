@@ -246,7 +246,6 @@ const StyledTitle = styled.div`
   display: flex;
   height: 3.5rem;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
-  font-family: Ycomputer;
   font-size: 1.125rem;
   color: ${({ theme }) => theme.colors.gray60};
   flex-direction: column;
@@ -263,7 +262,6 @@ const StyledListItemButton = styled(ListItemButton)`
 
 const StyledLinkTypography = styled.p`
   color: ${({ theme }) => theme.colors.gray60};
-  font-family: Ycomputer;
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
