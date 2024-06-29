@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from '@components/Header';
 import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
@@ -19,6 +19,8 @@ import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 
 function App() {
+  const location = useLocation();
+  const isInHome = location.pathname === '/';
   //
   //
   //
@@ -44,7 +46,7 @@ function App() {
           <Route path="/mypage/*" element={<MyPage />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
-        {window.location.pathname !== '/' && <Footer />}
+        {isInHome ? null : <Footer />}
       </CotatoThemeProvider>
     </div>
   );
