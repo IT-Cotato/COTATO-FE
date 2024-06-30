@@ -42,6 +42,8 @@ const SessionCard = ({ session }: SessionCardProps) => {
       <SessionContentsWrapper>
         {csEducation === 'CS_ON' && <Content $color={theme.colors.primary100_1}>#CS</Content>}
         {itIssue === 'IT_ON' && <Content $color={theme.colors.sub2[80]}>#IT</Content>}
+        {networking === 'NW_ON' && <Content $color={theme.colors.sub3[60]}>#NW</Content>}
+        {devTalk === 'DEVTALK_ON' && <Content $color={theme.colors.gray80}>#DEV</Content>}
       </SessionContentsWrapper>
     );
   };
