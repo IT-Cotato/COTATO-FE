@@ -37,7 +37,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
       <Circle>
         <HeartIcon />
       </Circle>
-      {session.sessionNumber}주차 세션
+      {session.title}
     </CardHeader>
   );
 
