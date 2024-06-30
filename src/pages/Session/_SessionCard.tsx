@@ -81,6 +81,7 @@ const Container = styled.div`
   width: 20rem;
   border: 3px solid ${({ theme }) => theme.colors.primary100_1};
   background: ${({ theme }) => theme.colors.common.white};
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
 `;
 
 const CardHeader = styled.div`
