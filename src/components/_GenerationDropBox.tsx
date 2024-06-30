@@ -16,6 +16,7 @@ export interface GenerationInfo {
   generationNumber: number;
   sessionCount: number;
 }
+
 type GetV1ApiGenerationResponse = GenerationInfo[];
 
 interface GenerationDropBoxProps {
