@@ -4,28 +4,21 @@ import generation_background from '@assets/generation_background.svg';
 import { ReactComponent as ArrowDown } from '@assets/arrow_down_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { v4 as uuid } from 'uuid';
-import generationSort from '@utils/generationSort';
+import generationSort from '@utils/newGenerationSort';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 
 //
 //
 //
-
-export interface GenerationInfo {
-  generationId: number;
-  generationNumber: number;
-  sessionCount: number;
-}
-
-type GetV1ApiGenerationResponse = GenerationInfo[];
 
 interface GenerationDropBoxProps {
   /**
    * generation change event
    * @param generation selected generation
    */
-  handleGenerationChange: (generation: GenerationInfo) => void;
+  handleGenerationChange: (generation: CotatoGenerationInfoResponse) => void;
   backgroundColor?: string;
   width?: string;
   height?: string;
@@ -52,15 +45,17 @@ const GenerationDropBox = ({
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
-  const { data: unsortedGenerations } = useSWR<GetV1ApiGenerationResponse>(
+  const { data: unsortedGenerations } = useSWR<CotatoGenerationInfoResponse[]>(
     '/v1/api/generation',
     fetcher,
   );
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
   const [isDropBoxVisible, setIsDropBoxVisible] = useState(false);
-  const [generations, setGenerations] = useState<GetV1ApiGenerationResponse>([]);
-  const [selectedGeneration, setSelectedGeneration] = useState<GenerationInfo | null>(null);
+  const [generations, setGenerations] = useState<CotatoGenerationInfoResponse[]>([]);
+  const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse | null>(
+    null,
+  );
 
   const generationDropBoxRef = useRef<HTMLDivElement>(null);
 
@@ -82,7 +77,7 @@ const GenerationDropBox = ({
   /**
    *
    */
-  const handleGenerationClick = (generation: GenerationInfo) => {
+  const handleGenerationClick = (generation: CotatoGenerationInfoResponse) => {
     handleDropDownChange();
     handleGenerationChange(generation);
     setTimeout(() => {
