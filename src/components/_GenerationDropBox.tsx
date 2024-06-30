@@ -114,7 +114,9 @@ const GenerationDropBox = ({
       return;
     }
 
-    setGenerations(generationSort(unsortedGenerations));
+    const sortedGenerations = generationSort(unsortedGenerations);
+    setGenerations(sortedGenerations);
+    setSelectedGeneration(sortedGenerations[0]);
   }, [unsortedGenerations]);
 
   /**
