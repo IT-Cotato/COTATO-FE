@@ -34,6 +34,12 @@ interface GenerationDropBoxProps {
 //
 //
 
+const DEALY_TIME = 100;
+
+//
+//
+//
+
 /**
  * generation drop box component
  * @param handleGenerationChange generation change event
@@ -56,7 +62,7 @@ const GenerationDropBox = ({
     if (isDropBoxVisible) {
       setTimeout(() => {
         setIsDropBoxOpen(false);
-      }, 90);
+      }, DEALY_TIME - 10);
     } else {
       setIsDropBoxOpen(true);
     }
@@ -69,7 +75,7 @@ const GenerationDropBox = ({
     handleGenerationChange(generation);
     setTimeout(() => {
       setSelectedGeneration(generation);
-    }, 100);
+    }, DEALY_TIME);
   };
 
   useEffect(() => {
@@ -188,17 +194,17 @@ const fadeOut = keyframes`
 `;
 
 const DownButton = styled(ArrowDown)`
-  animation: ${fadeIn} 0.1s linear;
+  animation: ${fadeIn} ${DEALY_TIME} linear;
 `;
 
 const UpButton = styled(ArrowDown)`
   transform: rotate(180deg);
-  animation: ${fadeIn} 0.1s linear;
+  animation: ${fadeIn} ${DEALY_TIME} linear;
 `;
 
 const DropDownList = styled.div<{ $visible: boolean }>`
   position: absolute;
-  animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} 0.1s ease-out;
+  animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} ${DEALY_TIME} ease-out;
   width: 100%;
   z-index: 10;
 
