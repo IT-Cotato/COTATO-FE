@@ -58,6 +58,9 @@ const GenerationDropBox = ({
 
   const generationDropBoxRef = useRef<HTMLDivElement>(null);
 
+  /**
+   *
+   */
   const handleDropDownClick = () => {
     if (isDropBoxVisible) {
       setTimeout(() => {
@@ -70,6 +73,9 @@ const GenerationDropBox = ({
     setIsDropBoxVisible(!isDropBoxVisible);
   };
 
+  /**
+   *
+   */
   const handleGenerationClick = (generation: GenerationInfo) => {
     handleDropDownClick();
     handleGenerationChange(generation);
@@ -106,6 +112,9 @@ const GenerationDropBox = ({
       });
   }, []);
 
+  /**
+   *
+   */
   const renderDropBox = () => (
     <DropBox onClick={handleDropDownClick} $height={height}>
       <SelectText>
@@ -116,6 +125,9 @@ const GenerationDropBox = ({
     </DropBox>
   );
 
+  /**
+   *
+   */
   const renderDropDownList = () => {
     if (!isDropBoxOpen) {
       return null;
