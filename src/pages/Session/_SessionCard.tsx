@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
-import ready_image from '@assets/ready_potato.svg';
+import ready_image from '@assets/potato_ready.svg';
 
 interface SessionInfo {
   sessionId: number;
@@ -33,7 +33,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
     </CardHeader>
   );
 
-  const renderCardImage = () => <ReadyImage src={ready_image} />;
+  const renderCardImage = () => <CardImage src={session.photoUrl || ready_image} />;
 
   const renderSessionContents = () => {
     const { csEducation, itIssue, networking, devTalk } = session.sessionContents;
@@ -87,8 +87,9 @@ const Circle = styled.div`
   background: ${({ theme }) => theme.colors.primary100_1};
 `;
 
-const ReadyImage = styled.img`
+const CardImage = styled.img`
   width: 100%;
+  height: 20rem;
 `;
 
 const SessionContentsWrapper = styled.div`
