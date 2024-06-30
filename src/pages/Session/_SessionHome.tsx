@@ -13,6 +13,7 @@ interface SessionInfo {
   sessionId: number;
   sessionNumber: number;
   photoUrl: string;
+  title: string;
   description: string;
   generationId: number;
   sessionContents: {

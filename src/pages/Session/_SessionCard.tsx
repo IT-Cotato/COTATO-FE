@@ -6,6 +6,7 @@ import ready_image from '@assets/potato_ready.svg';
 interface SessionInfo {
   sessionId: number;
   sessionNumber: number;
+  title: string;
   photoUrl: string;
   description: string;
   generationId: number;
