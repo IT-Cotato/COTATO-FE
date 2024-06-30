@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import ready_image from '@assets/potato_ready.svg';
+import Skeleton from '@mui/material/Skeleton';
+
+//
+//
+//
 
 interface SessionInfo {
   sessionId: number;
@@ -26,8 +31,23 @@ interface SessionCardProps {
 //
 //
 
+const SKELETON_ANIMATION = 'wave';
+const IMAGE_HEIGHT = '20rem';
+
+//
+//
+//
+
 const SessionCard = ({ session }: SessionCardProps) => {
+  const [imageLoading, setImageLoading] = useState(true);
   const theme = useTheme();
+
+  /**
+   *
+   */
+  const handelImageLoad = () => {
+    setImageLoading(false);
+  };
 
   /**
    *
@@ -44,13 +64,37 @@ const SessionCard = ({ session }: SessionCardProps) => {
   /**
    *
    */
-  const renderCardImage = () => <CardImage src={session.photoUrl || ready_image} />;
+  const renderCardImage = () => {
+    const getImageSkeleton = () => (
+      <Skeleton
+        animation={SKELETON_ANIMATION}
+        variant="rectangular"
+        width="100%"
+        height={IMAGE_HEIGHT}
+      />
+    );
+
+    const getImageContent = () => (
+      <CardImage
+        src={session.photoUrl || ready_image}
+        alt="session"
+        onLoad={handelImageLoad}
+        $display={imageLoading ? 'none' : 'bolock'}
+      />
+    );
+
+    return (
+      <>
+        {imageLoading && getImageSkeleton()} {getImageContent()}
+      </>
+    );
+  };
 
   /**
    *
    */
   const renderSessionContents = () => {
-    const { csEducation, itIssue, networking, devTalk } = session.sessionContents;
+    const { itIssue, networking, csEducation, devTalk } = session.sessionContents;
 
     return (
       <SessionContentsWrapper>
@@ -104,9 +148,10 @@ const Circle = styled.div`
   background: ${({ theme }) => theme.colors.primary100_1};
 `;
 
-const CardImage = styled.img`
+const CardImage = styled.img<{ $display: string }>`
+  display: ${({ $display }) => $display};
   width: 100%;
-  height: 20rem;
+  height: ${IMAGE_HEIGHT};
 `;
 
 const SessionContentsWrapper = styled.div`
