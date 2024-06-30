@@ -10,6 +10,8 @@ import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { useNavigate } from 'react-router-dom';
+import GenerationDropBox from '@components/_GenerationDropBox';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 
 const SessionHome = () => {
   const { data: user, error } = useSWR('/v1/api/member/info', fetcher);
@@ -18,7 +20,7 @@ const SessionHome = () => {
   const [isSessionModalOpen, setIsSessionModalOpen] = useState(false);
   const [modifySession, setModifySession] = useState<undefined | ISession>();
   const [lastWeek, setLastWeek] = useState(-1);
-  const [selectedGeneration, setSelectedGeneration] = useState<IGeneration | undefined>();
+  const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
 
   const navigate = useNavigate();
 
@@ -42,7 +44,7 @@ const SessionHome = () => {
   }, []);
 
   const onChangeGeneration = useCallback(
-    (generation: IGeneration | undefined) => {
+    (generation: CotatoGenerationInfoResponse) => {
       setSelectedGeneration(generation);
 
       if (generation) {
@@ -76,10 +78,7 @@ const SessionHome = () => {
         <SessionWrapper>
           <SessionHeader>세션 기록</SessionHeader>
           <SessionSetting>
-            <GenerationSelect
-              onChangeGeneration={onChangeGeneration}
-              selectedGeneration={selectedGeneration}
-            />
+            <GenerationDropBox handleGenerationChange={onChangeGeneration} />
             {user?.role === 'ADMIN' && (
               <ButtonWrapper>
                 <AddIcon onClick={onClickAddButton} />
