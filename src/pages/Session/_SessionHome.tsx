@@ -2,6 +2,8 @@ import React from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import SessionCard from '@pages/Session/_SessionCard';
+import { v4 as uuidv4 } from 'uuid';
 
 //
 //
@@ -25,7 +27,9 @@ const SessionHome = () => {
   const { data: sessions } = useSWR(`/v1/api/session?generationId=${1}`, fetcher);
 
   const renderSessionCards = () => (
-    <SessionCardWrapper>{sessions?.map((session: SessionInfo) => <></>)}</SessionCardWrapper>
+    <SessionCardWrapper>
+      {sessions?.map((session: SessionInfo) => <SessionCard key={uuidv4()} session={session} />)}
+    </SessionCardWrapper>
   );
 
   return <Wrapper>{renderSessionCards()}</Wrapper>;
