@@ -24,9 +24,16 @@ interface SessionInfo {
   };
 }
 
+//
+//
+//
+
 const SessionHome = () => {
   const { data: sessions } = useSWR(`/v1/api/session?generationId=${1}`, fetcher);
 
+  /**
+   *
+   */
   const renderSessionCards = () => (
     <SessionCardWrapper>
       {sessions?.map((session: SessionInfo) => <SessionCard key={uuidv4()} session={session} />)}

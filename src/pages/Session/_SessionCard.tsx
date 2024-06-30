@@ -22,9 +22,16 @@ interface SessionCardProps {
   session: SessionInfo;
 }
 
+//
+//
+//
+
 const SessionCard = ({ session }: SessionCardProps) => {
   const theme = useTheme();
 
+  /**
+   *
+   */
   const renderCardHeader = () => (
     <CardHeader>
       <Circle>
@@ -34,8 +41,14 @@ const SessionCard = ({ session }: SessionCardProps) => {
     </CardHeader>
   );
 
+  /**
+   *
+   */
   const renderCardImage = () => <CardImage src={session.photoUrl || ready_image} />;
 
+  /**
+   *
+   */
   const renderSessionContents = () => {
     const { csEducation, itIssue, networking, devTalk } = session.sessionContents;
 
