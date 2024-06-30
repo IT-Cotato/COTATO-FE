@@ -6,6 +6,9 @@ import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { v4 as uuid } from 'uuid';
 import api from '@/api/api';
 import generationSort from '@utils/generationSort';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
+import { set } from 'date-fns';
 
 //
 //
@@ -51,6 +54,11 @@ const GenerationDropBox = ({
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
+  const { data: unsortedGenerations } = useSWR<GetV1ApiGenerationResponse>(
+    '/v1/api/generation',
+    fetcher,
+  );
+
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
   const [isDropBoxVisible, setIsDropBoxVisible] = useState(false);
   const [generations, setGenerations] = useState<GetV1ApiGenerationResponse>([]);
@@ -84,6 +92,9 @@ const GenerationDropBox = ({
     }, DEALY_TIME);
   };
 
+  /**
+   *
+   */
   useEffect(() => {
     window.addEventListener('mousedown', (e) => {
       if (
@@ -97,20 +108,16 @@ const GenerationDropBox = ({
     return () => window.removeEventListener('mousedown', () => {});
   }, [generationDropBoxRef, isDropBoxOpen]);
 
-  // useEffect for fetch generation data
-  // there whill be removed when zustand is applied
+  /**
+   *
+   */
   useEffect(() => {
-    api
-      .get<GetV1ApiGenerationResponse>('/v1/api/generation')
-      .then((res) => {
-        const sortedGenerations = generationSort(res.data);
-        setGenerations(sortedGenerations);
-        setSelectedGeneration(sortedGenerations[0]);
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-  }, []);
+    if (!unsortedGenerations) {
+      return;
+    }
+
+    setGenerations(generationSort(unsortedGenerations));
+  }, [unsortedGenerations]);
 
   /**
    *
