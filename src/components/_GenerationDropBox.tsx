@@ -39,7 +39,6 @@ interface GenerationDropBoxProps {
  * @param handleGenerationChange generation change event
  * @param width drop box width (default: 8rem)
  * @param height drop box height (default: 3.2rem)
- * @returns generation drop box component
  */
 const GenerationDropBox = ({
   handleGenerationChange,
