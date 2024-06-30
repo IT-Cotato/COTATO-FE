@@ -61,7 +61,7 @@ const GenerationDropBox = ({
   /**
    *
    */
-  const handleDropDownClick = () => {
+  const handleDropDownChange = () => {
     if (isDropBoxVisible) {
       setTimeout(() => {
         setIsDropBoxOpen(false);
@@ -77,7 +77,7 @@ const GenerationDropBox = ({
    *
    */
   const handleGenerationClick = (generation: GenerationInfo) => {
-    handleDropDownClick();
+    handleDropDownChange();
     handleGenerationChange(generation);
     setTimeout(() => {
       setSelectedGeneration(generation);
@@ -91,7 +91,7 @@ const GenerationDropBox = ({
         !generationDropBoxRef.current.contains(e.target as Node) &&
         isDropBoxOpen
       ) {
-        handleDropDownClick();
+        handleDropDownChange();
       }
     });
     return () => window.removeEventListener('mousedown', () => {});
@@ -116,7 +116,7 @@ const GenerationDropBox = ({
    *
    */
   const renderDropBox = () => (
-    <DropBox onClick={handleDropDownClick} $height={height}>
+    <DropBox onClick={handleDropDownChange} $height={height}>
       <SelectText>
         {selectedGeneration?.generationNumber}
         {selectedGeneration && '기'}
