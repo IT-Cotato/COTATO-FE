@@ -4,25 +4,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SessionCard from '@pages/Session/_SessionCard';
 import { v4 as uuidv4 } from 'uuid';
-
-//
-//
-//
-
-interface SessionInfo {
-  sessionId: number;
-  sessionNumber: number;
-  photoUrl: string;
-  title: string;
-  description: string;
-  generationId: number;
-  sessionContents: {
-    itIssue: 'IT_ON' | 'IT_OFF';
-    networking: 'NW_ON' | 'NW_OFF';
-    csEducation: 'CS_ON' | 'CS_OFF';
-    devTalk: 'DEVTALK_ON' | 'DEVTALK_OFF';
-  };
-}
+import { CotatoSessionListResponse } from 'cotato-openapi-clients';
 
 //
 //
@@ -36,7 +18,9 @@ const SessionHome = () => {
    */
   const renderSessionCards = () => (
     <SessionCardWrapper>
-      {sessions?.map((session: SessionInfo) => <SessionCard key={uuidv4()} session={session} />)}
+      {sessions?.map((session: CotatoSessionListResponse) => (
+        <SessionCard key={uuidv4()} session={session} />
+      ))}
     </SessionCardWrapper>
   );
 

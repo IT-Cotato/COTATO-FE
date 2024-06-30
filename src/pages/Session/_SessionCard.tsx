@@ -3,28 +3,14 @@ import styled, { useTheme } from 'styled-components';
 import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import ready_image from '@assets/potato_ready.svg';
 import Skeleton from '@mui/material/Skeleton';
+import { CotatoSessionListResponse, CotatoSessionContents } from 'cotato-openapi-clients';
 
 //
 //
 //
-
-interface SessionInfo {
-  sessionId: number;
-  sessionNumber: number;
-  title: string;
-  photoUrl: string;
-  description: string;
-  generationId: number;
-  sessionContents: {
-    itIssue: 'IT_ON' | 'IT_OFF';
-    networking: 'NW_ON' | 'NW_OFF';
-    csEducation: 'CS_ON' | 'CS_OFF';
-    devTalk: 'DEVTALK_ON' | 'DEVTALK_OFF';
-  };
-}
 
 interface SessionCardProps {
-  session: SessionInfo;
+  session: CotatoSessionListResponse;
 }
 
 //
@@ -94,7 +80,8 @@ const SessionCard = ({ session }: SessionCardProps) => {
    *
    */
   const renderSessionContents = () => {
-    const { itIssue, networking, csEducation, devTalk } = session.sessionContents;
+    const { itIssue, networking, csEducation, devTalk } =
+      session.sessionContents as CotatoSessionContents;
 
     return (
       <SessionContentsWrapper>
