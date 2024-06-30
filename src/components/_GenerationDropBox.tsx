@@ -211,17 +211,17 @@ const fadeOut = keyframes`
 `;
 
 const DownButton = styled(ArrowDown)`
-  animation: ${fadeIn} ${DEALY_TIME} linear;
+  animation: ${fadeIn} ${DEALY_TIME}ms linear;
 `;
 
 const UpButton = styled(ArrowDown)`
   transform: rotate(180deg);
-  animation: ${fadeIn} ${DEALY_TIME} linear;
+  animation: ${fadeIn} ${DEALY_TIME}ms linear;
 `;
 
 const DropDownList = styled.div<{ $visible: boolean }>`
   position: absolute;
-  animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} ${DEALY_TIME} ease-out;
+  animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} ${DEALY_TIME}ms ease-out;
   width: 100%;
   z-index: 10;
 
