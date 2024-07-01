@@ -9,7 +9,6 @@ import bubble2 from '@assets/bubble_2.svg';
 import bubble3 from '@assets/bubble_3.svg';
 import explaination from '@assets/explaination.svg';
 import podori from '@assets/podori.jpg';
-import MemberHeader from '@components/MemberHeader';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -17,7 +16,6 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
-import BgWinner from './BgWinner';
 
 type Problem = {
   id: number; // 문제의 PK
@@ -51,18 +49,17 @@ const CSProblem: React.FC<CSProblemProps> = ({
   showKingKing,
   setShowKingKing,
 }) => {
-  const { data, error, isLoading, mutate } = useSWR('/v1/api/member/info', fetcher);
+  const { data } = useSWR('/v1/api/member/info', fetcher);
   if (data) {
     // console.log(data);
   } else {
     console.log('data is undefined');
   }
 
-  const [showHeader, setShowHeader] = useState(false);
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
-  const [biggerImg, setBiggerImg] = useState(false);
-  const [selectNum, setSelectNum] = useState(0);
+  const [biggerImg, setBiggerImg] = useState<boolean>(false);
+  const [selectNum, setSelectNum] = useState<number>(0);
   const [selected, setSelected] = useState<string[]>([]); // 최종적으로 선택한 선지번호 리스트
   const [shortAns, setShortAns] = useState('');
   const [showCorrect, setShowCorrect] = useState(false);
@@ -249,11 +246,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
     }
   };
 
-  const propsForMemberHeader = {
-    showHeader,
-    setShowHeader,
-  };
-
   if (showKingKing == true) {
     setTimeout(() => {
       setShowKingKing(false);
@@ -263,7 +255,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   return (
     <Wrapper>
-      {showHeader ? <MemberHeader {...propsForMemberHeader} /> : null}
       {notice && (
         <img
           src={podori}
