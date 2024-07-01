@@ -52,11 +52,11 @@ const SessionModal = ({
 
   const handleAfterOpen = useCallback(() => {
     if (session) {
-      setTitle(getTitle(session.sessionNumber));
+      setTitle(session.title);
       setDescription(session.description);
-      setItIssue(session.itIssue === 'IT_ON');
-      setNetworking(session.networking === 'NW_ON');
-      setCsEdu(session.csEducation === 'CS_ON');
+      setItIssue(session.sessionContents.itIssue === 'IT_ON');
+      setNetworking(session.sessionContents.networking === 'NW_ON');
+      setCsEdu(session.sessionContents.csEducation === 'CS_ON');
     } else {
       setTitle(getTitle(lastWeek + 1));
     }
@@ -75,6 +75,13 @@ const SessionModal = ({
     setIsImageUpdated(false);
     document.body.style.overflow = 'unset';
   }, []);
+
+  const onChangeTitle = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setTitle(e.target.value);
+    },
+    [title],
+  );
 
   const onChangeItNews = useCallback(() => {
     setItIssue(!itIssue);
@@ -98,10 +105,12 @@ const SessionModal = ({
 
       const formData = new FormData();
       if (image) formData.append('sessionImage', image);
+      formData.append('title', title);
       formData.append('description', description);
       formData.append('itIssue', itIssue ? 'IT_ON' : 'IT_OFF');
       formData.append('networking', networking ? 'NW_ON' : 'NW_OFF');
       formData.append('csEducation', csEdu ? 'CS_ON' : 'CS_OFF');
+      formData.append('devTalk', 'DEVTALK_OFF');
 
       if (!session) {
         if (generationId) formData.append('generationId', generationId.toString());
@@ -126,7 +135,7 @@ const SessionModal = ({
           .catch((err) => console.error(err));
       }
     },
-    [session, image, generationId, itIssue, csEdu, networking, description, isImageUpdated],
+    [session, title, image, generationId, itIssue, csEdu, networking, description, isImageUpdated],
   );
 
   const closePopUp = useCallback(() => {
@@ -155,7 +164,7 @@ const SessionModal = ({
             setIsPopUpOpen={setIsPopUpOpen}
             setIsImageUpdated={setIsImageUpdated}
           />
-          <TextBox value={title} height="60px" readOnly={true} />
+          <TextBox value={title} height="60px" onChange={onChangeTitle} />
           <ToggleButtonBox>
             <p>it 뉴스</p>
             <ToggleButton toggled={itIssue} onClick={onChangeItNews} />

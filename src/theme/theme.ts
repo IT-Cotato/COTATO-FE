@@ -65,6 +65,8 @@ export type CotatoThemeType = {
     primary80: string;
     primary90: string;
     primary100: string;
+    primary100_1: string;
+    primary100_2: string;
     secondary5: string;
     secondary10: string;
     secondary20: string;
@@ -154,6 +156,8 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
     primary80: '#FFC700',
     primary90: '#FFB500',
     primary100: '#FFA000',
+    primary100_1: '#FFA000',
+    primary100_2: '#FFA000',
     // secondary //
     secondary5: '#FFF4ED',
     secondary10: '#FFE7D5',
@@ -239,7 +243,7 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
     primary5: '#FFFCF4',
     primary10: '#FFF9E6',
     primary20: '#FFF5D4',
-    primary30: '#FFF0BD',
+    primary30: CotatoLightTheme.colors.gray90,
     primary40: '#FFEBA3',
     primary50: '#FFE37D',
     primary60: '#FFDA58',
@@ -247,6 +251,8 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
     primary80: '#FFC700',
     primary90: CotatoLightTheme.colors.primary80,
     primary100: CotatoLightTheme.colors.secondary60,
+    primary100_1: CotatoLightTheme.colors.secondary60,
+    primary100_2: '#FFA000',
     // secondary //
     secondary5: '#FFF4ED',
     secondary10: '#FFE7D5',

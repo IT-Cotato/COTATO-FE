@@ -95,7 +95,7 @@ const FindID = () => {
             <p>
               {name}님의 ID는 <span>{email}</span> 입니다.
             </p>
-            <Button type="submit" bgColor={showResult} onClick={navigateToLogin}>
+            <Button type="submit" onClick={navigateToLogin}>
               계속
             </Button>
           </ResultWrapper>
@@ -128,9 +128,7 @@ const FindID = () => {
                 {!isTel && <Error>{telErrMsg}</Error>}
                 {apiErrMsg && <Error>{apiErrMsg}</Error>}
               </Label>
-              <Button type="submit" bgColor={isName && isTel}>
-                계속
-              </Button>
+              <Button type="submit">계속</Button>
             </Form>
           </InputWrapper>
         )}
@@ -142,17 +140,20 @@ const FindID = () => {
 export default FindID;
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  padding: 3rem 0;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 80px;
+  gap: 1rem;
+  color: ${({ theme }) => theme.colors.common.black};
   h3 {
     font-size: 1.8rem;
-    margin-bottom: 28px;
   }
   p {
     font-size: 1rem;
-    margin-bottom: 60px !important;
   }
 `;
 
@@ -169,7 +170,6 @@ const InputWrapper = styled.div`
   align-items: center;
   p {
     font-size: 1rem;
-    margin-bottom: 40px;
   }
 `;
 
@@ -178,10 +178,10 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2rem;
 `;
 
 const Label = styled.label`
-  margin-bottom: 24px;
   font-size: 1rem;
   height: 80px;
   span {
@@ -193,8 +193,9 @@ const InputBox = styled.input`
   width: 500px !important;
   height: 52px;
   border-radius: 10px;
-  border: 2px solid #d7e5ca !important;
-  background: #fff;
+  border: 1px solid ${({ theme }) => theme.colors.primary90} !important;
+  background: ${({ theme }) => theme.colors.common.white};
+  color: ${({ theme }) => theme.colors.common.black};
   margin-bottom: 4px;
   display: flex;
   flex-direction: row;
@@ -216,12 +217,11 @@ const Error = styled.p`
   padding-left: 4px;
 `;
 
-const Button = styled.button<{ bgColor?: boolean }>`
+const Button = styled.button`
   width: 500px;
   height: 52px;
   margin-top: 12px;
-  background: ${(props) => (props.bgColor ? '#85C88A' : '#D7E5CA')};
-  color: #fff;
+  background: ${({ theme }) => theme.colors.primary100_2};
   font-size: 1.1rem;
   font-weight: 400;
   border-radius: 28px;
@@ -240,8 +240,6 @@ const ResultWrapper = styled.div`
     font-size: 1.1rem;
     font-weight: 700;
     width: 600px;
-    margin-top: 69px;
-    margin-bottom: 84px;
     text-align: center;
     span {
       color: #85c88a;

@@ -1,151 +1,249 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import logo from '@assets/logo.svg';
-import login from '@assets/login_icon.svg';
-import joinus from '@assets/joinus_icon.svg';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import DropDownMenu from './DropDownMenu';
-import HamburgerMenu from './HamburgerMenu';
+import { ReactComponent as Logo } from '@/assets/header_logo.svg';
+import { ReactComponent as Login } from '@/assets/login.svg';
+import { NavLink, useLocation } from 'react-router-dom';
+import fetchUserData from '@utils/fetchUserData';
+import { v4 as uuid } from 'uuid';
+import { getMemberRoleIcon } from '@utils/getMemberRoleIcon';
+import { device, media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import MobileSideMenuDrawerButton from './MobileSideMenuDrawerButton';
+import { ReactComponent as ThemeDark } from '@/assets/theme_dark_icon.svg';
+import { ReactComponent as ThemeLight } from '@/assets/theme_light_icon.svg';
+import { Box, CircularProgress, Tooltip } from '@mui/material';
+import { ThemeContext } from '@theme/context/CotatoThemeProvider';
+import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
+import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
+
+//
+//
+//
+
+type NavItemName = 'Home' | 'About us' | 'Project' | 'Session' | 'FAQ' | 'CS Quiz';
+
+type NavItem = {
+  name: NavItemName;
+  path: string;
+};
+
+const NAV_LIST: NAV_LIST_TYPE = Object.freeze([
+  { name: 'Home', path: '/' },
+  { name: 'About us', path: '/about' },
+  { name: 'Project', path: '/projects' },
+  { name: 'Session', path: '/session' },
+  { name: 'FAQ', path: '/faq' },
+  { name: 'CS Quiz', path: '/cs' },
+]);
+
+export type NAV_LIST_TYPE = ReadonlyArray<Readonly<NavItem>>;
+
+//
+//
+//
 
 const Header = () => {
-  const [isTop, setIsTop] = useState(true);
-  const navigate = useNavigate();
-  useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 0) {
-        setIsTop(false);
-      } else {
-        setIsTop(true);
-      }
-    });
-  }, []);
+  const { data: user, isLoading: isUserLoading } = fetchUserData();
+  const location = useLocation();
+  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const { DefaultTheme, onChangeTheme } = React.useContext(ThemeContext);
+
+  /**
+   *
+   */
+  const renderLogo = () => (
+    <LogoLink to={'/'}>
+      <Logo />
+    </LogoLink>
+  );
+
+  /**
+   *
+   */
+  const renderNav = () => (
+    <NavContainer>
+      {NAV_LIST.map((navItem) => (
+        <NavItem key={uuid()} to={navItem.path}>
+          {navItem.name}
+        </NavItem>
+      ))}
+      {renderProfile()}
+      <StyledSwitchDiv>
+        <Tooltip arrow title="실험적 기능으로 아직 완벽하지 않을 수 있습니다." placement="top">
+          {DefaultTheme === COTATO_LIGHT_THEME ? (
+            <ThemeLight width="1.5rem" />
+          ) : (
+            <ThemeDark width="1.5rem" />
+          )}
+        </Tooltip>
+
+        <CotatoThemeToggleSwitch
+          checked={DefaultTheme === COTATO_LIGHT_THEME}
+          onChange={onChangeTheme}
+        />
+      </StyledSwitchDiv>
+    </NavContainer>
+  );
+
+  /**
+   *
+   */
+  const renderProfile = () => {
+    if (isUserLoading) {
+      return (
+        <Box minWidth="5.5rem" height="1rem">
+          <CircularProgress size="1rem" />
+        </Box>
+      );
+    }
+
+    if (!user) {
+      return (
+        <LoginLink to={'/signin'}>
+          <Login width={90} style={{ marginTop: '0.2rem' }} />
+        </LoginLink>
+      );
+    }
+
+    return (
+      <NavItem key={uuid()} to={'/mypage'}>
+        <MemberNav>
+          <MemberRoleIcon src={getMemberRoleIcon(user?.role)} />
+          {user?.memberName}
+        </MemberNav>
+      </NavItem>
+    );
+  };
+
+  const renderHeader = () => {
+    if (isTabletOrSmaller) {
+      return null;
+    }
+    return (
+      <HeaderWrapper>
+        {renderLogo()}
+        {renderNav()}
+      </HeaderWrapper>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderMobileHeader = () => {
+    if (!isTabletOrSmaller) {
+      return null;
+    }
+    return <MobileSideMenuDrawerButton navList={NAV_LIST} />;
+  };
+
+  //
+  //
+  //
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  //
+  //
+  //
 
   return (
-    <Wrapper $is_top={isTop.toString()}>
-      <Logo src={logo} onClick={() => window.location.replace('/')} style={{ cursor: 'pointer' }} />
-      <MenuSection>
-        <MenuItem to="/">홈</MenuItem>
-        <MenuItem to="/projects">프로젝트</MenuItem>
-        <MenuItem to="/team">팀 멤버</MenuItem>
-      </MenuSection>
-      <LoginSection>
-        <LoginWrapper>
-          <img
-            src={login}
-            onClick={() => {
-              navigate('/signin');
-            }}
-          />
-          <LoginItem to="/signin">로그인</LoginItem>
-        </LoginWrapper>
-        <LoginWrapper>
-          <img
-            src={joinus}
-            onClick={() => {
-              navigate('/joinus');
-            }}
-          />
-          <LoginItem to="/joinus">Join Us</LoginItem>
-        </LoginWrapper>
-      </LoginSection>
-      <DropDownMenu isTop={isTop.toString()} />
-      <HamburgerMenu color="#202020" top="16px" />
-    </Wrapper>
+    <>
+      {renderHeader()}
+      {renderMobileHeader()}
+    </>
   );
 };
 
 export default Header;
 
-const Wrapper = styled.div<{ $is_top: string }>`
+//
+//
+//
+
+const HeaderWrapper = styled.header`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between !important;
-  align-items: center;
   width: 100%;
-  box-sizing: border-box;
-  /* 스크롤이 최상단이 아닐 시 효과 부여 */
-  height: ${(props) => (props.$is_top === 'true' ? '80px' : '72px')};
-  border-bottom: ${(props) => (props.$is_top === 'true' ? 'none' : '1px solid rgba(0, 0, 0, 0.1)')};
-  box-shadow: ${(props) => (props.$is_top === 'true' ? 'none' : '0px 4px 4px rgba(0, 0, 0, 0.25)')};
-  transition: all 0.2s ease-in-out;
-  padding: 0 60px;
+  padding: 0.5rem 6rem;
+  align-items: center;
+  background: ${({ theme }) => theme.colors.common.white};
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: #fff;
-  @media screen and (max-width: 960px) {
-    padding: 0 20px;
-  }
+  transition: ${THEME_CHANGE_TRANSITION};
+  ${media.desktop`
+    padding: 0.5rem 4rem;
+`}
+  ${media.laptop`
+    padding: 0.5rem 2rem;
+  `}
 `;
 
-const Logo = styled.img`
-  width: 144px;
-`;
-
-const MenuSection = styled.div`
+const LogoLink = styled(NavLink)`
   display: flex;
-  flex-direction: row;
-  margin-right: 100px;
-  justify-content: space-between;
-  /* width: 312px; */
-  @media screen and (max-width: 1280px) {
-    margin-right: -100px;
-  }
-`;
-
-const MenuItem = styled(NavLink)`
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 1.1rem;
-  font-weight: 400;
-  text-decoration: none;
-  margin-right: 80px;
-  font-family: NanumSquareRound;
-  &:hover {
-    color: #000;
-  }
-  &.active {
-    color: #000;
-    font-weight: 600;
-  }
-  @media screen and (max-width: 1280px) {
-    margin-right: 40px;
-  }
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const LoginSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-left: 50px;
-  @media screen and (max-width: 1280px) {
-    margin-right: 0px;
-  }
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const LoginWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  /* margin-right: 40px; */
-  width: 100px;
-  cursor: pointer;
-  img {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-  }
 `;
 
-const LoginItem = styled(Link)`
-  color: var(--pointcolor-4, #259c2e);
-  font-size: 1.1rem;
-  font-weight: 400;
+const NavContainer = styled.div`
+  display: flex;
+  align-self: stretch;
+  width: 70%;
+  height: 3.5rem;
+  justify-content: space-around;
+  margin: auto;
+  align-items: center;
+  gap: 2rem;
+`;
+
+const NavItem = styled(NavLink)`
+  min-width: fit-content;
   text-decoration: none;
-  margin-left: 8px;
-  font-family: NanumSquareRound;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.gray80_2};
+  font-size: ${({ theme }) => theme.fontSize.md};
+  padding: ${({ theme }) => theme.size.lg};
+  transition: 0.2s;
+  cursor: pointer;
+  &:hover,
+  &.active {
+    color: ${({ theme }) => theme.colors.common.black};
+    box-shadow: ${({ theme }) => theme.colors.sub2[60]} inset 0px -3px 0px 0px;
+  }
+  ${media.desktop`
+    padding: 0.5rem;
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.sm};
+`}
+  ${media.laptop`
+    padding: 0rem;
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.sm};
+  `}
+`;
+
+const LoginLink = styled(NavLink)`
+  padding: 0 ${({ theme }) => theme.size.xs};
+`;
+
+const MemberNav = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.size.sm};
+`;
+
+const MemberRoleIcon = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+`;
+
+const StyledSwitchDiv = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+
+  > label {
+    margin-bottom: 0.5rem;
+  }
 `;

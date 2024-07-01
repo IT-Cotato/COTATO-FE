@@ -55,7 +55,6 @@ const FindPW: React.FC<FindPWProps> = ({
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (isEmail) {
-        // setShowEmailAuth(true);
         console.log(email);
         api
           .post('/v1/api/auth/verification', emailData, {
@@ -102,9 +101,7 @@ const FindPW: React.FC<FindPWProps> = ({
           />
           {!isEmail && <Error>{errMessage}</Error>}
         </Label>
-        <Button type="submit" bgColor={isEmail}>
-          인증 이메일 보내기
-        </Button>
+        <Button type="submit">인증 이메일 보내기</Button>
       </Form>
     </Wrapper>
   );
@@ -114,16 +111,19 @@ export default FindPW;
 
 const Wrapper = styled.div`
   display: flex;
+  width: 100%;
+  height: 100vh;
   flex-direction: column;
+  padding: 3rem 5rem;
+  justify-content: flex-start;
   align-items: center;
-  margin-top: 120px;
+  color: ${({ theme }) => theme.colors.common.black};
+  gap: 2rem;
   h3 {
     font-size: 1.8rem;
-    margin-bottom: 56px;
   }
   p {
     font-size: 1rem;
-    margin-bottom: 40px;
   }
 `;
 
@@ -132,10 +132,10 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 4rem;
 `;
 
 const Label = styled.label`
-  margin-bottom: 20px;
   font-size: 1rem;
   span {
     padding-left: 4px;
@@ -149,8 +149,9 @@ const InputBox = styled.input`
   width: 500px !important;
   height: 52px;
   border-radius: 10px;
-  border: 2px solid #d7e5ca !important;
-  background: #fff;
+  border: 1px solid ${({ theme }) => theme.colors.primary90} !important;
+  color: ${({ theme }) => theme.colors.common.black};
+  background: ${({ theme }) => theme.colors.common.white};
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -172,17 +173,15 @@ const Error = styled.p`
   padding-top: 4px;
 `;
 
-const Button = styled.button<{ bgColor?: boolean }>`
+const Button = styled.button`
   width: 500px;
   height: 52px;
-  background: ${(props) => (props.bgColor ? '#85C88A' : '#D7E5CA')};
-  color: #fff;
+  background: ${({ theme }) => theme.colors.primary100_2};
+  color: ${({ theme }) => theme.colors.common.white};
   font-size: 1.1rem;
   font-weight: 400;
   border-radius: 28px;
   border: none;
-  font-family: NanumSquareRound;
-  margin-top: 20px;
   &:hover {
     cursor: pointer;
   }

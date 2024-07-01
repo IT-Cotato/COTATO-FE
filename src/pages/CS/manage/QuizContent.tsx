@@ -15,10 +15,9 @@ interface Props {
   educationId: string | null;
   educationStatus?: string;
   quizStatus: string;
-  quizNineStart: string;
 }
 
-const QuizContent = ({ quiz, educationId, educationStatus, quizStatus, quizNineStart }: Props) => {
+const QuizContent = ({ quiz, educationId, educationStatus, quizStatus }: Props) => {
   const { mutate } = useSWR(`/v1/api/quiz/cs-admin/all?educationId=${educationId}`, fetcher);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -26,17 +25,12 @@ const QuizContent = ({ quiz, educationId, educationStatus, quizStatus, quizNineS
   const navigate = useNavigate();
 
   const onClickQuestionButton = useCallback(() => {
-    navigate(`quizscorer?quizId=${quiz.quizId}`);
+    navigate(`quizscorer?educationId=${educationId}&quizId=${quiz.quizId}`);
   }, [quiz]);
 
   const onClickApproach = useCallback(() => {
-    if (educationStatus === 'CLOSED') {
+    if (educationStatus !== 'ONGOING') {
       toast.error('교육을 시작해주세요.');
-      return;
-    }
-
-    if (quizNineStart === 'QUIZ_ON') {
-      toast.error('9번 문제풀이를 종료해주시요.');
       return;
     }
 
@@ -56,10 +50,10 @@ const QuizContent = ({ quiz, educationId, educationStatus, quizStatus, quizNineS
         console.error(err);
         mutate();
       });
-  }, [quiz, educationStatus, quizNineStart]);
+  }, [quiz, educationStatus]);
 
   const onClickQuizStart = useCallback(() => {
-    if (educationStatus === 'CLOSED') {
+    if (educationStatus !== 'ONGOING') {
       toast.error('교육을 시작해주세요.');
       return;
     }

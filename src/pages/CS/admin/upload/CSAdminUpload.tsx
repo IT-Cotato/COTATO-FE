@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Multiples, ShortQuizzes } from '@/typing/db';
-import axios from 'axios';
 import CSAdminUploadLayout from './CSAdminUploadLayout';
 import CSAdminUploadContent from './CSAdminUploadContent';
 import fetchUserData from '@utils/fetchUserData';
@@ -43,7 +42,7 @@ const CSAdminUpload = () => {
       previewUrl: null,
     },
   ]);
-  const { data: userData } = fetchUserData();
+  const { data: userData, isLoading } = fetchUserData();
   const [params] = useSearchParams();
   const educationId = Number(params.get('educationId'));
   const educationNumber = params.get('educationNumber') || '';
@@ -54,7 +53,7 @@ const CSAdminUpload = () => {
    */
   const fetchQuizData = async () => {
     await api
-      .get(process.env.REACT_APP_BASE_URL + '/v1/api/quiz/all', {
+      .get('/v1/api/quiz/all', {
         params: {
           educationId: educationId,
         },
@@ -96,6 +95,8 @@ const CSAdminUpload = () => {
   // TODO: utilize role check function
   //
   setTimeout(() => {
+    if (isLoading) return;
+
     if (!['ADMIN', 'EDUCATION'].includes(userData?.role as string)) {
       window.location.href = '/';
     }

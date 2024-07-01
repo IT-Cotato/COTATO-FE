@@ -23,7 +23,6 @@ const ToggleButton = ({ toggled, onClick }: Props) => {
 };
 
 export default React.memo(ToggleButton);
-// export default ToggleButton;
 
 const Label = styled.label`
   position: relative;

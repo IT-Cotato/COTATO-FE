@@ -141,12 +141,12 @@ const CSAdminUploadSlides = ({ quiz, setQuiz, selected, setSelected }: Props) =>
 
 const Wrapper = styled.div`
   grid-area: leftbox;
-  /* width: 280px; */
+  background-color: ${({ theme }) => theme.colors.primary5};
   width: 100%;
-  height: fit-content;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 40px;
   button {
@@ -158,7 +158,7 @@ const Wrapper = styled.div`
     align-items: center;
     cursor: pointer;
     border: none;
-    background: ${(props: any) => (props.isselected === 'true' ? '#C4D7FF' : '#E4ECFD')};
+    background: ${({ theme }) => theme.colors.primary5};
     & + button {
       margin-top: 16px;
     }

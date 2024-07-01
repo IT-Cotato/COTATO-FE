@@ -1,52 +1,67 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useState } from 'react';
-import { Link, redirect, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import line from '@assets/Line 1.svg';
+import WelcomeImg from '@assets/login_welcome_img.svg';
+import idIcon from '@assets/login_id_icon.svg';
+import passwordIcon from '@assets/login_pw_icon.svg';
+import btnDefault from '@assets/login_btn_default.svg';
+import btnHover from '@assets/login_btn_hover.svg';
+import btnClicked from '@assets/login_btn_clicked.svg';
+import line from '@assets/login_line.svg';
+import { Link } from 'react-router-dom';
+import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import axios from 'axios';
-import api from '@/api/api';
+import { media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
+
+//
+//
+//
+
+type btnStateType = 'default' | 'hover' | 'clicked';
+
+//
+//
+//
 
 const Login = () => {
-  const { data, error, mutate } = useSWR('/v1/api/member/info', fetcher, {
+  const [btnState, setBtnState] = useState<btnStateType>('default');
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isError, setIsError] = useState(false);
+
+  const { data, mutate } = useSWR('/v1/api/member/info', fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     // 서버 리소스를 한번 받아오고 나서는 다시 받아오지 않음
   });
 
-  const nagivate = useNavigate();
-
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState(false);
-
-  const onChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
   }, []);
 
-  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   }, []);
 
-  const onSubmit = useCallback(
+  const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      setLoginError(false);
+      setIsError(false);
       api
         .post('/login', {
           email: id,
           password: password,
         })
         .then((res) => {
-          console.log(res.headers.accesstoken);
           localStorage.setItem('token', res.headers.accesstoken);
           mutate('/v1/api/member/info'); // 로그인 후에는 swr 요청을 수동으로 해준다
         })
         .catch((error) => {
           console.log(error);
-          setLoginError(true);
+          setIsError(true);
           if (id === '' || password === '') {
             alert('아이디 또는 비밀번호를 입력해주세요');
           } else {
@@ -64,28 +79,44 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <h3>로그인</h3>
-      <Form onSubmit={onSubmit}>
-        <InputBox>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/fc85a00960fa2f2a33ed4409b435484864454f73/icon_user.svg" />
-          <input type="text" id="id" name="id" placeholder="아이디" onChange={onChangeId} />
-        </InputBox>
-        <InputBox>
-          <img src="https://raw.githubusercontent.com/MinJaeSon/assets/fc85a00960fa2f2a33ed4409b435484864454f73/icon_unlock.svg" />
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="비밀번호"
-            onChange={onChangePassword}
-          />
-        </InputBox>
-        <LoginButton type="submit">로그인</LoginButton>
+      <BackImg src={WelcomeImg} />
+      <Form onSubmit={handleSubmit}>
+        <InputContainer>
+          <InputBox>
+            <img src={idIcon} />
+            <input type="text" id="id" name="id" placeholder="아이디" onChange={handleIdChange} />
+          </InputBox>
+          <InputBox>
+            <img src={passwordIcon} />
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="비밀번호"
+              onChange={handlePasswordChange}
+            />
+          </InputBox>
+        </InputContainer>
+        <ButtonContainer>
+          <LoginBtn
+            type="submit"
+            onMouseOver={() => setBtnState('hover')}
+            onMouseLeave={() => setBtnState('default')}
+            onClick={() => setBtnState('clicked')}
+          >
+            <img
+              src={
+                btnState === 'default' ? btnDefault : btnState === 'hover' ? btnHover : btnClicked
+              }
+              style={{ width: '120px' }}
+            />
+          </LoginBtn>
+        </ButtonContainer>
       </Form>
       <LinkContainer>
-        <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
-        <img src={line} />
         <StyledLink to="/findid">아이디 찾기</StyledLink>
+        <img src={line} />
+        <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
         <img src={line} />
         <StyledLink to="/joinus">회원가입</StyledLink>
       </LinkContainer>
@@ -93,78 +124,94 @@ const Login = () => {
   );
 };
 
-export default Login;
+//
+//
+//
 
 const Wrapper = styled.div`
   display: flex;
+  width: 100%;
+  height: 100vh;
+  padding: 4rem;
   flex-direction: column;
   align-items: center;
-  margin-top: 120px;
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 40px;
+
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px ${({ theme }) => theme.colors.common.white} inset;
+    -webkit-text-fill-color: ${({ theme }) => theme.colors.gray60}; // 글자색 변경
   }
+`;
+
+const BackImg = styled.img`
+  position: absolute;
+  z-index: 10;
+  width: 360px;
+  ${media.mobile`
+  width: 284px;
+  margin-top: 72px;
+`}
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
+  margin-top: 14rem;
+  margin-bottom: 3.6rem;
+  z-index: 100;
+`;
+
+const InputContainer = styled.div`
+  margin-bottom: 2rem;
 `;
 
 const InputBox = styled.div`
   width: 600px;
   height: 52px;
-  border-radius: 10px;
-  border: 2px solid #d7e5ca;
-  background: #fff;
-  margin-bottom: 12px;
+  border-radius: 0.5rem;
+  border: 2px solid ${({ theme }) => theme.colors.primary90};
+  background: ${({ theme }) => theme.colors.common.white};
   display: flex;
   flex-direction: row;
   align-items: center;
+  &:first-child {
+    margin-bottom: 1rem;
+  }
   input {
     border: none;
     width: 512px;
     &:focus {
       outline: none;
     }
+    caret-color: ${({ theme }) => theme.colors.primary90};
+    caret-shape: bar;
+    background-color: ${({ theme }) => theme.colors.common.white};
+    color: ${({ theme }) => theme.colors.gray60};
+    font-size: ${({ theme }) => theme.fontSize.xs};
   }
   img {
     width: 16px;
     height: 16px;
-    margin-left: 20px;
-    margin-right: 8px;
+    margin-left: 1.25rem;
+    margin-right: 0.8rem;
   }
-
-  @media screen and (max-width: 768px) {
-    width: 440px;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px;
-  }
+  ${media.landscape`
+    width: 350px;
+  `}
+  ${media.mobile`
+    width: 220px;
+  `}
 `;
 
-const LoginButton = styled.button`
-  width: 600px;
-  height: 52px;
-  border-radius: 10px;
-  border: 1px solid #d7e5ca;
-  background: #d7e5ca;
-  margin-top: 48px;
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #fff;
-  &:hover {
-    cursor: pointer;
-  }
+const ButtonContainer = styled.div`
+  height: 5rem;
+  display: flex;
+  align-items: end;
+`;
 
-  @media screen and (max-width: 768px) {
-    width: 440px;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px;
-  }
+const LoginBtn = styled.button`
+  background: none;
+  border: none;
 `;
 
 const LinkContainer = styled.div`
@@ -172,33 +219,30 @@ const LinkContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 600px;
-  height: 52px;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0px 2px 1px 0px #cecccc inset;
+  width: fit-content;
+  height: fit-content;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.5rem;
+  background: ${({ theme }) => theme.colors.common.white};
+  border: 2px solid ${({ theme }) => theme.colors.primary90};
   img {
-    margin: 0 8px;
-    height: 16px;
+    margin: 0 20px;
   }
-
-  @media screen and (max-width: 768px) {
-    width: 440px;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px;
-    height: 48px;
-    margin-top: 20px;
-  }
+  ${media.mobile`
+    img {
+      margin: 0 12px;
+    }
+  `}
 `;
 
 const StyledLink = styled(Link)`
-  color: #5e5e5e;
+  color: ${({ theme }) => theme.colors.gray60};
   text-align: center;
   text-decoration: none;
-  font-size: 0.9rem;
-
-  @media screen and (max-width: 392px) {
-    font-size: 0.8rem;
-  }
+  font-size: ${({ theme }) => theme.fontSize.md};
+  ${media.mobile`
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
+  `}
 `;
+
+export default Login;

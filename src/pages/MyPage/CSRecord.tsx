@@ -7,7 +7,7 @@ import localeKr from '@/assets/locale/locale_kr.json';
 const CSRecord = () => {
   const { data: user } = useSWR('/v1/api/mypage/info', fetcher);
   const { data: generationData } = useSWR('/v1/api/generation', fetcher);
-  const [generationId, setGenerationId] = React.useState<number>(1);
+  const [generationId, setGenerationId] = React.useState<number>();
   const { data: hallOfFameData } = useSWR(
     '/v1/api/mypage/hall-of-fame?generationId=' + generationId,
     fetcher,
@@ -21,9 +21,19 @@ const CSRecord = () => {
     'https://velog.velcdn.com/images/ea_st_ring/post/80026402-2707-4ff9-9503-223c6fbb7396/image.svg',
   ];
 
+  //
+  //
+  //
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    if (generationData) {
+      generationData.reverse();
+      setGenerationId(generationData[0].generationId);
+    }
+  }, [generationData]);
+
+  //
+  //
+  //
 
   return (
     <Wrapper>
@@ -44,12 +54,6 @@ const CSRecord = () => {
         </select>
       </SelectGenerationDiv>
       <MyInfoBox>
-        <ImageDiv>
-          <img
-            src="https://cdn.pixabay.com/photo/2016/02/04/12/19/gold-1179100_1280.png"
-            alt="tier"
-          />
-        </ImageDiv>
         <InfoDiv>
           <BadgeDiv>
             <Badge backgroundcolor="rgba(37, 156, 46, 0.52)">{user?.generationNumber}기</Badge>
@@ -133,7 +137,7 @@ const Wrapper = styled.section`
 
 const Title = styled.h1`
   width: 100%;
-  color: #1e1e1e;
+  color: ${({ theme }) => theme.colors.common.black};
   font-family: NanumSquareRound;
   font-size: 28px;
   font-style: normal;
@@ -146,7 +150,7 @@ const Title = styled.h1`
 
 const Subtitle = styled.p`
   width: 100%;
-  color: #bbb;
+  color: ${({ theme }) => theme.colors.gray80_1};
   text-align: center;
   font-family: NanumSquareRound;
   font-size: 16px;
@@ -161,7 +165,8 @@ const MyInfoBox = styled.div`
   width: 695px;
   height: fit-content;
   flex-shrink: 0;
-  background: #fff;
+  color: ${({ theme }) => theme.colors.common.black};
+  background-color: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   margin-bottom: 20px;
   @media screen and (max-width: 768px) {
@@ -192,29 +197,6 @@ const SelectGenerationDiv = styled.div`
   }
 `;
 
-const ImageDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 170px;
-  height: 190px;
-  flex-shrink: 0;
-  margin-right: 40px;
-  img {
-    width: 170px;
-    height: 170px;
-  }
-  @media screen and (max-width: 768px) {
-    width: 60px;
-    height: 100%;
-    margin-right: 10px;
-    img {
-      width: 60px;
-      height: 60px;
-    }
-  }
-`;
-
 const InfoDiv = styled.div`
   display: flex;
   width: 100%;
@@ -236,6 +218,7 @@ const BadgeDiv = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 20px;
+  background-color: ${({ theme }) => theme.colors.common.white};
 `;
 
 const Badge = styled.div<{ backgroundcolor: string }>`
@@ -244,7 +227,7 @@ const Badge = styled.div<{ backgroundcolor: string }>`
   align-items: center;
   width: fit-content;
   padding: 5px 10px;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.common.white};
   background: ${(props) => props.backgroundcolor};
 
   & + & {
@@ -262,7 +245,7 @@ const RecordDiv = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  color: #000;
+  color: ${({ theme }) => theme.colors.common.black};
   font-family: NanumSquareRound;
   font-size: 16px;
   font-weight: 600;
@@ -301,6 +284,7 @@ const HallOfFameBox = styled.div`
   padding: 20px;
   width: 695px;
   height: fit-content;
+  background: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   h1 {
     color: #bfc21b;
@@ -362,7 +346,7 @@ const FameInfoDiv = styled.div`
     padding: 0 5px;
     p {
       margin: 0;
-      color: #000;
+      color: ${({ theme }) => theme.colors.common.black};
       font-family: NanumSquareRound;
       font-size: 20px;
       font-weight: 700;
