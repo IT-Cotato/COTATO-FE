@@ -1,29 +1,55 @@
 import React from 'react';
 import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
+import { useWindowSize } from 'react-use';
+import { useLocation } from 'react-router-dom';
+import { usePromiseTracker } from 'react-promise-tracker';
 
 //
 //
 //
 
-const HomeBackgroundSvgComponent = () => {
+const GlobalBackgroundSvgComponent = () => {
   const theme = useTheme();
+  const location = useLocation();
+  const { promiseInProgress } = usePromiseTracker();
+  const { width, height } = useWindowSize();
+  const [viewPort, setViewPort] = React.useState({ width: 0, height: 0 });
+  const viewPortHeight = document.body.clientHeight;
+  const headerHeight = 72;
+
   const dotColor = theme.colors.primary30;
   const pinkStarColor = theme.colors.sub1[20];
   const blueStarColor = theme.colors.sub2[20];
   const greenStarColor = theme.colors.sub3[20];
   const yellowStarColor = theme.colors.primary60;
   const orangeStarColor = theme.colors.secondary40;
+
+  //
+  //
+  //
+  React.useLayoutEffect(() => {
+    setViewPort({
+      width,
+      height: viewPortHeight - headerHeight,
+    });
+  }, [width, height, viewPortHeight, location.pathname, promiseInProgress]);
+
+  //
+  //
+  //
+
   return (
     <svg
-      width="1440"
-      height="3998"
-      viewBox="0 0 1440 3998"
+      width={viewPort.width}
+      height={viewPort.height}
+      viewBox={`0 0 ${viewPort.width} ${viewPort.height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        width: '100vw',
+        width: '100%',
         position: 'absolute',
+        zIndex: -1,
         background: theme.colors.common.white,
         transition: THEME_CHANGE_TRANSITION,
       }}
@@ -1659,4 +1685,4 @@ const HomeBackgroundSvgComponent = () => {
   );
 };
 
-export default HomeBackgroundSvgComponent;
+export default GlobalBackgroundSvgComponent;

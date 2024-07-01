@@ -10,10 +10,9 @@ import cotato_icon from '@assets/cotato_icon.png';
 interface Props {
   session: ISession;
   handleModifyButton: (session: ISession) => void;
-  sessionCount?: number;
 }
 
-const SessionContent = ({ session, handleModifyButton, sessionCount }: Props) => {
+const SessionContent = ({ session, handleModifyButton }: Props) => {
   const { data: user } = useSWR('/v1/api/member/info', fetcher);
 
   const [isHover, setIsHover] = useState(false);
@@ -26,15 +25,6 @@ const SessionContent = ({ session, handleModifyButton, sessionCount }: Props) =>
     setIsHover(false);
   }, []);
 
-  const getSessionWeekStr = useCallback(() => {
-    if (session.sessionNumber === 0) {
-      return 'OT';
-    } else if (sessionCount && session.sessionNumber === sessionCount - 1) {
-      return '데모데이';
-    }
-    return `${session.sessionNumber}주차 세션`;
-  }, [session, sessionCount]);
-
   return (
     <Content>
       <SessionImage
@@ -44,17 +34,17 @@ const SessionContent = ({ session, handleModifyButton, sessionCount }: Props) =>
       />
       {isHover ? (
         <HoverContent onMouseEnter={onMouseEnterImage} onMouseLeave={onMouseLeaveImage}>
-          <p>{getSessionWeekStr()}</p>
+          <p>{session.title}</p>
           <p>{session.description}</p>
           {user?.role === 'ADMIN' && <ModifyIcon onClick={() => handleModifyButton(session)} />}
         </HoverContent>
       ) : (
         <Title>
-          <p>{session.sessionNumber === 0 ? 'OT' : `${session.sessionNumber}주차 세션`}</p>
+          <p>{session.title}</p>
           <EmojiWrapper>
-            {session.csEducation === 'CS_ON' && <SessionEmoji activity="CS" />}
-            {session.itIssue === 'IT_ON' && <SessionEmoji activity="IT" />}
-            {session.networking === 'NW_ON' && <SessionEmoji activity="NW" />}
+            {session.sessionContents.csEducation === 'CS_ON' && <SessionEmoji activity="CS" />}
+            {session.sessionContents.itIssue === 'IT_ON' && <SessionEmoji activity="IT" />}
+            {session.sessionContents.networking === 'NW_ON' && <SessionEmoji activity="NW" />}
           </EmojiWrapper>
         </Title>
       )}

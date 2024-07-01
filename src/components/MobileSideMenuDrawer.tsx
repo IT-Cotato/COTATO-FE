@@ -15,6 +15,8 @@ import CotatoToggleSwitch from './CotatoToggleSwitch';
 import LoginIconSvgComponent from './LoginIconSvgComponent';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
+import fetchUserData from '@utils/fetchUserData';
+import { getMemberRoleIcon } from '@utils/getMemberRoleIcon';
 
 //
 //
@@ -44,6 +46,7 @@ const MENU_ICON_MAP = {
 //
 
 const MobileSideMenuDrawer: React.FC<MobileSideMenuDrawerProps> = ({ navList, open, onClose }) => {
+  const { data: user } = fetchUserData();
   const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
   const drawerRef = React.useRef<HTMLDivElement>(null);
   const { DefaultTheme, onChangeTheme } = React.useContext(ThemeContext);
@@ -67,6 +70,46 @@ const MobileSideMenuDrawer: React.FC<MobileSideMenuDrawerProps> = ({ navList, op
    */
   const renderTitle = () => {
     return <StyledTitle>MENU</StyledTitle>;
+  };
+
+  /**
+   * render member component if user is logged in
+   */
+  const renderMember = () => {
+    if (!user) {
+      return null;
+    }
+
+    return (
+      <Link component={Link} href="/mypage" underline="none">
+        <ListItem
+          sx={{
+            gap: '0.5rem',
+          }}
+        >
+          <MemberRoleIcon src={getMemberRoleIcon(user.role)} />
+          <StyledLinkTypography>{user.memberName}</StyledLinkTypography>
+        </ListItem>
+      </Link>
+    );
+  };
+
+  /**
+   * render login component if user is not logged in
+   */
+  const renderLogin = () => {
+    return (
+      <Link component={Link} href="/signin" underline="none">
+        <ListItem
+          sx={{
+            gap: '0.5rem',
+          }}
+        >
+          <LoginIconSvgComponent />
+          <StyledLinkTypography>로그인</StyledLinkTypography>
+        </ListItem>
+      </Link>
+    );
   };
 
   /**
@@ -96,18 +139,7 @@ const MobileSideMenuDrawer: React.FC<MobileSideMenuDrawerProps> = ({ navList, op
             margin: 'auto',
           }}
         />
-        <StyledListItemButton>
-          <Link component={Link} href="/signin" underline="none">
-            <ListItem
-              sx={{
-                gap: '0.5rem',
-              }}
-            >
-              <LoginIconSvgComponent />
-              <StyledLinkTypography>로그인</StyledLinkTypography>
-            </ListItem>
-          </Link>
-        </StyledListItemButton>
+        <StyledListItemButton>{user ? renderMember() : renderLogin()}</StyledListItemButton>
         <StyledSwitchDiv>
           <Tooltip arrow title="실험적 기능으로 아직 완벽하지 않을 수 있습니다." placement="top">
             {DefaultTheme === COTATO_LIGHT_THEME ? (
@@ -214,7 +246,6 @@ const StyledTitle = styled.div`
   display: flex;
   height: 3.5rem;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
-  font-family: Ycomputer;
   font-size: 1.125rem;
   color: ${({ theme }) => theme.colors.gray60};
   flex-direction: column;
@@ -231,7 +262,6 @@ const StyledListItemButton = styled(ListItemButton)`
 
 const StyledLinkTypography = styled.p`
   color: ${({ theme }) => theme.colors.gray60};
-  font-family: Ycomputer;
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
@@ -253,4 +283,9 @@ const StyledSwitchDiv = styled.div`
   > label {
     margin-bottom: 0.5rem;
   }
+`;
+
+const MemberRoleIcon = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
 `;

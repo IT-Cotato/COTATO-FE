@@ -62,7 +62,7 @@ export default MobileSideMenuDrawerButton;
 //
 
 const StyledMobileSideMenuDrawerButton = styled.div<{ $slidein: boolean }>`
-  position: absolute;
+  position: fixed;
   top: 3.5rem;
   right: 0;
   display: flex;
@@ -77,7 +77,7 @@ const StyledMobileSideMenuDrawerButton = styled.div<{ $slidein: boolean }>`
   z-index: 1000;
   cursor: pointer;
   animation: ${({ $slidein }) =>
-    $slidein ? 'anim__slide__in 0.5s forwards' : 'anim__slide__out 0.5s forwards'};
+    $slidein ? 'anim__slide__in 0.5s forwards' : 'anim__slide__out 0.3s forwards'};
 
   @keyframes anim__slide__in {
     from {

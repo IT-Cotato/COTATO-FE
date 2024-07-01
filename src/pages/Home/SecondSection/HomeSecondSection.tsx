@@ -14,6 +14,7 @@ import { EffectCards } from 'swiper/modules';
 import 'swiper/css/effect-cards';
 import { media } from '@theme/media';
 import styles from './style.module.css';
+import { CotatoThemeType } from '@theme/theme';
 
 //
 //
@@ -83,7 +84,6 @@ const Title = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 100px;
   img {
     width: 200px;
     height: 40px;
@@ -95,6 +95,12 @@ const Title = styled.div`
     font-weight: 700;
     color: ${({ theme }) => theme.colors.gray80_2};
   }
+
+  ${media.tablet`
+    p {
+      font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.md};
+    }
+  `}
 `;
 
 const StyledSwiper = styled(Swiper)`

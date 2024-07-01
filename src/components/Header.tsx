@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '@/assets/header_logo.svg';
 import { ReactComponent as Login } from '@/assets/login.svg';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import fetchUserData from '@utils/fetchUserData';
 import { v4 as uuid } from 'uuid';
 import { getMemberRoleIcon } from '@utils/getMemberRoleIcon';
@@ -12,7 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import MobileSideMenuDrawerButton from './MobileSideMenuDrawerButton';
 import { ReactComponent as ThemeDark } from '@/assets/theme_dark_icon.svg';
 import { ReactComponent as ThemeLight } from '@/assets/theme_light_icon.svg';
-import { Tooltip } from '@mui/material';
+import { Box, CircularProgress, Tooltip } from '@mui/material';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
@@ -44,7 +44,8 @@ export type NAV_LIST_TYPE = ReadonlyArray<Readonly<NavItem>>;
 //
 
 const Header = () => {
-  const { data: user } = fetchUserData();
+  const { data: user, isLoading: isUserLoading } = fetchUserData();
+  const location = useLocation();
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
   const { DefaultTheme, onChangeTheme } = React.useContext(ThemeContext);
 
@@ -67,13 +68,13 @@ const Header = () => {
           {navItem.name}
         </NavItem>
       ))}
-      {user ? renderMember() : renderLogin()}
+      {renderProfile()}
       <StyledSwitchDiv>
         <Tooltip arrow title="실험적 기능으로 아직 완벽하지 않을 수 있습니다." placement="top">
           {DefaultTheme === COTATO_LIGHT_THEME ? (
-            <ThemeLight width={24} />
+            <ThemeLight width="1.5rem" />
           ) : (
-            <ThemeDark width={24} />
+            <ThemeDark width="1.5rem" />
           )}
         </Tooltip>
 
@@ -88,33 +89,30 @@ const Header = () => {
   /**
    *
    */
-  const renderMember = () => {
+  const renderProfile = () => {
+    if (isUserLoading) {
+      return (
+        <Box minWidth="5.5rem" height="1rem">
+          <CircularProgress size="1rem" />
+        </Box>
+      );
+    }
+
     if (!user) {
-      return null;
+      return (
+        <LoginLink to={'/signin'}>
+          <Login width={90} style={{ marginTop: '0.2rem' }} />
+        </LoginLink>
+      );
     }
 
     return (
       <NavItem key={uuid()} to={'/mypage'}>
         <MemberNav>
-          <MemberRoleIcon src={getMemberRoleIcon(user.role)} />
-          {user.memberName}
+          <MemberRoleIcon src={getMemberRoleIcon(user?.role)} />
+          {user?.memberName}
         </MemberNav>
       </NavItem>
-    );
-  };
-
-  /**
-   *
-   */
-  const renderLogin = () => {
-    if (user) {
-      return null;
-    }
-
-    return (
-      <LoginLink to={'/signin'}>
-        <Login width={90} style={{ marginTop: '0.2rem' }} />
-      </LoginLink>
     );
   };
 
@@ -140,6 +138,17 @@ const Header = () => {
     return <MobileSideMenuDrawerButton navList={NAV_LIST} />;
   };
 
+  //
+  //
+  //
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  //
+  //
+  //
+
   return (
     <>
       {renderHeader()}
@@ -160,7 +169,7 @@ const HeaderWrapper = styled.header`
   padding: 0.5rem 6rem;
   align-items: center;
   background: ${({ theme }) => theme.colors.common.white};
-  position: absolute;
+  position: sticky;
   top: 0;
   z-index: 100;
   transition: ${THEME_CHANGE_TRANSITION};
@@ -191,7 +200,6 @@ const NavContainer = styled.div`
 const NavItem = styled(NavLink)`
   min-width: fit-content;
   text-decoration: none;
-  font-family: 'Ycomputer';
   text-align: center;
   color: ${({ theme }) => theme.colors.gray80_2};
   font-size: ${({ theme }) => theme.fontSize.md};
@@ -210,11 +218,6 @@ const NavItem = styled(NavLink)`
   ${media.laptop`
     padding: 0rem;
     font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.sm};
-    &:hover,
-    &.active {
-      border: 2px solid ${({ theme }: { theme: CotatoThemeType }) => theme.colors.sub2[60]};
-      box-shadow:none;
-    }
   `}
 `;
 

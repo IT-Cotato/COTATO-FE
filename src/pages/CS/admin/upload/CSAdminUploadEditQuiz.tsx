@@ -291,7 +291,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 40px;
-  background: #f4f4f4;
+  background-color: ${({ theme }) => theme.colors.primary5};
   @media screen and (max-width: 768px) {
     justify-content: center;
     align-items: center;
@@ -305,7 +305,7 @@ const MakeQuestionDiv = styled.div`
   height: 95px;
   margin-top: 16px;
   border-radius: 5px;
-  background: #fff;
+  background-color: ${({ theme }) => theme.colors.common.white};
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;

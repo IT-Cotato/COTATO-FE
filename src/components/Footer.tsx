@@ -74,21 +74,20 @@ const FooterWrapper = styled.footer`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  padding: 6.25rem 6.25rem 3.125rem 6.25rem;
-  gap: 6.25rem;
-  background-color: ${({ theme }) => theme.colors.common.white};
+  width: 100%;
+  padding: 0 6.25rem 2rem 6.25rem;
+  gap: 1rem;
   transition: ${THEME_CHANGE_TRANSITION};
   ${media.laptop`
-    padding: 6.25rem 3.125rem 3.125rem 3.125rem;
+    padding: 0 3.125rem 2rem 3.125rem;
   `}
   ${media.tablet`
-    padding: 1.5rem 1.5rem 1.5rem 0;
-    gap: 1.5rem;
+    padding: 0 1.5rem 2rem 0;
+    
   `}
   ${media.mobile`
-    padding: 6.25rem 1.25rem 3.125rem 1.25rem;
-    gap: 1rem;
+    padding: 0 1.25rem 0rem 1.25rem;
+    
   `}
 `;
 
@@ -111,7 +110,7 @@ const SnsBackground = styled.div`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.common.white};
+  background-color: ${({ theme }) => theme.colors.common.white};
   filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.25));
   cursor: pointer;
 `;
@@ -120,11 +119,9 @@ const DescriptionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
 `;
 
 const MainText = styled.span`
-  font-family: Ycomputer;
   color: ${({ theme }) => theme.colors.gray80};
 
   &.md {
@@ -137,15 +134,14 @@ const MainText = styled.span`
 
 const SubTextContainer = styled.div`
   display: flex;
+  height: fit-content;
   flex-direction: column;
   align-items: center;
-
+  gap: 0.25rem;
   > p {
-    font-family: Ycomputer;
     font-size: ${({ theme }) => theme.fontSize.md};
     color: ${({ theme }) => theme.colors.gray80};
-    line-height: 180%;
-
+    margin: 0;
     > a {
       color: ${({ theme }) => theme.colors.gray80};
     }

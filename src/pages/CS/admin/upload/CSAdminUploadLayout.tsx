@@ -38,8 +38,9 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: fit-content;
-  padding: 20px 120px;
-  margin-bottom: 40px;
+  padding: 40px 120px;
+  margin-bottom: 4rem;
+  color: ${({ theme }) => theme.colors.common.black};
   @media screen and (max-width: 768px) {
     justify-content: center;
     align-items: center;
