@@ -4,6 +4,10 @@ import welcomeImg from '@assets/login_welcome_img.svg';
 import potatoImg from '@assets/welcome_potatoes.svg';
 import { media } from '@theme/media';
 
+//
+//
+//
+
 const LoginSuccess = () => {
   return (
     <Wrapper>
@@ -13,7 +17,9 @@ const LoginSuccess = () => {
   );
 };
 
-export default LoginSuccess;
+//
+//
+//
 
 const Wrapper = styled.div`
   display: flex;
@@ -52,3 +58,5 @@ const PotatoImg = styled.img`
   top: 30rem;
   `}
 `;
+
+export default LoginSuccess;
