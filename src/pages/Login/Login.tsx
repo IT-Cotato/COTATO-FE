@@ -256,6 +256,46 @@ const ButtonContainer = styled.div`
 const LoginBtn = styled.button`
   background: none;
   border: none;
+  &:hover {
+    animation: spring 0.1s ease-out 0.1s;
+  }
+  /* &:active {
+    animation: spring 0.1s ease-out 0.1s;
+  } */
+  @keyframes spring {
+    0% {
+      transform: scaleY(1);
+    }
+    40% {
+      transform: scaleY(0.99);
+    }
+    60% {
+      transform: scaleY(1.01);
+    }
+    100% {
+      transform: scaleY(1);
+    }
+  }
+  /* @keyframes spring_clicked {
+    0% {
+      transform: scaleY(1);
+    }
+    10% {
+      transform: scaleY(0.95);
+    }
+    20% {
+      transform: scaleY(1.05);
+    }
+    40% {
+      transform: scaleY(0.99);
+    }
+    60% {
+      transform: scaleY(1.01);
+    }
+    100% {
+      transform: scaleY(1);
+    }
+  } */
 `;
 
 const LinkContainer = styled.div`
