@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import idIcon from '@assets/login_id_icon.svg';
@@ -7,12 +7,13 @@ import btnDefault from '@assets/login_btn_default.svg';
 import btnHover from '@assets/login_btn_hover.svg';
 import btnClicked from '@assets/login_btn_clicked.svg';
 import line from '@assets/login_line.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
+import LoginSuccess from '@components/LoginSuccess';
 
 //
 //
@@ -24,14 +25,23 @@ type btnStateType = 'default' | 'hover' | 'clicked';
 //
 //
 
+const DELAY_TIME = 3000;
+
+//
+//
+//
+
 const Login = () => {
   const [btnState, setBtnState] = useState<btnStateType>('default');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const { data, mutate } = useSWR('/v1/api/member/info', fetcher, {
+  const navigate = useNavigate();
+
+  const { data, mutate, isLoading } = useSWR('/v1/api/member/info', fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -58,6 +68,7 @@ const Login = () => {
         .then((res) => {
           localStorage.setItem('token', res.headers.accesstoken);
           mutate('/v1/api/member/info'); // 로그인 후에는 swr 요청을 수동으로 해준다
+          handleLoginSuccess();
         })
         .catch((error) => {
           console.log(error);
@@ -72,54 +83,83 @@ const Login = () => {
     [id, password],
   );
 
-  if (data) {
-    console.log(data);
-    window.location.href = '/';
-  }
+  const handleLoginSuccess = () => {
+    setIsSuccess(true);
+    setTimeout(() => {
+      setIsSuccess(false);
+      navigate('/');
+    }, DELAY_TIME);
+  };
+
+  const handleAccess = useCallback(() => {
+    if (data && !isLoading && !isSuccess) {
+      navigate('/');
+    }
+  }, [isLoading, isSuccess]);
+
+  useEffect(() => {
+    handleAccess();
+  }, [handleAccess]);
 
   return (
     <Wrapper>
-      <BackImg src={WelcomeImg} />
-      <Form onSubmit={handleSubmit}>
-        <InputContainer>
-          <InputBox>
-            <img src={idIcon} />
-            <input type="text" id="id" name="id" placeholder="아이디" onChange={handleIdChange} />
-          </InputBox>
-          <InputBox>
-            <img src={passwordIcon} />
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="비밀번호"
-              onChange={handlePasswordChange}
-            />
-          </InputBox>
-        </InputContainer>
-        <ButtonContainer>
-          <LoginBtn
-            type="submit"
-            onMouseOver={() => setBtnState('hover')}
-            onMouseLeave={() => setBtnState('default')}
-            onClick={() => setBtnState('clicked')}
-          >
-            <img
-              src={
-                btnState === 'default' ? btnDefault : btnState === 'hover' ? btnHover : btnClicked
-              }
-              style={{ width: '120px' }}
-            />
-          </LoginBtn>
-        </ButtonContainer>
-      </Form>
-      <LinkContainer>
-        <StyledLink to="/findid">아이디 찾기</StyledLink>
-        <img src={line} />
-        <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
-        <img src={line} />
-        <StyledLink to="/joinus">회원가입</StyledLink>
-      </LinkContainer>
+      {isSuccess ? (
+        <LoginSuccess />
+      ) : (
+        <>
+          <BackImg src={WelcomeImg} />
+          <Form onSubmit={handleSubmit}>
+            <InputContainer>
+              <InputBox>
+                <img src={idIcon} />
+                <input
+                  type="text"
+                  id="id"
+                  name="id"
+                  placeholder="아이디"
+                  onChange={handleIdChange}
+                />
+              </InputBox>
+              <InputBox>
+                <img src={passwordIcon} />
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="비밀번호"
+                  onChange={handlePasswordChange}
+                />
+              </InputBox>
+            </InputContainer>
+            <ButtonContainer>
+              <LoginBtn
+                type="submit"
+                onMouseOver={() => setBtnState('hover')}
+                onMouseLeave={() => setBtnState('default')}
+                onClick={() => setBtnState('clicked')}
+              >
+                <img
+                  src={
+                    btnState === 'default'
+                      ? btnDefault
+                      : btnState === 'hover'
+                      ? btnHover
+                      : btnClicked
+                  }
+                  style={{ width: '120px' }}
+                />
+              </LoginBtn>
+            </ButtonContainer>
+          </Form>
+          <LinkContainer>
+            <StyledLink to="/findid">아이디 찾기</StyledLink>
+            <img src={line} />
+            <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
+            <img src={line} />
+            <StyledLink to="/joinus">회원가입</StyledLink>
+          </LinkContainer>
+        </>
+      )}
     </Wrapper>
   );
 };
