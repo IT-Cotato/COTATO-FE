@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import welcomeImg from '@assets/login_welcome_img.svg';
-import potatoImg from '@assets/welcome_potatoes.svg';
+import potatoImg from '@assets/login_success_potatoes.svg';
 import { media } from '@theme/media';
 
 //
