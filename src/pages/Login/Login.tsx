@@ -101,67 +101,71 @@ const Login = () => {
     handleAccess();
   }, [handleAccess]);
 
-  return (
-    <Wrapper>
-      {isSuccess ? (
-        <LoginSuccess />
-      ) : (
-        <>
-          <BackImg src={WelcomeImg} />
-          <Form onSubmit={handleSubmit}>
-            <InputContainer>
-              <InputBox>
-                <img src={idIcon} />
-                <input
-                  type="text"
-                  id="id"
-                  name="id"
-                  placeholder="아이디"
-                  onChange={handleIdChange}
-                />
-              </InputBox>
-              <InputBox>
-                <img src={passwordIcon} />
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="비밀번호"
-                  onChange={handlePasswordChange}
-                />
-              </InputBox>
-            </InputContainer>
-            <ButtonContainer>
-              <LoginBtn
-                type="submit"
-                onMouseOver={() => setBtnState('hover')}
-                onMouseLeave={() => setBtnState('default')}
-                onClick={() => setBtnState('clicked')}
-              >
-                <img
-                  src={
-                    btnState === 'default'
-                      ? btnDefault
-                      : btnState === 'hover'
-                      ? btnHover
-                      : btnClicked
-                  }
-                  style={{ width: '120px' }}
-                />
-              </LoginBtn>
-            </ButtonContainer>
-          </Form>
-          <LinkContainer>
-            <StyledLink to="/findid">아이디 찾기</StyledLink>
-            <img src={line} />
-            <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
-            <img src={line} />
-            <StyledLink to="/joinus">회원가입</StyledLink>
-          </LinkContainer>
-        </>
-      )}
-    </Wrapper>
-  );
+  const renderLoginForm = () => {
+    return (
+      <>
+        <BackImg src={WelcomeImg} />
+        <Form onSubmit={handleSubmit}>
+          <InputContainer>
+            <InputBox>
+              <img src={idIcon} />
+              <input type="text" id="id" name="id" placeholder="아이디" onChange={handleIdChange} />
+            </InputBox>
+            <InputBox>
+              <img src={passwordIcon} />
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="비밀번호"
+                onChange={handlePasswordChange}
+              />
+            </InputBox>
+          </InputContainer>
+          <ButtonContainer>
+            <LoginBtn
+              type="submit"
+              onMouseOver={() => setBtnState('hover')}
+              onMouseLeave={() => setBtnState('default')}
+              onClick={() => setBtnState('clicked')}
+            >
+              <img
+                src={
+                  btnState === 'default' ? btnDefault : btnState === 'hover' ? btnHover : btnClicked
+                }
+                style={{ width: '120px' }}
+              />
+            </LoginBtn>
+          </ButtonContainer>
+        </Form>
+      </>
+    );
+  };
+
+  const renderNavSection = () => {
+    return (
+      <>
+        <LinkContainer>
+          <StyledLink to="/findid">아이디 찾기</StyledLink>
+          <img src={line} />
+          <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
+          <img src={line} />
+          <StyledLink to="/joinus">회원가입</StyledLink>
+        </LinkContainer>
+      </>
+    );
+  };
+
+  const renderLogin = () => {
+    return (
+      <>
+        {renderLoginForm()}
+        {renderNavSection()}
+      </>
+    );
+  };
+
+  return <Wrapper>{isSuccess ? <LoginSuccess /> : <>{renderLogin()}</>}</Wrapper>;
 };
 
 //
