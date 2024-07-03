@@ -23,7 +23,6 @@ interface SessionCardProps {
 //
 //
 
-const SKELETON_ANIMATION = 'wave';
 const IMAGE_HEIGHT = '20rem';
 
 //
@@ -51,12 +50,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
    */
   const renderCardImage = () => {
     const getImageSkeleton = () => (
-      <Skeleton
-        animation={SKELETON_ANIMATION}
-        variant="rectangular"
-        width="100%"
-        height={IMAGE_HEIGHT}
-      />
+      <Skeleton animation="wave" variant="rectangular" width="100%" height={IMAGE_HEIGHT} />
     );
 
     const getImageContent = () => (
