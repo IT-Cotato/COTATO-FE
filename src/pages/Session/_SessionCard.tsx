@@ -4,6 +4,12 @@ import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import ready_image from '@assets/potato_ready.svg';
 import Skeleton from '@mui/material/Skeleton';
 import { CotatoSessionListResponse, CotatoSessionContents } from 'cotato-openapi-clients';
+import {
+  SessionContentsCsEducation,
+  SessionContentsItIssue,
+  SessionContentsNetworking,
+  SessionContentsDevTalk,
+} from '@/enums/SessionContents';
 
 //
 //
@@ -85,10 +91,18 @@ const SessionCard = ({ session }: SessionCardProps) => {
 
     return (
       <SessionContentsWrapper>
-        {csEducation === 'CS_ON' && <Content $color={theme.colors.primary100_1}>#CS</Content>}
-        {itIssue === 'IT_ON' && <Content $color={theme.colors.sub2[80]}>#IT</Content>}
-        {networking === 'NW_ON' && <Content $color={theme.colors.sub3[60]}>#NW</Content>}
-        {devTalk === 'DEVTALK_ON' && <Content $color={theme.colors.gray80}>#DEV</Content>}
+        {csEducation === SessionContentsCsEducation.ON && (
+          <Content $color={theme.colors.primary100_1}>#CS</Content>
+        )}
+        {itIssue === SessionContentsItIssue.ON && (
+          <Content $color={theme.colors.sub2[80]}>#IT</Content>
+        )}
+        {networking === SessionContentsNetworking.ON && (
+          <Content $color={theme.colors.sub3[60]}>#NW</Content>
+        )}
+        {devTalk === SessionContentsDevTalk.ON && (
+          <Content $color={theme.colors.gray80}>#DEV</Content>
+        )}
       </SessionContentsWrapper>
     );
   };
