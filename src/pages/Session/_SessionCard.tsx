@@ -37,13 +37,6 @@ const SessionCard = ({ session }: SessionCardProps) => {
   /**
    *
    */
-  const handelImageLoad = () => {
-    setImageLoading(false);
-  };
-
-  /**
-   *
-   */
   const renderCardHeader = () => (
     <CardHeader>
       <Circle>
@@ -70,7 +63,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
       <CardImage
         src={session.photoUrl || ready_image}
         alt="session"
-        onLoad={handelImageLoad}
+        onLoad={() => setImageLoading(false)}
         $display={imageLoading ? 'none' : 'bolock'}
       />
     );
