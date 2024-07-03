@@ -35,6 +35,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 6rem 6.25rem;
+  // full height except for the header
   min-height: calc(100vh - 4rem);
 `;
 
