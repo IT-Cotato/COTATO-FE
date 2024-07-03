@@ -43,7 +43,7 @@ const SessionCardWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
   grid-template-rows: repeat(auto-fill, minmax(auto, 1fr));
-  gap: 3.8rem 2.5rem;
+  gap: 3.5rem 2.5rem;
   place-items: center;
   width: 100%;
   padding: 3.2rem 2.5rem;
