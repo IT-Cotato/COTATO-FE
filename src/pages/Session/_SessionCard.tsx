@@ -58,7 +58,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
         src={session.photoUrl || ready_image}
         alt="session"
         onLoad={() => setImageLoading(false)}
-        $display={imageLoading ? 'none' : 'bolock'}
+        $display={imageLoading ? 'none' : 'block'}
       />
     );
 
