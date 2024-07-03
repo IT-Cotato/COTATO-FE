@@ -41,66 +41,85 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { data, mutate, isLoading } = useSWR('/v1/api/member/info', fetcher, {
+  const {
+    data: user,
+    mutate,
+    isLoading,
+  } = useSWR('/v1/api/member/info', fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     // 서버 리소스를 한번 받아오고 나서는 다시 받아오지 않음
   });
 
+  /**
+   *
+   */
   const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
   }, []);
 
+  /**
+   *
+   */
   const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   }, []);
 
-  const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setIsError(false);
-      api
-        .post('/login', {
-          email: id,
-          password: password,
-        })
-        .then((res) => {
-          localStorage.setItem('token', res.headers.accesstoken);
-          mutate('/v1/api/member/info'); // 로그인 후에는 swr 요청을 수동으로 해준다
-          handleLoginSuccess();
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsError(true);
-          if (id === '' || password === '') {
-            alert('아이디 또는 비밀번호를 입력해주세요');
-          } else {
-            alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-          }
-        });
-    },
-    [id, password],
-  );
+  /**
+   *
+   */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsError(false);
+    api
+      .post('/login', {
+        email: id,
+        password: password,
+      })
+      .then((res) => {
+        localStorage.setItem('token', res.headers.accesstoken);
+        mutate('/v1/api/member/info'); // 로그인 후에는 swr 요청을 수동으로 해준다
+        handleLoginSuccess();
+      })
+      .catch((error) => {
+        setIsError(true);
+        // will be changed to toast
+        !id || !password
+          ? alert('아이디 또는 비밀번호를 입력해주세요')
+          : alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+      });
+  };
 
+  /**
+   *
+   */
   const handleLoginSuccess = () => {
     setIsSuccess(true);
     setTimeout(() => {
-      setIsSuccess(false);
       navigate('/');
     }, DELAY_TIME);
   };
 
-  const handleAccess = useCallback(() => {
-    if (data && !isLoading && !isSuccess) {
-      navigate('/');
+  /**
+   *
+   */
+  const getImgSrcByState = (state: btnStateType) => {
+    switch (state) {
+      case 'default':
+        return btnDefault;
+      case 'hover':
+        return btnHover;
+      case 'clicked':
+        return btnClicked;
+      default:
+        return btnDefault;
     }
-  }, [isLoading, isSuccess]);
+  };
 
-  useEffect(() => {
-    handleAccess();
-  }, [handleAccess]);
-
+  /**
+   *
+   */
   const renderLoginForm = () => {
     return (
       <>
@@ -129,12 +148,7 @@ const Login = () => {
               onMouseLeave={() => setBtnState('default')}
               onClick={() => setBtnState('clicked')}
             >
-              <img
-                src={
-                  btnState === 'default' ? btnDefault : btnState === 'hover' ? btnHover : btnClicked
-                }
-                style={{ width: '120px' }}
-              />
+              <img src={getImgSrcByState(btnState)} style={{ width: '120px' }} />
             </LoginBtn>
           </ButtonContainer>
         </Form>
@@ -142,6 +156,9 @@ const Login = () => {
     );
   };
 
+  /**
+   *
+   */
   const renderNavSection = () => {
     return (
       <>
@@ -156,7 +173,14 @@ const Login = () => {
     );
   };
 
+  /**
+   *
+   */
   const renderLogin = () => {
+    if (isSuccess) {
+      return null;
+    }
+
     return (
       <>
         {renderLoginForm()}
@@ -165,7 +189,35 @@ const Login = () => {
     );
   };
 
-  return <Wrapper>{isSuccess ? <LoginSuccess /> : <>{renderLogin()}</>}</Wrapper>;
+  /**
+   *
+   */
+  const renderLoginSuccess = () => {
+    if (!isSuccess) {
+      return null;
+    }
+
+    return <LoginSuccess />;
+  };
+
+  //
+  //
+  //
+  useEffect(() => {
+    if (isLoading) {
+      navigate('/');
+    }
+    if (user) {
+      return;
+    }
+  }, [isLoading, user]);
+
+  return (
+    <Wrapper>
+      {renderLogin()}
+      {renderLoginSuccess()}
+    </Wrapper>
+  );
 };
 
 //
@@ -259,9 +311,6 @@ const LoginBtn = styled.button`
   &:hover {
     animation: spring 0.1s ease-out 0.1s;
   }
-  /* &:active {
-    animation: spring 0.1s ease-out 0.1s;
-  } */
   @keyframes spring {
     0% {
       transform: scaleY(1);
@@ -276,26 +325,6 @@ const LoginBtn = styled.button`
       transform: scaleY(1);
     }
   }
-  /* @keyframes spring_clicked {
-    0% {
-      transform: scaleY(1);
-    }
-    10% {
-      transform: scaleY(0.95);
-    }
-    20% {
-      transform: scaleY(1.05);
-    }
-    40% {
-      transform: scaleY(0.99);
-    }
-    60% {
-      transform: scaleY(1.01);
-    }
-    100% {
-      transform: scaleY(1);
-    }
-  } */
 `;
 
 const LinkContainer = styled.div`
