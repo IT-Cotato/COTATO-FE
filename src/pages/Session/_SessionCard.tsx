@@ -155,7 +155,7 @@ const Content = styled.div<{ $color: string }>`
   justify-content: center;
   align-items: center;
   padding: ${({ theme }) => theme.size.sm} ${({ theme }) => theme.size.xl};
-  border-radius: 6.2rem;
+  border-radius: 6rem;
   background: ${({ $color }) => $color};
   font-family: Ycomputer;
   font-size: ${({ theme }) => theme.fontSize.sm};
