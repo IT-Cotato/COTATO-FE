@@ -365,67 +365,25 @@ const Choice: React.FC<choiceProps> = ({
   choiceRef,
 }) => {
   return (
-    <ChoiceContainer ref={multipleRef}>
-      <ChoiceBtn
-        clicked={selected.includes('1')}
-        onClick={() => {
-          setSelectNum(1);
-          console.log(selectNum, selected);
-          if (selected.includes('1') === false) {
-            setSelected([...selected, '1']);
-          } else {
-            setSelected(selected.filter((item) => item !== '1'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[0] = el)}
-      >
-        {contents[0]}
-      </ChoiceBtn>
-      <ChoiceBtn
-        clicked={selected.includes('2')}
-        onClick={() => {
-          setSelectNum(2);
-          console.log(selectNum, selected);
-          if (selected.includes('2') === false) {
-            setSelected([...selected, '2']);
-          } else {
-            setSelected(selected.filter((item) => item !== '2'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[1] = el)}
-      >
-        {contents[1]}
-      </ChoiceBtn>
-      <ChoiceBtn
-        clicked={selected.includes('3')}
-        onClick={() => {
-          setSelectNum(3);
-          console.log(selectNum, selected);
-          if (selected.includes('3') === false) {
-            setSelected([...selected, '3']);
-          } else {
-            setSelected(selected.filter((item) => item !== '3'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[2] = el)}
-      >
-        {contents[2]}
-      </ChoiceBtn>
-      <ChoiceBtn
-        clicked={selected.includes('4')}
-        onClick={() => {
-          setSelectNum(4);
-          console.log(selectNum, selected);
-          if (selected.includes('4') === false) {
-            setSelected([...selected, '4']);
-          } else {
-            setSelected(selected.filter((item) => item !== '4'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[3] = el)}
-      >
-        {contents[3]}
-      </ChoiceBtn>
+    <ChoiceContainer ref={multipleRef} choiceNum={contents.length}>
+      {contents.map((content, idx) => (
+        <ChoiceBtn
+          key={idx}
+          clicked={selected.includes((idx + 1).toString())}
+          onClick={() => {
+            setSelectNum(idx + 1);
+            console.log(selectNum, selected);
+            if (selected.includes((idx + 1).toString()) === false) {
+              setSelected([...selected, (idx + 1).toString()]);
+            } else {
+              setSelected(selected.filter((item) => item !== (idx + 1).toString()));
+            }
+          }}
+          ref={(el) => (choiceRef.current[0] = el)}
+        >
+          {content}
+        </ChoiceBtn>
+      ))}
     </ChoiceContainer>
   );
 };
@@ -715,13 +673,16 @@ const LightOn = styled.div`
   }
 `;
 
-const ChoiceContainer = styled.div`
+const ChoiceContainer = styled.div<{ choiceNum: number }>`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  ${(props) =>
+    props.choiceNum > 4
+      ? `grid-template-columns: 1fr;`
+      : `grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr; 
+      grid-column-gap: 16px;`}
   grid-row-gap: 12px;
-  grid-column-gap: 16px;
   align-items: stretch !important;
 
   @media screen and (max-width: 392px) {
@@ -730,7 +691,7 @@ const ChoiceContainer = styled.div`
 `;
 
 const ChoiceBtn = styled.div<{ clicked: boolean }>`
-  width: 454px;
+  width: 100%;
   min-height: 68px;
   height: fit-content;
   border-radius: 5px;
@@ -747,7 +708,6 @@ const ChoiceBtn = styled.div<{ clicked: boolean }>`
   ${(props) => props.clicked && `background: #D2D2D2;`}
 
   @media screen and (max-width: 392px) {
-    width: 180px;
     min-height: 100px;
     padding: 20px;
   }
