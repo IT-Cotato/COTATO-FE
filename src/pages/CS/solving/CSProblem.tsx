@@ -454,13 +454,6 @@ const Wrapper = styled.div`
   padding-bottom: 60px;
   overflow: auto;
   overflow-x: hidden;
-  /* background-color: #fff;
-  background-size: cover;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 100; */
 `;
 
 const ProgressContainer = styled.div`
@@ -480,7 +473,6 @@ const ProgressBar = styled.div<{ progress: number }>`
 `;
 
 const QuizContainer = styled.div`
-  /* width: 920px; */
   padding: 0 300px;
   display: flex;
   flex-direction: column;
@@ -583,9 +575,6 @@ interface PosProps {
 const LightImgContainer = styled.div<PosProps>`
   position: absolute;
   width: 80px;
-  /* height: 82px;
-  right: 300px;
-  bottom: 316px; */
   ${(props) =>
     props.mulYPos &&
     `
@@ -600,7 +589,6 @@ const LightImgContainer = styled.div<PosProps>`
   `}
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 `;
 
