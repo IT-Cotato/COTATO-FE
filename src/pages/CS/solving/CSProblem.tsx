@@ -16,7 +16,8 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
-import {CotatoReplyRequest} from 'cotato-openapi-clients';
+import { CotatoReplyRequest } from 'cotato-openapi-clients';
+import fetchUserData from '@utils/fetchUserData';
 
 //
 //
@@ -58,12 +59,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
   showKingKing,
   setShowKingKing,
 }) => {
-  const { data } = useSWR('/v1/api/member/info', fetcher);
-  if (data) {
-    // console.log(data);
-  } else {
-    console.log('data is undefined');
-  }
+  const { data: user } = fetchUserData();
+  user ? null : console.log('data is undefined');
 
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
@@ -80,15 +77,14 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const [notice, setNotice] = useState(false);
 
   const inputRef = useRef<any>();
-
   const multipleRef = useRef<any>();
   const shortRef = useRef<any>();
+  const choiceRef = useRef<any | null>([]);
+
   const mulYPos = multipleRef.current?.offsetTop;
   const mulXPos = multipleRef.current?.offsetLeft + multipleRef.current?.offsetWidth;
   const shortYPos = shortRef.current?.offsetTop;
   const shortXPos = shortRef.current?.offsetLeft + shortRef.current?.offsetWidth;
-
-  const choiceRef = useRef<any | null>([]);
 
   const alignBtnHeights = () => {
     let maxHeight = 68;
@@ -204,7 +200,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const submitProblem = () => {
     const input = quizData?.choices ? selected : [shortAns];
 
-    if (!data || notice) {
+    if (!user || notice) {
       return;
     } else {
       if (!submitAllowed) {
@@ -223,14 +219,14 @@ const CSProblem: React.FC<CSProblemProps> = ({
             '/v1/api/record/reply',
             {
               quizId: quizId,
-              memberId: data.memberId,
+              memberId: user.memberId,
               inputs: input,
             } as CotatoReplyRequest,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
               },
-            }
+            },
           )
           .then((res) => {
             if (res.data.result === 'true') {
@@ -251,7 +247,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     }
   };
 
-  if (showKingKing == true) {
+  if (showKingKing) {
     setTimeout(() => {
       setShowKingKing(false);
       setReturnToWaiting(true);
