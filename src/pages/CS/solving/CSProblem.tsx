@@ -16,6 +16,7 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
+import {CotatoReplyRequest} from 'cotato-openapi-clients';
 
 //
 //
@@ -224,12 +225,12 @@ const CSProblem: React.FC<CSProblemProps> = ({
               quizId: quizId,
               memberId: data.memberId,
               inputs: input,
-            },
+            } as CotatoReplyRequest,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
               },
-            },
+            }
           )
           .then((res) => {
             if (res.data.result === 'true') {
