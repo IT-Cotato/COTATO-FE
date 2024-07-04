@@ -82,7 +82,7 @@ const Login = () => {
         mutate('/v1/api/member/info'); // 로그인 후에는 swr 요청을 수동으로 해준다
         handleLoginSuccess();
       })
-      .catch((error) => {
+      .catch(() => {
         setIsError(true);
         // will be changed to toast
         !id || !password
