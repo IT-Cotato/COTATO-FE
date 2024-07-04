@@ -102,7 +102,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
     window.addEventListener('keydown', handleKeyDown);
 
     const intervalId = setInterval(() => {
-      // console.log(`1초 간 ${count}번 누름`);
       setCount(0);
     }, 1000);
 
@@ -119,7 +118,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
   // 최초 마운트 이후부터 문제 변경을 감지하여 다음 문제 보여주기
   const mountRef = useRef(false);
   useEffect(() => {
-    console.log('shortXPos' + shortXPos);
     if (!mountRef.current) {
       mountRef.current = true;
     } else {
@@ -137,8 +135,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
         })
         .then((res) => {
           setQuizData(res.data);
-          console.log(res.data);
-          console.log(multiples);
         })
         .catch((err) => {
           console.error(err);
@@ -206,7 +202,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
         if (count >= 3) {
           setNotice(true);
           setTimeout(() => setNotice(false), 5000);
-          // console.log('광클 에바지');
         }
         return;
       } else if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
@@ -314,7 +309,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
         )}
         {quizData?.choices && (
           <Choice
-            selectNum={selectNum}
             setSelectNum={setSelectNum}
             selected={selected}
             setSelected={setSelected}
@@ -346,7 +340,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
 };
 
 interface choiceProps {
-  selectNum: number; // 선택한 선지의 번호
   setSelectNum: React.Dispatch<React.SetStateAction<number>>;
   selected: string[]; // 최종적으로 선택한 선지번호 리스트
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
@@ -356,7 +349,6 @@ interface choiceProps {
 }
 
 const Choice: React.FC<choiceProps> = ({
-  selectNum,
   setSelectNum,
   selected,
   setSelected,
@@ -372,7 +364,6 @@ const Choice: React.FC<choiceProps> = ({
           clicked={selected.includes((idx + 1).toString())}
           onClick={() => {
             setSelectNum(idx + 1);
-            console.log(selectNum, selected);
             if (selected.includes((idx + 1).toString()) === false) {
               setSelected([...selected, (idx + 1).toString()]);
             } else {
