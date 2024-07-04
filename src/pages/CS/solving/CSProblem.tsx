@@ -675,6 +675,7 @@ const LightOn = styled.div`
 
 const ChoiceContainer = styled.div<{ choiceNum: number }>`
   width: 100%;
+  height: fit-content;
   display: grid;
   ${(props) =>
     props.choiceNum > 4
@@ -780,8 +781,6 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
     width: 100%;
     padding: 0 9px;
     flex-direction: column;
-    position: absolute;
-    bottom: 40px;
     button {
       width: 100%;
       height: 64px;
