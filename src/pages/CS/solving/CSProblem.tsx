@@ -17,6 +17,10 @@ import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
 
+//
+//
+//
+
 type Problem = {
   id: number; // 문제의 PK
   number: number; // 문제 번호
@@ -42,6 +46,10 @@ interface CSProblemProps {
   setShowKingKing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+//
+//
+//
+
 const CSProblem: React.FC<CSProblemProps> = ({
   quizId,
   submitAllowed,
@@ -59,6 +67,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
   const [biggerImg, setBiggerImg] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectNum, setSelectNum] = useState<number>(0);
   const [selected, setSelected] = useState<string[]>([]); // 최종적으로 선택한 선지번호 리스트
   const [shortAns, setShortAns] = useState('');
@@ -339,6 +348,10 @@ const CSProblem: React.FC<CSProblemProps> = ({
   );
 };
 
+//
+//
+//
+
 interface choiceProps {
   setSelectNum: React.Dispatch<React.SetStateAction<number>>;
   selected: string[]; // 최종적으로 선택한 선지번호 리스트
@@ -347,6 +360,10 @@ interface choiceProps {
   multipleRef: React.MutableRefObject<any>;
   choiceRef: React.MutableRefObject<any>;
 }
+
+//
+//
+//
 
 const Choice: React.FC<choiceProps> = ({
   setSelectNum,
@@ -383,6 +400,10 @@ const Choice: React.FC<choiceProps> = ({
   );
 };
 
+//
+//
+//
+
 interface ShortAnsProps {
   shortAns: string;
   onChangeShortAns: React.ChangeEventHandler<HTMLInputElement>;
@@ -390,6 +411,10 @@ interface ShortAnsProps {
   shortRef: React.MutableRefObject<any>;
   problemId: number;
 }
+
+//
+//
+//
 
 const ShortAnswer: React.FC<ShortAnsProps> = ({
   shortAns,
@@ -415,7 +440,9 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
   );
 };
 
-export default CSProblem;
+//
+//
+//
 
 const Wrapper = styled.div`
   display: flex;
@@ -788,3 +815,5 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
     }
   }
 `;
+
+export default CSProblem;
