@@ -16,6 +16,12 @@ import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
+import { CotatoReplyRequest } from 'cotato-openapi-clients';
+import fetchUserData from '@utils/fetchUserData';
+
+//
+//
+//
 
 type Problem = {
   id: number; // 문제의 PK
@@ -42,6 +48,10 @@ interface CSProblemProps {
   setShowKingKing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+//
+//
+//
+
 const CSProblem: React.FC<CSProblemProps> = ({
   quizId,
   submitAllowed,
@@ -49,16 +59,13 @@ const CSProblem: React.FC<CSProblemProps> = ({
   showKingKing,
   setShowKingKing,
 }) => {
-  const { data } = useSWR('/v1/api/member/info', fetcher);
-  if (data) {
-    // console.log(data);
-  } else {
-    console.log('data is undefined');
-  }
+  const { data: user } = fetchUserData();
+  user ? null : console.log('data is undefined');
 
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
   const [biggerImg, setBiggerImg] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectNum, setSelectNum] = useState<number>(0);
   const [selected, setSelected] = useState<string[]>([]); // 최종적으로 선택한 선지번호 리스트
   const [shortAns, setShortAns] = useState('');
@@ -70,15 +77,14 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const [notice, setNotice] = useState(false);
 
   const inputRef = useRef<any>();
-
   const multipleRef = useRef<any>();
   const shortRef = useRef<any>();
+  const choiceRef = useRef<any | null>([]);
+
   const mulYPos = multipleRef.current?.offsetTop;
   const mulXPos = multipleRef.current?.offsetLeft + multipleRef.current?.offsetWidth;
   const shortYPos = shortRef.current?.offsetTop;
   const shortXPos = shortRef.current?.offsetLeft + shortRef.current?.offsetWidth;
-
-  const choiceRef = useRef<any | null>([]);
 
   const alignBtnHeights = () => {
     let maxHeight = 68;
@@ -102,7 +108,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
     window.addEventListener('keydown', handleKeyDown);
 
     const intervalId = setInterval(() => {
-      // console.log(`1초 간 ${count}번 누름`);
       setCount(0);
     }, 1000);
 
@@ -119,7 +124,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
   // 최초 마운트 이후부터 문제 변경을 감지하여 다음 문제 보여주기
   const mountRef = useRef(false);
   useEffect(() => {
-    console.log('shortXPos' + shortXPos);
     if (!mountRef.current) {
       mountRef.current = true;
     } else {
@@ -137,8 +141,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
         })
         .then((res) => {
           setQuizData(res.data);
-          console.log(res.data);
-          console.log(multiples);
         })
         .catch((err) => {
           console.error(err);
@@ -198,7 +200,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const submitProblem = () => {
     const input = quizData?.choices ? selected : [shortAns];
 
-    if (!data || notice) {
+    if (!user || notice) {
       return;
     } else {
       if (!submitAllowed) {
@@ -206,7 +208,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
         if (count >= 3) {
           setNotice(true);
           setTimeout(() => setNotice(false), 5000);
-          // console.log('광클 에바지');
         }
         return;
       } else if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
@@ -218,9 +219,9 @@ const CSProblem: React.FC<CSProblemProps> = ({
             '/v1/api/record/reply',
             {
               quizId: quizId,
-              memberId: data.memberId,
+              memberId: user.memberId,
               inputs: input,
-            },
+            } as CotatoReplyRequest,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -246,7 +247,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     }
   };
 
-  if (showKingKing == true) {
+  if (showKingKing) {
     setTimeout(() => {
       setShowKingKing(false);
       setReturnToWaiting(true);
@@ -314,7 +315,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
         )}
         {quizData?.choices && (
           <Choice
-            selectNum={selectNum}
             setSelectNum={setSelectNum}
             selected={selected}
             setSelected={setSelected}
@@ -345,8 +345,11 @@ const CSProblem: React.FC<CSProblemProps> = ({
   );
 };
 
+//
+//
+//
+
 interface choiceProps {
-  selectNum: number; // 선택한 선지의 번호
   setSelectNum: React.Dispatch<React.SetStateAction<number>>;
   selected: string[]; // 최종적으로 선택한 선지번호 리스트
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
@@ -355,8 +358,11 @@ interface choiceProps {
   choiceRef: React.MutableRefObject<any>;
 }
 
+//
+//
+//
+
 const Choice: React.FC<choiceProps> = ({
-  selectNum,
   setSelectNum,
   selected,
   setSelected,
@@ -365,70 +371,35 @@ const Choice: React.FC<choiceProps> = ({
   choiceRef,
 }) => {
   return (
-    <ChoiceContainer ref={multipleRef}>
-      <ChoiceBtn
-        clicked={selected.includes('1')}
-        onClick={() => {
-          setSelectNum(1);
-          console.log(selectNum, selected);
-          if (selected.includes('1') === false) {
-            setSelected([...selected, '1']);
-          } else {
-            setSelected(selected.filter((item) => item !== '1'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[0] = el)}
-      >
-        {contents[0]}
-      </ChoiceBtn>
-      <ChoiceBtn
-        clicked={selected.includes('2')}
-        onClick={() => {
-          setSelectNum(2);
-          console.log(selectNum, selected);
-          if (selected.includes('2') === false) {
-            setSelected([...selected, '2']);
-          } else {
-            setSelected(selected.filter((item) => item !== '2'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[1] = el)}
-      >
-        {contents[1]}
-      </ChoiceBtn>
-      <ChoiceBtn
-        clicked={selected.includes('3')}
-        onClick={() => {
-          setSelectNum(3);
-          console.log(selectNum, selected);
-          if (selected.includes('3') === false) {
-            setSelected([...selected, '3']);
-          } else {
-            setSelected(selected.filter((item) => item !== '3'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[2] = el)}
-      >
-        {contents[2]}
-      </ChoiceBtn>
-      <ChoiceBtn
-        clicked={selected.includes('4')}
-        onClick={() => {
-          setSelectNum(4);
-          console.log(selectNum, selected);
-          if (selected.includes('4') === false) {
-            setSelected([...selected, '4']);
-          } else {
-            setSelected(selected.filter((item) => item !== '4'));
-          }
-        }}
-        ref={(el) => (choiceRef.current[3] = el)}
-      >
-        {contents[3]}
-      </ChoiceBtn>
+    <ChoiceContainer ref={multipleRef} choiceNum={contents.length}>
+      {contents.map((content, idx) => {
+        const choiceNum = idx + 1;
+
+        return (
+          <ChoiceBtn
+            key={idx}
+            clicked={selected.includes(choiceNum.toString())}
+            onClick={() => {
+              setSelectNum(choiceNum);
+              if (selected.includes(choiceNum.toString()) === false) {
+                setSelected([...selected, choiceNum.toString()]);
+              } else {
+                setSelected(selected.filter((item) => item !== choiceNum.toString()));
+              }
+            }}
+            ref={(el) => (choiceRef.current[idx] = el)}
+          >
+            {content}
+          </ChoiceBtn>
+        );
+      })}
     </ChoiceContainer>
   );
 };
+
+//
+//
+//
 
 interface ShortAnsProps {
   shortAns: string;
@@ -437,6 +408,10 @@ interface ShortAnsProps {
   shortRef: React.MutableRefObject<any>;
   problemId: number;
 }
+
+//
+//
+//
 
 const ShortAnswer: React.FC<ShortAnsProps> = ({
   shortAns,
@@ -462,7 +437,9 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
   );
 };
 
-export default CSProblem;
+//
+//
+//
 
 const Wrapper = styled.div`
   display: flex;
@@ -474,13 +451,6 @@ const Wrapper = styled.div`
   padding-bottom: 60px;
   overflow: auto;
   overflow-x: hidden;
-  /* background-color: #fff;
-  background-size: cover;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 100; */
 `;
 
 const ProgressContainer = styled.div`
@@ -500,7 +470,6 @@ const ProgressBar = styled.div<{ progress: number }>`
 `;
 
 const QuizContainer = styled.div`
-  /* width: 920px; */
   padding: 0 300px;
   display: flex;
   flex-direction: column;
@@ -603,9 +572,6 @@ interface PosProps {
 const LightImgContainer = styled.div<PosProps>`
   position: absolute;
   width: 80px;
-  /* height: 82px;
-  right: 300px;
-  bottom: 316px; */
   ${(props) =>
     props.mulYPos &&
     `
@@ -620,7 +586,6 @@ const LightImgContainer = styled.div<PosProps>`
   `}
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 `;
 
@@ -715,13 +680,17 @@ const LightOn = styled.div`
   }
 `;
 
-const ChoiceContainer = styled.div`
+const ChoiceContainer = styled.div<{ choiceNum: number }>`
   width: 100%;
+  height: fit-content;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  ${(props) =>
+    props.choiceNum > 4
+      ? `grid-template-columns: 1fr;`
+      : `grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr; 
+      grid-column-gap: 16px;`}
   grid-row-gap: 12px;
-  grid-column-gap: 16px;
   align-items: stretch !important;
 
   @media screen and (max-width: 392px) {
@@ -730,7 +699,7 @@ const ChoiceContainer = styled.div`
 `;
 
 const ChoiceBtn = styled.div<{ clicked: boolean }>`
-  width: 454px;
+  width: 100%;
   min-height: 68px;
   height: fit-content;
   border-radius: 5px;
@@ -747,7 +716,6 @@ const ChoiceBtn = styled.div<{ clicked: boolean }>`
   ${(props) => props.clicked && `background: #D2D2D2;`}
 
   @media screen and (max-width: 392px) {
-    width: 180px;
     min-height: 100px;
     padding: 20px;
   }
@@ -820,8 +788,6 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
     width: 100%;
     padding: 0 9px;
     flex-direction: column;
-    position: absolute;
-    bottom: 40px;
     button {
       width: 100%;
       height: 64px;
@@ -834,3 +800,5 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
     }
   }
 `;
+
+export default CSProblem;
