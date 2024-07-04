@@ -358,23 +358,27 @@ const Choice: React.FC<choiceProps> = ({
 }) => {
   return (
     <ChoiceContainer ref={multipleRef} choiceNum={contents.length}>
-      {contents.map((content, idx) => (
-        <ChoiceBtn
-          key={idx}
-          clicked={selected.includes((idx + 1).toString())}
-          onClick={() => {
-            setSelectNum(idx + 1);
-            if (selected.includes((idx + 1).toString()) === false) {
-              setSelected([...selected, (idx + 1).toString()]);
-            } else {
-              setSelected(selected.filter((item) => item !== (idx + 1).toString()));
-            }
-          }}
-          ref={(el) => (choiceRef.current[0] = el)}
-        >
-          {content}
-        </ChoiceBtn>
-      ))}
+      {contents.map((content, idx) => {
+        const choiceNum = idx + 1;
+
+        return (
+          <ChoiceBtn
+            key={idx}
+            clicked={selected.includes(choiceNum.toString())}
+            onClick={() => {
+              setSelectNum(choiceNum);
+              if (selected.includes(choiceNum.toString()) === false) {
+                setSelected([...selected, choiceNum.toString()]);
+              } else {
+                setSelected(selected.filter((item) => item !== choiceNum.toString()));
+              }
+            }}
+            ref={(el) => (choiceRef.current[idx] = el)}
+          >
+            {content}
+          </ChoiceBtn>
+        );
+      })}
     </ChoiceContainer>
   );
 };
