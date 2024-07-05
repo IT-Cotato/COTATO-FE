@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
 import { LoadingIndicator } from '../../../../components/LoadingIndicator';
 import { ToastContainer, toast } from 'react-toastify';
