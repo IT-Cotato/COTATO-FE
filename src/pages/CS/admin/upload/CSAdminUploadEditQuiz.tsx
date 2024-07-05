@@ -55,10 +55,9 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
       setQuiz(
         produce((draft) => {
           const selectedQuiz = draft[selected] as MultipleQuiz;
-          selectedQuiz.choices?.forEach((choice) => {
-            choice.isAnswer = 'NO_ANSWER';
-          });
-          selectedQuiz.choices![Number(e.target.id) - 1].isAnswer = 'ANSWER';
+          const choicedQuizAnswer = selectedQuiz.choices![Number(e.target.id) - 1].isAnswer;
+          selectedQuiz.choices![Number(e.target.id) - 1].isAnswer =
+            choicedQuizAnswer === 'ANSWER' ? 'NO_ANSWER' : 'ANSWER';
         }),
       );
     },

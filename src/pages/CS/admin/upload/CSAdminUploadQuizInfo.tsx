@@ -10,6 +10,7 @@ import { MultipleQuiz, QuizType, ShortQuiz } from './CSAdminUploadSlides';
 import { produce } from 'immer';
 import { createMultipleQuiz } from './utils/createMultipleQuiz';
 import { createShortQuiz } from './utils/createShortQuiz';
+import api from '@/api/api';
 
 //
 //
@@ -120,7 +121,7 @@ const CSAdminUploadQuizInfo = ({
     appendData(formData, shortQuizzes, 'shortQuizzes');
 
     const sendData = async () => {
-      await axios({
+      await api({
         method: 'POST',
         url: '/v1/api/quiz/adds',
         data: formData,
@@ -128,7 +129,6 @@ const CSAdminUploadQuizInfo = ({
           educationId: educationId,
         },
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
           ContentType: 'multipart/form-data',
         },
       })
