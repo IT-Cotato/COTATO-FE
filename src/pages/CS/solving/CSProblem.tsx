@@ -10,8 +10,6 @@ import bubble3 from '@assets/bubble_3.svg';
 import explaination from '@assets/explaination.svg';
 import podori from '@assets/podori.jpg';
 import api from '@/api/api';
-import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
 import BgCorrect from './BgCorrect';
 import BgIncorrect from './BgIncorrect';
 import BgWaiting from './BgWaiting';
