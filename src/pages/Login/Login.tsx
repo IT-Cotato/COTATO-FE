@@ -204,13 +204,13 @@ const Login = () => {
   //
   //
   useEffect(() => {
-    if (isLoading) {
+    if (user) {
       navigate('/');
     }
-    if (user) {
+    if (isLoading) {
       return;
     }
-  }, [isLoading, user]);
+  }, [user, isLoading]);
 
   return (
     <Wrapper>
