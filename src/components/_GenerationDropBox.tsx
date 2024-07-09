@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
+import { useSearchParams } from 'react-router-dom';
 
 //
 //
@@ -58,6 +59,8 @@ const GenerationDropBox = ({
     fetcher,
   );
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
   const [isDropBoxVisible, setIsDropBoxVisible] = useState(false);
   const [generations, setGenerations] = useState<CotatoGenerationInfoResponse[]>([]);
@@ -88,6 +91,15 @@ const GenerationDropBox = ({
   /**
    *
    */
+  const setGenerationSearchParam = (generation: CotatoGenerationInfoResponse) => {
+    if (generation?.generationId) {
+      setSearchParams({ generation: generation.generationId.toString() });
+    }
+  };
+
+  /**
+   *
+   */
   const handleDropDownChange = () => {
     if (isDropBoxVisible) {
       setTimeout(() => {
@@ -106,6 +118,7 @@ const GenerationDropBox = ({
   const handleGenerationClick = (generation: CotatoGenerationInfoResponse) => {
     handleDropDownChange();
     handleGenerationChange(generation);
+    setGenerationSearchParam(generation);
     setTimeout(() => {
       setSelectedGeneration(generation);
     }, DEALY_TIME);
