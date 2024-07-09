@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { keyframes, styled } from 'styled-components';
-import generation_background from '@assets/generation_background.svg';
+import { keyframes, styled, useTheme } from 'styled-components';
 import { ReactComponent as ArrowDown } from '@assets/arrow_down_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { v4 as uuid } from 'uuid';
@@ -8,6 +7,8 @@ import generationSort from '@utils/newGenerationSort';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { DropBoxColorEnum } from '@/enums/DropBoxColor';
+import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 
 //
 //
@@ -19,9 +20,14 @@ interface GenerationDropBoxProps {
    * @param generation selected generation
    */
   handleGenerationChange: (generation: CotatoGenerationInfoResponse) => void;
-  backgroundColor?: string;
+  color: DropBoxColorEnum;
   width?: string;
   height?: string;
+}
+
+interface DropBoxProps {
+  $height: string;
+  $background: string;
 }
 
 //
@@ -37,11 +43,13 @@ const DEALY_TIME = 100;
 /**
  * generation drop box component
  * @param handleGenerationChange generation change event
+ * @param color drop box color
  * @param width drop box width (default: 8rem)
  * @param height drop box height (default: 3.2rem)
  */
 const GenerationDropBox = ({
   handleGenerationChange,
+  color,
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
@@ -58,6 +66,24 @@ const GenerationDropBox = ({
   );
 
   const generationDropBoxRef = useRef<HTMLDivElement>(null);
+
+  const theme = useTheme();
+
+  /**
+   * get drop box style of color
+   * @returns drop box style { background: url of drop box background, arrowColor: color code of arrow button}
+   * @throws invalid color type
+   */
+  const getDropBoxStyle = () => {
+    if (color === DropBoxColorEnum.BLUE) {
+      return {
+        background: `url(${drop_box_background_blue})`,
+        arrowColor: theme.colors.sub2[80],
+      };
+    }
+
+    throw new TypeError('invalid color type');
+  };
 
   /**
    *
@@ -117,15 +143,19 @@ const GenerationDropBox = ({
   /**
    *
    */
-  const renderDropBox = () => (
-    <DropBox onClick={handleDropDownChange} $height={height}>
-      <SelectText>
-        {selectedGeneration?.generationNumber}
-        {selectedGeneration && '기'}
-      </SelectText>
-      {isDropBoxVisible ? <UpButton /> : <DownButton />}
-    </DropBox>
-  );
+  const renderDropBox = () => {
+    const { background, arrowColor } = getDropBoxStyle();
+
+    return (
+      <DropBox onClick={handleDropDownChange} $height={height} $background={background}>
+        <SelectText>
+          {selectedGeneration?.generationNumber}
+          {selectedGeneration && '기'}
+        </SelectText>
+        {isDropBoxVisible ? <UpButton $fill={arrowColor} /> : <DownButton $fill={arrowColor} />}
+      </DropBox>
+    );
+  };
 
   /**
    *
@@ -171,7 +201,7 @@ const Wrapper = styled.div<{ $width: string }>`
   width: ${({ $width }) => $width};
 `;
 
-const DropBox = styled.div<{ $height: string }>`
+const DropBox = styled.div<DropBoxProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -179,7 +209,7 @@ const DropBox = styled.div<{ $height: string }>`
   height: ${({ $height }) => $height};
   padding: ${({ theme }) => theme.size.md};
   cursor: pointer;
-  background-image: url(${generation_background});
+  background-image: ${({ $background }) => $background};
   background-size: 100% 100%;
 `;
 
@@ -207,13 +237,21 @@ const fadeOut = keyframes`
   }
 `;
 
-const DownButton = styled(ArrowDown)`
+const DownButton = styled(ArrowDown)<{ $fill: string }>`
   animation: ${fadeIn} ${DEALY_TIME}ms linear;
+
+  > path {
+    fill: ${({ $fill }) => $fill};
+  }
 `;
 
-const UpButton = styled(ArrowDown)`
+const UpButton = styled(ArrowDown)<{ $fill: string }>`
   transform: rotate(180deg);
   animation: ${fadeIn} ${DEALY_TIME}ms linear;
+
+  > path {
+    fill: ${({ $fill }) => $fill};
+  }
 `;
 
 const DropDownList = styled.div<{ $visible: boolean }>`
