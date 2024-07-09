@@ -44,13 +44,13 @@ const DEALY_TIME = 100;
 /**
  * generation drop box component
  * @param handleGenerationChange generation change event
- * @param color drop box color
+ * @param color drop box color (default: blue)
  * @param width drop box width (default: 8rem)
  * @param height drop box height (default: 3.2rem)
  */
 const GenerationDropBox = ({
   handleGenerationChange,
-  color,
+  color = DropBoxColorEnum.BLUE,
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
