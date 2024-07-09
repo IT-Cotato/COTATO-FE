@@ -12,6 +12,7 @@ import fetcher from '@utils/fetcher';
 import { useNavigate } from 'react-router-dom';
 import GenerationDropBox from '@components/_GenerationDropBox';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 
 const SessionHome = () => {
   const { data: user, error } = useSWR('/v1/api/member/info', fetcher);
@@ -78,7 +79,7 @@ const SessionHome = () => {
         <SessionWrapper>
           <SessionHeader>세션 기록</SessionHeader>
           <SessionSetting>
-            <GenerationDropBox handleGenerationChange={onChangeGeneration} />
+            <GenerationDropBox handleGenerationChange={() => {}} color={DropBoxColorEnum.BLUE} />
             {user?.role === 'ADMIN' && (
               <ButtonWrapper>
                 <AddIcon onClick={onClickAddButton} />
