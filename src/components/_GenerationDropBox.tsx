@@ -93,7 +93,7 @@ const GenerationDropBox = ({
    */
   const setGenerationSearchParam = (generation: CotatoGenerationInfoResponse) => {
     if (generation?.generationId) {
-      setSearchParams({ generation: generation.generationId.toString() });
+      setSearchParams({ 'generation-id': generation.generationId.toString() });
     }
   };
 
@@ -150,7 +150,13 @@ const GenerationDropBox = ({
 
     const sortedGenerations = generationSort(unsortedGenerations);
     setGenerations(sortedGenerations);
-    setSelectedGeneration(sortedGenerations[0]);
+
+    const generationId = searchParams.get('generation-id');
+    const searchedGeneration = sortedGenerations.find(
+      (generation) => generation.generationId === Number(generationId),
+    );
+
+    setSelectedGeneration(searchedGeneration || sortedGenerations[0]);
   }, [unsortedGenerations]);
 
   /**
