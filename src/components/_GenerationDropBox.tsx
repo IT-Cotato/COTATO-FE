@@ -54,7 +54,7 @@ const GenerationDropBox = ({
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
-  const { data: unsortedGenerations } = useSWR<CotatoGenerationInfoResponse[]>(
+  const { data: rawGenerations } = useSWR<CotatoGenerationInfoResponse[]>(
     '/v1/api/generation',
     fetcher,
   );
@@ -144,11 +144,11 @@ const GenerationDropBox = ({
    *
    */
   useEffect(() => {
-    if (!unsortedGenerations) {
+    if (!rawGenerations) {
       return;
     }
 
-    const sortedGenerations = generationSort(unsortedGenerations);
+    const sortedGenerations = generationSort(rawGenerations);
     setGenerations(sortedGenerations);
 
     const generationId = searchParams.get('generation-id');
@@ -157,7 +157,7 @@ const GenerationDropBox = ({
     );
 
     setSelectedGeneration(searchedGeneration || sortedGenerations[0]);
-  }, [unsortedGenerations]);
+  }, [rawGenerations]);
 
   /**
    *
