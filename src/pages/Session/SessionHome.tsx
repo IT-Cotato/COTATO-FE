@@ -69,10 +69,6 @@ const SessionHome = () => {
     setIsSessionModalOpen(false);
   }, []);
 
-  if (error || user?.role === 'GENERAL') {
-    navigate('/');
-  }
-
   return (
     <>
       <FlexBox>
