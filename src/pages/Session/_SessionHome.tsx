@@ -18,9 +18,11 @@ const SessionHome = () => {
    */
   const renderSessionCards = () => (
     <SessionCardWrapper>
-      {sessions?.map((session: CotatoSessionListResponse) => (
-        <SessionCard key={uuidv4()} session={session} />
-      ))}
+      {!sessions
+        ? sessions?.map((session: CotatoSessionListResponse) => (
+            <SessionCard key={uuidv4()} session={session} />
+          ))
+        : new Array(6).fill(null).map(() => <SessionCard key={uuidv4()} />)}
     </SessionCardWrapper>
   );
 

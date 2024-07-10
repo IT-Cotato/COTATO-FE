@@ -17,7 +17,7 @@ import SessionIcon from '@components/Session/SessionIcon';
 //
 
 interface SessionCardProps {
-  session: CotatoSessionListResponse;
+  session?: CotatoSessionListResponse;
 }
 
 //
@@ -54,7 +54,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
 
     const getImageContent = () => (
       <CardImage
-        src={session.photoUrl || ready_image}
+        src={session?.photoUrl || ready_image}
         alt="session"
         onLoad={() => setImageLoading(false)}
         $display={imageLoading ? 'none' : 'block'}
@@ -72,6 +72,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
    *
    */
   const renderSessionContents = () => {
+    if (!session) return null;
     const { itIssue, networking, csEducation, devTalk } =
       session.sessionContents as CotatoSessionContents;
 
