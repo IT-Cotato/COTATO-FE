@@ -276,8 +276,17 @@ const UpButton = styled(ArrowDown)<{ $fill: string }>`
 const DropDownList = styled.div<{ $visible: boolean }>`
   position: absolute;
   animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} ${DEALY_TIME}ms ease-out;
-  width: 100%;
   z-index: 10;
+  width: 100%;
+  max-height: 20rem;
+  overflow-y: scroll;
+
+  // hide scrollbar except safari
+  scrollbar-width: none;
+  // hide scrollbar in safari
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   > ul {
     background-color: ${({ theme }) => theme.colors.common.white};
