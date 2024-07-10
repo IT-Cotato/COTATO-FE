@@ -37,12 +37,23 @@ const SessionCard = ({ session }: SessionCardProps) => {
   /**
    *
    */
-  const renderCardHeader = () => (
-    <CardHeader>
-      <SessionIcon Icon={<HeartIcon />} size="2.5rem" padding="0.5rem" />
-      {session.title}
-    </CardHeader>
-  );
+  const renderCardHeader = () => {
+    const getHeaderSkeleton = () => (
+      <>
+        <Skeleton animation="wave" variant="circular" width="2.5rem" height="2.5rem" />
+        <Skeleton variant="text" width="70%" height="2rem" />
+      </>
+    );
+
+    const getHeaderElement = () => (
+      <>
+        <SessionIcon Icon={<HeartIcon />} size="2.5rem" padding="0.5rem" />
+        {session?.title}
+      </>
+    );
+
+    return <CardHeader>{session ? getHeaderElement() : getHeaderSkeleton()}</CardHeader>;
+  };
 
   /**
    *
@@ -52,18 +63,24 @@ const SessionCard = ({ session }: SessionCardProps) => {
       <Skeleton animation="wave" variant="rectangular" width="100%" height={IMAGE_HEIGHT} />
     );
 
-    const getImageContent = () => (
-      <CardImage
-        src={session?.photoUrl || ready_image}
-        alt="session"
-        onLoad={() => setImageLoading(false)}
-        $display={imageLoading ? 'none' : 'block'}
-      />
-    );
+    const getImageElement = () => {
+      if (!session) {
+        return null;
+      }
+
+      return (
+        <CardImage
+          src={session.photoUrl || ready_image}
+          alt="session"
+          onLoad={() => setImageLoading(false)}
+          $display={imageLoading ? 'none' : 'block'}
+        />
+      );
+    };
 
     return (
       <>
-        {imageLoading && getImageSkeleton()} {getImageContent()}
+        {imageLoading && getImageSkeleton()} {getImageElement()}
       </>
     );
   };
@@ -72,24 +89,35 @@ const SessionCard = ({ session }: SessionCardProps) => {
    *
    */
   const renderSessionContents = () => {
-    if (!session) return null;
-    const { itIssue, networking, csEducation, devTalk } =
-      session.sessionContents as CotatoSessionContents;
+    const getContentsSkeleton = () => (
+      <Skeleton animation="wave" variant="rounded" width="100%" height="1.6rem" />
+    );
+
+    const getContentElement = () => {
+      const { itIssue, networking, csEducation, devTalk } =
+        session?.sessionContents as CotatoSessionContents;
+
+      return (
+        <>
+          {csEducation === SessionContentsCsEducation.ON && (
+            <Content $color={theme.colors.primary100_1}>#CS</Content>
+          )}
+          {itIssue === SessionContentsItIssue.ON && (
+            <Content $color={theme.colors.sub2[80]}>#IT</Content>
+          )}
+          {networking === SessionContentsNetworking.ON && (
+            <Content $color={theme.colors.sub3[60]}>#NW</Content>
+          )}
+          {devTalk === SessionContentsDevTalk.ON && (
+            <Content $color={theme.colors.gray80}>#DEV</Content>
+          )}
+        </>
+      );
+    };
 
     return (
       <SessionContentsWrapper>
-        {csEducation === SessionContentsCsEducation.ON && (
-          <Content $color={theme.colors.primary100_1}>#CS</Content>
-        )}
-        {itIssue === SessionContentsItIssue.ON && (
-          <Content $color={theme.colors.sub2[80]}>#IT</Content>
-        )}
-        {networking === SessionContentsNetworking.ON && (
-          <Content $color={theme.colors.sub3[60]}>#NW</Content>
-        )}
-        {devTalk === SessionContentsDevTalk.ON && (
-          <Content $color={theme.colors.gray80}>#DEV</Content>
-        )}
+        {session ? getContentElement() : getContentsSkeleton()}
       </SessionContentsWrapper>
     );
   };
