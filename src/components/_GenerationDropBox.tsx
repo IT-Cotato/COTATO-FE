@@ -281,7 +281,7 @@ const DropDownList = styled.div<{ $visible: boolean }>`
 
   > ul {
     background-color: ${({ theme }) => theme.colors.common.white};
-    padding: ${({ theme }) => theme.size.lg} 0;
+    padding: 0;
     margin: ${({ theme }) => theme.size.sm} 0;
 
     > li {
