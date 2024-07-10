@@ -10,6 +10,7 @@ import {
   SessionContentsNetworking,
   SessionContentsDevTalk,
 } from '@/enums/SessionContents';
+import SessionIcon from '@components/Session/SessionIcon';
 
 //
 //
@@ -38,9 +39,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
    */
   const renderCardHeader = () => (
     <CardHeader>
-      <Circle>
-        <HeartIcon />
-      </Circle>
+      <SessionIcon Icon={<HeartIcon />} size="2.5rem" padding="0.5rem" />
       {session.title}
     </CardHeader>
   );
@@ -124,16 +123,6 @@ const CardHeader = styled.div`
   padding: ${({ theme }) => theme.size.md} ${({ theme }) => theme.size.lg};
   font-family: Ycomputer;
   font-size: ${({ theme }) => theme.fontSize.xl};
-`;
-
-const Circle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: ${({ theme }) => theme.colors.primary100_1};
 `;
 
 const CardImage = styled.img<{ $display: string }>`
