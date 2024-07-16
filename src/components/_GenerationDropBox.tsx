@@ -210,6 +210,7 @@ const DropBox = styled.div<DropBoxProps>`
   height: ${({ $height }) => $height};
   padding: ${({ theme }) => theme.size.md};
   cursor: pointer;
+  user-select: none;
   background-image: ${({ $background }) => $background};
   background-size: 100% 100%;
 `;
