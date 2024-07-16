@@ -56,7 +56,7 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
     } else if (size === 'md') {
       return {
         fontSize: theme.fontSize.sm,
-        padding: `${theme.size.md} ${theme.size.xxl}`,
+        padding: `0.6rem ${theme.size.xxl}`,
         borderRadius: '6rem',
       };
     }
