@@ -19,7 +19,7 @@ interface SessionCardProps {
 //
 //
 
-const IMAGE_HEIGHT = '20rem';
+export const IMAGE_WIDTH = '20rem';
 
 //
 //
@@ -54,7 +54,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
    */
   const renderCardImage = () => {
     const getImageSkeleton = () => (
-      <Skeleton animation="wave" variant="rectangular" width="100%" height={IMAGE_HEIGHT} />
+      <Skeleton animation="wave" variant="rectangular" width={IMAGE_WIDTH} />
     );
 
     const getImageElement = () => {
@@ -108,7 +108,6 @@ const SessionCard = ({ session }: SessionCardProps) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20rem;
   border: 3px solid ${({ theme }) => theme.colors.primary100_1};
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
@@ -126,8 +125,9 @@ const CardHeader = styled.div`
 
 const CardImage = styled.img<{ $display: string }>`
   display: ${({ $display }) => $display};
-  width: 100%;
-  height: ${IMAGE_HEIGHT};
+  width: ${IMAGE_WIDTH};
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 `;
 
 const SessionContentsWrapper = styled.div`

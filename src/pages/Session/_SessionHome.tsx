@@ -2,7 +2,7 @@ import React from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import SessionCard from '@pages/Session/_SessionCard';
+import SessionCard, { IMAGE_WIDTH } from '@pages/Session/_SessionCard';
 import { v4 as uuidv4 } from 'uuid';
 import { CotatoSessionListResponse } from 'cotato-openapi-clients';
 
@@ -43,8 +43,8 @@ const Wrapper = styled.div`
 
 const SessionCardWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  grid-template-rows: repeat(auto-fill, minmax(auto, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(${IMAGE_WIDTH}, 1fr));
+  /* grid-template-rows: repeat(auto-fill, minmax(1fr, 1fr)); */
   gap: 3.5rem 2.5rem;
   place-items: center;
   width: 100%;
