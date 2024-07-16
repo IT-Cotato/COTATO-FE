@@ -99,7 +99,7 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
           $padding={padding}
           $borderRadius={borderRadius}
         >
-          #NW
+          #NET
         </Content>
       )}
       {devTalk === SessionContentsDevTalk.ON && (
