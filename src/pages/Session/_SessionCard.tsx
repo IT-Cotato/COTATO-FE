@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import ready_image from '@assets/potato_ready.svg';
 import Skeleton from '@mui/material/Skeleton';
 import { CotatoSessionListResponse, CotatoSessionContents } from 'cotato-openapi-clients';
-import {
-  SessionContentsCsEducation,
-  SessionContentsItIssue,
-  SessionContentsNetworking,
-  SessionContentsDevTalk,
-} from '@/enums/SessionContents';
 import SessionIcon from '@components/Session/SessionIcon';
+import SessionContents from '@components/Session/SessionContents';
 
 //
 //
@@ -32,7 +27,6 @@ const IMAGE_HEIGHT = '20rem';
 
 const SessionCard = ({ session }: SessionCardProps) => {
   const [imageLoading, setImageLoading] = useState(true);
-  const theme = useTheme();
 
   /**
    *
@@ -88,39 +82,15 @@ const SessionCard = ({ session }: SessionCardProps) => {
   /**
    *
    */
-  const renderSessionContents = () => {
-    const getContentsSkeleton = () => (
-      <Skeleton animation="wave" variant="rounded" width="100%" height="1.6rem" />
-    );
-
-    const getContentElement = () => {
-      const { itIssue, networking, csEducation, devTalk } =
-        session?.sessionContents as CotatoSessionContents;
-
-      return (
-        <>
-          {csEducation === SessionContentsCsEducation.ON && (
-            <Content $color={theme.colors.primary100_1}>#CS</Content>
-          )}
-          {itIssue === SessionContentsItIssue.ON && (
-            <Content $color={theme.colors.sub2[80]}>#IT</Content>
-          )}
-          {networking === SessionContentsNetworking.ON && (
-            <Content $color={theme.colors.sub3[60]}>#NW</Content>
-          )}
-          {devTalk === SessionContentsDevTalk.ON && (
-            <Content $color={theme.colors.gray80}>#DEV</Content>
-          )}
-        </>
-      );
-    };
-
-    return (
-      <SessionContentsWrapper>
-        {session ? getContentElement() : getContentsSkeleton()}
-      </SessionContentsWrapper>
-    );
-  };
+  const renderSessionContents = () => (
+    <SessionContentsWrapper>
+      {session ? (
+        <SessionContents contents={session.sessionContents as CotatoSessionContents} size="md" />
+      ) : (
+        <Skeleton animation="wave" variant="rounded" width="100%" height="1.6rem" />
+      )}
+    </SessionContentsWrapper>
+  );
 
   return (
     <Container>
@@ -166,18 +136,6 @@ const SessionContentsWrapper = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.size.sm};
   padding: ${({ theme }) => theme.size.lg};
-`;
-
-const Content = styled.div<{ $color: string }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.size.sm} ${({ theme }) => theme.size.xl};
-  border-radius: 6rem;
-  background: ${({ $color }) => $color};
-  font-family: Ycomputer;
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.common.white};
 `;
 
 export default SessionCard;
