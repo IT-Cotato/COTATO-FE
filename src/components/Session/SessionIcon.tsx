@@ -30,7 +30,7 @@ interface CircleProps {
  * @param Icon svg file to ReactComponent
  * @param size size of the icon (default : sm)
  */
-const SessionIcon = ({ Icon, size }: SessionIconProps) => {
+const SessionIcon = ({ Icon, size = 'sm' }: SessionIconProps) => {
   /**
    *
    */
