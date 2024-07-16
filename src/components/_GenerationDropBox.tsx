@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { keyframes, styled, useTheme } from 'styled-components';
+import { styled, useTheme } from 'styled-components';
 import { ReactComponent as ArrowDown } from '@assets/arrow_down_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { v4 as uuid } from 'uuid';
@@ -35,7 +35,7 @@ interface DropBoxProps {
 //
 //
 
-const DEALY_TIME = 100;
+const FADE_DURATION = 100;
 
 //
 //
@@ -62,7 +62,6 @@ const GenerationDropBox = ({
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
-  const [isDropBoxVisible, setIsDropBoxVisible] = useState(false);
   const [generations, setGenerations] = useState<CotatoGenerationInfoResponse[]>([]);
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse | null>(
     null,
@@ -101,15 +100,7 @@ const GenerationDropBox = ({
    *
    */
   const handleDropDownChange = () => {
-    if (isDropBoxVisible) {
-      setTimeout(() => {
-        setIsDropBoxOpen(false);
-      }, DEALY_TIME - 10);
-    } else {
-      setIsDropBoxOpen(true);
-    }
-
-    setIsDropBoxVisible(!isDropBoxVisible);
+    setIsDropBoxOpen(!isDropBoxOpen);
   };
 
   /**
@@ -119,9 +110,6 @@ const GenerationDropBox = ({
     handleDropDownChange();
     handleGenerationChange(generation);
     setGenerationSearchParam(generation);
-    setTimeout(() => {
-      setSelectedGeneration(generation);
-    }, DEALY_TIME);
   };
 
   /**
@@ -171,7 +159,7 @@ const GenerationDropBox = ({
           {selectedGeneration?.generationNumber}
           {selectedGeneration && '기'}
         </SelectText>
-        {isDropBoxVisible ? <UpButton $fill={arrowColor} /> : <DownButton $fill={arrowColor} />}
+        {isDropBoxOpen ? <UpButton $fill={arrowColor} /> : <DownButton $fill={arrowColor} />}
       </DropBox>
     );
   };
@@ -179,28 +167,22 @@ const GenerationDropBox = ({
   /**
    *
    */
-  const renderDropDownList = () => {
-    if (!isDropBoxOpen) {
-      return null;
-    }
-
-    return (
-      <DropDownList $visible={isDropBoxVisible}>
-        <ul>
-          {generations.map((generation) => (
-            <li
-              key={uuid()}
-              className={generation === selectedGeneration ? 'selected' : ''}
-              onClick={() => handleGenerationClick(generation)}
-            >
-              {generation === selectedGeneration && <StyledCheckIcon />}
-              {generation.generationNumber}기
-            </li>
-          ))}
-        </ul>
-      </DropDownList>
-    );
-  };
+  const renderDropDownList = () => (
+    <DropDownList className={isDropBoxOpen ? 'fade-in' : 'fade-out'}>
+      <ul>
+        {generations.map((generation) => (
+          <li
+            key={uuid()}
+            className={generation === selectedGeneration ? 'selected' : ''}
+            onClick={() => handleGenerationClick(generation)}
+          >
+            {generation === selectedGeneration && <StyledCheckIcon />}
+            {generation.generationNumber}기
+          </li>
+        ))}
+      </ul>
+    </DropDownList>
+  );
 
   return (
     <Wrapper ref={generationDropBoxRef} $width={width}>
@@ -238,44 +220,30 @@ const SelectText = styled.span`
   font-size: ${({ theme }) => theme.size.lg};
 `;
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-`;
-
 const DownButton = styled(ArrowDown)<{ $fill: string }>`
-  animation: ${fadeIn} ${DEALY_TIME}ms linear;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: fade-in ${FADE_DURATION}ms linear;
 
   > path {
     fill: ${({ $fill }) => $fill};
   }
 `;
 
-const UpButton = styled(ArrowDown)<{ $fill: string }>`
+const UpButton = styled(DownButton)`
   transform: rotate(180deg);
-  animation: ${fadeIn} ${DEALY_TIME}ms linear;
-
-  > path {
-    fill: ${({ $fill }) => $fill};
-  }
 `;
 
-const DropDownList = styled.div<{ $visible: boolean }>`
+const DropDownList = styled.div`
   position: absolute;
-  animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} ${DEALY_TIME}ms ease-out;
   z-index: 10;
   width: 100%;
   max-height: 20rem;
@@ -287,6 +255,20 @@ const DropDownList = styled.div<{ $visible: boolean }>`
   &::-webkit-scrollbar {
     display: none;
   }
+
+  &.fade-in {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &.fade-out {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  transition:
+    opacity ${FADE_DURATION}ms ease-out,
+    visibility ${FADE_DURATION}ms;
 
   > ul {
     background-color: ${({ theme }) => theme.colors.common.white};
