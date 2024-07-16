@@ -35,7 +35,7 @@ interface DropBoxProps {
 //
 //
 
-const FADE_DURATION = 100;
+const FADE_DURATION = 300;
 
 //
 //
