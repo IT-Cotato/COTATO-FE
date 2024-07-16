@@ -116,7 +116,7 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
   );
 };
 
-const Content = styled.div<ContentProps>`
+const Content = styled.span<ContentProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,6 +126,7 @@ const Content = styled.div<ContentProps>`
   font-family: Ycomputer;
   font-size: ${({ $fontSize }) => $fontSize};
   color: ${({ theme }) => theme.colors.common.white};
+  user-select: none;
 `;
 
 export default SessionContents;
