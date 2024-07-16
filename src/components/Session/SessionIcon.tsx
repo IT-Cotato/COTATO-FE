@@ -7,12 +7,17 @@ import { styled } from 'styled-components';
 
 interface SessionIconProps {
   Icon: React.ReactNode;
+  /**
+   * size of the icon
+   * - **sm** : small
+   * - **md** : medium
+   * - **lg** : large
+   */
   size: string;
-  padding: string;
 }
 
 interface CircleProps {
-  $size: string;
+  $radius: string;
   $padding: string;
 }
 
@@ -23,11 +28,40 @@ interface CircleProps {
 /**
  * icon with circle background
  * @param Icon svg file to ReactComponent
- * @param size size of the icon
+ * @param size size of the icon (default : sm)
  */
-const SessionIcon = ({ Icon, size, padding }: SessionIconProps) => {
+const SessionIcon = ({ Icon, size }: SessionIconProps) => {
+  /**
+   *
+   */
+  const getIconStyles = () => {
+    if (size === 'sm') {
+      return {
+        radius: '1.2rem',
+        padding: '0.2rem',
+      };
+    } else if (size === 'md') {
+      return {
+        radius: '2rem',
+        padding: '0.4rem',
+      };
+    } else if (size === 'lg') {
+      return {
+        radius: '2.5rem',
+        padding: '0.5rem',
+      };
+    }
+
+    return {
+      radius: '1.2rem',
+      padding: '0.2rem',
+    };
+  };
+
+  const { radius, padding } = getIconStyles();
+
   return (
-    <Circle $size={size} $padding={padding}>
+    <Circle $radius={radius} $padding={padding}>
       {Icon}
     </Circle>
   );
@@ -41,8 +75,8 @@ const Circle = styled.div<CircleProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${({ $size }) => $size};
-  height: ${({ $size }) => $size};
+  width: ${({ $radius }) => $radius};
+  height: ${({ $radius }) => $radius};
   padding: ${({ $padding }) => $padding};
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.primary100_1};

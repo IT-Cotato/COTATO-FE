@@ -41,7 +41,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
 
     const getHeaderElement = () => (
       <>
-        <SessionIcon Icon={<HeartIcon />} size="2.5rem" padding="0.5rem" />
+        <SessionIcon Icon={<HeartIcon />} size="lg" />
         {session?.title}
       </>
     );
