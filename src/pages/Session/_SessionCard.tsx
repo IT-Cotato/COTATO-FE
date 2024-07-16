@@ -23,7 +23,7 @@ interface SessionCardProps {
 //
 //
 
-export const IMAGE_WIDTH = '20rem';
+export const IMAGE_WIDTH = '18rem';
 
 //
 //
@@ -58,7 +58,11 @@ const SessionCard = ({ session }: SessionCardProps) => {
    */
   const renderCardImage = () => {
     const getImageSkeleton = () => (
-      <Skeleton animation="wave" variant="rectangular" width={IMAGE_WIDTH} />
+      <Skeleton
+        animation="wave"
+        variant="rectangular"
+        sx={{ width: IMAGE_WIDTH, height: 'auto', aspectRatio: 4 / 3 }}
+      />
     );
 
     const getImageElement = () => {
@@ -93,7 +97,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
       {session ? (
         <SessionContents contents={session.sessionContents as CotatoSessionContents} size="md" />
       ) : (
-        <Skeleton animation="wave" variant="rounded" width="100%" height="1.6rem" />
+        <Skeleton animation="wave" variant="rounded" width="100%" height="2rem" />
       )}
     </SessionContentsWrapper>
   );
