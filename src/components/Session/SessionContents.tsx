@@ -34,7 +34,7 @@ interface ContentProps {
 //
 
 /**
- * session Contents icons (IT issue, networking, CS education, dev talk)
+ * session contents icons (IT issue, networking, CS education, dev talk)
  * @param contents session contents
  * @param size size of the icon (default : sm)
  */
