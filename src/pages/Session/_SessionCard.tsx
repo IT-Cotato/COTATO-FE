@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import ready_image from '@assets/potato_ready.svg';
 import Skeleton from '@mui/material/Skeleton';
-import { CotatoSessionListResponse, CotatoSessionContents } from 'cotato-openapi-clients';
+import {
+  CotatoSessionListResponse,
+  CotatoSessionContents,
+  CotatoSessionListPhotoInfoResponse,
+} from 'cotato-openapi-clients';
 import SessionIcon from '@components/Session/SessionIcon';
 import SessionContents from '@components/Session/SessionContents';
 
@@ -62,9 +66,11 @@ const SessionCard = ({ session }: SessionCardProps) => {
         return null;
       }
 
+      const firstSessionPhotoInfo = session.photoInfos?.at(0) as CotatoSessionListPhotoInfoResponse;
+
       return (
         <CardImage
-          src={session.photoUrl || ready_image}
+          src={firstSessionPhotoInfo?.photoUrl || ready_image}
           alt="session"
           onLoad={() => setImageLoading(false)}
           $display={imageLoading ? 'none' : 'block'}
