@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import SessoinUploadModal from './_SessionUploadModal';
 
 //
 //
@@ -24,11 +25,24 @@ interface SessionInfo {
 const SessionHome = () => {
   const { data: sessions } = useSWR(`/v1/api/session?generationId=${1}`, fetcher);
 
+  const [isAddModalOpen, setIsAddModalOpen] = useState(true);
+
+  const handelModalClose = () => setIsAddModalOpen(false);
+
   const renderSessionCards = () => (
     <SessionCardWrapper>{sessions?.map((session: SessionInfo) => <></>)}</SessionCardWrapper>
   );
 
-  return <Wrapper>{renderSessionCards()}</Wrapper>;
+  return (
+    <>
+      <Wrapper>{renderSessionCards()}</Wrapper>
+      <SessoinUploadModal
+        open={isAddModalOpen}
+        handleClose={handelModalClose}
+        headerText="세션 추가"
+      />
+    </>
+  );
 };
 
 //
