@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted.svg';
+import SessionUploadModalImageInput from '@pages/Session/_SessionUploadModalImageInput';
 
 //
 //
@@ -21,14 +22,23 @@ const SessionUploadModal = ({ open, handleClose, headerText }: SessionUploadModa
   /**
    *
    */
-  const renderHeader = () => (
-    <ModalHeader>
-      {headerText}
-      <CloseButton type="button" onClick={handleClose}>
-        <CloseIcon />
-      </CloseButton>
-    </ModalHeader>
+  const renerCloseButton = () => (
+    <CloseButton type="button" onClick={handleClose}>
+      <CloseIcon />
+    </CloseButton>
   );
+
+  /**
+   *
+   */
+  const renderHeader = () => <ModalHeader>{headerText}</ModalHeader>;
+
+  /**
+   *
+   */
+  const renderImageInput = () => {
+    return <SessionUploadModalImageInput />;
+  };
 
   return (
     <Modal
@@ -38,7 +48,11 @@ const SessionUploadModal = ({ open, handleClose, headerText }: SessionUploadModa
       }}
     >
       <UploadContainer>
-        <Wrapper>{renderHeader()}</Wrapper>
+        <Wrapper>
+          {renerCloseButton()}
+          {renderHeader()}
+          {renderImageInput()}
+        </Wrapper>
       </UploadContainer>
     </Modal>
   );
@@ -54,7 +68,7 @@ const UploadContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 800px;
-  height: 400px;
+  height: 600px;
   padding: 1.6rem 3rem;
   border-radius: ${({ theme }) => theme.size.xl};
   box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.25);
