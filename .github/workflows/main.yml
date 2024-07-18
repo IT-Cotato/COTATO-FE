@@ -63,5 +63,5 @@ jobs:
         run: aws deploy create-deployment
           --application-name cotato-deploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name cotato-deploy-group
+          --deployment-group-name cotato-deploy-fe-production
           --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},key=build-fe.zip,bundleType=zip
