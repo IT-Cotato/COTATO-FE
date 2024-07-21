@@ -47,8 +47,8 @@ const SessionIcon = ({ Icon, size = 'sm' }: SessionIconProps) => {
       };
     } else if (size === 'lg') {
       return {
-        radius: '2.5rem',
-        padding: '0.5rem',
+        radius: '2.2rem',
+        padding: '0.4rem',
       };
     }
 

@@ -22,7 +22,7 @@ const SessionHome = () => {
         ? sessions?.map((session: CotatoSessionListResponse) => (
             <SessionCard key={uuidv4()} session={session} />
           ))
-        : new Array(6).fill(null).map(() => <SessionCard key={uuidv4()} />)}
+        : new Array(12).fill(null).map(() => <SessionCard key={uuidv4()} />)}
     </SessionCardWrapper>
   );
 
@@ -44,7 +44,7 @@ const Wrapper = styled.div`
 const SessionCardWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(${IMAGE_WIDTH}, 1fr));
-  gap: 3.5rem 2.5rem;
+  gap: 4rem 2rem;
   place-items: center;
   width: 100%;
   padding: 3.2rem 2.5rem;

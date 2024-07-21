@@ -50,13 +50,13 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
     if (size === 'sm') {
       return {
         fontSize: theme.fontSize.xs,
-        padding: `${theme.size.sm} ${theme.size.lg}`,
+        padding: `${theme.size.xs} ${theme.size.lg}`,
         borderRadius: '5rem',
       };
     } else if (size === 'md') {
       return {
         fontSize: theme.fontSize.sm,
-        padding: `0.6rem ${theme.size.xl}`,
+        padding: `${theme.size.sm} ${theme.size.lg}`,
         borderRadius: '6rem',
       };
     }
