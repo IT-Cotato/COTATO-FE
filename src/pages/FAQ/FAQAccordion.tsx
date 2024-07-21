@@ -50,15 +50,6 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
   /**
    *
    */
-  const handleAccordionClick = () => {
-    if (typeof onClick !== 'function') return;
-
-    onClick(hash);
-  };
-
-  /**
-   *
-   */
   const renderAccordionSummary = () => {
     return (
       <StyledAccordionSummary
@@ -118,6 +109,15 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
         {renderCharacter()}
       </StyledAccordionDetails>
     );
+  };
+
+  /**
+   *
+   */
+  const handleAccordionClick = () => {
+    if (typeof onClick !== 'function') return;
+
+    onClick(hash);
   };
 
   //
