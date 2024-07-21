@@ -1,4 +1,5 @@
 import { Stack } from '@mui/material';
+import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -54,6 +55,7 @@ export default FAQFloatingNav;
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.common.white};
+  transition: ${THEME_CHANGE_TRANSITION};
 `;
 
 const StyledTitle = styled.div`
@@ -68,4 +70,8 @@ const StyledStack = styled(Stack)`
   background-color: ${({ theme }) => theme.colors.gray10};
   color: ${({ theme }) => theme.colors.gray100};
   cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray30};
+  }
 `;
