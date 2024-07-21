@@ -27,24 +27,6 @@ const FAQ = () => {
   /**
    *
    */
-  const handleSummaryClick = (hash: string) => {
-    window.history.pushState(null, '', `#${hash}`);
-
-    const element =
-      applyFAQRefs.current.find((ref) => ref?.id === hash) ||
-      activityFAQRefs.current.find((ref) => ref?.id === hash);
-
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 100,
-        behavior: 'smooth',
-      });
-    }
-  };
-
-  /**
-   *
-   */
   const renderApplyFAQ = () => {
     return (
       <Stack gap="3rem" alignItems="center">
@@ -138,6 +120,24 @@ const FAQ = () => {
         />
       </Stack>
     );
+  };
+
+  /**
+   *
+   */
+  const handleSummaryClick = (hash: string) => {
+    window.history.pushState(null, '', `#${hash}`);
+
+    const element =
+      applyFAQRefs.current.find((ref) => ref?.id === hash) ||
+      activityFAQRefs.current.find((ref) => ref?.id === hash);
+
+    if (element) {
+      window.scrollTo({
+        top: element.offsetTop - DEFAULT_SCROLL_OFFSET,
+        behavior: 'smooth',
+      });
+    }
   };
 
   //
