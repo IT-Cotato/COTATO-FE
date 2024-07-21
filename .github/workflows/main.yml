@@ -70,8 +70,13 @@ jobs:
 
       - name: Deploy
         run: |
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            DEPLOYMENT_GROUP_NAME="cotato-deploy-fe-production"
+          elif [ "${GITHUB_REF}" == "refs/heads/release" ]; then
+            DEPLOYMENT_GROUP_NAME="cotato-deploy-fe-release"
+          fi
           aws deploy create-deployment \
             --application-name cotato-deploy \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name cotato-deploy-fe-production \
+            --deployment-group-name ${DEPLOYMENT_GROUP_NAME} \
             --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},key=build-fe.zip,bundleType=zip
