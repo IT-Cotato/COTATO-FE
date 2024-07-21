@@ -17,6 +17,7 @@ import CSPage from '@pages/CS/CSPage';
 
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
+import { FAQ } from '@pages/FAQ';
 
 function App() {
   const location = useLocation();
@@ -39,7 +40,7 @@ function App() {
           <Route path="/products" element={<ReadyState />} />
           <Route path="/cs/*" element={<CSPage />} />
           <Route path="/session" element={<SessionHome />} />
-          <Route path="/faq" element={<ReadyState />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/findid" element={<FindID />} />
           <Route path="/findpw" element={<FindPWProcess />} />
