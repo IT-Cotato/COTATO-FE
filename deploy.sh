@@ -1,3 +1,8 @@
+#!/bin/bash
+
+# 사용할 리전을 명시
+REGION="ap-northeast-2" 
+
 DEPLOY_LOG_PATH="/home/ubuntu/frontend/production/log/deploy/deploy_$(date +%Y%m%d).log"
 
 echo "> deployment start : $(date +%c)" >> $DEPLOY_LOG_PATH
@@ -6,7 +11,7 @@ echo "> deployment start : $(date +%c)" >> $DEPLOY_LOG_PATH
 DEPLOYMENT_ID=$(grep -oP '\[d-[a-zA-Z0-9]+\]' /opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log | tail -1 | grep -oP 'd-[a-zA-Z0-9]+')
 
 # 배포 그룹 이름 가져오기
-DEPLOYMENT_GROUP_NAME=$(aws deploy get-deployment --deployment-id "$DEPLOYMENT_ID" --query 'deploymentInfo.deploymentGroupName' --output text)
+DEPLOYMENT_GROUP_NAME=$(aws deploy get-deployment --region "$REGION" --deployment-id "$DEPLOYMENT_ID" --query 'deploymentInfo.deploymentGroupName' --output text)
 
 # app directory
 APP_DIR="/home/ubuntu/frontend"
