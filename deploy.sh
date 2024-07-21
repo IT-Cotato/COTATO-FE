@@ -19,15 +19,15 @@ if [[ $DEPLOYMENT_GROUP_NAME == "cotato-deploy-fe-production" ]]; then
 elif [[ $DEPLOYMENT_GROUP_NAME == "cotato-deploy-fe-release" ]]; then
     TARGET_DIR=$RELEASE_DIR
 else
-    echo "Unknown deployment group: $DEPLOYMENT_GROUP_NAME"
+    echo "Unknown deployment group: $DEPLOYMENT_GROUP_NAME" >> $DEPLOY_LOG_PATH
     exit 1
 fi
 
 # build 디렉토리, appspec.yml, deploy.sh 파일을 대상 디렉토리로 이동
-mv build $TARGET_DIR
-mv appspec.yml $TARGET_DIR
-mv deploy.sh $TARGET_DIR
+mv "$APP_DIR/cotato/build" "$TARGET_DIR"
+mv "$APP_DIR/cotato/appspec.yml" "$TARGET_DIR"
+mv "$APP_DIR/cotato/deploy.sh" "$TARGET_DIR"
 
-echo "Deployment files moved to $TARGET_DIR"
+echo "Deployment files moved to $TARGET_DIR" >> $DEPLOY_LOG_PATH
 
 echo "> deployment end : $(date +%c)" >> $DEPLOY_LOG_PATH
