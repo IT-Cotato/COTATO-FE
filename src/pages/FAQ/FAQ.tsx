@@ -11,6 +11,12 @@ import { useLocation } from 'react-router-dom';
 //
 //
 
+const DEFAULT_SCROLL_OFFSET = 100;
+
+//
+//
+//
+
 const FAQ = () => {
   const theme = useTheme();
   const isLapTopOrSmaller = useMediaQuery(`(max-width:${device.laptop})`);
@@ -23,10 +29,11 @@ const FAQ = () => {
    */
   const handleSummaryClick = (hash: string) => {
     window.history.pushState(null, '', `#${hash}`);
+
     const element =
       applyFAQRefs.current.find((ref) => ref?.id === hash) ||
       activityFAQRefs.current.find((ref) => ref?.id === hash);
-    console.log(element);
+
     if (element) {
       window.scrollTo({
         top: element.offsetTop - 100,
@@ -51,15 +58,15 @@ const FAQ = () => {
         <Stack width="100%" justifyContent="center" alignItems="center">
           <StyledStack gap="1.25rem">
             {FAQList.apply.map((faq, idx) => (
-              <div key={idx} id={faq.hash} ref={(ref) => (applyFAQRefs.current[idx] = ref)}>
+              <div
+                key={`faq-apply-${idx}`}
+                id={faq.hash}
+                ref={(ref) => (applyFAQRefs.current[idx] = ref)}
+              >
                 <FAQAccordion
-                  key={idx}
-                  expanded={location.hash === `#${faq.hash}`}
-                  question={faq.question}
-                  answer={faq.answer}
-                  summary={faq.summary}
-                  hash={faq.hash}
+                  {...faq}
                   index={idx}
+                  expanded={location.hash === `#${faq.hash}`}
                   onClick={handleSummaryClick}
                 />
               </div>
@@ -87,7 +94,11 @@ const FAQ = () => {
         <Stack width="100%" justifyContent="center" alignItems="center">
           <StyledStack gap="1.25rem">
             {FAQList.activity.map((faq, idx) => (
-              <div key={idx} id={faq.hash} ref={(ref) => (activityFAQRefs.current[idx] = ref)}>
+              <div
+                key={`faq-activity-${idx}`}
+                id={faq.hash}
+                ref={(ref) => (activityFAQRefs.current[idx] = ref)}
+              >
                 <FAQAccordion
                   {...faq}
                   index={idx}
@@ -130,7 +141,7 @@ const FAQ = () => {
   };
 
   //
-  //
+  // Scroll to hash if exists
   //
   React.useEffect(() => {
     if (location.hash) {
@@ -140,7 +151,7 @@ const FAQ = () => {
         activityFAQRefs.current.find((ref) => ref?.id === hash);
       if (element) {
         window.scrollTo({
-          top: element.offsetTop - 100,
+          top: element.offsetTop - DEFAULT_SCROLL_OFFSET,
           behavior: 'smooth',
         });
       }
@@ -163,6 +174,10 @@ const FAQ = () => {
 };
 
 export default FAQ;
+
+//
+//
+//
 
 const StyledTitleBox = styled(Box)`
   display: flex;

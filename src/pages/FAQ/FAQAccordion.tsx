@@ -11,8 +11,11 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import styled from 'styled-components';
-import { ReactComponent as CharacterEyeClose } from '@assets/character_eye_close.svg';
-import { device, media } from '@theme/media';
+import { device } from '@theme/media';
+import {
+  CotatoCharacterImageMapType,
+  convertCotatoCharcterImage,
+} from '@utils/convertCotatoCharcterImage';
 
 //
 //
@@ -23,6 +26,7 @@ interface FAQAccordionProps {
   answer: string;
   summary: string;
   hash: string;
+  image: CotatoCharacterImageMapType;
   expanded: boolean;
   index?: number;
   onClick?: (hash: string) => void;
@@ -36,14 +40,12 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
   question,
   answer,
   hash,
+  image,
   expanded,
   index = 0,
   onClick,
 }) => {
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
-  //
-  //
-  //
 
   /**
    *
@@ -90,7 +92,7 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
 
     return (
       <Stack width="6rem" padding="1rem" justifyContent="center" alignItems="flex-end">
-        <CharacterEyeClose width="3rem" height="3.5rem" />
+        <img src={convertCotatoCharcterImage(image)} width={50} height={50} />
       </Stack>
     );
   };
@@ -131,6 +133,10 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
 };
 
 export default FAQAccordion;
+
+//
+//
+//
 
 const StyledAccordion = styled(Accordion)(() => ({
   [`&.${accordionClasses.root}`]: {
