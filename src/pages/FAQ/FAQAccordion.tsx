@@ -59,7 +59,7 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
           padding: { xs: '1rem 2rem', md: '1.5rem 2rem' },
         }}
       >
-        <QustionIndex>Q{index + 1}</QustionIndex>
+        <QuestionIndex>Q{index + 1}</QuestionIndex>
         <Typography
           fontFamily="Pretendard"
           fontWeight="bold"
@@ -175,7 +175,7 @@ const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   },
 }));
 
-const QustionIndex = styled.div`
+const QuestionIndex = styled.div`
   position: absolute;
   left: 0.5rem;
   top: -0.5rem;
