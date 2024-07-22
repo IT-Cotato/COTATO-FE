@@ -13,19 +13,35 @@ DEPLOYMENT_ID=$(grep -oP '\[d-[a-zA-Z0-9]+\]' /opt/codedeploy-agent/deployment-r
 # 배포 그룹 이름 가져오기
 DEPLOYMENT_GROUP_NAME=$(aws deploy get-deployment --region "$REGION" --deployment-id "$DEPLOYMENT_ID" --query 'deploymentInfo.deploymentGroupName' --output text)
 
+echo "배포 그룹 이름: $DEPLOYMENT_GROUP_NAME" >> $DEPLOY_LOG_PATH
+
 # app directory
 APP_DIR="/home/ubuntu/frontend"
 PRODUCTION_DIR="$APP_DIR/production/cotato"
 RELEASE_DIR="$APP_DIR/release/cotato"
 
 # 배포 그룹 이름에 따라 대상 디렉토리를 설정
-if [[ $DEPLOYMENT_GROUP_NAME == "cotato-deploy-fe-production" ]]; then
+if [[ "$DEPLOYMENT_GROUP_NAME" == "cotato-deploy-fe-production" ]]; then
     TARGET_DIR=$PRODUCTION_DIR
-elif [[ $DEPLOYMENT_GROUP_NAME == "cotato-deploy-fe-release" ]]; then
+elif [[ "$DEPLOYMENT_GROUP_NAME" == "cotato-deploy-fe-release" ]]; then
     TARGET_DIR=$RELEASE_DIR
 else
     echo "Unknown deployment group: $DEPLOYMENT_GROUP_NAME" >> $DEPLOY_LOG_PATH
     exit 1
+fi
+
+# 기존 파일 및 디렉토리 삭제
+if [ -d "$TARGET_DIR/build" ]; then
+    rm -rf "$TARGET_DIR/build"
+    echo "기존 build 디렉토리 존재" >> $DEPLOY_LOG_PATH
+fi
+if [ -f "$TARGET_DIR/appspec.yml" ]; then
+    rm "$TARGET_DIR/appspec.yml"
+    echo "기존 appspec.yml 존재" >> $DEPLOY_LOG_PATH
+fi
+if [ -f "$TARGET_DIR/deploy.sh" ]; then
+    rm "$TARGET_DIR/deploy.sh"
+    echo "기존 deploy.sh 존재" >> $DEPLOY_LOG_PATH
 fi
 
 # build 디렉토리, appspec.yml, deploy.sh 파일을 대상 디렉토리로 이동
