@@ -19,9 +19,9 @@ PRODUCTION_DIR="$APP_DIR/production/cotato"
 RELEASE_DIR="$APP_DIR/release/cotato"
 
 # 배포 그룹 이름에 따라 대상 디렉토리를 설정
-if [[ $DEPLOYMENT_GROUP_NAME == "cotato-deploy-fe-production" ]]; then
+if [[ "$DEPLOYMENT_GROUP_NAME" == "cotato-deploy-fe-production" ]]; then
     TARGET_DIR=$PRODUCTION_DIR
-elif [[ $DEPLOYMENT_GROUP_NAME == "cotato-deploy-fe-release" ]]; then
+elif [[ "$DEPLOYMENT_GROUP_NAME" == "cotato-deploy-fe-release" ]]; then
     TARGET_DIR=$RELEASE_DIR
 else
     echo "Unknown deployment group: $DEPLOYMENT_GROUP_NAME" >> $DEPLOY_LOG_PATH
