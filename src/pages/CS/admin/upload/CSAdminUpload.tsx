@@ -1,47 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Multiples, ShortQuizzes } from '@/typing/db';
 import CSAdminUploadLayout from './CSAdminUploadLayout';
 import CSAdminUploadContent from './CSAdminUploadContent';
 import fetchUserData from '@utils/fetchUserData';
 import api from '@/api/api';
+import { MultipleQuiz, ShortQuiz } from './CSAdminUploadSlides';
+import { createMultipleQuiz } from './utils/createMultipleQuiz';
 
-type QuizType = Multiples | ShortQuizzes;
+type QuizType = MultipleQuiz | ShortQuiz;
 
 const CSAdminUpload = () => {
   // 현재 선택된 슬라이드를 나타내기 위한 state
   const [selected, setSelected] = useState(0);
   // 전체 슬라이드를 담기 위한 state
-  const [quiz, setQuiz] = useState<QuizType[]>([
-    {
-      number: 1,
-      question: '',
-      choices: [
-        {
-          number: 1,
-          content: '',
-          isAnswer: 'ANSWER',
-        },
-        {
-          number: 2,
-          content: '',
-          isAnswer: 'NO_ANSWER',
-        },
-        {
-          number: 3,
-          content: '',
-          isAnswer: 'NO_ANSWER',
-        },
-        {
-          number: 4,
-          content: '',
-          isAnswer: 'NO_ANSWER',
-        },
-      ],
-      image: null,
-      previewUrl: null,
-    },
-  ]);
+  const [quiz, setQuiz] = useState<QuizType[]>([createMultipleQuiz()]);
+
   const { data: userData, isLoading } = fetchUserData();
   const [params] = useSearchParams();
   const educationId = Number(params.get('educationId'));
@@ -63,7 +36,7 @@ const CSAdminUpload = () => {
       })
       .then((res) => {
         const quizDataList = [...res.data.multiples].concat(res.data.shortQuizzes);
-        quizDataList.sort((a: QuizType, b: QuizType) => a.number - b.number);
+        quizDataList.sort((a: QuizType, b: QuizType) => (a as any).number - (b as any).number);
         if (quizDataList.length === 0) {
           return;
         }

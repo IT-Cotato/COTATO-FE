@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "*"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,9 +19,10 @@ jobs:
 
       - name: Build
         run: yarn build
+
   production-deploy:
     needs: build
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -33,13 +35,20 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Generate Environment Variables File for Production
+      - name: Set Environment Variables
         run: |
-          echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env.production
-          echo "REACT_APP_SOCKET_URL=$REACT_APP_SOCKET_URL" >> .env.production
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" >> .env.production
+            echo "REACT_APP_SOCKET_URL=$REACT_APP_SOCKET_URL" >> .env.production
+          elif [ "${GITHUB_REF}" == "refs/heads/release" ]; then
+            echo "REACT_APP_BASE_URL=$REACT_APP_QA_BASE_URL" >> .env.qa
+            echo "REACT_APP_SOCKET_URL=$REACT_APP_QA_SOCKET_URL" >> .env.qa
+          fi
         env:
           REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
           REACT_APP_SOCKET_URL: ${{ secrets.REACT_APP_SOCKET_URL }}
+          REACT_APP_QA_BASE_URL: ${{ secrets.REACT_APP_QA_BASE_URL }}
+          REACT_APP_QA_SOCKET_URL: ${{ secrets.REACT_APP_QA_SOCKET_URL }}
 
       - name: Build
         run: yarn build
@@ -60,8 +69,14 @@ jobs:
           aws s3 cp build-fe.zip s3://${{ secrets.AWS_S3_BUCKET_NAME }}/build-fe.zip --region ap-northeast-2
 
       - name: Deploy
-        run: aws deploy create-deployment
-          --application-name cotato-deploy
-          --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name cotato-deploy-group
-          --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},key=build-fe.zip,bundleType=zip
+        run: |
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            DEPLOYMENT_GROUP_NAME="cotato-deploy-fe-production"
+          elif [ "${GITHUB_REF}" == "refs/heads/release" ]; then
+            DEPLOYMENT_GROUP_NAME="cotato-deploy-fe-release"
+          fi
+          aws deploy create-deployment \
+            --application-name cotato-deploy \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name ${DEPLOYMENT_GROUP_NAME} \
+            --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},key=build-fe.zip,bundleType=zip

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { Multiples, ShortQuizzes } from '@/typing/db';
+import { QuizType } from './CSAdminUploadSlides';
 
 //
 //
@@ -10,7 +10,6 @@ import { Multiples, ShortQuizzes } from '@/typing/db';
 type Item = {
   $isselected?: string;
 };
-type QuizType = Multiples | ShortQuizzes;
 
 //
 //
@@ -74,7 +73,7 @@ const CSAdminUploadDndContainer = (
                       key={item.number}
                       $isselected={selected + 1 === item.number ? 'true' : 'false'}
                       onClick={() => {
-                        setSelected(item.number - 1);
+                        item.number && setSelected(item.number - 1);
                       }}
                     >
                       {item.number}

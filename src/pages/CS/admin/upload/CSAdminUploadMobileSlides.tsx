@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { Multiples, ShortQuizzes } from '@/typing/db';
+import { QuizType } from './CSAdminUploadSlides';
 
 type Props = {
   quiz: QuizType[];
@@ -9,7 +9,10 @@ type Props = {
   setSelected: React.Dispatch<React.SetStateAction<number>>;
 };
 
-type QuizType = Multiples | ShortQuizzes;
+//
+//
+//
+
 const MobileSlides = ({ quiz, setQuiz, selected, setSelected }: Props) => {
   const [isDown, setIsDown] = useState(false);
   const [isShow, setIsShow] = useState(false);
@@ -79,8 +82,8 @@ const MobileSlides = ({ quiz, setQuiz, selected, setSelected }: Props) => {
             isAnswer: 'NO_ANSWER',
           },
         ],
-        image: null,
-        previewUrl: null,
+        image: undefined,
+        previewUrl: undefined,
       },
     ]);
     setIsShow(false);
@@ -149,7 +152,7 @@ const MobileSlides = ({ quiz, setQuiz, selected, setSelected }: Props) => {
                 key={item.number}
                 onClick={() => {
                   setIsDown(false);
-                  setSelected(item.number - 1);
+                  setSelected((item?.number as number) - 1);
                 }}
               >
                 {item.number}
@@ -159,7 +162,7 @@ const MobileSlides = ({ quiz, setQuiz, selected, setSelected }: Props) => {
       </Dropdown>
       <Title
         onChange={onChangeTitle}
-        value={quiz[selected]?.question || ''}
+        value={quiz[selected].question || ''}
         placeholder="문제 제목을 입력해주세요."
       />
     </Wrapper>
