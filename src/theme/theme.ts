@@ -105,20 +105,6 @@ export type CotatoThemeType = {
       100: string;
     };
     pastel: {
-      tone: {
-        yellow: {
-          100: string;
-        };
-        pink: {
-          100: string;
-        };
-        blue: {
-          100: string;
-        };
-        blurBlue: {
-          100: string;
-        };
-      };
       yellow: {
         10: string;
         20: string;
@@ -151,6 +137,20 @@ export type CotatoThemeType = {
         70: string;
         80: string;
         90: string;
+      };
+    };
+    pastelTone: {
+      yellow: {
+        100: string;
+      };
+      pink: {
+        100: string;
+      };
+      blue: {
+        100: string;
+      };
+      blurBlue: {
+        100: string;
       };
     };
   };
@@ -250,18 +250,6 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
     },
     // pastel //
     pastel: {
-      tone: {
-        yellow: { 100: '#FFF4CC' },
-        pink: {
-          100: '#FBE4F4',
-        },
-        blue: {
-          100: '#D6DEF5',
-        },
-        blurBlue: {
-          100: '#305BCF',
-        },
-      },
       yellow: {
         '10': '#FFFDF5',
         '20': '#FFF8EB',
@@ -294,6 +282,20 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
         '70': '#808593',
         '80': '#565962',
         '90': '#2B2C31',
+      },
+    },
+    pastelTone: {
+      yellow: {
+        100: '#FFF4CC',
+      },
+      pink: {
+        100: '#FBE4F4',
+      },
+      blue: {
+        100: '#D6DEF5',
+      },
+      blurBlue: {
+        100: '#305BCF',
       },
     },
   },
@@ -393,18 +395,6 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
     },
     // pastel //
     pastel: {
-      tone: {
-        yellow: { 100: '#FFF4CC' },
-        pink: {
-          100: '#FBE4F4',
-        },
-        blue: {
-          100: '#D6DEF5',
-        },
-        blurBlue: {
-          100: '#305BCF',
-        },
-      },
       yellow: {
         '10': '#FFFDF5',
         '20': '#FFF8EB',
@@ -437,6 +427,20 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
         '70': '#808593',
         '80': '#565962',
         '90': '#2B2C31',
+      },
+    },
+    pastelTone: {
+      yellow: {
+        100: '#FFF4CC',
+      },
+      pink: {
+        100: '#FBE4F4',
+      },
+      blue: {
+        100: '#D6DEF5',
+      },
+      blurBlue: {
+        100: '#305BCF',
       },
     },
   },
