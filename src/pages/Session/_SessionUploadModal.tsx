@@ -247,7 +247,11 @@ const SessionUploadModal = ({
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
         <InfoBox $height="8rem">
-          <textarea placeholder="설명" onChange={handleDescriptionChange} />
+          <textarea
+            placeholder="활동 내용을 작성하세요."
+            value={session.description}
+            onChange={handleDescriptionChange}
+          />
         </InfoBox>
       </InfoInputWrapper>
     );
