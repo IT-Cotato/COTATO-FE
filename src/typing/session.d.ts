@@ -9,6 +9,6 @@ interface ImageFile {
 
 export type SessionListImageInfo = CotatoSessionListImageInfoResponse & ImageFile;
 
-export type SessionListInfo = Omit<CotatoSessionListResponse, 'imageInfos' | 'generationId'> & {
+export type SessionListInfo = Omit<CotatoSessionListResponse, 'imageInfos'> & {
   imageInfos: SessionListImageInfo[];
 };

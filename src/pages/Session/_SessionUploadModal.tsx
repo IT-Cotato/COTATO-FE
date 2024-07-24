@@ -41,8 +41,10 @@ interface InfoBoxProps {
 
 const INITIAL_SESSION_STATE: SessionListInfo = {
   sessionId: 0,
+  sessionNumber: 0,
   title: '',
   description: '',
+  generationId: 0,
   sessionContents: {
     itIssue: SessionContentsItIssue.ON,
     csEducation: SessionContentsCsEducation.ON,
