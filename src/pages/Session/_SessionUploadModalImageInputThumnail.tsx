@@ -78,8 +78,8 @@ const ImageThumbnail = styled.div<{ $image?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 5rem;
-  height: 5rem;
+  width: 4.2rem;
+  height: 4.2rem;
   border-radius: ${({ theme }) => theme.size.sm};
 
   font-family: Pretendard-Bold;

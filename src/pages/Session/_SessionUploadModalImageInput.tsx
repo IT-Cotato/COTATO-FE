@@ -22,7 +22,7 @@ interface SessionUploadModalImageInputProps {
 //
 //
 
-const IMAGE_WIDTH = 22;
+const IMAGE_WIDTH = 18;
 const IMAGE_HEIGHT = IMAGE_WIDTH * (3 / 4);
 
 //
@@ -228,16 +228,18 @@ const SessionUploadModalImageInput = ({
   }, []);
 
   return (
-    <ImageInputWrapper>
-      {renderImageBox()}
-      {renderImageDnd()}
+    <>
+      <ImageInputWrapper>
+        {renderImageBox()}
+        {renderImageDnd()}
+      </ImageInputWrapper>
       <ToastContainer
         position="top-center"
         autoClose={2000}
         pauseOnFocusLoss={false}
-        theme={localStorage.getItem('theme') || 'dark'}
+        theme={localStorage.getItem('theme') || 'light'}
       />
-    </ImageInputWrapper>
+    </>
   );
 };
 
@@ -249,7 +251,7 @@ const ImageInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: ${({ theme }) => theme.size.xxl};
+  padding: ${({ theme }) => theme.size.xl};
   gap: ${({ theme }) => theme.size['3xl']};
 `;
 
