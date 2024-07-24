@@ -20,8 +20,8 @@ import {
 
 interface SessionUploadModalProps {
   open: boolean;
-  handleClose: () => void;
   headerText: string;
+  handleClose: () => void;
   handleUpload: (session: SessionListInfo) => void;
   sessionInfo?: SessionListInfo;
   lastSessionNumber?: number;
@@ -43,7 +43,6 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
   sessionId: 0,
   title: '',
   description: '',
-  generationId: 0,
   sessionContents: {
     itIssue: SessionContentsItIssue.ON,
     csEducation: SessionContentsCsEducation.ON,
@@ -59,8 +58,8 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
 
 const SessionUploadModal = ({
   open,
-  handleClose,
   headerText,
+  handleClose,
   handleUpload,
   sessionInfo,
   lastSessionNumber,
