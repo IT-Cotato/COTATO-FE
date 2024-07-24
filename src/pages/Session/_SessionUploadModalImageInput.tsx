@@ -12,7 +12,8 @@ import { toast, ToastContainer } from 'react-toastify';
 //
 
 interface SessionUploadModalImageInputProps {
-  imageListProps: SessionListImageInfo[];
+  imageList: SessionListImageInfo[];
+  handleImageListChange: (imageList: SessionListImageInfo[]) => void;
   requestImageAdd?: (imageFile: FileList) => string;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => void;
   requestImageRemove?: (image: SessionListImageInfo) => void;
@@ -30,13 +31,13 @@ const IMAGE_HEIGHT = IMAGE_WIDTH * (3 / 4);
 //
 
 const SessionUploadModalImageInput = ({
-  imageListProps,
+  imageList,
+  handleImageListChange,
   requestImageAdd,
   requestImageReorder,
   requestImageRemove,
 }: SessionUploadModalImageInputProps) => {
   const [selectedImage, setSelectedImage] = useState<SessionListImageInfo | null>(null);
-  const [imageList, setImageList] = useState<SessionListImageInfo[]>(imageListProps);
   const [isImageLoading, setIsImageLoading] = useState(selectedImage?.imageUrl ? true : false);
 
   const theme = useTheme();
@@ -71,7 +72,7 @@ const SessionUploadModalImageInput = ({
       newImageList.push(newImage);
     }
 
-    setImageList(newImageList);
+    handleImageListChange(newImageList);
     setSelectedImage(newImageList.at(-1) || null);
 
     requestImageAdd && requestImageAdd(fileList);
@@ -92,7 +93,7 @@ const SessionUploadModalImageInput = ({
     const [removed] = newImageList.splice(source.index, 1);
     newImageList.splice(destination.index, 0, removed);
 
-    setImageList(newImageList);
+    handleImageListChange(newImageList);
     requestImageReorder && requestImageReorder(newImageList);
   };
 
@@ -118,7 +119,7 @@ const SessionUploadModalImageInput = ({
       setSelectedImage(null);
     }
 
-    setImageList(newImageList);
+    handleImageListChange(newImageList);
 
     if (!selectedImage.imageId && selectedImage.imageUrl) {
       URL.revokeObjectURL(selectedImage.imageUrl);
