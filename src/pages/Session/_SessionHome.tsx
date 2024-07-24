@@ -40,6 +40,8 @@ const SessionHome = () => {
         open={isAddModalOpen}
         handleClose={handelModalClose}
         headerText="세션 추가"
+        handleUpload={() => {}}
+        lastSessionNumber={sessions?.length}
       />
     </>
   );

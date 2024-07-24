@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import SessionUploadModalImageInput from '@pages/Session/_SessionUploadModalImageInput';
-import { SessionListImageInfo } from '@/typing/session';
+import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
+import { produce } from 'immer';
+import {
+  SessionContentsItIssue,
+  SessionContentsCsEducation,
+  SessionContentsNetworking,
+  SessionContentsDevTalk,
+} from '@/enums/SessionContents';
 
 //
 //
@@ -15,6 +22,9 @@ interface SessionUploadModalProps {
   open: boolean;
   handleClose: () => void;
   headerText: string;
+  handleUpload: (session: SessionListInfo) => void;
+  sessionInfo?: SessionListInfo;
+  lastSessionNumber?: number;
   requestImageAdd?: (imageFile: FileList) => string;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => void;
   requestImageRemove?: (image: SessionListImageInfo) => void;
@@ -29,14 +39,36 @@ interface InfoBoxProps {
 //
 //
 
+const INITIAL_SESSION_STATE: SessionListInfo = {
+  sessionId: 0,
+  title: '',
+  description: '',
+  generationId: 0,
+  sessionContents: {
+    itIssue: SessionContentsItIssue.ON,
+    csEducation: SessionContentsCsEducation.ON,
+    networking: SessionContentsNetworking.OFF,
+    devTalk: SessionContentsDevTalk.OFF,
+  },
+  imageInfos: [],
+};
+
+//
+//
+//
+
 const SessionUploadModal = ({
   open,
   handleClose,
   headerText,
+  handleUpload,
+  sessionInfo,
+  lastSessionNumber,
   requestImageAdd,
   requestImageReorder,
   requestImageRemove,
 }: SessionUploadModalProps) => {
+  const [session, setSession] = useState<SessionListInfo>(INITIAL_SESSION_STATE);
   const [imageList, setImageList] = useState<SessionListImageInfo[]>([
     {
       imageUrl:
@@ -63,6 +95,84 @@ const SessionUploadModal = ({
   /**
    *
    */
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.title = e.target.value;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleItIssueChange = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.sessionContents!.itIssue =
+          session.sessionContents?.itIssue === SessionContentsItIssue.ON
+            ? SessionContentsItIssue.OFF
+            : SessionContentsItIssue.ON;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleCsEducationChange = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.sessionContents!.csEducation =
+          session.sessionContents?.csEducation === SessionContentsCsEducation.ON
+            ? SessionContentsCsEducation.OFF
+            : SessionContentsCsEducation.ON;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleNetworkingChange = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.sessionContents!.networking =
+          session.sessionContents?.networking === SessionContentsNetworking.ON
+            ? SessionContentsNetworking.OFF
+            : SessionContentsNetworking.ON;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleDevTalkChange = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.sessionContents!.devTalk =
+          session.sessionContents?.devTalk === SessionContentsDevTalk.ON
+            ? SessionContentsDevTalk.OFF
+            : SessionContentsDevTalk.ON;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.description = e.target.value;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
   const renerCloseButton = () => (
     <CloseButton type="button" onClick={handleClose}>
       <CloseIcon />
@@ -85,12 +195,30 @@ const SessionUploadModal = ({
    *
    */
   const renderInfoInput = () => {
+    const { itIssue, csEducation, networking, devTalk } = session.sessionContents!;
+
     const getContentsInput = () => {
       const contentList = [
-        { name: 'IT 이슈', checked: true, hanldeChange: () => {} },
-        { name: 'CS 교육', checked: true, hanldeChange: () => {} },
-        { name: '네트워킹', checked: false, hanldeChange: () => {} },
-        { name: '데브토크', checked: false, hanldeChange: () => {} },
+        {
+          name: 'IT 이슈',
+          checked: itIssue === SessionContentsItIssue.ON,
+          hanldeChange: handleItIssueChange,
+        },
+        {
+          name: 'CS 교육',
+          checked: csEducation === SessionContentsCsEducation.ON,
+          hanldeChange: handleCsEducationChange,
+        },
+        {
+          name: '네트워킹',
+          checked: networking === SessionContentsNetworking.ON,
+          hanldeChange: handleNetworkingChange,
+        },
+        {
+          name: '데브토크',
+          checked: devTalk === SessionContentsDevTalk.ON,
+          hanldeChange: handleDevTalkChange,
+        },
       ];
 
       return (
@@ -108,7 +236,7 @@ const SessionUploadModal = ({
     return (
       <InfoInputWrapper>
         <TitleBox $bold={true}>
-          <input value="세션" />
+          <input value={session.title} onChange={handleTitleChange} />
           <PencilIcon />
         </TitleBox>
         <InfoBox>
@@ -122,7 +250,7 @@ const SessionUploadModal = ({
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
         <InfoBox $height="8rem">
-          <textarea placeholder="설명" />
+          <textarea placeholder="설명" onChange={handleDescriptionChange} />
         </InfoBox>
       </InfoInputWrapper>
     );
@@ -130,9 +258,21 @@ const SessionUploadModal = ({
 
   const renderUplaodButton = () => (
     <UploadButtonWrapper>
-      <button>업로드</button>
+      <button onClick={() => handleUpload(session)}>업로드</button>
     </UploadButtonWrapper>
   );
+
+  useEffect(() => {
+    if (sessionInfo) {
+      setSession(sessionInfo);
+    } else if (lastSessionNumber) {
+      setSession(
+        produce(session, (darft) => {
+          darft.title = lastSessionNumber > 0 ? `${lastSessionNumber}주차 세션` : 'OT';
+        }),
+      );
+    }
+  }, [lastSessionNumber]);
 
   return (
     <Modal
@@ -305,6 +445,7 @@ const UploadButtonWrapper = styled.div`
     border: none;
     border-radius: 6rem;
     background: ${({ theme }) => theme.colors.primary100_1};
+    cursor: pointer;
     color: ${({ theme }) => theme.colors.common.white};
     text-align: center;
     font-family: Pretendard;
