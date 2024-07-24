@@ -3,34 +3,54 @@ import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SessoinUploadModal from './_SessionUploadModal';
+import { SessionListInfo } from '@/typing/session';
+import { SessionContentsItIssue } from '@/enums/SessionContents';
+import api from '@/api/api';
 
 //
 //
 //
-
-interface SessionInfo {
-  sessionId: number;
-  sessionNumber: number;
-  photoUrl: string;
-  description: string;
-  generationId: number;
-  sessionContents: {
-    itIssue: 'IT_ON' | 'IT_OFF';
-    networking: 'NW_ON' | 'NW_OFF';
-    csEducation: 'CS_ON' | 'CS_OFF';
-    devTalk: 'DEVTALK_ON' | 'DEVTALK_OFF';
-  };
-}
 
 const SessionHome = () => {
-  const { data: sessions } = useSWR(`/v1/api/session?generationId=${1}`, fetcher);
+  const { data: sessions } = useSWR<SessionListInfo[]>(
+    `/v1/api/session?generationId=${1}`,
+    fetcher,
+  );
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(true);
 
   const handelModalClose = () => setIsAddModalOpen(false);
 
+  const handleSessoinAdd = (session: SessionListInfo) => {
+    const formData = new FormData();
+    formData.append('generationId', '1');
+    formData.append('title', session.title || '');
+    formData.append('description', session.description || '');
+    formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
+    formData.append(
+      'csEducation',
+      session.sessionContents?.csEducation || SessionContentsItIssue.OFF,
+    );
+    formData.append(
+      'networking',
+      session.sessionContents?.networking || SessionContentsItIssue.OFF,
+    );
+    formData.append('devTalk', session.sessionContents?.devTalk || SessionContentsItIssue.OFF);
+
+    session.imageInfos.forEach((imageInfo) => {
+      if (imageInfo.imageFile) {
+        formData.append('images', imageInfo.imageFile);
+      }
+    });
+
+    api
+      .post('/v1/api/session/add', formData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+  console.log('sessions', sessions);
   const renderSessionCards = () => (
-    <SessionCardWrapper>{sessions?.map((session: SessionInfo) => <></>)}</SessionCardWrapper>
+    <SessionCardWrapper>{sessions?.map((session: SessionListInfo) => <></>)}</SessionCardWrapper>
   );
 
   return (
@@ -40,7 +60,7 @@ const SessionHome = () => {
         open={isAddModalOpen}
         handleClose={handelModalClose}
         headerText="세션 추가"
-        handleUpload={() => {}}
+        handleUpload={handleSessoinAdd}
         lastSessionNumber={sessions?.length}
       />
     </>

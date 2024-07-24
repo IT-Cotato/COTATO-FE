@@ -68,7 +68,7 @@ const SessionUploadModalImageInput = ({
 
     const newImageList = [...imageList];
     for (let i = 0; i < fileList.length; i++) {
-      const newImage = { imageUrl: URL.createObjectURL(fileList[i]) };
+      const newImage = { imageUrl: URL.createObjectURL(fileList[i]), imageFile: fileList[i] };
       newImageList.push(newImage);
     }
 
