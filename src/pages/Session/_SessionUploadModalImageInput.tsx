@@ -6,6 +6,8 @@ import SessionUploadModalImageInputThumnail from '@pages/Session/_SessionUploadM
 import { SessionListImageInfo } from '@/typing/session';
 import { ReactComponent as ImageCloseIcon } from '@assets/close_dotted.svg';
 import { toast, ToastContainer } from 'react-toastify';
+import imageSortByOrder from '@utils/imageSortByOrder';
+import { produce } from 'immer';
 
 //
 //
@@ -14,7 +16,7 @@ import { toast, ToastContainer } from 'react-toastify';
 interface SessionUploadModalImageInputProps {
   imageList: SessionListImageInfo[];
   handleImageListChange: (imageList: SessionListImageInfo[]) => void;
-  requestImageAdd?: (imageFile: FileList) => string;
+  requestImageAdd?: (imageFile: File) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => void;
   requestImageRemove?: (image: SessionListImageInfo) => void;
 }
@@ -66,16 +68,52 @@ const SessionUploadModalImageInput = ({
       return;
     }
 
-    const newImageList = [...imageList];
+    const addedImageList = [];
     for (let i = 0; i < fileList.length; i++) {
-      const newImage = { imageUrl: URL.createObjectURL(fileList[i]), imageFile: fileList[i] };
-      newImageList.push(newImage);
+      const addedImage = { imageFile: fileList[i] };
+      addedImageList.push(addedImage);
+    }
+
+    let newImageList = [...imageList];
+
+    if (requestImageAdd) {
+      const requests: Promise<any>[] = addedImageList.map((image) =>
+        requestImageAdd(image.imageFile),
+      );
+
+      Promise.all(requests)
+        .then((responses) => {
+          responses.forEach((response) => {
+            const newImage = {
+              imageId: response.data.imageId,
+              imageUrl: response.data.imageUrl,
+              order: response.data.order,
+            };
+
+            newImageList = produce(newImageList, (draft) => {
+              draft.push(newImage);
+            });
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error('이미지 추가에 실패했습니다.');
+          return;
+        });
+
+      imageSortByOrder(newImageList);
+    } else {
+      addedImageList.forEach((image) => {
+        const newImage = {
+          imageUrl: URL.createObjectURL(image.imageFile),
+          imageFile: image.imageFile,
+        };
+        newImageList.push(newImage);
+      });
     }
 
     handleImageListChange(newImageList);
     setSelectedImage(newImageList.at(-1) || null);
-
-    requestImageAdd && requestImageAdd(fileList);
   };
 
   /**

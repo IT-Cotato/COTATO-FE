@@ -23,9 +23,9 @@ interface SessionUploadModalProps {
   headerText: string;
   handleClose: () => void;
   handleUpload: (session: SessionListInfo) => void;
-  sessionInfo?: SessionListInfo;
+  sessionInfo?: SessionListInfo | null;
   lastSessionNumber?: number;
-  requestImageAdd?: (imageFile: FileList) => string;
+  requestImageAdd?: (imageFile: File) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => void;
   requestImageRemove?: (image: SessionListImageInfo) => void;
 }
@@ -274,7 +274,7 @@ const SessionUploadModal = ({
         }),
       );
     }
-  }, [lastSessionNumber]);
+  }, [sessionInfo, lastSessionNumber]);
 
   return (
     <Modal

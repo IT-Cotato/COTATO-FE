@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -6,6 +6,7 @@ import SessoinUploadModal from './_SessionUploadModal';
 import { SessionListInfo } from '@/typing/session';
 import { SessionContentsItIssue } from '@/enums/SessionContents';
 import api from '@/api/api';
+import SessionUploadModal from './_SessionUploadModal';
 
 //
 //
@@ -17,10 +18,24 @@ const SessionHome = () => {
     fetcher,
   );
 
-  const [isAddModalOpen, setIsAddModalOpen] = useState(true);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(true);
+  const [updateSessoin, setUpdateSessoin] = useState<SessionListInfo | null>(null);
 
-  const handelModalClose = () => setIsAddModalOpen(false);
+  /**
+   *
+   */
+  const requestImageAdd = (imageFile: File): Promise<any> => {
+    const formData = new FormData();
+    formData.append('sessionId', updateSessoin?.sessionId?.toString() || '');
+    formData.append('image', imageFile);
 
+    return api.post('v1/api/session/image', formData);
+  };
+
+  /**
+   *
+   */
   const handleSessoinAdd = (session: SessionListInfo) => {
     const formData = new FormData();
     formData.append('generationId', '1');
@@ -48,20 +63,40 @@ const SessionHome = () => {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
+
+  /**
+   *
+   */
+  const handleSessionUpdate = (session: SessionListInfo) => {};
+
   console.log('sessions', sessions);
   const renderSessionCards = () => (
     <SessionCardWrapper>{sessions?.map((session: SessionListInfo) => <></>)}</SessionCardWrapper>
   );
+
+  useEffect(() => {
+    if (sessions) {
+      setUpdateSessoin(sessions[0]);
+    }
+  }, [sessions]);
 
   return (
     <>
       <Wrapper>{renderSessionCards()}</Wrapper>
       <SessoinUploadModal
         open={isAddModalOpen}
-        handleClose={handelModalClose}
+        handleClose={() => setIsAddModalOpen(false)}
         headerText="세션 추가"
         handleUpload={handleSessoinAdd}
         lastSessionNumber={sessions?.length}
+      />
+      <SessionUploadModal
+        open={isUpdateModalOpen}
+        handleClose={() => setIsUpdateModalOpen(false)}
+        headerText="세션 수정"
+        handleUpload={handleSessionUpdate}
+        sessionInfo={updateSessoin}
+        requestImageAdd={requestImageAdd}
       />
     </>
   );
