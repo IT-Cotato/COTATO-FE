@@ -4,7 +4,12 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SessoinUploadModal from './_SessionUploadModal';
 import { SessionListInfo } from '@/typing/session';
-import { SessionContentsItIssue } from '@/enums/SessionContents';
+import {
+  SessionContentsCsEducation,
+  SessionContentsDevTalk,
+  SessionContentsItIssue,
+  SessionContentsNetworking,
+} from '@/enums/SessionContents';
 import api from '@/api/api';
 import SessionUploadModal from './_SessionUploadModal';
 
@@ -44,13 +49,13 @@ const SessionHome = () => {
     formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
     formData.append(
       'csEducation',
-      session.sessionContents?.csEducation || SessionContentsItIssue.OFF,
+      session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
     );
     formData.append(
       'networking',
-      session.sessionContents?.networking || SessionContentsItIssue.OFF,
+      session.sessionContents?.networking || SessionContentsNetworking.OFF,
     );
-    formData.append('devTalk', session.sessionContents?.devTalk || SessionContentsItIssue.OFF);
+    formData.append('devTalk', session.sessionContents?.devTalk || SessionContentsDevTalk.OFF);
 
     session.imageInfos.forEach((imageInfo) => {
       if (imageInfo.imageFile) {
