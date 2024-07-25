@@ -25,9 +25,9 @@ interface SessionUploadModalProps {
   handleUpload: (session: SessionListInfo) => void;
   sessionInfo?: SessionListInfo | null;
   lastSessionNumber?: number;
-  requestImageAdd?: (imageFile: File) => Promise<any>;
-  requestImageReorder?: (imageList: SessionListImageInfo[]) => void;
-  requestImageRemove?: (image: SessionListImageInfo) => void;
+  requestImageAdd?: (image: SessionListImageInfo) => Promise<any>;
+  requestImageReorder?: (imageList: SessionListImageInfo[]) => Promise<any>;
+  requestImageRemove?: (image: SessionListImageInfo) => Promise<any>;
 }
 
 interface InfoBoxProps {

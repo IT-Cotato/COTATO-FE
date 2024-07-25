@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SessoinUploadModal from './_SessionUploadModal';
-import { SessionListInfo } from '@/typing/session';
+import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import {
   SessionContentsCsEducation,
   SessionContentsDevTalk,
@@ -30,12 +30,31 @@ const SessionHome = () => {
   /**
    *
    */
-  const requestImageAdd = (imageFile: File): Promise<any> => {
+  const requestImageAdd = (image: SessionListImageInfo): Promise<any> => {
+    if (!image.imageFile) {
+      return Promise.reject('No image file');
+    }
+
     const formData = new FormData();
     formData.append('sessionId', updateSessoin?.sessionId?.toString() || '');
-    formData.append('image', imageFile);
+    formData.append('image', image.imageFile);
 
     return api.post('v1/api/session/image', formData);
+  };
+
+  /**
+   *
+   */
+  const requestImageRemove = (image: SessionListImageInfo): Promise<any> => {
+    if (!image.imageId) {
+      return Promise.reject('No image id');
+    }
+
+    return api.delete('/v1/api/session/image', {
+      data: {
+        imageId: image.imageId,
+      },
+    });
   };
 
   /**
@@ -102,6 +121,7 @@ const SessionHome = () => {
         handleUpload={handleSessionUpdate}
         sessionInfo={updateSessoin}
         requestImageAdd={requestImageAdd}
+        requestImageRemove={requestImageRemove}
       />
     </>
   );

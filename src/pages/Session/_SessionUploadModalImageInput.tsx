@@ -16,9 +16,9 @@ import { produce } from 'immer';
 interface SessionUploadModalImageInputProps {
   imageList: SessionListImageInfo[];
   handleImageListChange: (imageList: SessionListImageInfo[]) => void;
-  requestImageAdd?: (imageFile: File) => Promise<any>;
+  requestImageAdd?: (image: SessionListImageInfo) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => void;
-  requestImageRemove?: (image: SessionListImageInfo) => void;
+  requestImageRemove?: (image: SessionListImageInfo) => Promise<any>;
 }
 
 //
@@ -77,9 +77,7 @@ const SessionUploadModalImageInput = ({
     let newImageList = [...imageList];
 
     if (requestImageAdd) {
-      const requests: Promise<any>[] = addedImageList.map((image) =>
-        requestImageAdd(image.imageFile),
-      );
+      const requests: Promise<any>[] = addedImageList.map((image) => requestImageAdd(image));
 
       Promise.all(requests)
         .then((responses) => {
@@ -139,9 +137,19 @@ const SessionUploadModalImageInput = ({
    * Callback function for image remove event
    * Remove selected image from image list
    */
-  const handleImageRemove = () => {
+  const handleImageRemove = async () => {
     if (!selectedImage) {
       return;
+    }
+
+    if (requestImageRemove) {
+      try {
+        await requestImageRemove(selectedImage);
+      } catch (err) {
+        console.error(err);
+        toast.error('이미지 삭제에 실패했습니다.');
+        return;
+      }
     }
 
     const newImageList = imageList.filter((image) => image.imageUrl !== selectedImage.imageUrl);
@@ -162,8 +170,6 @@ const SessionUploadModalImageInput = ({
     if (!selectedImage.imageId && selectedImage.imageUrl) {
       URL.revokeObjectURL(selectedImage.imageUrl);
     }
-
-    requestImageRemove && requestImageRemove(selectedImage);
   };
 
   /**
