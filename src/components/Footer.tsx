@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { SVGProps } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as Insta } from '@/assets/footer_insta.svg';
 import { ReactComponent as Youtube } from '@/assets/footer_youtube.svg';
 import { ReactComponent as Github } from '@/assets/footer_github.svg';
 import { ReactComponent as Cafe } from '@/assets/footer_cafe.svg';
-import { media } from '@theme/media';
-import { CotatoThemeType } from '@theme/theme';
+import { device, media } from '@theme/media';
 import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
+import { useMediaQuery } from '@mui/material';
 
 //
 //
@@ -17,25 +17,43 @@ const COTATO_YOUTUBE_URL = 'https://www.youtube.com/@ITCotato';
 const COTATO_GITHUB_URL = 'https://github.com/IT-Cotato';
 const COTATO_CAFE_URL = 'https://cafe.naver.com/cotato';
 
+const LOGO_LIST = ['INSTA', 'YOUTUBE', 'GITHUB', 'CAFE'];
+
+const LOGO_COMPONENTS: { [key: string]: React.FunctionComponent<SVGProps<SVGSVGElement>> } = {
+  INSTA: Insta,
+  YOUTUBE: Youtube,
+  GITHUB: Github,
+  CAFE: Cafe,
+};
+
+const URL_LIST: { [key: string]: string } = {
+  INSTA: COTATO_INSTA_URL,
+  YOUTUBE: COTATO_YOUTUBE_URL,
+  GITHUB: COTATO_GITHUB_URL,
+  CAFE: COTATO_CAFE_URL,
+};
+
 //
 //
 //
 
 const Footer = () => {
+  const isTablet = useMediaQuery(`(max-width: ${device.tablet})`);
+  const isLandScape = useMediaQuery(`(max-width: ${device.landscape})`);
+  const isMobile = useMediaQuery(`(max-width: ${device.mobile})`);
+
   const renderSns = () => (
     <SnsWrapper>
-      <SnsBackground onClick={() => open(COTATO_INSTA_URL)}>
-        <Insta />
-      </SnsBackground>
-      <SnsBackground onClick={() => open(COTATO_YOUTUBE_URL)}>
-        <Youtube />
-      </SnsBackground>
-      <SnsBackground onClick={() => open(COTATO_GITHUB_URL)}>
-        <Github />
-      </SnsBackground>
-      <SnsBackground onClick={() => open(COTATO_CAFE_URL)}>
-        <Cafe />
-      </SnsBackground>
+      {LOGO_LIST.map((logo) => {
+        const LogoComponent = LOGO_COMPONENTS[logo];
+        return (
+          <SnsBackground key={logo} onClick={() => open(URL_LIST[logo])}>
+            <LogoComponent
+              width={isMobile ? '2rem' : isLandScape ? '2.25rem' : isTablet ? '3rem' : '4rem'}
+            />
+          </SnsBackground>
+        );
+      })}
     </SnsWrapper>
   );
 
@@ -75,18 +93,18 @@ const FooterWrapper = styled.footer`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 6.25rem 2rem 6.25rem;
+  padding: 5rem 6.25rem 1.5rem 6.25rem;
   gap: 1rem;
   transition: ${THEME_CHANGE_TRANSITION};
   ${media.laptop`
-    padding: 0 3.125rem 2rem 3.125rem;
+    padding: 3rem 3.125rem 1.5rem 3.125rem;
   `}
   ${media.tablet`
-    padding: 0 1.5rem 2rem 0;
+    padding: 3rem 1.5rem 1.5rem 1.25rem;
     
   `}
   ${media.mobile`
-    padding: 0 1.25rem 0rem 1.25rem;
+    padding:  3rem 1.25rem 1.5rem 1.25rem;
     
   `}
 `;
@@ -99,7 +117,7 @@ const SnsWrapper = styled.div`
     gap: 2rem;
   `}
   ${media.mobile`
-    gap: 0.5rem;
+    gap: 1.25rem;
   `}
 `;
 
@@ -113,6 +131,21 @@ const SnsBackground = styled.div`
   background-color: ${({ theme }) => theme.colors.common.white};
   filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.25));
   cursor: pointer;
+
+  ${media.tablet`
+    width: 4rem;
+    height: 4rem;
+  `}
+
+  ${media.landscape`
+    width: 3.5rem;
+    height: 3.5rem;
+  `}
+
+  ${media.mobile`
+    width: 3rem;
+    height: 3rem;
+  `}
 `;
 
 const DescriptionWrapper = styled.div`
@@ -149,7 +182,14 @@ const SubTextContainer = styled.div`
 
   ${media.tablet`
     > p {
-      font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
+      font-size: 0.75rem;
+      margin: 0rem;
+    }
+  `}
+
+  ${media.mobile`
+    > p {
+      font-size: 0.5rem;
       margin: 0rem;
     }
   `}
