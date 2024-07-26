@@ -169,7 +169,7 @@ const HeaderWrapper = styled.header`
   padding: 0.5rem 6rem;
   align-items: center;
   background: ${({ theme }) => theme.colors.common.white};
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 100;
   transition: ${THEME_CHANGE_TRANSITION};
