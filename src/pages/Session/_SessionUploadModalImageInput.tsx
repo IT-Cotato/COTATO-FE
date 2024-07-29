@@ -58,7 +58,7 @@ const SessionUploadModalImageInput = ({
    * Callback function for image add event
    * Add new image to image list and set selected image
    */
-  const handleImageAdd = (fileList: FileList | null) => {
+  const handleImageAdd = async (fileList: FileList | null) => {
     if (!fileList) {
       return;
     }
@@ -75,31 +75,31 @@ const SessionUploadModalImageInput = ({
     }
 
     let newImageList = [...imageList];
-
+    console.log(1);
     if (requestImageAdd) {
       const requests: Promise<any>[] = addedImageList.map((image) => requestImageAdd(image));
-
-      Promise.all(requests)
-        .then((responses) => {
-          responses.forEach((response) => {
-            const newImage = {
-              imageId: response.data.imageId,
-              imageUrl: response.data.imageUrl,
-              order: response.data.order,
-            };
-
-            newImageList = produce(newImageList, (draft) => {
-              draft.push(newImage);
-            });
+      console.log(2);
+      try {
+        const responses = await Promise.all(requests);
+        responses.forEach((response) => {
+          const newImage = {
+            imageId: response.data.imageId,
+            imageUrl: response.data.imageUrl,
+            order: response.data.order,
+          };
+          console.log(3);
+          newImageList = produce(newImageList, (draft) => {
+            draft.push(newImage);
           });
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error('이미지 추가에 실패했습니다.');
-          return;
         });
 
-      imageSortByOrder(newImageList);
+        newImageList = imageSortByOrder([...newImageList]);
+      } catch (error) {
+        console.error(error);
+        toast.error('이미지 추가에 실패했습니다.');
+        return;
+      }
+      console.log(4);
     } else {
       addedImageList.forEach((image) => {
         const newImage = {
@@ -109,7 +109,7 @@ const SessionUploadModalImageInput = ({
         newImageList.push(newImage);
       });
     }
-
+    console.log(5);
     handleImageListChange(newImageList);
     setSelectedImage(newImageList.at(-1) || null);
   };
