@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import SignUpModal from '@components/SignUpModal';
 import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
 import WelcomeImg from '@assets/login_welcome_img.svg';
-import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import userIcon from '@assets/signup_user_icon.svg';
 import phoneIcon from '@assets/signup_phone_icon.svg';
@@ -38,14 +36,6 @@ const SignUp = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const onApply = () => {
-  //   if (isId && isPassword && !mismatchError && isName && isTel && isAuthorized) {
-  //     setIsModalOpen(true);
-  //   } else {
-  //     alert('입력값을 확인해주세요.');
-  //     setIsModalOpen(false);
-  //   }
-  // };
 
   const onCancel = () => {
     if (confirm('가입을 취소합니다.')) {
@@ -199,11 +189,6 @@ const SignUp = () => {
     },
     [id, password, passwordCheck, name, tel, mismatchError, authNum],
   );
-
-  // if (data) {
-  //   console.log(data);
-  //   navigate('/');
-  // }
 
   return (
     <Wrapper>
