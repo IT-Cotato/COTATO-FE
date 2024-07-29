@@ -10,7 +10,8 @@ import phoneIcon from '@assets/sign_up_phone_icon.svg';
 import pwIcon from '@assets/sign_up_pw_icon.svg';
 import PixelButton from '@components/PixelButton';
 import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
-import eyesIcon from '@assets/sign_up_eyes_icon.svg';
+import eyesDefaultIcon from '@assets/sign_up_eyes_default_icon.svg';
+import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -267,7 +268,7 @@ const SignUp = () => {
                 onChange={onChangePassword}
               />
               <Eyes
-                src={eyesIcon}
+                src={isPasswordVisible ? eyesInvisibleIcon : eyesDefaultIcon}
                 alt="eyes icon"
                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
               />
