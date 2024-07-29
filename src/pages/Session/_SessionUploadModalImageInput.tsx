@@ -157,10 +157,10 @@ const SessionUploadModalImageInput = ({
 
     if (index === -1) {
       return;
+    } else if (index === newImageList.length) {
+      setSelectedImage(newImageList[newImageList.length - 1]);
     } else if (index < newImageList.length) {
       setSelectedImage(newImageList[index]);
-    } else if (index - 1 < newImageList.length) {
-      setSelectedImage(newImageList[index - 1]);
     } else {
       setSelectedImage(null);
     }
