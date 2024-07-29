@@ -12,6 +12,7 @@ import {
 } from '@/enums/SessionContents';
 import api from '@/api/api';
 import SessionUploadModal from './_SessionUploadModal';
+import { CotatoUpdateSessionRequest } from 'cotato-openapi-clients';
 
 //
 //
@@ -40,6 +41,23 @@ const SessionHome = () => {
     formData.append('image', image.imageFile);
 
     return api.post('v1/api/session/image', formData);
+  };
+
+  /**
+   *
+   */
+  const requestImageReorder = (imageList: SessionListImageInfo[]): Promise<any> => {
+    const reorderedImageList = imageList.map((image) => {
+      return {
+        imageId: image.imageId,
+        order: image.order,
+      };
+    });
+
+    return api.patch('/v1/api/session/image/order', {
+      sessionId: updateSessoin?.sessionId,
+      orderInfos: reorderedImageList,
+    });
   };
 
   /**
@@ -91,7 +109,26 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleSessionUpdate = (session: SessionListInfo) => {};
+  const handleSessionUpdate = (session: SessionListInfo) => {
+    if (!session.sessionId) {
+      return;
+    }
+
+    const updatedSessoinInfo: CotatoUpdateSessionRequest = {
+      sessionId: session.sessionId,
+      title: session.title,
+      description: session.description,
+      itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
+      csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
+      networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
+      devTalk: session.sessionContents?.devTalk || SessionContentsDevTalk.OFF,
+    };
+
+    api
+      .patch('/v1/api/session/update', updatedSessoinInfo)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   console.log('sessions', sessions);
   const renderSessionCards = () => (
@@ -121,6 +158,7 @@ const SessionHome = () => {
         handleUpload={handleSessionUpdate}
         sessionInfo={updateSessoin}
         requestImageAdd={requestImageAdd}
+        requestImageReorder={requestImageReorder}
         requestImageRemove={requestImageRemove}
       />
     </>

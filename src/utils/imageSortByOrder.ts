@@ -6,7 +6,7 @@ import { SessionListImageInfo } from '@/typing/session';
  */
 const imageSortByOrder = (imageList: SessionListImageInfo[]): SessionListImageInfo[] => {
   imageList.sort((left, right) => {
-    if (left.order && right.order) {
+    if (left.order !== undefined && right.order !== undefined) {
       return left.order - right.order;
     }
 

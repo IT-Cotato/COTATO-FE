@@ -17,7 +17,7 @@ interface SessionUploadModalImageInputProps {
   imageList: SessionListImageInfo[];
   handleImageListChange: (imageList: SessionListImageInfo[]) => void;
   requestImageAdd?: (image: SessionListImageInfo) => Promise<any>;
-  requestImageReorder?: (imageList: SessionListImageInfo[]) => void;
+  requestImageReorder?: (imageList: SessionListImageInfo[]) => Promise<any>;
   requestImageRemove?: (image: SessionListImageInfo) => Promise<any>;
 }
 
@@ -40,6 +40,7 @@ const SessionUploadModalImageInput = ({
   requestImageRemove,
 }: SessionUploadModalImageInputProps) => {
   const [selectedImage, setSelectedImage] = useState<SessionListImageInfo | null>(null);
+  const [sortedImageList, setSortedImageList] = useState<SessionListImageInfo[]>([]);
   const [isImageLoading, setIsImageLoading] = useState(selectedImage?.imageUrl ? true : false);
 
   const theme = useTheme();
@@ -63,22 +64,26 @@ const SessionUploadModalImageInput = ({
       return;
     }
 
-    if (imageList.length + fileList.length > 5) {
+    if (sortedImageList.length + fileList.length > 5) {
       toast.error('이미지는 최대 5개까지 등록 가능합니다.');
       return;
     }
 
     const addedImageList = [];
     for (let i = 0; i < fileList.length; i++) {
-      const addedImage = { imageFile: fileList[i] };
+      const addedImage: SessionListImageInfo = {
+        imageFile: fileList[i],
+        order: sortedImageList.length + i,
+      };
       addedImageList.push(addedImage);
     }
 
-    let newImageList = [...imageList];
-    console.log(1);
+    let newImageList = [...sortedImageList];
+
+    // If requestImageAdd is provided, send request to server
     if (requestImageAdd) {
       const requests: Promise<any>[] = addedImageList.map((image) => requestImageAdd(image));
-      console.log(2);
+
       try {
         const responses = await Promise.all(requests);
         responses.forEach((response) => {
@@ -87,29 +92,27 @@ const SessionUploadModalImageInput = ({
             imageUrl: response.data.imageUrl,
             order: response.data.order,
           };
-          console.log(3);
+
           newImageList = produce(newImageList, (draft) => {
             draft.push(newImage);
           });
         });
-
-        newImageList = imageSortByOrder([...newImageList]);
       } catch (error) {
         console.error(error);
         toast.error('이미지 추가에 실패했습니다.');
         return;
       }
-      console.log(4);
     } else {
       addedImageList.forEach((image) => {
         const newImage = {
-          imageUrl: URL.createObjectURL(image.imageFile),
+          imageUrl: URL.createObjectURL(image.imageFile as Blob),
           imageFile: image.imageFile,
         };
         newImageList.push(newImage);
       });
     }
-    console.log(5);
+
+    newImageList = imageSortByOrder([...newImageList]);
     handleImageListChange(newImageList);
     setSelectedImage(newImageList.at(-1) || null);
   };
@@ -125,12 +128,29 @@ const SessionUploadModalImageInput = ({
       return;
     }
 
-    const newImageList = Array.from(imageList);
+    const prevImageList = [...sortedImageList];
+    const newImageList = JSON.parse(JSON.stringify(sortedImageList));
     const [removed] = newImageList.splice(source.index, 1);
     newImageList.splice(destination.index, 0, removed);
 
+    for (let i = 0; i < newImageList.length; i++) {
+      newImageList[i].order = i;
+    }
+
+    setSortedImageList(newImageList);
     handleImageListChange(newImageList);
-    requestImageReorder && requestImageReorder(newImageList);
+
+    // If requestImageReorder is provided, send request to server
+    if (requestImageReorder) {
+      try {
+        requestImageReorder(newImageList);
+      } catch (err) {
+        console.error(err);
+        handleImageListChange(prevImageList);
+        toast.error('이미지 순서 변경에 실패했습니다.');
+        return;
+      }
+    }
   };
 
   /**
@@ -142,6 +162,7 @@ const SessionUploadModalImageInput = ({
       return;
     }
 
+    // If requestImageRemove is provided, send request to server
     if (requestImageRemove) {
       try {
         await requestImageRemove(selectedImage);
@@ -214,7 +235,7 @@ const SessionUploadModalImageInput = ({
    *
    */
   const renderImageDnd = () => {
-    const dragableImages = [...imageList];
+    const dragableImages = [...sortedImageList];
     dragableImages.push({ imageId: -1 });
 
     const getdragableThumnail = (image: SessionListImageInfo, index: number) => (
@@ -223,6 +244,7 @@ const SessionUploadModalImageInput = ({
         index={index}
         draggableId={image.imageUrl || image.imageId?.toString() || index.toString()}
         isDragDisabled={image.imageId === -1}
+        disableInteractiveElementBlocking={image.imageId === -1}
       >
         {(provided, snapshot) => (
           <SessionUploadModalImageInputThumnail
@@ -260,7 +282,13 @@ const SessionUploadModalImageInput = ({
 
   useEffect(() => {
     if (imageList.length > 0) {
-      setSelectedImage(imageList[0]);
+      if (sortedImageList.length === 0) {
+        setSelectedImage(imageList.find((image) => image.order === 0) || null);
+      }
+
+      if (imageList.some((image, index) => image.imageUrl !== sortedImageList[index]?.imageUrl)) {
+        setSortedImageList(imageSortByOrder([...imageList]));
+      }
     }
   }, [imageList]);
 
