@@ -262,7 +262,9 @@ const SessionUploadModalImageInput = ({
     if (imageList.length > 0) {
       setSelectedImage(imageList[0]);
     }
+  }, [imageList]);
 
+  useEffect(() => {
     return () => {
       imageList.forEach((image) => {
         if (!image.imageId && image.imageUrl) {
