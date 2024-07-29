@@ -4,6 +4,12 @@ import styled from 'styled-components';
 import SignUpModal from '@components/SignUpModal';
 import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
+import WelcomeImg from '@assets/login_welcome_img.svg';
+import { media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
+import userIcon from '@assets/signup_user_icon.svg';
+import phoneIcon from '@assets/signup_phone_icon.svg';
+import pwIcon from '@assets/signup_pw_icon.svg';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -201,91 +207,114 @@ const SignUp = () => {
 
   return (
     <Wrapper>
-      <h3>회원가입</h3>
-      <Form onSubmit={onSubmit}>
-        <Label>
-          <span>아이디</span>
-          <InputWrapper>
-            <InputBox
-              type="text"
-              id="id"
-              name="id"
-              placeholder="이메일 형식으로 작성해주세요."
-              value={id}
-              onChange={onChangeId}
-            />
-            <AuthButton type="button" onClick={onSendEmail} disable={isAuthorized}>
-              인증 메일 발송
-            </AuthButton>
-          </InputWrapper>
-          {!isId && <Error>{idMessage}</Error>}
-          <InputWrapper>
-            <InputBox
-              type="text"
-              id="id"
-              name="id"
-              placeholder="발송된 이메일의 인증번호를 입력해주세요."
-              value={authNum}
-              onChange={onChangeAuthNum}
-            />
-            <AuthButton type="button" onClick={handleEmailAuth} disable={isAuthorized}>
-              인증하기
-            </AuthButton>
-          </InputWrapper>
-        </Label>
-        <Label>
-          <span>비밀번호</span>
-          <InputBox
-            type="password"
-            id="password"
-            name="password"
-            placeholder="8-16자 영문 대소문자, 숫자, 특수문자를 사용하세요."
-            value={password}
-            onChange={onChangePassword}
-          />
-          {!isPassword && <Error>{passwordMessage}</Error>}
-        </Label>
-        <Label>
-          <span>비밀번호 확인</span>
-          <InputBox
-            type="password"
-            id="passwordCheck"
-            name="passwordCheck"
-            value={passwordCheck}
-            onChange={onChangePasswordCheck}
-          />
-          {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
-        </Label>
-        <Label>
-          <span>이름</span>
-          <InputBox type="text" id="name" name="name" value={name} onChange={onChangeName} />
-          {!isName && <Error>{nameMessage}</Error>}
-        </Label>
-        <Label>
-          <span>전화번호</span>
-          <InputBox
-            type="tel"
-            id="tel"
-            name="tel"
-            placeholder="'-'를 제외한 숫자만 입력해주세요."
-            value={tel}
-            onChange={onChangeTel}
-          />
-          {!isTel && <Error>{telMessage}</Error>}
-        </Label>
-        <ButtonSection>
-          <Button
-            type="submit"
-            bgColor={isId && isPassword && !mismatchError && isName && isTel && isAuthorized}
-          >
-            가입신청
-          </Button>
-          {isModalOpen && <SignUpModal />}
-          <Button type="button" onClick={onCancel}>
-            가입취소
-          </Button>
-        </ButtonSection>
-      </Form>
+      <FormDiv>
+        <BackImg src={WelcomeImg} />
+        <Form onSubmit={onSubmit}>
+          <Label>
+            <span>이름</span>
+            <InputDiv>
+              <Icon src={userIcon} alt="user icon" />
+              <InputBox
+                type="text"
+                id="name"
+                name="name"
+                placeholder="이름을 입력해주세요."
+                value={name}
+                onChange={onChangeName}
+              />
+            </InputDiv>
+            {!isName && <Error>{nameMessage}</Error>}
+          </Label>
+          <Label>
+            <span>아이디</span>
+            <InputDiv>
+              <Icon src={userIcon} alt="user icon" />
+              <InputBox
+                type="text"
+                id="id"
+                name="id"
+                placeholder="이메일 형식으로 작성해주세요."
+                value={id}
+                onChange={onChangeId}
+              />
+              <AuthButton type="button" onClick={onSendEmail} disable={isAuthorized}>
+                인증 메일 발송
+              </AuthButton>
+            </InputDiv>
+            {!isId && <Error>{idMessage}</Error>}
+            <InputDiv>
+              <InputBox
+                type="text"
+                id="id"
+                name="id"
+                placeholder="발송된 이메일의 인증번호를 입력해주세요."
+                value={authNum}
+                onChange={onChangeAuthNum}
+              />
+              <AuthButton type="button" onClick={handleEmailAuth} disable={isAuthorized}>
+                인증하기
+              </AuthButton>
+            </InputDiv>
+          </Label>
+          <Label>
+            <span>전화번호</span>
+            <InputDiv>
+              <Icon src={phoneIcon} alt="phone icon" />
+              <InputBox
+                type="tel"
+                id="tel"
+                name="tel"
+                placeholder="'-'를 제외한 숫자만 입력해주세요."
+                value={tel}
+                onChange={onChangeTel}
+              />
+            </InputDiv>
+            {!isTel && <Error>{telMessage}</Error>}
+          </Label>
+          <Label>
+            <span>비밀번호</span>
+            <InputDiv>
+              <Icon src={pwIcon} alt="password icon" />
+              <InputBox
+                type="password"
+                id="password"
+                name="password"
+                placeholder="비밀번호를 입력해주세요."
+                value={password}
+                onChange={onChangePassword}
+              />
+            </InputDiv>
+            {!isPassword && <Error>{passwordMessage}</Error>}
+          </Label>
+          <Label>
+            <span>비밀번호 확인</span>
+            <InputDiv>
+              <Icon src={pwIcon} alt="password icon" />
+              <InputBox
+                type="password"
+                id="passwordCheck"
+                name="passwordCheck"
+                placeholder="비밀번호를 한 번 더 입력해주세요."
+                value={passwordCheck}
+                onChange={onChangePasswordCheck}
+              />
+            </InputDiv>
+            {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
+          </Label>
+          <ButtonSection>
+            <Button
+              type="submit"
+              bgColor={isId && isPassword && !mismatchError && isName && isTel && isAuthorized}
+            >
+              가입신청
+            </Button>
+            {isModalOpen && <SignUpModal />}
+            <Button type="button" onClick={onCancel}>
+              가입취소
+            </Button>
+          </ButtonSection>
+        </Form>
+      </FormDiv>
     </Wrapper>
   );
 };
@@ -297,22 +326,31 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 80px;
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 56px;
-  }
+  padding-top: 4rem;
 
   @media screen and (max-width: 392px) {
     margin-top: 40px;
   }
 `;
 
+const FormDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const BackImg = styled.img`
+  z-index: 10;
+  width: 24rem;
+  top: 0px;
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
+  z-index: 100;
+  margin-top: -88px;
 `;
 
 const Label = styled.label`
@@ -323,27 +361,20 @@ const Label = styled.label`
   }
 `;
 
-const InputWrapper = styled.div`
-  position: relative;
-`;
-
-const InputBox = styled.input`
+const InputDiv = styled.div`
   width: 600px !important;
   height: 52px;
-  border-radius: 10px;
-  border: 2px solid #d7e5ca !important;
+  border-radius: 0.5rem;
+  border: 2px solid ${({ theme }) => theme.colors.primary90} !important;
   background: #fff;
   margin-bottom: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: none;
   width: 512px;
   margin-top: 4px;
-  padding-left: 20px;
-  &:focus {
-    outline: none;
-  }
+  padding: 0 1rem;
+  position: relative;
 
   @media screen and (max-width: 768px) {
     width: 440px !important;
@@ -358,6 +389,18 @@ const InputBox = styled.input`
   }
 `;
 
+const Icon = styled.img`
+  padding-right: 0.6rem;
+`;
+
+const InputBox = styled.input`
+  border: none;
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+`;
+
 const AuthButton = styled.button<{ disable: boolean }>`
   width: 92px;
   height: 36px;
@@ -365,7 +408,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   font-size: 0.8rem;
   font-weight: 300;
   border-radius: 8px;
-  background: #85c88a;
+  background: ${({ theme }) => theme.colors.primary90};
   color: #fff;
   border: none;
   position: absolute;
@@ -375,7 +418,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   ${(props) =>
     props.disable &&
     `
-    background: #D7E5CA;
+    background: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
     pointer-events: none;
     cursor: default;
   `}
