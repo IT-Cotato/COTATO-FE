@@ -289,7 +289,9 @@ const SignUp = () => {
             </InputDiv>
             {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
           </Label>
-          <PixelButton BtnTextImg={ButtonText} />
+          <ButtonDiv>
+            <PixelButton BtnTextImg={ButtonText} />
+          </ButtonDiv>
         </Form>
       </FormDiv>
     </Wrapper>
@@ -304,6 +306,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding-top: 4rem;
+  margin-bottom: 5rem;
 
   @media screen and (max-width: 392px) {
     margin-top: 40px;
@@ -333,17 +336,18 @@ const Form = styled.form`
 const Label = styled.label`
   margin-bottom: 20px;
   font-size: 1rem;
+  color: ${({ theme }) => theme.colors.gray100};
   span {
     padding-left: 4px;
   }
 `;
 
 const InputDiv = styled.div`
-  width: 600px !important;
+  width: 40rem !important;
   height: 52px;
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.colors.primary90} !important;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.common.white};
   margin-bottom: 8px;
   display: flex;
   flex-direction: row;
@@ -373,24 +377,24 @@ const Icon = styled.img`
 const InputBox = styled.input`
   border: none;
   width: 100%;
+  background: ${({ theme }) => theme.colors.common.white};
   &:focus {
     outline: none;
   }
 `;
 
 const AuthButton = styled.button<{ disable: boolean }>`
-  width: 92px;
+  width: 96px;
   height: 36px;
-  font-family: NanumSquareRound;
   font-size: 0.8rem;
   font-weight: 300;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background: ${({ theme }) => theme.colors.primary90};
   color: #fff;
   border: none;
   position: absolute;
   right: 12px;
-  top: 8px;
+  top: 6px;
   cursor: pointer;
   ${(props) =>
     props.disable &&
@@ -419,4 +423,8 @@ const Error = styled.p`
   font-weight: 500;
   margin: 0;
   padding-left: 4px;
+`;
+
+const ButtonDiv = styled.div`
+  margin-top: 10rem;
 `;
