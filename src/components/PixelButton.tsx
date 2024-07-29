@@ -18,6 +18,10 @@ interface Props {
 //
 //
 
+/**
+ * @param {React.FC<React.SVGProps<SVGSVGElement>>} BtnTextImg button text image(.svg) imported as React component
+ * @returns pixel button component with animation
+ */
 const PixelButton: React.FC<Props> = ({ BtnTextImg }) => {
   const [btnState, setBtnState] = useState<btnStateType>('default');
 
