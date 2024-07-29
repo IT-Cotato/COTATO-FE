@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import { CotatoThemeType } from '@theme/theme';
-import userIcon from '@assets/signup_user_icon.svg';
-import phoneIcon from '@assets/signup_phone_icon.svg';
-import pwIcon from '@assets/signup_pw_icon.svg';
+import userIcon from '@assets/sign_up_user_icon.svg';
+import phoneIcon from '@assets/sign_up_phone_icon.svg';
+import pwIcon from '@assets/sign_up_pw_icon.svg';
 import PixelButton from '@components/PixelButton';
 import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
+import eyesIcon from '@assets/sign_up_eyes_icon.svg';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const SignUp = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const onChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const emailRegex =
@@ -257,12 +259,17 @@ const SignUp = () => {
             <InputDiv>
               <Icon src={pwIcon} alt="password icon" />
               <InputBox
-                type="password"
+                type={isPasswordVisible ? 'text' : 'password'}
                 id="password"
                 name="password"
                 placeholder="비밀번호를 입력해주세요."
                 value={password}
                 onChange={onChangePassword}
+              />
+              <Eyes
+                src={eyesIcon}
+                alt="eyes icon"
+                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
               />
             </InputDiv>
             {!isPassword && <Error>{passwordMessage}</Error>}
@@ -401,39 +408,9 @@ const AuthButton = styled.button<{ disable: boolean }>`
   }
 `;
 
-const ButtonSection = styled.div`
-  width: 600px;
-  height: 52px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  margin-top: 48px;
-
-  @media screen and (max-width: 768px) {
-    width: 440px !important;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px !important;
-  }
-`;
-
-const Button = styled.button<{ bgColor?: boolean }>`
-  width: 200px;
-  height: 52px;
-  font-size: 1.1rem;
-  font-weight: 400;
-  border-radius: 10px;
-  border: 1px solid #d7e5ca;
-  background: ${(props) => (props.bgColor ? '#85C88A' : '#D7E5CA')};
-  color: #fff;
-  &:hover {
-    ${(props) => (props.bgColor ? 'cursor: pointer;' : 'cursor: default;')}
-  }
-
-  @media screen and (max-width: 392px) {
-    width: 140px;
-  }
+const Eyes = styled.img`
+  position: absolute;
+  right: 12px;
 `;
 
 const Error = styled.p`
