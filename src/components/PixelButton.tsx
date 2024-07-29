@@ -71,16 +71,18 @@ const PixelButton: React.FC<Props> = ({ BtnTextImg }) => {
   };
 
   return (
-    <Wrapper
-      type="submit"
-      onMouseOver={() => setBtnState('hover')}
-      onMouseLeave={() => setBtnState('default')}
-      onClick={() => setBtnState('clicked')}
-    >
-      <BtnImg src={getImgSrcByState(btnState)} />
-      <BtnTextDiv btnState={btnState} getTextPositionByState={getTextPositionByState}>
-        <BtnTextImg fill={getTextColorByState(btnState)} />
-      </BtnTextDiv>
+    <Wrapper>
+      <Container
+        type="submit"
+        onMouseOver={() => setBtnState('hover')}
+        onMouseLeave={() => setBtnState('default')}
+        onClick={() => setBtnState('clicked')}
+      >
+        <BtnImg src={getImgSrcByState(btnState)} />
+        <BtnTextDiv btnState={btnState} getTextPositionByState={getTextPositionByState}>
+          <BtnTextImg fill={getTextColorByState(btnState)} />
+        </BtnTextDiv>
+      </Container>
     </Wrapper>
   );
 };
@@ -89,7 +91,13 @@ const PixelButton: React.FC<Props> = ({ BtnTextImg }) => {
 //
 //
 
-const Wrapper = styled.button`
+const Wrapper = styled.div`
+  height: 5rem;
+  display: flex;
+  align-items: end;
+`;
+
+const Container = styled.button`
   background: none;
   border: none;
   position: relative;
