@@ -14,6 +14,8 @@ import fetcher from '@utils/fetcher';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import LoginSuccess from '@components/LoginSuccess';
+import PixelButton from '@components/PixelButton';
+import { ReactComponent as ButtonText } from '@assets/login_btn_text.svg';
 
 //
 //
@@ -32,7 +34,6 @@ const DELAY_TIME = 3000;
 //
 
 const Login = () => {
-  const [btnState, setBtnState] = useState<btnStateType>('default');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -104,22 +105,6 @@ const Login = () => {
   /**
    *
    */
-  const getImgSrcByState = (state: btnStateType) => {
-    switch (state) {
-      case 'default':
-        return btnDefault;
-      case 'hover':
-        return btnHover;
-      case 'clicked':
-        return btnClicked;
-      default:
-        return btnDefault;
-    }
-  };
-
-  /**
-   *
-   */
   const renderLoginForm = () => {
     return (
       <>
@@ -141,16 +126,7 @@ const Login = () => {
               />
             </InputBox>
           </InputContainer>
-          <ButtonContainer>
-            <LoginBtn
-              type="submit"
-              onMouseOver={() => setBtnState('hover')}
-              onMouseLeave={() => setBtnState('default')}
-              onClick={() => setBtnState('clicked')}
-            >
-              <img src={getImgSrcByState(btnState)} style={{ width: '120px' }} />
-            </LoginBtn>
-          </ButtonContainer>
+          <PixelButton BtnTextImg={ButtonText} />
         </Form>
       </>
     );
@@ -297,34 +273,6 @@ const InputBox = styled.div`
   ${media.mobile`
     width: 220px;
   `}
-`;
-
-const ButtonContainer = styled.div`
-  height: 5rem;
-  display: flex;
-  align-items: end;
-`;
-
-const LoginBtn = styled.button`
-  background: none;
-  border: none;
-  &:hover {
-    animation: spring 0.1s ease-out 0.1s;
-  }
-  @keyframes spring {
-    0% {
-      transform: scaleY(1);
-    }
-    40% {
-      transform: scaleY(0.99);
-    }
-    60% {
-      transform: scaleY(1.01);
-    }
-    100% {
-      transform: scaleY(1);
-    }
-  }
 `;
 
 const LinkContainer = styled.div`

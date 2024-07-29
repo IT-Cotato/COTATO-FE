@@ -8,6 +8,8 @@ import { CotatoThemeType } from '@theme/theme';
 import userIcon from '@assets/signup_user_icon.svg';
 import phoneIcon from '@assets/signup_phone_icon.svg';
 import pwIcon from '@assets/signup_pw_icon.svg';
+import PixelButton from '@components/PixelButton';
+import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -36,12 +38,6 @@ const SignUp = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const onCancel = () => {
-    if (confirm('가입을 취소합니다.')) {
-      navigate('/');
-    }
-  };
 
   const onChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const emailRegex =
@@ -286,18 +282,7 @@ const SignUp = () => {
             </InputDiv>
             {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
           </Label>
-          <ButtonSection>
-            <Button
-              type="submit"
-              bgColor={isId && isPassword && !mismatchError && isName && isTel && isAuthorized}
-            >
-              가입신청
-            </Button>
-            {isModalOpen && <SignUpModal />}
-            <Button type="button" onClick={onCancel}>
-              가입취소
-            </Button>
-          </ButtonSection>
+          <PixelButton BtnTextImg={ButtonText} />
         </Form>
       </FormDiv>
     </Wrapper>
