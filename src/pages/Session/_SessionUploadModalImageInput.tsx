@@ -112,7 +112,7 @@ const SessionUploadModalImageInput = ({
       });
     }
 
-    newImageList = imageSortByOrder([...newImageList]);
+    newImageList = imageSortByOrder(newImageList);
     handleImageListChange(newImageList);
     setSelectedImage(newImageList.at(-1) || null);
   };
@@ -129,13 +129,11 @@ const SessionUploadModalImageInput = ({
     }
 
     const prevImageList = [...sortedImageList];
-    const newImageList = JSON.parse(JSON.stringify(sortedImageList));
+
+    let newImageList: SessionListImageInfo[] = JSON.parse(JSON.stringify(sortedImageList));
     const [removed] = newImageList.splice(source.index, 1);
     newImageList.splice(destination.index, 0, removed);
-
-    for (let i = 0; i < newImageList.length; i++) {
-      newImageList[i].order = i;
-    }
+    newImageList = newImageList.map((image, index) => ({ ...image, order: index }));
 
     setSortedImageList(newImageList);
     handleImageListChange(newImageList);
@@ -176,6 +174,10 @@ const SessionUploadModalImageInput = ({
     const newImageList = imageList.filter((image) => image.imageUrl !== selectedImage.imageUrl);
     const index = imageList.findIndex((image) => image.imageUrl === selectedImage.imageUrl);
 
+    if (!selectedImage.imageId && selectedImage.imageUrl) {
+      URL.revokeObjectURL(selectedImage.imageUrl);
+    }
+
     if (index === -1) {
       return;
     } else if (index === newImageList.length) {
@@ -187,10 +189,7 @@ const SessionUploadModalImageInput = ({
     }
 
     handleImageListChange(newImageList);
-
-    if (!selectedImage.imageId && selectedImage.imageUrl) {
-      URL.revokeObjectURL(selectedImage.imageUrl);
-    }
+    setSortedImageList(newImageList);
   };
 
   /**
@@ -287,7 +286,7 @@ const SessionUploadModalImageInput = ({
       }
 
       if (imageList.some((image, index) => image.imageUrl !== sortedImageList[index]?.imageUrl)) {
-        setSortedImageList(imageSortByOrder([...imageList]));
+        setSortedImageList(imageSortByOrder(imageList));
       }
     }
   }, [imageList]);

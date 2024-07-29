@@ -3,16 +3,20 @@ import { SessionListImageInfo } from '@/typing/session';
 /**
  * Sort image list by order
  * @param imageList
+ * @return sorted image list
  */
 const imageSortByOrder = (imageList: SessionListImageInfo[]): SessionListImageInfo[] => {
-  imageList.sort((left, right) => {
+  const newImageList = [...imageList];
+
+  newImageList.sort((left, right) => {
     if (left.order !== undefined && right.order !== undefined) {
       return left.order - right.order;
     }
 
     return 0;
   });
-  return imageList;
+
+  return newImageList;
 };
 
 export default imageSortByOrder;
