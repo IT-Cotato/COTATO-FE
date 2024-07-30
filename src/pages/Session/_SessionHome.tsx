@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import SessoinUploadModal from './_SessionUploadModal';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import {
   SessionContentsCsEducation,
@@ -26,7 +25,7 @@ const SessionHome = () => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(true);
-  const [updateSessoin, setUpdateSessoin] = useState<SessionListInfo | null>(null);
+  const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
 
   /**
    *
@@ -37,7 +36,7 @@ const SessionHome = () => {
     }
 
     const formData = new FormData();
-    formData.append('sessionId', updateSessoin?.sessionId?.toString() || '');
+    formData.append('sessionId', updateSession?.sessionId?.toString() || '');
     formData.append('image', image.imageFile);
 
     return api.post('v1/api/session/image', formData);
@@ -55,7 +54,7 @@ const SessionHome = () => {
     });
 
     return api.patch('/v1/api/session/image/order', {
-      sessionId: updateSessoin?.sessionId,
+      sessionId: updateSession?.sessionId,
       orderInfos: reorderedImageList,
     });
   };
@@ -137,14 +136,14 @@ const SessionHome = () => {
 
   useEffect(() => {
     if (sessions) {
-      setUpdateSessoin(sessions[0]);
+      setUpdateSession(sessions[0]);
     }
   }, [sessions]);
 
   return (
     <>
       <Wrapper>{renderSessionCards()}</Wrapper>
-      <SessoinUploadModal
+      <SessionUploadModal
         open={isAddModalOpen}
         handleClose={() => setIsAddModalOpen(false)}
         headerText="세션 추가"
@@ -156,7 +155,7 @@ const SessionHome = () => {
         handleClose={() => setIsUpdateModalOpen(false)}
         headerText="세션 수정"
         handleUpload={handleSessionUpdate}
-        sessionInfo={updateSessoin}
+        sessionInfo={updateSession}
         requestImageAdd={requestImageAdd}
         requestImageReorder={requestImageReorder}
         requestImageRemove={requestImageRemove}
