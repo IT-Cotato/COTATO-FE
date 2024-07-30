@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
+import React, { useCallback, useEffect, useState } from 'react';
+import styled, { useTheme } from 'styled-components';
 import SignUpModal from '@components/SignUpModal';
 import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
@@ -12,6 +12,8 @@ import PixelButton from '@components/PixelButton';
 import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
 import eyesDefaultIcon from '@assets/sign_up_eyes_default_icon.svg';
 import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
+import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
+import { set } from 'date-fns';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -34,6 +36,8 @@ const SignUp = () => {
   // 유효성 검사
   const [isId, setIsId] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
+  const [isPasswordLength, setIsPasswordLength] = useState(false);
+  const [isPasswordRegex, setIsPasswordRegex] = useState(false);
   const [isPasswordCheck, setIsPasswordCheck] = useState(false);
   const [isName, setIsName] = useState(false);
   const [isTel, setIsTel] = useState(false);
@@ -42,13 +46,15 @@ const SignUp = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  const theme = useTheme();
+
   const onChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.target.value;
     setId(emailCurrent);
     if (!emailRegex.test(emailCurrent)) {
-      setIdMessage('올바른 이메일 형식이 아닙니다.');
+      setIdMessage('잘못된 이메일 형식입니다.');
       setIsId(false);
     } else {
       setIdMessage('');
@@ -58,20 +64,23 @@ const SignUp = () => {
 
   const onChangePassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&.])[A-Za-z\d@$!%*#?&.]{8,16}$/;
+      const passwordLength = /^.{8,16}$/;
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
       const passwordCurrent = e.target.value;
       setPassword(passwordCurrent);
-      if (!passwordRegex.test(passwordCurrent)) {
-        setPasswordMessage(
-          '영문 대소문자, 숫자, 특수문자(@$!%*#?&.)를 포함하여 8-16자로 입력하세요.',
-        );
-        setIsPassword(false);
+      if (passwordLength.test(passwordCurrent)) {
+        setIsPasswordLength(true);
       } else {
-        setPasswordMessage('');
-        setIsPassword(true);
+        setIsPasswordLength(false);
       }
+      if (passwordRegex.test(passwordCurrent)) {
+        setIsPasswordRegex(true);
+      } else {
+        setIsPasswordRegex(false);
+      }
+      console.log(isPasswordLength, isPasswordRegex);
     },
-    [passwordCheck],
+    [isPasswordLength, isPasswordRegex],
   );
 
   const onChangePasswordCheck = useCallback(
@@ -189,6 +198,10 @@ const SignUp = () => {
     [id, password, passwordCheck, name, tel, mismatchError, authNum],
   );
 
+  useEffect(() => {
+    console.log('야', isPasswordLength, isPasswordRegex);
+  }, [isPasswordLength, isPasswordRegex]);
+
   return (
     <Wrapper>
       <FormDiv>
@@ -273,6 +286,16 @@ const SignUp = () => {
                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
               />
             </InputDiv>
+            <ValidationSection>
+              <ValidationDiv color={isPasswordLength}>
+                <CheckIcon fill={isPasswordLength ? theme.colors.sub3[60] : theme.colors.gray60} />
+                <span>8-16자 입력</span>
+              </ValidationDiv>
+              <ValidationDiv color={isPasswordRegex}>
+                <CheckIcon fill={isPasswordRegex ? theme.colors.sub3[60] : theme.colors.gray60} />
+                <span>영문, 숫자, 특수문자 입력</span>
+              </ValidationDiv>
+            </ValidationSection>
             {!isPassword && <Error>{passwordMessage}</Error>}
           </Label>
           <Label>
@@ -345,7 +368,7 @@ const Label = styled.label`
 
 const InputDiv = styled.div`
   width: 40rem !important;
-  height: 52px;
+  height: 3.5rem;
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.colors.primary90} !important;
   background: ${({ theme }) => theme.colors.common.white};
@@ -379,6 +402,7 @@ const InputBox = styled.input`
   border: none;
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
+  font-size: ${({ theme }) => theme.fontSize.sm};
   &:focus {
     outline: none;
   }
@@ -394,8 +418,8 @@ const AuthButton = styled.button<{ disable: boolean }>`
   color: #fff;
   border: none;
   position: absolute;
-  right: 12px;
-  top: 6px;
+  right: 1rem;
+  top: 0.52rem;
   cursor: pointer;
   ${(props) =>
     props.disable &&
@@ -424,6 +448,28 @@ const Error = styled.p`
   font-weight: 500;
   margin: 0;
   padding-left: 4px;
+`;
+
+const ValidationSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 0.8rem;
+`;
+
+const ValidationDiv = styled.div<{ color: boolean }>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 0.8rem;
+  img {
+    width: 1.2rem;
+    margin-right: 0.3rem;
+  }
+  span {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    color: ${({ color, theme }) => (color ? theme.colors.sub3[60] : theme.colors.gray60)};
+  }
 `;
 
 const ButtonDiv = styled.div`
