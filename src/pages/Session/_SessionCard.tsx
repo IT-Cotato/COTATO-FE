@@ -6,7 +6,7 @@ import Skeleton from '@mui/material/Skeleton';
 import {
   CotatoSessionListResponse,
   CotatoSessionContents,
-  CotatoSessionListPhotoInfoResponse,
+  CotatoSessionListImageInfoResponse,
 } from 'cotato-openapi-clients';
 import SessionIcon from '@components/Session/SessionIcon';
 import SessionContents from '@components/Session/SessionContents';
@@ -70,11 +70,13 @@ const SessionCard = ({ session }: SessionCardProps) => {
         return null;
       }
 
-      const firstSessionPhotoInfo = session.photoInfos?.at(0) as CotatoSessionListPhotoInfoResponse;
+      const firstSessionImageInfo = session?.imageInfos?.at(
+        0,
+      ) as CotatoSessionListImageInfoResponse;
 
       return (
         <CardImage
-          src={firstSessionPhotoInfo?.photoUrl || ready_image}
+          src={firstSessionImageInfo?.imageUrl || ready_image}
           alt="session"
           onLoad={() => setImageLoading(false)}
           $display={imageLoading ? 'none' : 'block'}
