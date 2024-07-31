@@ -4,26 +4,22 @@ import SessionContent from '@pages/Session/SessionContent';
 import SessionModal from '@pages/Session/SessionModal/SessionModal';
 import { ReactComponent as AddIcon } from '@assets/add_icon.svg';
 import { ReactComponent as SettingIcon } from '@assets/setting_icon.svg';
-import GenerationSelect from '@components/GenerationSelect';
-import { IGeneration, ISession } from '@/typing/db';
+import { ISession } from '@/typing/db';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import { useNavigate } from 'react-router-dom';
 import GenerationDropBox from '@components/_GenerationDropBox';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 
 const SessionHome = () => {
-  const { data: user, error } = useSWR('/v1/api/member/info', fetcher);
+  const { data: user } = useSWR('/v1/api/member/info', fetcher);
 
   const [sessions, setSessions] = useState<undefined | ISession[]>();
   const [isSessionModalOpen, setIsSessionModalOpen] = useState(false);
   const [modifySession, setModifySession] = useState<undefined | ISession>();
   const [lastWeek, setLastWeek] = useState(-1);
-  const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
-
-  const navigate = useNavigate();
+  const [selectedGeneration] = useState<CotatoGenerationInfoResponse>();
 
   useEffect(() => {
     if (sessions && sessions.length > 0) {
@@ -43,17 +39,6 @@ const SessionHome = () => {
       .then((res) => setSessions(res.data))
       .catch((err) => console.error(err));
   }, []);
-
-  const onChangeGeneration = useCallback(
-    (generation: CotatoGenerationInfoResponse) => {
-      setSelectedGeneration(generation);
-
-      if (generation) {
-        fetchSessions(generation.generationId);
-      }
-    },
-    [selectedGeneration],
-  );
 
   const onClickAddButton = useCallback(() => {
     setModifySession(undefined);
