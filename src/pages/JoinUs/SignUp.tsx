@@ -15,6 +15,8 @@ import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import { set } from 'date-fns';
 import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
+import SignUpSuccess from '@components/SignUpSuccess';
+import { media } from '@theme/media';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ const SignUp = () => {
   const [isTel, setIsTel] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const theme = useTheme();
@@ -187,17 +189,16 @@ const SignUp = () => {
             phoneNumber: tel,
           })
           .then((res) => {
-            setIsModalOpen(true);
+            setIsSuccess(true);
           })
           .catch((err) => {
             console.log(err);
-            setIsModalOpen(false);
             if (err.response.data.message === '존재하는 전화번호입니다.') {
               alert('이미 가입된 전화번호입니다.');
-            } else {
-              alert('입력값을 확인해주세요.');
             }
           });
+      } else {
+        alert('입력값을 확인해주세요.');
       }
     },
     [id, password, passwordCheck, name, tel, mismatchError, authNum],
@@ -212,12 +213,25 @@ const SignUp = () => {
     );
   };
 
-  useEffect(() => {
-    console.log(password, passwordCheck, password === passwordCheck, mismatchError);
-  }, [password, passwordCheck]);
+  const PasswordValidation = () => {
+    return (
+      <ValidationSection>
+        <ValidationDiv color={isPasswordLength}>
+          <CheckIcon fill={isPasswordLength ? theme.colors.sub3[60] : theme.colors.gray60} />
+          <span>8-16자 입력</span>
+        </ValidationDiv>
+        <ValidationDiv color={isPasswordRegex}>
+          <CheckIcon fill={isPasswordRegex ? theme.colors.sub3[60] : theme.colors.gray60} />
+          <span>영문, 숫자, 특수문자 입력</span>
+        </ValidationDiv>
+      </ValidationSection>
+    );
+  };
 
-  return (
-    <Wrapper>
+  const renderSignUpForm = () => {
+    if (isSuccess) return;
+
+    return (
       <FormDiv>
         <BackImg src={WelcomeImg} />
         <Form onSubmit={onSubmit}>
@@ -299,16 +313,7 @@ const SignUp = () => {
                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
               />
             </InputDiv>
-            <ValidationSection>
-              <ValidationDiv color={isPasswordLength}>
-                <CheckIcon fill={isPasswordLength ? theme.colors.sub3[60] : theme.colors.gray60} />
-                <span>8-16자 입력</span>
-              </ValidationDiv>
-              <ValidationDiv color={isPasswordRegex}>
-                <CheckIcon fill={isPasswordRegex ? theme.colors.sub3[60] : theme.colors.gray60} />
-                <span>영문, 숫자, 특수문자 입력</span>
-              </ValidationDiv>
-            </ValidationSection>
+            <PasswordValidation />
           </Label>
           <Label>
             <span>비밀번호 확인</span>
@@ -330,6 +335,23 @@ const SignUp = () => {
           </ButtonDiv>
         </Form>
       </FormDiv>
+    );
+  };
+
+  const renderSignUpSuccess = () => {
+    if (!isSuccess) return;
+
+    return <SignUpSuccess />;
+  };
+
+  useEffect(() => {
+    console.log(password, passwordCheck, password === passwordCheck, mismatchError);
+  }, [password, passwordCheck]);
+
+  return (
+    <Wrapper>
+      {renderSignUpForm()}
+      {renderSignUpSuccess()}
     </Wrapper>
   );
 };
@@ -359,6 +381,9 @@ const BackImg = styled.img`
   z-index: 10;
   width: 24rem;
   top: 0px;
+  ${media.mobile`
+  width: 284px;
+  `}
 `;
 
 const Form = styled.form`
