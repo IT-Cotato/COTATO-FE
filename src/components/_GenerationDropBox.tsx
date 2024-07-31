@@ -93,6 +93,7 @@ const GenerationDropBox = ({
   const setGenerationSearchParam = (generation: CotatoGenerationInfoResponse) => {
     if (generation?.generationId) {
       setSearchParams({ 'generation-id': generation.generationId.toString() });
+      handleGenerationChange(generation);
     }
   };
 
@@ -111,41 +112,6 @@ const GenerationDropBox = ({
     handleGenerationChange(generation);
     setGenerationSearchParam(generation);
   };
-
-  /**
-   *
-   */
-  useEffect(() => {
-    window.addEventListener('mousedown', (e) => {
-      if (
-        generationDropBoxRef.current &&
-        !generationDropBoxRef.current.contains(e.target as Node) &&
-        isDropBoxOpen
-      ) {
-        handleDropDownChange();
-      }
-    });
-    return () => window.removeEventListener('mousedown', () => {});
-  }, [generationDropBoxRef, isDropBoxOpen]);
-
-  /**
-   *
-   */
-  useEffect(() => {
-    if (!rawGenerations) {
-      return;
-    }
-
-    const sortedGenerations = generationSort(rawGenerations);
-    setGenerations(sortedGenerations);
-
-    const generationId = searchParams.get('generation-id');
-    const searchedGeneration = sortedGenerations.find(
-      (generation) => generation.generationId === Number(generationId),
-    );
-
-    setSelectedGeneration(searchedGeneration || sortedGenerations[0]);
-  }, [rawGenerations]);
 
   /**
    *
@@ -183,6 +149,42 @@ const GenerationDropBox = ({
       </ul>
     </DropDownList>
   );
+
+  /**
+   *
+   */
+  useEffect(() => {
+    window.addEventListener('mousedown', (e) => {
+      if (
+        generationDropBoxRef.current &&
+        !generationDropBoxRef.current.contains(e.target as Node) &&
+        isDropBoxOpen
+      ) {
+        handleDropDownChange();
+      }
+    });
+    return () => window.removeEventListener('mousedown', () => {});
+  }, [generationDropBoxRef, isDropBoxOpen]);
+
+  /**
+   *
+   */
+  useEffect(() => {
+    if (!rawGenerations) {
+      return;
+    }
+
+    const sortedGenerations = generationSort(rawGenerations);
+    setGenerations(sortedGenerations);
+
+    const generationId = searchParams.get('generation-id');
+    const searchedGeneration = sortedGenerations.find(
+      (generation) => generation.generationId === Number(generationId),
+    );
+
+    setSelectedGeneration(searchedGeneration || sortedGenerations[0]);
+    handleGenerationChange(searchedGeneration || sortedGenerations[0]);
+  }, [rawGenerations]);
 
   return (
     <Wrapper ref={generationDropBoxRef} $width={width}>
