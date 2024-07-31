@@ -4,7 +4,9 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import SessionCard, { IMAGE_WIDTH } from '@pages/Session/_SessionCard';
 import { v4 as uuidv4 } from 'uuid';
-import { CotatoSessionListResponse } from 'cotato-openapi-clients';
+import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
+import GenerationDropBox from '@components/_GenerationDropBox';
+import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 
 //
 //
@@ -12,6 +14,7 @@ import { CotatoSessionListResponse } from 'cotato-openapi-clients';
 
 const SessionHome = () => {
   const { data: sessions } = useSWR(`/v1/api/session?generationId=${1}`, fetcher);
+
 
   /**
    *
@@ -26,7 +29,12 @@ const SessionHome = () => {
     </SessionCardWrapper>
   );
 
-  return <Wrapper>{renderSessionCards()}</Wrapper>;
+  return (
+    <Wrapper>
+      <GenerationDropBox color={DropBoxColorEnum.BLUE} handleGenerationChange={() => {}} />
+      {renderSessionCards()}
+    </Wrapper>
+  );
 };
 
 //
@@ -47,7 +55,7 @@ const SessionCardWrapper = styled.div`
   gap: 4rem 2rem;
   place-items: center;
   width: 100%;
-  padding: 3.2rem 2.5rem;
+  padding: 3rem 0 1.6rem;
 `;
 
 export default SessionHome;

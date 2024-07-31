@@ -199,6 +199,7 @@ const GenerationDropBox = ({
 const Wrapper = styled.div<{ $width: string }>`
   position: relative;
   margin: ${({ theme }) => theme.size.md};
+  margin: 0.6rem;
   width: ${({ $width }) => $width};
 `;
 
