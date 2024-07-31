@@ -4,7 +4,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from '@components/Header';
 import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
-import SessionHome from '@pages/Session/SessionHome';
+import Session from '@pages/Session/_Session';
 import SignUp from '@pages/JoinUs/SignUp';
 import MyPage from '@pages/MyPage/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
