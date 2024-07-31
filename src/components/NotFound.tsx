@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ReactComponent as BittenPotato } from '@assets/potato_bitten.svg';
 
 const NotFound = () => {
   return (
     <Wrapper>
-      <img src="https://velog.velcdn.com/images/ea_st_ring/post/c5bc895f-888d-4a0f-8c72-b64300852286/image.svg" />
+      <StyledBittenPotato />
       <h1>요청하신 페이지를 찾을 수 없습니다.</h1>
       <button
         onClick={() => {
@@ -24,29 +25,40 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: rgba(255, 255, 255, 0);
+
   img {
     width: 60px;
   }
   h1 {
-    color: #bbb;
-    font-family: NanumSquareRound;
+    color: ${({ theme }) => theme.colors.gray80_2};
     font-size: 28px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
+    z-index: 100;
   }
   button {
     display: flex;
-    padding: 12px 32px;
+    padding: 16px 32px;
     justify-content: center;
     margin-top: 24px;
     font-size: 18px;
     align-items: center;
     gap: 10px;
     border-radius: 100px;
-    background-color: #1e1e1e;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.gray80_2};
+    background-color: ${({ theme }) => theme.colors.common.white};
     cursor: pointer;
+    border: 4px solid ${({ theme }) => theme.colors.primary100_1};
+    z-index: 100;
   }
+`;
+
+const StyledBittenPotato = styled(BittenPotato)`
+  z-index: 100;
+  width: 180px;
+  height: 140px;
+  margin-bottom: 16px;
 `;
 
 export default NotFound;

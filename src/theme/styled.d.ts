@@ -8,9 +8,6 @@ import { CotatoThemeType } from './theme';
 //   export interface DefaultTheme extends LegacyThemeType {}
 // }
 
-/**
- * Will be replaced this in v2.
- */
 declare module 'styled-components' {
   export interface DefaultTheme extends CotatoThemeType {}
 }

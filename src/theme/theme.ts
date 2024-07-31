@@ -243,7 +243,7 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
     primary5: '#FFFCF4',
     primary10: '#FFF9E6',
     primary20: '#FFF5D4',
-    primary30: CotatoLightTheme.colors.gray80,
+    primary30: CotatoLightTheme.colors.gray90,
     primary40: '#FFEBA3',
     primary50: '#FFE37D',
     primary60: '#FFDA58',

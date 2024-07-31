@@ -2,9 +2,9 @@ import React from 'react';
 import { ReactComponent as HomeTitleSvg } from '@assets/home_title.svg';
 import Fries from '@assets/fries.svg';
 import FriesHover from '@assets/fries_hover.svg';
-import Join from '@assets/join_us.svg';
-import JoinHover from '@assets/join_us_hover.svg';
-import JoinPressed from '@assets/join_us_pressed.svg';
+// import Join from '@assets/join_us.svg';
+// import JoinHover from '@assets/join_us_hover.svg';
+// import JoinPressed from '@assets/join_us_pressed.svg';
 import styled, { useTheme } from 'styled-components';
 import HomeFirstSectionCotato from './HomeFirstSectionCotato';
 import { media } from '@theme/media';
@@ -60,13 +60,13 @@ const HomeFirstSection = () => {
   /**
    *
    */
-  const renderJoinButton = () => {
-    return (
-      <StyledJoinDiv>
-        <StyledJoin />
-      </StyledJoinDiv>
-    );
-  };
+  // const renderJoinButton = () => {
+  //   return (
+  //     <StyledJoinDiv>
+  //       <StyledJoin />
+  //     </StyledJoinDiv>
+  //   );
+  // };
 
   return (
     <Wrapper>
@@ -74,7 +74,7 @@ const HomeFirstSection = () => {
       {renderSlogan()}
       {renderFry()}
       {renderCotato()}
-      {renderJoinButton()}
+      {/* {renderJoinButton()} */}
     </Wrapper>
   );
 };
@@ -89,12 +89,10 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   padding: 2rem 10rem;
-  margin-top: 6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  font-family: 'Ycomputer';
   ${media.laptop`
     padding: 2rem 5rem;
   `}
@@ -185,64 +183,64 @@ const StyledFries = styled.div`
   `}
 `;
 
-const StyledJoinDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: fit-content;
-  height: 100px;
-`;
+// const StyledJoinDiv = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: flex-start;
+//   width: fit-content;
+//   height: 100px;
+// `;
 
-const StyledJoin = styled.div`
-  width: 10rem;
-  height: 10rem;
-  background: url(${Join}) no-repeat;
-  background-size: contain;
-  background-position-y: bottom;
-  src: url(${Join});
-  transition: 50ms;
-  animation: anim__fries__default 0.5s ease 0.1s;
-  &:hover {
-    animation: anim__fries__hover 0.5s ease 0s;
-    width: 11.5rem;
-    transition: 0ms;
-    margin-top: 0.25rem;
-    height: 10rem;
-    background: url(${JoinHover}) no-repeat;
-    background-position-y: bottom;
-    background-size: contain;
-  }
-  &:active {
-    animation: anim__fries__default 0.5s ease 0.1s;
-    background: url(${JoinPressed}) no-repeat;
-    width: 10.25rem;
-    height: 10rem;
-    background-size: contain;
-    background-position-y: bottom;
-  }
+// const StyledJoin = styled.div`
+//   width: 10rem;
+//   height: 10rem;
+//   background: url(${Join}) no-repeat;
+//   background-size: contain;
+//   background-position-y: bottom;
+//   src: url(${Join});
+//   transition: 50ms;
+//   animation: anim__fries__default 0.5s ease 0.1s;
+//   &:hover {
+//     animation: anim__fries__hover 0.5s ease 0s;
+//     width: 11.5rem;
+//     transition: 0ms;
+//     margin-top: 0.25rem;
+//     height: 10rem;
+//     background: url(${JoinHover}) no-repeat;
+//     background-position-y: bottom;
+//     background-size: contain;
+//   }
+//   &:active {
+//     animation: anim__fries__default 0.5s ease 0.1s;
+//     background: url(${JoinPressed}) no-repeat;
+//     width: 10.25rem;
+//     height: 10rem;
+//     background-size: contain;
+//     background-position-y: bottom;
+//   }
 
-  ${media.landscape`
-    width: 10rem;
-    height: 8rem;
-    &:hover{
-      width: 11.25rem;
-      height: 8rem;
-    }
-    &:active{
-      width: 10rem;
-      height: 8rem;
-    }
-  `}
-  ${media.mobile`
-    width: 8rem;
-    height: 6rem;
-    &:hover{
-      width: 8.25rem;
-      height: 6rem;
-    }
-    &:active{
-      width: 8rem;
-      height: 6rem;
-    }
-  `}
-`;
+//   ${media.landscape`
+//     width: 10rem;
+//     height: 8rem;
+//     &:hover{
+//       width: 11.25rem;
+//       height: 8rem;
+//     }
+//     &:active{
+//       width: 10rem;
+//       height: 8rem;
+//     }
+//   `}
+//   ${media.mobile`
+//     width: 8rem;
+//     height: 6rem;
+//     &:hover{
+//       width: 8.25rem;
+//       height: 6rem;
+//     }
+//     &:active{
+//       width: 8rem;
+//       height: 6rem;
+//     }
+//   `}
+// `;
