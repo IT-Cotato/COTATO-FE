@@ -106,11 +106,18 @@ const GenerationDropBox = ({
   /**
    *
    */
+  const handleGenerationSelect = (generation: CotatoGenerationInfoResponse) => {
+    setSelectedGeneration(generation);
+    handleGenerationChange(generation);
+    setGenerationSearchParam(generation);
+  };
+
+  /**
+   *
+   */
   const handleGenerationClick = (generation: CotatoGenerationInfoResponse) => {
     handleDropDownChange();
-    handleGenerationChange(generation);
-    setSelectedGeneration(generation);
-    setGenerationSearchParam(generation);
+    handleGenerationSelect(generation);
   };
 
   /**
@@ -182,8 +189,7 @@ const GenerationDropBox = ({
       (generation) => generation.generationId === Number(generationId),
     );
 
-    setSelectedGeneration(searchedGeneration || sortedGenerations[0]);
-    handleGenerationChange(searchedGeneration || sortedGenerations[0]);
+    handleGenerationSelect(searchedGeneration || sortedGenerations[0]);
   }, [rawGenerations]);
 
   return (
