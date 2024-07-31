@@ -16,6 +16,10 @@ import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
 import SignUpSuccess from '@components/SignUpSuccess';
 import { media } from '@theme/media';
 
+//
+//
+//
+
 const SignUp = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -45,7 +49,10 @@ const SignUp = () => {
 
   const theme = useTheme();
 
-  const onChangeId = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   *
+   */
+  const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.target.value;
@@ -59,7 +66,10 @@ const SignUp = () => {
     }
   }, []);
 
-  const onChangePassword = useCallback(
+  /**
+   *
+   */
+  const handlePasswordChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const passwordLength = /^.{8,16}$/;
       const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
@@ -80,7 +90,10 @@ const SignUp = () => {
     [isPasswordLength, isPasswordRegex, passwordCheck],
   );
 
-  const onChangePasswordCheck = useCallback(
+  /**
+   *
+   */
+  const handlePasswordCheckChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const PasswordCheckCurrent = e.target.value;
       setPasswordCheck(PasswordCheckCurrent);
@@ -95,7 +108,10 @@ const SignUp = () => {
     [password],
   );
 
-  const onChangeName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   *
+   */
+  const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
     if (!e.target.value) {
       setNameMessage('필수 입력 항목입니다!');
@@ -106,7 +122,10 @@ const SignUp = () => {
     }
   }, []);
 
-  const onChangeTel = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   *
+   */
+  const handleTelChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const telRegex = /^010\d{4}\d{4}$/;
     const telCurrent = e.target.value;
     setTel(telCurrent);
@@ -123,7 +142,10 @@ const SignUp = () => {
     email: id,
   };
 
-  const onSendEmail = async () => {
+  /**
+   *
+   */
+  const handleEmailSend = async () => {
     if (isId) {
       alert('인증 메일이 발송되었습니다.');
     }
@@ -146,6 +168,9 @@ const SignUp = () => {
       });
   };
 
+  /**
+   *
+   */
   const handleEmailAuth = async () => {
     await api
       .get('/v1/api/auth/verification', {
@@ -168,11 +193,17 @@ const SignUp = () => {
       });
   };
 
-  const onChangeAuthNum = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   *
+   */
+  const handleAuthNumChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setAuthNum(e.target.value);
   }, []);
 
-  const onSubmit = useCallback(
+  /**
+   *
+   */
+  const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError) {
@@ -199,6 +230,9 @@ const SignUp = () => {
     [id, password, passwordCheck, name, tel, mismatchError, authNum],
   );
 
+  /**
+   *
+   */
   const renderErrorMsg = (errorMsg: string) => {
     return (
       <Error>
@@ -208,6 +242,9 @@ const SignUp = () => {
     );
   };
 
+  /**
+   *
+   */
   const PasswordValidation = () => {
     return (
       <ValidationSection>
@@ -223,13 +260,16 @@ const SignUp = () => {
     );
   };
 
+  /**
+   *
+   */
   const renderSignUpForm = () => {
     if (isSuccess) return;
 
     return (
       <FormDiv>
         <BackImg src={WelcomeImg} />
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Label>
             <span>이름</span>
             <InputDiv>
@@ -240,7 +280,7 @@ const SignUp = () => {
                 name="name"
                 placeholder="이름을 입력해주세요."
                 value={name}
-                onChange={onChangeName}
+                onChange={handleNameChange}
               />
             </InputDiv>
           </Label>
@@ -254,9 +294,9 @@ const SignUp = () => {
                 name="id"
                 placeholder="이메일 형식으로 작성해주세요."
                 value={id}
-                onChange={onChangeId}
+                onChange={handleIdChange}
               />
-              <AuthButton type="button" onClick={onSendEmail} disable={isAuthorized}>
+              <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
                 인증 메일 발송
               </AuthButton>
             </InputDiv>
@@ -268,7 +308,7 @@ const SignUp = () => {
                 name="id"
                 placeholder="발송된 이메일의 인증번호를 입력해주세요."
                 value={authNum}
-                onChange={onChangeAuthNum}
+                onChange={handleAuthNumChange}
               />
               <AuthButton type="button" onClick={handleEmailAuth} disable={isAuthorized}>
                 인증하기
@@ -285,7 +325,7 @@ const SignUp = () => {
                 name="tel"
                 placeholder="'-'를 제외한 숫자만 입력해주세요."
                 value={tel}
-                onChange={onChangeTel}
+                onChange={handleTelChange}
               />
             </InputDiv>
             {!isTel && telMessage && renderErrorMsg(telMessage)}
@@ -300,7 +340,7 @@ const SignUp = () => {
                 name="password"
                 placeholder="비밀번호를 입력해주세요."
                 value={password}
-                onChange={onChangePassword}
+                onChange={handlePasswordChange}
               />
               <Eyes
                 src={isPasswordVisible ? eyesInvisibleIcon : eyesDefaultIcon}
@@ -320,7 +360,7 @@ const SignUp = () => {
                 name="passwordCheck"
                 placeholder="비밀번호를 한 번 더 입력해주세요."
                 value={passwordCheck}
-                onChange={onChangePasswordCheck}
+                onChange={handlePasswordCheckChange}
               />
             </InputDiv>
             {mismatchError && renderErrorMsg(passwordCheckMessage)}
@@ -333,6 +373,9 @@ const SignUp = () => {
     );
   };
 
+  /**
+   *
+   */
   const renderSignUpSuccess = () => {
     if (!isSuccess) return;
 
@@ -347,7 +390,9 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+//
+//
+//
 
 const Wrapper = styled.div`
   display: flex;
@@ -505,3 +550,5 @@ const ValidationDiv = styled.div<{ color: boolean }>`
 const ButtonDiv = styled.div`
   margin-top: 10rem;
 `;
+
+export default SignUp;
