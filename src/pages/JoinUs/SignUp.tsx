@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
-import SignUpModal from '@components/SignUpModal';
 import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
 import WelcomeImg from '@assets/login_welcome_img.svg';
@@ -13,14 +12,11 @@ import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
 import eyesDefaultIcon from '@assets/sign_up_eyes_default_icon.svg';
 import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
-import { set } from 'date-fns';
 import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
 import SignUpSuccess from '@components/SignUpSuccess';
 import { media } from '@theme/media';
 
 const SignUp = () => {
-  const navigate = useNavigate();
-
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -31,7 +27,6 @@ const SignUp = () => {
 
   // 오류 메시지
   const [idMessage, setIdMessage] = useState('');
-  const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordCheckMessage, setPasswordCheckMessage] = useState('');
   const [nameMessage, setNameMessage] = useState('');
   const [telMessage, setTelMessage] = useState('');
@@ -41,7 +36,6 @@ const SignUp = () => {
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordLength, setIsPasswordLength] = useState(false);
   const [isPasswordRegex, setIsPasswordRegex] = useState(false);
-  const [isPasswordCheck, setIsPasswordCheck] = useState(false);
   const [isName, setIsName] = useState(false);
   const [isTel, setIsTel] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -128,6 +122,7 @@ const SignUp = () => {
   const emailData = {
     email: id,
   };
+
   const onSendEmail = async () => {
     if (isId) {
       alert('인증 메일이 발송되었습니다.');
@@ -188,7 +183,7 @@ const SignUp = () => {
             name: name,
             phoneNumber: tel,
           })
-          .then((res) => {
+          .then(() => {
             setIsSuccess(true);
           })
           .catch((err) => {
@@ -343,10 +338,6 @@ const SignUp = () => {
 
     return <SignUpSuccess />;
   };
-
-  useEffect(() => {
-    console.log(password, passwordCheck, password === passwordCheck, mismatchError);
-  }, [password, passwordCheck]);
 
   return (
     <Wrapper>
