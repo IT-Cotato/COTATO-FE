@@ -176,9 +176,7 @@ const SignUp = () => {
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(id, password, passwordCheck, name, tel);
-      if (!mismatchError) {
-        console.log('서버로 회원가입하기');
+      if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError) {
         api
           .post('/v1/api/auth/join', {
             email: id,
@@ -187,10 +185,7 @@ const SignUp = () => {
             phoneNumber: tel,
           })
           .then((res) => {
-            console.log(res);
-            if (isId && isPassword && !mismatchError && isName && isTel && isAuthorized) {
-              setIsModalOpen(true);
-            }
+            setIsModalOpen(true);
           })
           .catch((err) => {
             console.log(err);
