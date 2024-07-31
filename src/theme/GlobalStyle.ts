@@ -1,4 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
+import { device } from './media';
+import { HEADER_HEIGHT } from './constants/constants';
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -8,5 +10,9 @@ export const GlobalStyle = createGlobalStyle`
   
   body {
     font-family: NanumSquareRound;
+    // global layout
+    @media screen and (min-width: ${device.tablet}) {
+      margin-top: ${HEADER_HEIGHT};
+    }
   }
 `;

@@ -10,7 +10,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import HomeFirstSection from './FirstSection/HomeFirstSection';
 import HomeSecondSection from './SecondSection/HomeSecondSection';
 import HomeThirdSection from './ThirdSection/HomeThirdSection';
-import HomeBackgroundSvgComponent from './HomeBackgroundSvgComponent';
 import Footer from '@components/Footer';
 import { device } from '@theme/media';
 
@@ -43,7 +42,6 @@ const HomeSlide = () => {
         mousewheel={MOUSE_WHEEL_OPTION}
         autoHeight={true}
       >
-        <HomeBackgroundSvgComponent />
         {/* First Section */}
         <StyledSwiperSlide>
           <HomeFirstSection />
