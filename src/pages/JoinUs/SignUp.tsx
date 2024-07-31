@@ -14,6 +14,7 @@ import eyesDefaultIcon from '@assets/sign_up_eyes_default_icon.svg';
 import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import { set } from 'date-fns';
+import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -80,13 +81,20 @@ const SignUp = () => {
       }
       console.log(isPasswordLength, isPasswordRegex);
     },
-    [isPasswordLength, isPasswordRegex],
+    [isPasswordLength, isPasswordRegex, passwordCheck],
   );
 
   const onChangePasswordCheck = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value !== password);
+      const PasswordCheckCurrent = e.target.value;
+      setPasswordCheck(PasswordCheckCurrent);
+      if (PasswordCheckCurrent !== password) {
+        setMismatchError(true);
+        setPasswordCheckMessage('비밀번호가 일치하지 않습니다.');
+      } else {
+        setMismatchError(false);
+        setPasswordCheckMessage('');
+      }
     },
     [password],
   );
@@ -107,7 +115,7 @@ const SignUp = () => {
     const telCurrent = e.target.value;
     setTel(telCurrent);
     if (!telRegex.test(telCurrent)) {
-      setTelMessage('올바른 전화번호 형식이 아닙니다.');
+      setTelMessage('잘못된 전화번호 형식입니다.');
       setIsTel(false);
     } else {
       setTelMessage('');
@@ -198,9 +206,18 @@ const SignUp = () => {
     [id, password, passwordCheck, name, tel, mismatchError, authNum],
   );
 
+  const renderErrorMsg = (errorMsg: string) => {
+    return (
+      <Error>
+        <img src={unvalidIcon} alt="unvalid icon" />
+        <span>{errorMsg}</span>
+      </Error>
+    );
+  };
+
   useEffect(() => {
-    console.log('야', isPasswordLength, isPasswordRegex);
-  }, [isPasswordLength, isPasswordRegex]);
+    console.log(password, passwordCheck, password === passwordCheck, mismatchError);
+  }, [password, passwordCheck]);
 
   return (
     <Wrapper>
@@ -220,7 +237,6 @@ const SignUp = () => {
                 onChange={onChangeName}
               />
             </InputDiv>
-            {!isName && <Error>{nameMessage}</Error>}
           </Label>
           <Label>
             <span>아이디</span>
@@ -238,7 +254,7 @@ const SignUp = () => {
                 인증 메일 발송
               </AuthButton>
             </InputDiv>
-            {!isId && <Error>{idMessage}</Error>}
+            {!isId && idMessage && renderErrorMsg(idMessage)}
             <InputDiv>
               <InputBox
                 type="text"
@@ -266,7 +282,7 @@ const SignUp = () => {
                 onChange={onChangeTel}
               />
             </InputDiv>
-            {!isTel && <Error>{telMessage}</Error>}
+            {!isTel && telMessage && renderErrorMsg(telMessage)}
           </Label>
           <Label>
             <span>비밀번호</span>
@@ -296,7 +312,6 @@ const SignUp = () => {
                 <span>영문, 숫자, 특수문자 입력</span>
               </ValidationDiv>
             </ValidationSection>
-            {!isPassword && <Error>{passwordMessage}</Error>}
           </Label>
           <Label>
             <span>비밀번호 확인</span>
@@ -311,7 +326,7 @@ const SignUp = () => {
                 onChange={onChangePasswordCheck}
               />
             </InputDiv>
-            {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
+            {mismatchError && renderErrorMsg(passwordCheckMessage)}
           </Label>
           <ButtonDiv>
             <PixelButton BtnTextImg={ButtonText} />
@@ -372,12 +387,11 @@ const InputDiv = styled.div`
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.colors.primary90} !important;
   background: ${({ theme }) => theme.colors.common.white};
-  margin-bottom: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 512px;
-  margin-top: 4px;
+  margin: 0.5rem 0;
   padding: 0 1rem;
   position: relative;
 
@@ -443,11 +457,14 @@ const Eyes = styled.img`
 `;
 
 const Error = styled.p`
-  color: #eb5353;
-  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.secondary80};
+  font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: 500;
   margin: 0;
-  padding-left: 4px;
+  padding-left: 0.8rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const ValidationSection = styled.div`
