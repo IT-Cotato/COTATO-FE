@@ -164,8 +164,10 @@ const SignUp = () => {
         setIsAuthorized(true);
       })
       .catch((err) => {
-        console.log(err);
-        alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.'); // 10분 지난 경우 따로 처리?
+        const errorCode = err.response.data.code;
+        if (errorCode === 'A-101') alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
+        if (errorCode === 'A-102') alert('인증번호가 만료되었습니다. 다시 인증해주세요.');
+        if (errorCode === 'A-202') alert('인증번호 발급에 실패하였습니다. 다시 시도해주세요.');
       });
   };
 
