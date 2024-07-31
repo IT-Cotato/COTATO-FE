@@ -1,10 +1,13 @@
-import { Multiples, ShortQuizzes } from '@/typing/db';
 import React from 'react';
 import styled from 'styled-components';
-import CSAdminUploadSlides from './CSAdminUploadSlides';
+import CSAdminUploadSlides, { QuizType } from './CSAdminUploadSlides';
 import CSAdminUploadMobileSlides from './CSAdminUploadMobileSlides';
 import CSAdminUploadEditQuiz from './CSAdminUploadEditQuiz';
 import CSAdminUploadQuizInfo from './CSAdminUploadQuizInfo';
+
+//
+//
+//
 
 interface CSAdminUploadContentProps {
   quiz: QuizType[];
@@ -14,7 +17,9 @@ interface CSAdminUploadContentProps {
   educationId: number;
 }
 
-type QuizType = Multiples | ShortQuizzes;
+//
+//
+//
 
 const CSAdminUploadContent = ({
   quiz,

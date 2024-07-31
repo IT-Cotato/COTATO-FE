@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import styled from 'styled-components';
-import arrowDown from '@assets/arrow_down.svg';
 
 const HomeDropDownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);

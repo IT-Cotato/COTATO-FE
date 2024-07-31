@@ -4,23 +4,22 @@ import SessionContent from '@pages/Session/SessionContent';
 import SessionModal from '@pages/Session/SessionModal/SessionModal';
 import { ReactComponent as AddIcon } from '@assets/add_icon.svg';
 import { ReactComponent as SettingIcon } from '@assets/setting_icon.svg';
-import GenerationSelect from '@components/GenerationSelect';
-import { IGeneration, ISession } from '@/typing/db';
+import { ISession } from '@/typing/db';
 import api from '@/api/api';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import { useNavigate } from 'react-router-dom';
+import GenerationDropBox from '@components/_GenerationDropBox';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 
 const SessionHome = () => {
-  const { data: user, error } = useSWR('/v1/api/member/info', fetcher);
+  const { data: user } = useSWR('/v1/api/member/info', fetcher);
 
   const [sessions, setSessions] = useState<undefined | ISession[]>();
   const [isSessionModalOpen, setIsSessionModalOpen] = useState(false);
   const [modifySession, setModifySession] = useState<undefined | ISession>();
   const [lastWeek, setLastWeek] = useState(-1);
-  const [selectedGeneration, setSelectedGeneration] = useState<IGeneration | undefined>();
-
-  const navigate = useNavigate();
+  const [selectedGeneration] = useState<CotatoGenerationInfoResponse>();
 
   useEffect(() => {
     if (sessions && sessions.length > 0) {
@@ -41,17 +40,6 @@ const SessionHome = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  const onChangeGeneration = useCallback(
-    (generation: IGeneration | undefined) => {
-      setSelectedGeneration(generation);
-
-      if (generation) {
-        fetchSessions(generation.generationId);
-      }
-    },
-    [selectedGeneration],
-  );
-
   const onClickAddButton = useCallback(() => {
     setModifySession(undefined);
     setIsSessionModalOpen(true);
@@ -66,20 +54,13 @@ const SessionHome = () => {
     setIsSessionModalOpen(false);
   }, []);
 
-  if (error || user?.role === 'GENERAL') {
-    navigate('/');
-  }
-
   return (
     <>
       <FlexBox>
         <SessionWrapper>
           <SessionHeader>세션 기록</SessionHeader>
           <SessionSetting>
-            <GenerationSelect
-              onChangeGeneration={onChangeGeneration}
-              selectedGeneration={selectedGeneration}
-            />
+            <GenerationDropBox handleGenerationChange={() => {}} color={DropBoxColorEnum.BLUE} />
             {user?.role === 'ADMIN' && (
               <ButtonWrapper>
                 <AddIcon onClick={onClickAddButton} />
@@ -98,7 +79,6 @@ const SessionHome = () => {
                   key={session.sessionId}
                   session={session}
                   handleModifyButton={handleModifyButton}
-                  sessionCount={selectedGeneration?.sessionCount}
                 />
               ))
             )}
@@ -140,9 +120,7 @@ const SessionWrapper = styled.div`
 `;
 
 const SessionHeader = styled.h1`
-  margin: 144px 0 100px;
-
-  color: #1d1d1d;
+  color: ${({ theme }) => theme.colors.common.black};
   font-family: NanumSquareRound;
   font-size: 2.25rem;
   font-style: normal;
