@@ -93,7 +93,6 @@ const GenerationDropBox = ({
   const setGenerationSearchParam = (generation: CotatoGenerationInfoResponse) => {
     if (generation?.generationId) {
       setSearchParams({ 'generation-id': generation.generationId.toString() });
-      handleGenerationChange(generation);
     }
   };
 
@@ -110,6 +109,7 @@ const GenerationDropBox = ({
   const handleGenerationClick = (generation: CotatoGenerationInfoResponse) => {
     handleDropDownChange();
     handleGenerationChange(generation);
+    setSelectedGeneration(generation);
     setGenerationSearchParam(generation);
   };
 

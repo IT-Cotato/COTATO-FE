@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -13,8 +13,16 @@ import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 //
 
 const SessionHome = () => {
-  const { data: sessions } = useSWR(`/v1/api/session?generationId=${1}`, fetcher);
+  const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
 
+  const { data: sessions } = useSWR(
+    `/v1/api/session?generationId=${selectedGeneration?.generationId}`,
+    fetcher,
+  );
+
+  const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
+    setSelectedGeneration(generation);
+  };
 
   /**
    *
@@ -31,7 +39,10 @@ const SessionHome = () => {
 
   return (
     <Wrapper>
-      <GenerationDropBox color={DropBoxColorEnum.BLUE} handleGenerationChange={() => {}} />
+      <GenerationDropBox
+        color={DropBoxColorEnum.BLUE}
+        handleGenerationChange={handleGenerationChange}
+      />
       {renderSessionCards()}
     </Wrapper>
   );
