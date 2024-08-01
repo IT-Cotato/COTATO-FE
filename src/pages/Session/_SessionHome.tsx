@@ -77,7 +77,7 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleSessoinAdd = (session: SessionListInfo) => {
+  const handleSessionAdd = (session: SessionListInfo) => {
     const formData = new FormData();
     formData.append('generationId', '1');
     formData.append('title', session.title || '');
@@ -129,7 +129,6 @@ const SessionHome = () => {
       .catch((err) => console.log(err));
   };
 
-  console.log('sessions', sessions);
   const renderSessionCards = () => (
     <SessionCardWrapper>{sessions?.map((session: SessionListInfo) => <></>)}</SessionCardWrapper>
   );
@@ -147,7 +146,7 @@ const SessionHome = () => {
         open={isAddModalOpen}
         handleClose={() => setIsAddModalOpen(false)}
         headerText="세션 추가"
-        handleUpload={handleSessoinAdd}
+        handleUpload={handleSessionAdd}
         lastSessionNumber={sessions?.length}
       />
       <SessionUploadModal

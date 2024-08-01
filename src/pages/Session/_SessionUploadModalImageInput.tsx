@@ -237,7 +237,7 @@ const SessionUploadModalImageInput = ({
     const dragableImages = [...sortedImageList];
     dragableImages.push({ imageId: -1 });
 
-    const getdragableThumnail = (image: SessionListImageInfo, index: number) => (
+    const getDraggableThumnail = (image: SessionListImageInfo, index: number) => (
       <Draggable
         key={image.imageUrl || index}
         index={index}
@@ -264,7 +264,7 @@ const SessionUploadModalImageInput = ({
           <Droppable droppableId="droppable-image" direction="horizontal">
             {(propvided) => (
               <ImageDndContainer ref={propvided.innerRef} {...propvided.droppableProps}>
-                {dragableImages.map((image, index) => getdragableThumnail(image, index))}
+                {dragableImages.map((image, index) => getDraggableThumnail(image, index))}
                 {propvided.placeholder}
               </ImageDndContainer>
             )}
