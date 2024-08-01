@@ -8,6 +8,7 @@ import { ReactComponent as ImageCloseIcon } from '@assets/close_dotted.svg';
 import { toast, ToastContainer } from 'react-toastify';
 import imageSortByOrder from '@utils/imageSortByOrder';
 import { produce } from 'immer';
+import { CotatoSessionListImageInfoResponse } from 'cotato-openapi-clients';
 
 //
 //
@@ -44,6 +45,24 @@ const SessionUploadModalImageInput = ({
   const [isImageLoading, setIsImageLoading] = useState(selectedImage?.imageUrl ? true : false);
 
   const theme = useTheme();
+
+  /**
+   * function for selecting image after image remove
+   */
+  const selectImageAfterImageRemove = (
+    newImageList: readonly CotatoSessionListImageInfoResponse[],
+    index: number,
+  ) => {
+    if (index === -1) {
+      return;
+    } else if (index === newImageList.length) {
+      setSelectedImage(newImageList[newImageList.length - 1]);
+    } else if (index < newImageList.length) {
+      setSelectedImage(newImageList[index]);
+    } else {
+      setSelectedImage(null);
+    }
+  };
 
   /**
    * Callback function for image click event
@@ -174,15 +193,7 @@ const SessionUploadModalImageInput = ({
       URL.revokeObjectURL(selectedImage.imageUrl);
     }
 
-    if (index === -1) {
-      return;
-    } else if (index === newImageList.length) {
-      setSelectedImage(newImageList[newImageList.length - 1]);
-    } else if (index < newImageList.length) {
-      setSelectedImage(newImageList[index]);
-    } else {
-      setSelectedImage(null);
-    }
+    selectImageAfterImageRemove(newImageList, index);
 
     handleImageListChange(newImageList);
     setSortedImageList(newImageList);
