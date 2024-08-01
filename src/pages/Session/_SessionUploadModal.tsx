@@ -258,12 +258,18 @@ const SessionUploadModal = ({
     );
   };
 
+  /**
+   *
+   */
   const renderUplaodButton = () => (
     <UploadButtonWrapper>
       <button onClick={() => handleUpload(session)}>업로드</button>
     </UploadButtonWrapper>
   );
 
+  /**
+   * Set default session state
+   */
   useEffect(() => {
     if (sessionInfo) {
       setSession(sessionInfo);

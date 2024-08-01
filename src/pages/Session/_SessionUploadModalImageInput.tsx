@@ -282,10 +282,16 @@ const SessionUploadModalImageInput = ({
     );
   };
 
+  /**
+   * If selected image is changed, set isImageLoading while loading image
+   */
   useEffect(() => {
     setIsImageLoading(selectedImage?.imageUrl ? true : false);
   }, [selectedImage]);
 
+  /**
+   * If imageList is changed, set sortedImageList and selectedImage
+   */
   useEffect(() => {
     if (imageList.length > 0) {
       if (sortedImageList.length === 0) {
@@ -298,6 +304,9 @@ const SessionUploadModalImageInput = ({
     }
   }, [imageList]);
 
+  /**
+   * Revoke object URL when component is unmounted
+   */
   useEffect(() => {
     return () => {
       imageList.forEach((image) => {
