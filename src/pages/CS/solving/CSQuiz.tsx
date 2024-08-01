@@ -51,6 +51,10 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   useEffect(() => {
     initializeWebSocket();
+
+    return () => {
+      webSocket.current?.close(4000, 'disconnect websocket on purpose');
+    };
   }, []);
 
   // webSocket 초기 연결 및 메시지 수신
@@ -175,12 +179,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       }
     });
   };
-
-  useEffect(() => {
-    return () => {
-      webSocket.current?.close(4000, 'disconnect websocket on purpose');
-    };
-  });
 
   return (
     <Wrapper>
