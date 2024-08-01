@@ -471,6 +471,7 @@ const InputBox = styled.input`
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
   font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.common.black};
   &:focus {
     outline: none;
   }
