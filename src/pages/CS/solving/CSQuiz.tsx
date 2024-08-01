@@ -103,8 +103,9 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const reconnectWebSocket = () => {
     console.log('WebSocket disconnected. Attempting to reconnect...');
     setTimeout(() => {
-      connectWebSocket();
-      receiveMessage();
+      initializeWebSocket();
+      // connectWebSocket();
+      // receiveMessage();
     }, 1000);
   };
 
