@@ -20,6 +20,7 @@ interface SessionContentsProps {
    * - **md** : medium
    */
   size: string;
+  isActive?: boolean;
 }
 
 interface ContentProps {
@@ -38,7 +39,7 @@ interface ContentProps {
  * @param contents session contents
  * @param size size of the icon (default : sm)
  */
-const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
+const SessionContents = ({ contents, size = 'sm', isActive }: SessionContentsProps) => {
   const theme = useTheme();
 
   const { itIssue, networking, csEducation, devTalk } = contents;
@@ -50,13 +51,13 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
     if (size === 'sm') {
       return {
         fontSize: theme.fontSize.xs,
-        padding: `${theme.size.xs} ${theme.size.lg}`,
+        padding: `0.2rem ${theme.size.lg}`,
         borderRadius: '5rem',
       };
     } else if (size === 'md') {
       return {
         fontSize: theme.fontSize.sm,
-        padding: `${theme.size.sm} ${theme.size.lg}`,
+        padding: `0.4rem ${theme.size.lg}`,
         borderRadius: '6rem',
       };
     }
@@ -68,13 +69,24 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
     };
   };
 
+  /**
+   *
+   */
+  const getContentColor = (color: string) => {
+    if (isActive === false) {
+      return theme.colors.gray30;
+    }
+
+    return color;
+  };
+
   const { fontSize, padding, borderRadius } = getContentStyle();
 
   return (
     <>
       {csEducation === SessionContentsCsEducation.ON && (
         <Content
-          $color={theme.colors.primary100_1}
+          $color={getContentColor(theme.colors.primary100_1)}
           $fontSize={fontSize}
           $padding={padding}
           $borderRadius={borderRadius}
@@ -84,7 +96,7 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
       )}
       {itIssue === SessionContentsItIssue.ON && (
         <Content
-          $color={theme.colors.sub2[80]}
+          $color={getContentColor(theme.colors.sub2[80])}
           $fontSize={fontSize}
           $padding={padding}
           $borderRadius={borderRadius}
@@ -94,7 +106,7 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
       )}
       {networking === SessionContentsNetworking.ON && (
         <Content
-          $color={theme.colors.sub3[60]}
+          $color={getContentColor(theme.colors.sub3[60])}
           $fontSize={fontSize}
           $padding={padding}
           $borderRadius={borderRadius}
@@ -104,7 +116,7 @@ const SessionContents = ({ contents, size = 'sm' }: SessionContentsProps) => {
       )}
       {devTalk === SessionContentsDevTalk.ON && (
         <Content
-          $color={theme.colors.gray80}
+          $color={getContentColor(theme.colors.gray80)}
           $fontSize={fontSize}
           $padding={padding}
           $borderRadius={borderRadius}
