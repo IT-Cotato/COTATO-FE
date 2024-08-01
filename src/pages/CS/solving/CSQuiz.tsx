@@ -167,6 +167,12 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     });
   };
 
+  useEffect(() => {
+    return () => {
+      webSocket.current?.close();
+    };
+  })
+
   return (
     <Wrapper>
       <Waiting>
