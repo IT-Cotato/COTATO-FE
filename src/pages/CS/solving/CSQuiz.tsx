@@ -171,7 +171,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     return () => {
       webSocket.current?.close();
     };
-  })
+  });
 
   return (
     <Wrapper>
