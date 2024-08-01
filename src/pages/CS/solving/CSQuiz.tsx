@@ -50,8 +50,8 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const educationId = { ...location.state };
 
   useEffect(() => {
-    initializeWebSocket(); // 문제 바뀔 때마다 WebSocket 갱신
-  }, [message.quizId]);
+    initializeWebSocket();
+  }, []);
 
   // webSocket 초기 연결 및 메시지 수신
   const initializeWebSocket = async () => {
@@ -89,6 +89,10 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     };
     webSocket.current.onerror = (error) => {
       console.log(error);
+    };
+    webSocket.current.onclose = () => {
+      console.log('WebSocket disconnected. Attempting to reconnect...');
+      connectWebSocket();
     };
   };
 
