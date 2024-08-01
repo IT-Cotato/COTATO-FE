@@ -90,9 +90,9 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     webSocket.current.onerror = (error) => {
       console.log(error);
     };
-    webSocket.current.onclose = (code: any) => {
-      console.log(code);
-      if (code === 4000) {
+    webSocket.current.onclose = (event: any) => {
+      console.log(event);
+      if (event.code === 4000) {
         return;
       } else {
         reconnectWebSocket();
