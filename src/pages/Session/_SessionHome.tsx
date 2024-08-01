@@ -135,10 +135,6 @@ const StyledSwiper = styled(Swiper)`
   justify-content: center;
   width: 100%;
   padding: 2rem 0 5.4rem;
-  height: auto;
-
-  > .swiper-wrapper {
-  }
 
   > .swiper-pagination {
     bottom: 3.4rem;
@@ -173,9 +169,6 @@ const StyledSwiper = styled(Swiper)`
 `;
 
 const StyledSwiperSlide = styled(SwiperSlide)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: auto !important;
 `;
 
