@@ -51,6 +51,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   useEffect(() => {
     initializeWebSocket();
+    console.log('test')
   }, []);
 
   // webSocket 초기 연결 및 메시지 수신
@@ -95,6 +96,10 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       connectWebSocket();
     };
   };
+
+  const reconnectWebSocket = () => {
+    
+  }
 
   // WebSocket 메시지 수신
   const receiveMessage = () => {
