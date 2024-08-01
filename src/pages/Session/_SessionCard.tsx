@@ -150,6 +150,7 @@ const SessionContentsWrapper = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.size.sm};
   padding: ${({ theme }) => theme.size.md};
+  height: 3rem;
 `;
 
 export default SessionCard;
