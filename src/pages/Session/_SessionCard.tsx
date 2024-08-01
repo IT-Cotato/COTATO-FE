@@ -137,6 +137,7 @@ const CardHeader = styled.div`
 
   > h3 {
     margin: 0;
+    color: ${({ theme }) => theme.colors.gray80_1};
     font-family: Ycomputer;
     font-size: ${({ theme }) => theme.fontSize.xl};
     font-weight: 400;
