@@ -21,6 +21,7 @@ type MessageType = {
 
 const CSQuiz: React.FC<WaitingProps> = () => {
   const webSocket = React.useRef<WebSocket | undefined>(undefined);
+  const [isConnected, setIsConnected] = useState(false);
 
   const [message, setMessage] = useState<MessageType>({
     status: null,
@@ -51,7 +52,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   useEffect(() => {
     initializeWebSocket();
-    console.log('test')
   }, []);
 
   // webSocket 초기 연결 및 메시지 수신
@@ -87,19 +87,23 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     );
     webSocket.current.onopen = () => {
       console.log('WebSocket connected');
+      setIsConnected(true);
     };
     webSocket.current.onerror = (error) => {
       console.log(error);
     };
     webSocket.current.onclose = () => {
-      console.log('WebSocket disconnected. Attempting to reconnect...');
-      connectWebSocket();
+      setIsConnected(false);
     };
   };
 
   const reconnectWebSocket = () => {
-    
-  }
+    if (!isConnected) {
+      console.log('WebSocket disconnected. Attempting to reconnect...');
+      alert('서버와의 연결을 다시 시도합니다...');
+      connectWebSocket();
+    }
+  };
 
   // WebSocket 메시지 수신
   const receiveMessage = () => {
@@ -167,6 +171,10 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       }
     });
   };
+
+  useEffect(() => {
+    reconnectWebSocket();
+  }, [isConnected]);
 
   return (
     <Wrapper>
