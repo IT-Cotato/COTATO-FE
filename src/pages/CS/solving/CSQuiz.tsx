@@ -90,8 +90,13 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     webSocket.current.onerror = (error) => {
       console.log(error);
     };
-    webSocket.current.onclose = () => {
-      reconnectWebSocket();
+    webSocket.current.onclose = (code: any) => {
+      console.log(code);
+      if (code === 4000) {
+        return;
+      } else {
+        reconnectWebSocket();
+      }
     };
   };
 
@@ -169,7 +174,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   useEffect(() => {
     return () => {
-      webSocket.current?.close();
+      webSocket.current?.close(4000, 'disconnect websocket on purpose');
     };
   });
 
