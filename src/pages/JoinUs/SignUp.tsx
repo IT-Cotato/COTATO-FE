@@ -31,6 +31,7 @@ const SignUp = () => {
   // 오류 메시지
   const [idMessage, setIdMessage] = useState('');
   const [passwordCheckMessage, setPasswordCheckMessage] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [nameMessage, setNameMessage] = useState('');
   const [telMessage, setTelMessage] = useState('');
 
@@ -84,7 +85,7 @@ const SignUp = () => {
       } else {
         setIsPasswordRegex(false);
       }
-      console.log(isPasswordLength, isPasswordRegex);
+      if (passwordLength && passwordRegex) setIsPassword(true);
     },
     [isPasswordLength, isPasswordRegex, passwordCheck],
   );
@@ -154,11 +155,8 @@ const SignUp = () => {
           type: 'sign-up',
         },
       })
-      .then((res) => {
-        console.log(res);
-      })
+      .then(() => {})
       .catch((err) => {
-        console.log(err);
         if (err.response.status === 409) {
           alert('이미 가입된 이메일입니다.');
         } else if (err.response.status === 400) {
@@ -179,12 +177,12 @@ const SignUp = () => {
           type: 'sign-up',
         },
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         alert('이메일 인증이 완료되었습니다.');
         setIsAuthorized(true);
       })
       .catch((err) => {
+        setAuthNum('');
         const errorCode = err.response.data.code;
         if (errorCode === 'A-101') alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
         if (errorCode === 'A-102') alert('인증번호가 만료되었습니다. 다시 인증해주세요.');
@@ -217,10 +215,9 @@ const SignUp = () => {
             setIsSuccess(true);
           })
           .catch((err) => {
-            console.log(err);
-            if (err.response.data.message === '존재하는 전화번호입니다.') {
-              alert('이미 가입된 전화번호입니다.');
-            }
+            const errorCode = err.response.data.code;
+            if (errorCode === 'A-302') alert('이미 가입된 전화번호입니다.');
+            if (errorCode === 'A-401') alert('이메일 인증을 완료해주세요.');
           });
       } else {
         alert('입력값을 확인해주세요.');
