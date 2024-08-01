@@ -87,11 +87,6 @@ const SessionUploadModalImageInput = ({
       try {
         const responses = await Promise.all(requests);
         responses.forEach((response) => {
-          // const newImage = {
-          //   imageId: response.data.imageId,
-          //   imageUrl: response.data.imageUrl,
-          //   order: response.data.order,
-          // };
           const newImage = { ...response.data };
 
           newImageList = produce(newImageList, (draft) => {
