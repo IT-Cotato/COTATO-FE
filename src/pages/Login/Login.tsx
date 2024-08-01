@@ -3,9 +3,6 @@ import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import idIcon from '@assets/login_id_icon.svg';
 import passwordIcon from '@assets/login_pw_icon.svg';
-import btnDefault from '@assets/login_btn_default.svg';
-import btnHover from '@assets/login_btn_hover.svg';
-import btnClicked from '@assets/login_btn_clicked.svg';
 import line from '@assets/login_line.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '@/api/api';
@@ -14,14 +11,8 @@ import fetcher from '@utils/fetcher';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import LoginSuccess from '@components/LoginSuccess';
-import PixelButton from '@components/PixelButton';
+import CotatoPixelButton from '@components/CotatoPixelButton';
 import { ReactComponent as ButtonText } from '@assets/login_btn_text.svg';
-
-//
-//
-//
-
-type btnStateType = 'default' | 'hover' | 'clicked';
 
 //
 //
@@ -126,7 +117,7 @@ const Login = () => {
               />
             </InputBox>
           </InputContainer>
-          <PixelButton BtnTextImg={ButtonText} />
+          <CotatoPixelButton BtnTextImg={ButtonText} />
         </Form>
       </>
     );

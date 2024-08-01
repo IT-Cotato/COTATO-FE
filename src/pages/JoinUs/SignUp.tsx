@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import { CotatoThemeType } from '@theme/theme';
 import userIcon from '@assets/sign_up_user_icon.svg';
 import phoneIcon from '@assets/sign_up_phone_icon.svg';
 import pwIcon from '@assets/sign_up_pw_icon.svg';
-import PixelButton from '@components/PixelButton';
+import CotatoPixelButton from '@components/CotatoPixelButton';
 import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
 import eyesDefaultIcon from '@assets/sign_up_eyes_default_icon.svg';
 import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
@@ -366,7 +365,7 @@ const SignUp = () => {
             {mismatchError && renderErrorMsg(passwordCheckMessage)}
           </Label>
           <ButtonDiv>
-            <PixelButton BtnTextImg={ButtonText} />
+            <CotatoPixelButton BtnTextImg={ButtonText} />
           </ButtonDiv>
         </Form>
       </FormDiv>
