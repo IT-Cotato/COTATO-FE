@@ -46,7 +46,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
     const getHeaderElement = () => (
       <>
         <SessionIcon Icon={<HeartIcon />} size="lg" />
-        {session?.title}
+        <h3>{session?.title}</h3>
       </>
     );
 
@@ -120,6 +120,7 @@ const SessionCard = ({ session }: SessionCardProps) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: calc(${IMAGE_WIDTH} + (3px * 2));
   border: 3px solid ${({ theme }) => theme.colors.primary100_1};
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
@@ -127,14 +128,22 @@ const Container = styled.div`
 `;
 
 const CardHeader = styled.div`
-  display: flex;
+  display: inline-flex;
   justify-content: flex-start;
   align-items: center;
   gap: ${({ theme }) => theme.size.md};
   padding: ${({ theme }) => theme.size.md} ${({ theme }) => theme.size.lg};
   padding: 0.6rem 0.8rem;
-  font-family: Ycomputer;
-  font-size: ${({ theme }) => theme.fontSize.xl};
+
+  > h3 {
+    margin: 0;
+    font-family: Ycomputer;
+    font-size: ${({ theme }) => theme.fontSize.xl};
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const CardImage = styled.img<{ $display: string }>`
