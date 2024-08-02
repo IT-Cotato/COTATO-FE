@@ -1,5 +1,5 @@
-import api from '@/api/api';
 import React, { useEffect, useState } from 'react';
+import api from '@/api/api';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Tooltip } from 'react-tooltip';
@@ -74,7 +74,6 @@ const CSStart = () => {
         <Puzzle1 src="https://velog.velcdn.com/images/ea_st_ring/post/a4439877-e883-4352-b80f-6c630361d544/image.svg" />
         <Puzzle2 src="https://velog.velcdn.com/images/ea_st_ring/post/b26877af-3c64-4165-9562-4eda93180b5b/image.svg" />
         <Sphere src="https://velog.velcdn.com/images/ea_st_ring/post/41451983-1133-44d4-820a-a1170ce25397/image.svg" />
-        <Sphere2 src="https://velog.velcdn.com/images/ea_st_ring/post/5bc443b9-cad4-4001-b05f-334e3429728c/image.svg" />
       </>
     );
   };
@@ -158,8 +157,6 @@ const CSStart = () => {
 };
 
 const Background = styled.div`
-  background: rgb(191, 209, 253);
-  background: linear-gradient(180deg, rgba(191, 209, 253, 0.5) 50%, rgba(255, 220, 205, 1) 100%);
   width: 100%;
   min-height: 100vh !important;
   max-height: 110vh;
@@ -238,27 +235,6 @@ const Sphere = styled.img`
   }
 `;
 
-const Sphere2 = styled.img`
-  position: absolute;
-  width: 450px;
-  height: 450px;
-  top: 500px;
-  left: -150px;
-  z-index: 1;
-  animation: rotate 6s ease-in-out infinite;
-  @keyframes rotate {
-    0% {
-      transform: perspective(800px) rotateZ(0deg) translateY(0px);
-    }
-    50% {
-      transform: perspective(800px) rotateY(10deg) rotateZ(-15deg) translateY(40px);
-    }
-    100% {
-      transform: perspective(800px) rotateZ(0deg) translateY(0px);
-    }
-  }
-`;
-
 const TitleBox = styled.div`
   width: fit-content;
   height: fit-content;
@@ -269,7 +245,7 @@ const TitleBox = styled.div`
   color: #fff;
   z-index: 10;
   h3 {
-    color: #313131;
+    color: ${({ theme }) => theme.colors.gray80_1};
     text-align: center;
     font-family: 'Noto Sans';
     font-size: 38px;
@@ -280,7 +256,7 @@ const TitleBox = styled.div`
     margin-bottom: 0;
   }
   h1 {
-    color: #111;
+    color: ${({ theme }) => theme.colors.common.black};
     -webkit-text-stroke-width: 0.5;
     -webkit-text-stroke-color: #000;
     font-family: Pretendard;
@@ -289,14 +265,14 @@ const TitleBox = styled.div`
     margin: 8px 0 0 0;
   }
   p {
-    color: #111;
+    color: ${({ theme }) => theme.colors.common.black};
     font-family: Inter;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 4px;
   }
   span {
-    color: #111;
+    color: ${({ theme }) => theme.colors.common.black};
     font-family: Inter;
     font-size: 24px;
     font-style: normal;

@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from '@components/Header';
 import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
@@ -14,34 +14,42 @@ import FindPWProcess from '@pages/Login/FindPWProcess';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
 import CSPage from '@pages/CS/CSPage';
-import { ThemeProvider } from 'styled-components';
-import { CotatoLightTheme } from '@theme/theme';
+
+import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
+import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
+import { FAQ } from '@pages/FAQ';
 
 function App() {
+  const location = useLocation();
+  const isInHome = location.pathname === '/';
+
+  //
+  //
+  //
+
   return (
     <div className="App">
-      <ThemeProvider theme={CotatoLightTheme}>
+      <CotatoThemeProvider>
         <GlobalStyle />
-        <div className="wrapper">
-          <div className="contentWrapper">
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/projects" element={<ReadyState />} />
-              <Route path="/team" element={<ReadyState />} />
-              <Route path="/cs/*" element={<CSPage />} />
-              <Route path="/session/*" element={<Session />} />
-              <Route path="/signin" element={<Login />} />
-              <Route path="/findid" element={<FindID />} />
-              <Route path="/findpw" element={<FindPWProcess />} />
-              <Route path="/joinus" element={<SignUp />} />
-              <Route path="/mypage/*" element={<MyPage />} />
-              <Route path="/*" element={<NotFound />} />
-            </Routes>
-          </div>
-          {window.location.pathname !== '/' && <Footer />}
-        </div>
-      </ThemeProvider>
+        <Header />
+        <GlobalBackgroundSvgComponent />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<ReadyState />} />
+          <Route path="/about" element={<ReadyState />} />
+          <Route path="/products" element={<ReadyState />} />
+          <Route path="/cs/*" element={<CSPage />} />
+          <Route path="/session" element={<Session />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/signin" element={<Login />} />
+          <Route path="/findid" element={<FindID />} />
+          <Route path="/findpw" element={<FindPWProcess />} />
+          <Route path="/joinus" element={<SignUp />} />
+          <Route path="/mypage/*" element={<MyPage />} />
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+        {isInHome ? null : <Footer />}
+      </CotatoThemeProvider>
     </div>
   );
 }

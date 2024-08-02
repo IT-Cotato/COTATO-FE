@@ -50,11 +50,16 @@ const QuizScorer = () => {
         setQuizStart(quizData.start);
       }
     });
-  }, [quizList]);
+  }, [quizList, quizId]);
 
   useEffect(() => {
     const newSubmitList: IQuizAdminSubmit[] = record?.records;
     newSubmitList?.sort((left, right) => left.ticketNumber - right.ticketNumber);
+    if (quizStart === 'QUIZ_OFF' && newSubmitList?.length) {
+      setQuizStatus('QUIZ_ON');
+      setQuizStart('QUIZ_ON');
+    }
+
     setSubmits(newSubmitList);
     setScorer(record?.scorer);
   }, [record]);

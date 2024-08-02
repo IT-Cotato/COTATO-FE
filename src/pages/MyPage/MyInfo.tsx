@@ -150,7 +150,7 @@ export const MyPageWrapper = styled.div`
 `;
 
 const fontStyle = css`
-  color: #7a6b6b;
+  color: ${({ theme }) => theme.colors.common.black};
   font-family: NanumSquareRound;
   font-size: 16px;
   font-weight: 400;
@@ -167,7 +167,7 @@ export const MyPageHeader = styled.div`
 
   > h1 {
     ${fontStyle};
-    color: #1e1e1e;
+    color: ${({ theme }) => theme.colors.common.black};
     font-size: 28px;
     font-weight: 800;
   }
@@ -185,7 +185,7 @@ const MyDataHeader = styled.div`
 
   > h3 {
     ${fontStyle};
-    color: #1e1e1e;
+    color: ${({ theme }) => theme.colors.common.black};
     font-size: 24px;
     font-weight: 700;
   }
@@ -215,7 +215,7 @@ const DataBox = styled.div`
   padding: 12px 36px;
   box-sizing: border-box;
   margin-bottom: 50px;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.common.white};
   border-radius: 16px;
   box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.05);
 
@@ -236,7 +236,7 @@ const InfoWrapper = styled.div`
 
   > p {
     ${fontStyle};
-    color: #787878;
+    color: ${({ theme }) => theme.colors.common.black};
     margin-bottom: 8px;
 
     @media screen and (max-width: 768px) {
@@ -253,7 +253,7 @@ const TextContainer = styled.div`
   height: fit-content;
   padding: 12px 16px;
   box-sizing: border-box;
-  background: #f3f7ff;
+  border: ${({ theme }) => `1px solid ${theme.colors.primary100_1}}`};
   border-radius: 12px;
 
   @media screen and (max-width: 768px) {
@@ -293,7 +293,7 @@ const ButtonContainer = styled.div`
   box-sizing: border-box;
   margin: 10px 0;
   border-radius: 16px;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.05);
 
   @media screen and (max-width: 768px) {
@@ -301,7 +301,7 @@ const ButtonContainer = styled.div`
   }
 
   > p {
-    color: #1e1e1e;
+    color: ${({ theme }) => theme.colors.common.black};
     font-family: NanumSquareRound;
     font-size: 20px;
     font-weight: 400;
@@ -324,12 +324,12 @@ const LogoutButtonWrapper = styled.div`
     box-sizing: border-box;
     border-radius: 8px;
     border: 1.5px solid #e8e8e8;
-    background: #fff;
+    background: ${({ theme }) => theme.colors.common.white};
     cursor: pointer;
 
     > p {
       ${fontStyle};
-      color: #787878;
+      color: ${({ theme }) => theme.colors.common.black};
     }
   }
 `;

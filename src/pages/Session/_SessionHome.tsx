@@ -28,6 +28,12 @@ const SessionHome = () => {
   const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
 
   /**
+   * 
+   */ 
+  const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
+    setSelectedGeneration(generation);
+
+  /**
    *
    */
   const requestImageAdd = (image: SessionListImageInfo): Promise<any> => {
@@ -129,8 +135,17 @@ const SessionHome = () => {
       .catch((err) => console.log(err));
   };
 
+  /**
+   *
+   */
   const renderSessionCards = () => (
-    <SessionCardWrapper>{sessions?.map((session: SessionListInfo) => <></>)}</SessionCardWrapper>
+    <SessionCardWrapper>
+      {sessions
+        ? sessions?.map((session: CotatoSessionListResponse) => (
+            <SessionCard key={uuidv4()} session={session} />
+          ))
+        : new Array(12).fill(null).map(() => <SessionCard key={uuidv4()} />)}
+    </SessionCardWrapper>
   );
 
   useEffect(() => {
@@ -177,12 +192,11 @@ const Wrapper = styled.div`
 
 const SessionCardWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  grid-template-rows: repeat(auto-fill, minmax(auto, 1fr));
-  gap: 3.8rem 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(${IMAGE_WIDTH}, 1fr));
+  gap: 4rem 2rem;
   place-items: center;
   width: 100%;
-  padding: 3.2rem 2.5rem;
+  padding: 3rem 0 1.6rem;
 `;
 
 export default SessionHome;
