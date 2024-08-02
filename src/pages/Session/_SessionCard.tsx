@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import ready_image from '@assets/potato_ready.svg';
 import Skeleton from '@mui/material/Skeleton';
@@ -20,7 +20,13 @@ import fetchUserData from '@utils/fetchUserData';
 
 interface SessionCardProps {
   session?: CotatoSessionListResponse;
+  isActive?: boolean;
   handleChangeUpdateSession?: (Session?: CotatoSessionListResponse) => void;
+}
+
+interface CardImageProps {
+  $display: string;
+  $isActive?: boolean;
 }
 
 //
@@ -33,7 +39,7 @@ export const IMAGE_WIDTH = '16rem';
 //
 //
 
-const SessionCard = ({ session, handleChangeUpdateSession }: SessionCardProps) => {
+const SessionCard = ({ session, isActive ,handleChangeUpdateSession }: SessionCardProps) => {
   const { data: userData } = fetchUserData();
 
   const [imageLoading, setImageLoading] = useState(true);
@@ -91,6 +97,7 @@ const SessionCard = ({ session, handleChangeUpdateSession }: SessionCardProps) =
           alt="session"
           onLoad={() => setImageLoading(false)}
           $display={imageLoading ? 'none' : 'block'}
+          $isActive={isActive}
         />
       );
     };
@@ -108,7 +115,11 @@ const SessionCard = ({ session, handleChangeUpdateSession }: SessionCardProps) =
   const renderSessionContents = () => (
     <SessionContentsWrapper>
       {session ? (
-        <SessionContents contents={session.sessionContents as CotatoSessionContents} size="md" />
+        <SessionContents
+          contents={session.sessionContents as CotatoSessionContents}
+          size="md"
+          isActive={isActive}
+        />
       ) : (
         <Skeleton animation="wave" variant="rounded" width="100%" height="1.6rem" />
       )}
@@ -116,7 +127,7 @@ const SessionCard = ({ session, handleChangeUpdateSession }: SessionCardProps) =
   );
 
   return (
-    <Container>
+    <Container $isActive={isActive}>
       {renderCardHeader()}
       {renderCardImage()}
       {renderSessionContents()}
@@ -128,25 +139,35 @@ const SessionCard = ({ session, handleChangeUpdateSession }: SessionCardProps) =
 //
 //
 
-const Container = styled.div`
+const Container = styled.div<{ $isActive?: boolean }>`
   display: flex;
   flex-direction: column;
-  border: 3px solid ${({ theme }) => theme.colors.primary100_1};
+  width: calc(${IMAGE_WIDTH} + (3px * 2));
+  border: 3px solid
+    ${({ $isActive, theme }) =>
+      $isActive !== false ? theme.colors.primary100_1 : theme.colors.gray30};
+  border-radius: 0.6rem;
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
-  border-radius: 0.6rem;
 `;
 
 const CardHeader = styled.div`
-  display: flex;
+  display: inline-flex;
   justify-content: flex-start;
   align-items: center;
   gap: ${({ theme }) => theme.size.md};
-  padding: ${({ theme }) => theme.size.md} ${({ theme }) => theme.size.lg};
   padding: 0.6rem 0.8rem;
-  color: ${({ theme }) => theme.colors.gray80_1};
-  font-family: Ycomputer;
-  font-size: ${({ theme }) => theme.fontSize.xl};
+
+  > h3 {
+    margin: 0;
+    color: ${({ theme }) => theme.colors.gray80_1};
+    font-family: Ycomputer;
+    font-size: ${({ theme }) => theme.fontSize.xl};
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   > svg {
     margin-left: auto;
@@ -159,11 +180,16 @@ const CardHeader = styled.div`
   }
 `;
 
-const CardImage = styled.img<{ $display: string }>`
+const CardImage = styled.img<CardImageProps>`
   display: ${({ $display }) => $display};
-  width: ${IMAGE_WIDTH};
+  width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  ${({ $isActive }) =>
+    $isActive === false &&
+    css`
+      filter: grayscale(50%);
+    `}
 `;
 
 const SessionContentsWrapper = styled.div`
@@ -172,6 +198,7 @@ const SessionContentsWrapper = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.size.sm};
   padding: ${({ theme }) => theme.size.md};
+  height: 3.4rem;
 `;
 
 export default SessionCard;
