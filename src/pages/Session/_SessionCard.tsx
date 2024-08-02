@@ -11,12 +11,16 @@ import {
 import SessionIcon from '@components/Session/SessionIcon';
 import SessionContents from '@components/Session/SessionContents';
 
+import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
+import fetchUserData from '@utils/fetchUserData';
+
 //
 //
 //
 
 interface SessionCardProps {
   session?: CotatoSessionListResponse;
+  handleChangeUpdateSession?: (Session?: CotatoSessionListResponse) => void;
 }
 
 //
@@ -29,7 +33,9 @@ export const IMAGE_WIDTH = '16rem';
 //
 //
 
-const SessionCard = ({ session }: SessionCardProps) => {
+const SessionCard = ({ session, handleChangeUpdateSession }: SessionCardProps) => {
+  const { data: userData } = fetchUserData();
+
   const [imageLoading, setImageLoading] = useState(true);
 
   /**
@@ -47,6 +53,11 @@ const SessionCard = ({ session }: SessionCardProps) => {
       <>
         <SessionIcon Icon={<HeartIcon />} size="lg" />
         {session?.title}
+        {userData?.role === 'ADMIN' && (
+          <PencilIcon
+            onClick={() => handleChangeUpdateSession && handleChangeUpdateSession(session)}
+          />
+        )}
       </>
     );
 
@@ -133,8 +144,19 @@ const CardHeader = styled.div`
   gap: ${({ theme }) => theme.size.md};
   padding: ${({ theme }) => theme.size.md} ${({ theme }) => theme.size.lg};
   padding: 0.6rem 0.8rem;
+  color: ${({ theme }) => theme.colors.gray80_1};
   font-family: Ycomputer;
   font-size: ${({ theme }) => theme.fontSize.xl};
+
+  > svg {
+    margin-left: auto;
+    width: 1.25rem;
+    cursor: pointer;
+
+    > path {
+      fill: ${({ theme }) => theme.colors.sub2[401]};
+    }
+  }
 `;
 
 const CardImage = styled.img<{ $display: string }>`

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
+import fetcherWithParams from '@utils/fetcherWithParams';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import {
   SessionContentsCsEducation,
@@ -11,27 +11,58 @@ import {
 } from '@/enums/SessionContents';
 import api from '@/api/api';
 import SessionUploadModal from './_SessionUploadModal';
-import { CotatoUpdateSessionRequest } from 'cotato-openapi-clients';
+import {
+  CotatoGenerationInfoResponse,
+  CotatoSessionListResponse,
+  CotatoUpdateSessionRequest,
+} from 'cotato-openapi-clients';
+import SessionCard, { IMAGE_WIDTH } from './_SessionCard';
+import { v4 as uuid } from 'uuid';
+import GenerationDropBox from '@components/_GenerationDropBox';
+import { useMediaQuery } from '@mui/material';
+import { device } from '@theme/media';
+import { DropBoxColorEnum } from '@/enums/DropBoxColor';
+import fetchUserData from '@utils/fetchUserData';
+import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
 
 //
 //
 //
 
 const SessionHome = () => {
-  const { data: sessions } = useSWR<SessionListInfo[]>(
-    `/v1/api/session?generationId=${1}`,
-    fetcher,
+  const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
+
+  const { data: sessionList, mutate: mutateSessionList } = useSWR<SessionListInfo[]>(
+    '/v1/api/session',
+    (url: string) => fetcherWithParams(url, { generationId: selectedGeneration?.generationId }),
   );
+  const { data: userData } = fetchUserData();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(true);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
 
+  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+
   /**
-   * 
-   */ 
+   *
+   */
   const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
     setSelectedGeneration(generation);
+  };
+
+  /**
+   *
+   */
+  const handleChaneUpdateSession = (session?: CotatoSessionListResponse) => {
+    if (!session) {
+      return;
+    }
+
+    const updateSession: SessionListInfo = JSON.parse(JSON.stringify(session));
+    setUpdateSession(updateSession);
+    setIsUpdateModalOpen(true);
+  };
 
   /**
    *
@@ -138,31 +169,58 @@ const SessionHome = () => {
   /**
    *
    */
+  const renderSettingTab = () => {
+    return (
+      <SettingTab>
+        <GenerationDropBox
+          color={DropBoxColorEnum.BLUE}
+          handleGenerationChange={handleGenerationChange}
+          width={isTabletOrSmaller ? '7.2rem' : '8rem'}
+          height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
+        />
+        {userData?.role === 'ADMIN' && <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />}
+      </SettingTab>
+    );
+  };
+
+  /**
+   *
+   */
   const renderSessionCards = () => (
     <SessionCardWrapper>
-      {sessions
-        ? sessions?.map((session: CotatoSessionListResponse) => (
-            <SessionCard key={uuidv4()} session={session} />
+      {sessionList
+        ? sessionList?.map((session: CotatoSessionListResponse) => (
+            <SessionCard
+              key={uuid()}
+              session={session}
+              handleChangeUpdateSession={handleChaneUpdateSession}
+            />
           ))
-        : new Array(12).fill(null).map(() => <SessionCard key={uuidv4()} />)}
+        : new Array(12).fill(null).map(() => <SessionCard key={uuid()} />)}
     </SessionCardWrapper>
   );
 
+  /**
+   *
+   */
   useEffect(() => {
-    if (sessions) {
-      setUpdateSession(sessions[0]);
+    if (selectedGeneration) {
+      mutateSessionList();
     }
-  }, [sessions]);
+  }, [selectedGeneration]);
 
   return (
     <>
-      <Wrapper>{renderSessionCards()}</Wrapper>
+      <Wrapper>
+        {renderSettingTab()}
+        {renderSessionCards()}
+      </Wrapper>
       <SessionUploadModal
         open={isAddModalOpen}
         handleClose={() => setIsAddModalOpen(false)}
         headerText="세션 추가"
         handleUpload={handleSessionAdd}
-        lastSessionNumber={sessions?.length}
+        lastSessionNumber={sessionList?.length}
       />
       <SessionUploadModal
         open={isUpdateModalOpen}
@@ -188,6 +246,21 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+`;
+
+const SettingTab = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+
+  > svg {
+    position: absolute;
+    right: 0;
+    width: 2.75rem;
+    cursor: pointer;
+  }
 `;
 
 const SessionCardWrapper = styled.div`
