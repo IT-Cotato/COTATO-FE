@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import SessionHome from '@pages/Session/_SessionHome';
-import SessionLayout from '@pages/Session/_SessionLayout';
+import SessionHome from '@pages/Session/SessionHome';
+import SessionLayout from '@pages/Session/SessionLayout';
 
 //
 //

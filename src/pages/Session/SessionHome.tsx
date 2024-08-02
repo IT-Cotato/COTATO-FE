@@ -1,191 +1,375 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import SessionContent from '@pages/Session/SessionContent';
-import SessionModal from '@pages/Session/SessionModal/SessionModal';
-import { ReactComponent as AddIcon } from '@assets/add_icon.svg';
-import { ReactComponent as SettingIcon } from '@assets/setting_icon.svg';
-import { ISession } from '@/typing/db';
-import api from '@/api/api';
 import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
-import GenerationDropBox from '@components/_GenerationDropBox';
-import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import SessionCard, { IMAGE_WIDTH } from '@pages/Session/SessionCard';
+import { v4 as uuid } from 'uuid';
+import fetcherWithParams from '@utils/fetcherWithParams';
+import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
+import {
+  SessionContentsCsEducation,
+  SessionContentsDevTalk,
+  SessionContentsItIssue,
+  SessionContentsNetworking,
+} from '@/enums/SessionContents';
+import api from '@/api/api';
+import SessionUploadModal from './SessionUploadModal';
+import {
+  CotatoGenerationInfoResponse,
+  CotatoSessionListResponse,
+  CotatoUpdateSessionRequest,
+} from 'cotato-openapi-clients';
+import GenerationDropBox from '@components/GenerationDropBox';
+import { useMediaQuery } from '@mui/material';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
+import { device } from '@theme/media';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Scrollbar } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import fetchUserData from '@utils/fetchUserData';
+import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
+
+//
+//
+//
 
 const SessionHome = () => {
-  const { data: user } = useSWR('/v1/api/member/info', fetcher);
+  const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
-  const [sessions, setSessions] = useState<undefined | ISession[]>();
-  const [isSessionModalOpen, setIsSessionModalOpen] = useState(false);
-  const [modifySession, setModifySession] = useState<undefined | ISession>();
-  const [lastWeek, setLastWeek] = useState(-1);
-  const [selectedGeneration] = useState<CotatoGenerationInfoResponse>();
+  const { data: sessionList, mutate: mutateSessionList } = useSWR<SessionListInfo[]>(
+    '/v1/api/session',
+    (url: string) => fetcherWithParams(url, { generationId: selectedGeneration?.generationId }),
+  );
+  const { data: userData } = fetchUserData();
 
-  useEffect(() => {
-    if (sessions && sessions.length > 0) {
-      setLastWeek(sessions[sessions.length - 1].sessionNumber);
-    } else {
-      setLastWeek(-1);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
+
+  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+
+  /**
+   *
+   */
+  const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
+    setSelectedGeneration(generation);
+  };
+
+  /**
+   *
+   */
+  const handleChaneUpdateSession = (session?: CotatoSessionListResponse) => {
+    if (!session) {
+      return;
     }
-  }, [sessions]);
 
-  const fetchSessions = useCallback((generationId?: number) => {
+    const updateSession: SessionListInfo = JSON.parse(JSON.stringify(session));
+    setUpdateSession(updateSession);
+    setIsUpdateModalOpen(true);
+  };
+
+  /**
+   *
+   */
+  const requestImageAdd = (image: SessionListImageInfo): Promise<any> => {
+    if (!image.imageFile) {
+      return Promise.reject('No image file');
+    }
+
+    const formData = new FormData();
+    formData.append('sessionId', updateSession?.sessionId?.toString() || '');
+    formData.append('image', image.imageFile);
+
+    return api.post('v1/api/session/image', formData);
+  };
+
+  /**
+   *
+   */
+  const requestImageReorder = (imageList: SessionListImageInfo[]): Promise<any> => {
+    const reorderedImageList = imageList.map((image) => {
+      return {
+        imageId: image.imageId,
+        order: image.order,
+      };
+    });
+
+    return api.patch('/v1/api/session/image/order', {
+      sessionId: updateSession?.sessionId,
+      orderInfos: reorderedImageList,
+    });
+  };
+
+  /**
+   *
+   */
+  const requestImageRemove = (image: SessionListImageInfo): Promise<any> => {
+    if (!image.imageId) {
+      return Promise.reject('No image id');
+    }
+
+    return api.delete('/v1/api/session/image', {
+      data: {
+        imageId: image.imageId,
+      },
+    });
+  };
+
+  /**
+   *
+   */
+  const handleSessionAdd = (session: SessionListInfo) => {
+    const formData = new FormData();
+    formData.append('generationId', '1');
+    formData.append('title', session.title || '');
+    formData.append('description', session.description || '');
+    formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
+    formData.append(
+      'csEducation',
+      session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
+    );
+    formData.append(
+      'networking',
+      session.sessionContents?.networking || SessionContentsNetworking.OFF,
+    );
+    formData.append('devTalk', session.sessionContents?.devTalk || SessionContentsDevTalk.OFF);
+
+    session.imageInfos.forEach((imageInfo) => {
+      if (imageInfo.imageFile) {
+        formData.append('images', imageInfo.imageFile);
+      }
+    });
+
     api
-      .get('/v1/api/session', {
-        params: {
-          generationId: generationId,
-        },
-      })
-      .then((res) => setSessions(res.data))
-      .catch((err) => console.error(err));
-  }, []);
+      .post('/v1/api/session/add', formData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
-  const onClickAddButton = useCallback(() => {
-    setModifySession(undefined);
-    setIsSessionModalOpen(true);
-  }, []);
+  /**
+   *
+   */
+  const handleSessionUpdate = (session: SessionListInfo) => {
+    if (!session.sessionId) {
+      return;
+    }
 
-  const handleModifyButton = useCallback((session: ISession) => {
-    setModifySession(session);
-    setIsSessionModalOpen(true);
-  }, []);
+    const updatedSessoinInfo: CotatoUpdateSessionRequest = {
+      sessionId: session.sessionId,
+      title: session.title,
+      description: session.description,
+      itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
+      csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
+      networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
+      devTalk: session.sessionContents?.devTalk || SessionContentsDevTalk.OFF,
+    };
 
-  const onCloseModal = useCallback(() => {
-    setIsSessionModalOpen(false);
-  }, []);
+    api
+      .patch('/v1/api/session/update', updatedSessoinInfo)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  /**
+   *
+   */
+  const handleSlideChange = (swiper: any) => {
+    setActiveSlideIndex(swiper.activeIndex);
+  };
+
+  /**
+   *
+   */
+  const renderSettingTab = () => {
+    return (
+      <SettingTab>
+        <GenerationDropBox
+          color={DropBoxColorEnum.BLUE}
+          handleGenerationChange={handleGenerationChange}
+          width={isTabletOrSmaller ? '7.2rem' : '8rem'}
+          height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
+        />
+        {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
+          <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
+        )}
+      </SettingTab>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderSessionCards = () => {
+    if (isTabletOrSmaller) {
+      return null;
+    }
+
+    return (
+      <SessionCardGridWrapper>
+        {sessionList
+          ? sessionList?.map((session: CotatoSessionListResponse) => (
+              <SessionCard
+                key={uuid()}
+                session={session}
+                handleChangeUpdateSession={handleChaneUpdateSession}
+              />
+            ))
+          : new Array(12).fill(null).map(() => <SessionCard key={uuid()} />)}
+      </SessionCardGridWrapper>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderMobileSessoinCards = () => {
+    if (!isTabletOrSmaller) {
+      return null;
+    }
+
+    const slideList = sessionList ?? new Array(6).fill(undefined);
+
+    return (
+      <StyledSwiper
+        slidesPerView="auto"
+        spaceBetween="5%"
+        centeredSlides={true}
+        onSlideChange={handleSlideChange}
+        pagination={{
+          clickable: false,
+        }}
+        scrollbar={{
+          hide: false,
+          draggable: true,
+        }}
+        modules={[Pagination, Scrollbar]}
+      >
+        {slideList.map((session: CotatoSessionListResponse | undefined, index: number) => (
+          <StyledSwiperSlide key={uuid()}>
+            <SessionCard session={session} isActive={activeSlideIndex === index} />
+          </StyledSwiperSlide>
+        ))}
+      </StyledSwiper>
+    );
+  };
+
+  /**
+   *
+   */
+  useEffect(() => {
+    if (selectedGeneration) {
+      mutateSessionList();
+    }
+  }, [selectedGeneration]);
 
   return (
     <>
-      <FlexBox>
-        <SessionWrapper>
-          <SessionHeader>세션 기록</SessionHeader>
-          <SessionSetting>
-            <GenerationDropBox handleGenerationChange={() => {}} color={DropBoxColorEnum.BLUE} />
-            {user?.role === 'ADMIN' && (
-              <ButtonWrapper>
-                <AddIcon onClick={onClickAddButton} />
-              </ButtonWrapper>
-            )}
-          </SessionSetting>
-          <SessionContentsContainer session={sessions?.length.toString()}>
-            {sessions?.length === 0 ? (
-              <SessionReady>
-                <SettingIcon />
-                <p>세션 준비중입니다.</p>
-              </SessionReady>
-            ) : (
-              sessions?.map((session) => (
-                <SessionContent
-                  key={session.sessionId}
-                  session={session}
-                  handleModifyButton={handleModifyButton}
-                />
-              ))
-            )}
-          </SessionContentsContainer>
-        </SessionWrapper>
-      </FlexBox>
-      <SessionModal
-        isOpen={isSessionModalOpen}
-        onCloseModal={onCloseModal}
-        session={modifySession}
-        lastWeek={lastWeek}
-        generationId={selectedGeneration?.generationId}
-        fetchSessions={fetchSessions}
-        sessionCount={selectedGeneration?.sessionCount}
+      <Wrapper>
+        {renderSettingTab()}
+        {renderSessionCards()}
+        {renderMobileSessoinCards()}
+      </Wrapper>
+      <SessionUploadModal
+        open={isAddModalOpen}
+        handleClose={() => setIsAddModalOpen(false)}
+        headerText="세션 추가"
+        handleUpload={handleSessionAdd}
+        lastSessionNumber={sessionList?.length}
+      />
+      <SessionUploadModal
+        open={isUpdateModalOpen}
+        handleClose={() => setIsUpdateModalOpen(false)}
+        headerText="세션 수정"
+        handleUpload={handleSessionUpdate}
+        sessionInfo={updateSession}
+        requestImageAdd={requestImageAdd}
+        requestImageReorder={requestImageReorder}
+        requestImageRemove={requestImageRemove}
       />
     </>
   );
 };
 
-export default SessionHome;
+//
+//
+//
 
-const FlexBox = styled.div`
+const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-const SessionWrapper = styled.div`
-  display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: 70%;
-  min-height: 100vh;
-
-  @media screen and (max-width: 768px) {
-    width: 260px;
-  }
-`;
-
-const SessionHeader = styled.h1`
-  color: ${({ theme }) => theme.colors.common.black};
-  font-family: NanumSquareRound;
-  font-size: 2.25rem;
-  font-style: normal;
-  font-weight: 800;
-  line-height: normal;
-
-  @media screen and (max-width: 768px) {
-    margin: 92px 0 64px;
-    font-size: 1.875rem;
-  }
-`;
-
-const SessionSetting = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
-  margin-bottom: 12px;
+  height: fit-content;
 `;
 
-const ButtonWrapper = styled.div`
+const SettingTab = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+
   > svg {
-    margin-left: 8px;
-    width: 32px;
-    height: 32px;
+    position: absolute;
+    right: 0;
+    width: 2.75rem;
     cursor: pointer;
   }
 `;
 
-interface SessionContentsContainerProps {
-  session?: string;
-}
-
-const SessionContentsContainer = styled.div<SessionContentsContainerProps>`
+const SessionCardGridWrapper = styled.div`
   display: grid;
-  grid-template-rows: repeat(auto-fill, minmax(260px, 1fr));
-  grid-template-columns: ${(props) =>
-    props.session === '0' ? '1fr' : 'repeat(auto-fill, minmax(280px, 1fr))'};
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(${IMAGE_WIDTH}, 1fr));
+  gap: 4rem 2rem;
   place-items: center;
-
   width: 100%;
-  min-height: 30vh;
-  margin: 28px 0 120px;
-
-  @media screen and (max-width: 768px) {
-    grid-template-rows: repeat(auto-fill, minmax(240px, 1fr));
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  }
+  padding: 3rem 0 1.6rem;
 `;
 
-const SessionReady = styled.div`
+const StyledSwiper = styled(Swiper)`
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
   width: 100%;
-  margin: 160px 0;
+  padding: 2rem 0 5.4rem;
 
-  p {
-    color: #9a9a9a;
-    font-family: NanumSquareRound;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  > .swiper-pagination {
+    bottom: 3.4rem;
+
+    > .swiper-pagination-bullet {
+      width: 0.4rem;
+      height: 0.4rem;
+      margin: 0 0.2rem;
+      background: ${({ theme }) => theme.colors.gray30};
+      opacity: 1;
+    }
+
+    > .swiper-pagination-bullet-active {
+      background: ${({ theme }) => theme.colors.primary100_1};
+    }
+  }
+
+  > .swiper-scrollbar {
+    display: flex;
+    align-items: center;
+    left: auto;
+    width: 12rem;
+    background: ${({ theme }) => theme.colors.gray30};
+
+    > .swiper-scrollbar-drag {
+      width: 2rem !important;
+      height: 0.8rem;
+      border-radius: 2rem;
+      background: ${({ theme }) => theme.colors.primary100_1};
+      cursor: grab;
+    }
   }
 `;
+
+const StyledSwiperSlide = styled(SwiperSlide)`
+  width: auto !important;
+`;
+
+export default SessionHome;

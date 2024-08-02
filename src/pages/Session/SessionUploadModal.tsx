@@ -3,7 +3,7 @@ import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
-import SessionUploadModalImageInput from '@pages/Session/_SessionUploadModalImageInput';
+import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
 import { produce } from 'immer';
