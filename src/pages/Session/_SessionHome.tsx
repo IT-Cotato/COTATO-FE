@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
 import SessionCard, { IMAGE_WIDTH } from '@pages/Session/_SessionCard';
 import { v4 as uuid } from 'uuid';
-import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import {
@@ -20,11 +18,8 @@ import {
   CotatoSessionListResponse,
   CotatoUpdateSessionRequest,
 } from 'cotato-openapi-clients';
-import SessionCard, { IMAGE_WIDTH } from './_SessionCard';
-import { v4 as uuid } from 'uuid';
 import GenerationDropBox from '@components/_GenerationDropBox';
 import { useMediaQuery } from '@mui/material';
-import { device } from '@theme/media';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -178,12 +173,11 @@ const SessionHome = () => {
   };
 
   /**
-   * 
+   *
    */
   const handleSlideChange = (swiper: any) => {
     setActiveSlideIndex(swiper.activeIndex);
   };
-
 
   /**
    *
@@ -197,36 +191,12 @@ const SessionHome = () => {
           width={isTabletOrSmaller ? '7.2rem' : '8rem'}
           height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
         />
-        {userData?.role === 'ADMIN' && <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />}
+        {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
+          <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
+        )}
       </SettingTab>
     );
   };
-
-  /**
-   *
-   */
-  const renderSessionCards = () => (
-    <SessionCardWrapper>
-      {sessionList
-        ? sessionList?.map((session: CotatoSessionListResponse) => (
-            <SessionCard
-              key={uuid()}
-              session={session}
-              handleChangeUpdateSession={handleChaneUpdateSession}
-            />
-          ))
-        : new Array(12).fill(null).map(() => <SessionCard key={uuid()} />)}
-    </SessionCardWrapper>
-  );
-  
-  /**
-   *
-   */
-  useEffect(() => {
-    if (selectedGeneration) {
-      mutateSessionList();
-    }
-  }, [selectedGeneration]);
 
   /**
    *
@@ -238,9 +208,13 @@ const SessionHome = () => {
 
     return (
       <SessionCardGridWrapper>
-        {sessions
-          ? sessions?.map((session: CotatoSessionListResponse) => (
-              <SessionCard key={uuid()} session={session} />
+        {sessionList
+          ? sessionList?.map((session: CotatoSessionListResponse) => (
+              <SessionCard
+                key={uuid()}
+                session={session}
+                handleChangeUpdateSession={handleChaneUpdateSession}
+              />
             ))
           : new Array(12).fill(null).map(() => <SessionCard key={uuid()} />)}
       </SessionCardGridWrapper>
@@ -255,7 +229,7 @@ const SessionHome = () => {
       return null;
     }
 
-    const slideList = sessions ?? new Array(6).fill(undefined);
+    const slideList = sessionList ?? new Array(6).fill(undefined);
 
     return (
       <StyledSwiper
@@ -281,11 +255,21 @@ const SessionHome = () => {
     );
   };
 
+  /**
+   *
+   */
+  useEffect(() => {
+    if (selectedGeneration) {
+      mutateSessionList();
+    }
+  }, [selectedGeneration]);
+
   return (
     <>
       <Wrapper>
-        {renderMobileSessoinCards()}
+        {renderSettingTab()}
         {renderSessionCards()}
+        {renderMobileSessoinCards()}
       </Wrapper>
       <SessionUploadModal
         open={isAddModalOpen}
@@ -379,6 +363,7 @@ const StyledSwiper = styled(Swiper)`
       height: 0.8rem;
       border-radius: 2rem;
       background: ${({ theme }) => theme.colors.primary100_1};
+      cursor: grab;
     }
   }
 `;

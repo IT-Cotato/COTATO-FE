@@ -13,6 +13,8 @@ import SessionContents from '@components/Session/SessionContents';
 
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import fetchUserData from '@utils/fetchUserData';
+import { useMediaQuery } from '@mui/material';
+import { device } from '@theme/media';
 
 //
 //
@@ -39,10 +41,12 @@ export const IMAGE_WIDTH = '16rem';
 //
 //
 
-const SessionCard = ({ session, isActive ,handleChangeUpdateSession }: SessionCardProps) => {
+const SessionCard = ({ session, isActive, handleChangeUpdateSession }: SessionCardProps) => {
   const { data: userData } = fetchUserData();
 
   const [imageLoading, setImageLoading] = useState(true);
+
+  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
 
   /**
    *
@@ -58,8 +62,8 @@ const SessionCard = ({ session, isActive ,handleChangeUpdateSession }: SessionCa
     const getHeaderElement = () => (
       <>
         <SessionIcon Icon={<HeartIcon />} size="lg" />
-        {session?.title}
-        {userData?.role === 'ADMIN' && (
+        <h3>{session?.title}</h3>
+        {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
           <PencilIcon
             onClick={() => handleChangeUpdateSession && handleChangeUpdateSession(session)}
           />
