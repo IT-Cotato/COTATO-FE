@@ -84,7 +84,10 @@ const HomeNewThirdSection = () => {
    */
   const renderTitle = () => {
     return (
-      <Typography variant={isMobileOrSmaller ? 'h5' : 'h3'} fontFamily="YComputer">
+      <Typography
+        variant={isMobileOrSmaller ? 'h5' : isTabletOrSmaller ? 'h4' : 'h3'}
+        fontFamily="YComputer"
+      >
         COTATO CLUB MEMBERS
       </Typography>
     );
@@ -109,7 +112,7 @@ const HomeNewThirdSection = () => {
       <Stack
         direction="row"
         justifyContent="center"
-        gap={isMobileOrSmaller ? '0rem' : '3rem'}
+        gap={isMobileOrSmaller ? '0rem' : isTabletOrSmaller ? '1rem' : '3rem'}
         flexWrap="wrap"
       >
         {COTATO_CHARCTER_SVG_LIST.map((svg) => {
