@@ -6,12 +6,11 @@ import 'swiper/css/pagination';
 
 import { Mousewheel, Pagination } from 'swiper/modules';
 import styled from 'styled-components';
-import useMediaQuery from '@mui/material/useMediaQuery';
+
 import HomeFirstSection from './FirstSection/HomeFirstSection';
 import HomeSecondSection from './SecondSection/HomeSecondSection';
-import HomeThirdSection from './ThirdSection/HomeThirdSection';
 import Footer from '@components/Footer';
-import { device } from '@theme/media';
+import HomeNewThirdSection from './ThirdSection/HomeNewThirdSection';
 
 //
 //
@@ -22,7 +21,6 @@ const SWIPER_SLIDES_PER_VIEW = 1;
 const MOUSE_WHEEL_OPTION = {
   forceToAxis: true,
   sensitivity: 1,
-  releaseOnEdges: true,
 };
 
 //
@@ -30,8 +28,6 @@ const MOUSE_WHEEL_OPTION = {
 //
 
 const HomeSlide = () => {
-  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
-
   return (
     <>
       <StyledSwiper
@@ -52,11 +48,18 @@ const HomeSlide = () => {
         </StyledSwiperSlide>
         {/* Third Section */}
         <StyledSwiperSlide>
-          <HomeThirdSection />
+          <HomeNewThirdSection />
         </StyledSwiperSlide>
-        {!isTabletOrSmaller && <SwiperSlide />}
         {/* Footer */}
         <FooterSwiperSlide>
+          <h2
+            style={{
+              marginBottom: '8rem',
+            }}
+          >
+            코테이토에 대해 더 많이 알고 싶다면?
+          </h2>
+          <p>Contact us ↓ ↓ ↓ ↓ ↓ ↓</p>
           <Footer />
         </FooterSwiperSlide>
       </StyledSwiper>
@@ -85,15 +88,14 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
 `;
 
 const FooterSwiperSlide = styled(SwiperSlide)`
-  height: 100vh;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
