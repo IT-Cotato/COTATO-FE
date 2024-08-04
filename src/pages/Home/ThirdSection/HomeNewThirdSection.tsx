@@ -5,7 +5,7 @@ import { ReactComponent as CotatoCharacterFront } from '@assets/cotato_character
 import { ReactComponent as CotatoCharacterBack } from '@assets/cotato_character_back.svg';
 import { ReactComponent as CotatoCharacterPM } from '@assets/cotato_character_pm.svg';
 import { ReactComponent as CotatoCharacterDesign } from '@assets/cotato_character_design.svg';
-import { device } from '@theme/media';
+import { device, media } from '@theme/media';
 import CotatoTooltip from '@components/CotatoTooltip';
 
 //
@@ -144,7 +144,10 @@ const HomeNewThirdSection = () => {
                   disablePortal: true,
                 }}
               >
-                <Box width={isMobileOrSmaller ? '9rem' : '11.5rem'} height="11.5rem">
+                <Box
+                  width={isMobileOrSmaller ? '9rem' : '11.5rem'}
+                  height={isMobileOrSmaller ? '10rem' : '11rem'}
+                >
                   <Character
                     width={
                       isMobileOrSmaller
@@ -242,6 +245,14 @@ const Wrapper = styled.section`
   padding: 7.5rem 0;
   gap: 3rem;
   font-family: 'YComputer';
+
+  ${media.mobile`
+    padding: 2.5rem 0;
+  `}
+
+  ${media.tablet`
+    padding: 5rem 0;
+  `}
 `;
 
 export default HomeNewThirdSection;
