@@ -246,12 +246,12 @@ const Wrapper = styled.section`
   gap: 3rem;
   font-family: 'YComputer';
 
-  ${media.mobile`
-    padding: 2.5rem 0;
-  `}
-
   ${media.tablet`
     padding: 5rem 0;
+  `}
+
+  ${media.mobile`
+    padding: 2.5rem 0;
   `}
 `;
 
