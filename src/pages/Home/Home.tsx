@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import HomeSlide from './HomeSilde';
-import { HEADER_HEIGHT } from '@theme/constants/constants';
 
 //
 //
@@ -30,7 +29,7 @@ export default Home;
 const Wrapper = styled.div`
   width: 100vw;
   max-width: 100vw;
-  max-height: calc(100vh - ${HEADER_HEIGHT});
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
