@@ -3,7 +3,6 @@ import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
 import { useWindowSize } from 'react-use';
 import { useLocation } from 'react-router-dom';
-import { usePromiseTracker } from 'react-promise-tracker';
 
 //
 //
@@ -12,11 +11,9 @@ import { usePromiseTracker } from 'react-promise-tracker';
 const GlobalBackgroundSvgComponent = () => {
   const theme = useTheme();
   const location = useLocation();
-  const { promiseInProgress } = usePromiseTracker();
   const { width, height } = useWindowSize();
   const [viewPort, setViewPort] = React.useState({ width: 0, height: 0 });
   const viewPortHeight = document.body.clientHeight;
-  const headerHeight = 72;
 
   const dotColor = theme.colors.primary30;
   const pinkStarColor = theme.colors.sub1[20];
@@ -31,9 +28,9 @@ const GlobalBackgroundSvgComponent = () => {
   React.useLayoutEffect(() => {
     setViewPort({
       width,
-      height: viewPortHeight - headerHeight,
+      height: viewPortHeight,
     });
-  }, [width, height, viewPortHeight, location.pathname, promiseInProgress]);
+  }, [width, height, viewPortHeight, location.pathname]);
 
   //
   //
@@ -47,8 +44,9 @@ const GlobalBackgroundSvgComponent = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        width: '100%',
-        position: 'absolute',
+        position: 'fixed',
+        width: '100vw !important',
+        height: '100vh !important',
         zIndex: -1,
         background: theme.colors.common.white,
         transition: THEME_CHANGE_TRANSITION,

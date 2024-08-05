@@ -50,8 +50,12 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const educationId = { ...location.state };
 
   useEffect(() => {
-    initializeWebSocket(); // 문제 바뀔 때마다 WebSocket 갱신
-  }, [message.quizId]);
+    initializeWebSocket();
+
+    return () => {
+      webSocket.current?.close(4000, 'disconnect websocket on purpose');
+    };
+  }, []);
 
   // webSocket 초기 연결 및 메시지 수신
   const initializeWebSocket = async () => {
@@ -90,6 +94,23 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     webSocket.current.onerror = (error) => {
       console.log(error);
     };
+    webSocket.current.onclose = (event: any) => {
+      console.log(event);
+      if (event.code === 4000) {
+        return;
+      } else {
+        reconnectWebSocket();
+      }
+    };
+  };
+
+  const reconnectWebSocket = () => {
+    console.log('WebSocket disconnected. Attempting to reconnect...');
+    setTimeout(() => {
+      initializeWebSocket();
+      // connectWebSocket();
+      // receiveMessage();
+    }, 1000);
   };
 
   // WebSocket 메시지 수신
