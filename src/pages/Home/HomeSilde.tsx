@@ -8,10 +8,10 @@ import { Mousewheel, Pagination } from 'swiper/modules';
 import styled from 'styled-components';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import HomeFirstSection from './FirstSection/HomeFirstSection';
-import HomeSecondSection from './SecondSection/HomeSecondSection';
 import HomeThirdSection from './ThirdSection/HomeThirdSection';
 import Footer from '@components/Footer';
 import { device } from '@theme/media';
+import HomeNewSecondSection from './SecondSection/HomeNewSecondSection';
 
 //
 //
@@ -48,7 +48,7 @@ const HomeSlide = () => {
         </StyledSwiperSlide>
         {/* Second Section */}
         <StyledSwiperSlide>
-          <HomeSecondSection />
+          <HomeNewSecondSection />
         </StyledSwiperSlide>
         {/* Third Section */}
         <StyledSwiperSlide>
