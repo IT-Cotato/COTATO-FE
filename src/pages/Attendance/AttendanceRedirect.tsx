@@ -8,15 +8,17 @@ import { useNavigate } from 'react-router-dom';
 
 const AttendanceRedirect = () => {
   const navigate = useNavigate();
-  const { generationId, isGenerationLoading, sessionCount } = useGeneration();
+  const { currentGeneration, isGenerationLoading } = useGeneration();
 
   //
   // redirect logic
   //
   React.useEffect(() => {
-    if (isGenerationLoading) {
+    if (isGenerationLoading || !currentGeneration) {
       return;
     }
+
+    const { sessionCount, generationId } = currentGeneration;
 
     // if there is no session, navigate to home
     if (!sessionCount) {
@@ -29,7 +31,7 @@ const AttendanceRedirect = () => {
     navigate(`/attendance/list/generation/${generationId}`);
 
     return;
-  }, [generationId, isGenerationLoading]);
+  }, [isGenerationLoading]);
 
   return null;
 };

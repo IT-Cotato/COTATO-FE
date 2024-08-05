@@ -8,9 +8,8 @@ import useSWR from 'swr';
 //
 
 interface UseGenerationReturn {
-  generationId: CotatoGenerationInfoResponse['generationId'];
-  generationNumber: CotatoGenerationInfoResponse['generationNumber'];
-  sessionCount: CotatoGenerationInfoResponse['sessionCount'];
+  currentGeneration: CotatoGenerationInfoResponse | undefined;
+  generations: CotatoGenerationInfoResponse[] | undefined;
   isGenerationLoading: boolean;
   isGenerationError: any;
 }
@@ -35,9 +34,8 @@ export function useGeneration() {
   const currentGeneration = data?.at(-1);
 
   _return.current = {
-    generationId: currentGeneration?.generationId,
-    generationNumber: currentGeneration?.generationNumber,
-    sessionCount: currentGeneration?.sessionCount,
+    generations: data,
+    currentGeneration: currentGeneration,
     isGenerationLoading: isLoading,
     isGenerationError: error,
   };
