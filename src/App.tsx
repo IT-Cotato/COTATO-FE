@@ -18,6 +18,7 @@ import CSPage from '@pages/CS/CSPage';
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
+import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 
 function App() {
   const location = useLocation();
@@ -35,18 +36,19 @@ function App() {
         <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<ReadyState />} />
+          <Route path="/*" element={<NotFound />} />
           <Route path="/about" element={<ReadyState />} />
-          <Route path="/products" element={<ReadyState />} />
+          <Route path="/attendance" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
-          <Route path="/session" element={<SessionHome />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/signin" element={<Login />} />
           <Route path="/findid" element={<FindID />} />
           <Route path="/findpw" element={<FindPWProcess />} />
           <Route path="/joinus" element={<SignUp />} />
           <Route path="/mypage/*" element={<MyPage />} />
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/products" element={<ReadyState />} />
+          <Route path="/projects" element={<ReadyState />} />
+          <Route path="/session" element={<SessionHome />} />
+          <Route path="/signin" element={<Login />} />
         </Routes>
         {isInHome ? null : <Footer />}
       </CotatoThemeProvider>
