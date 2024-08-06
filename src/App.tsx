@@ -37,6 +37,7 @@ function App() {
         <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
           <Route path="/about" element={<ReadyState />} />
           <Route path="/attendance" element={<AttendanceRoutes />} />
