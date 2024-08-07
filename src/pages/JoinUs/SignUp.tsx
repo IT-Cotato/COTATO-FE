@@ -483,9 +483,9 @@ const AuthButton = styled.button<{ disable: boolean }>`
   font-size: 0.8rem;
   font-weight: 300;
   border-radius: 0.5rem;
-  background: ${({ theme }) => theme.colors.primary90};
-  color: #fff;
-  border: none;
+  border: 1px solid ${({ theme }) => theme.colors.primary100_1};
+  background: ${({ theme }) => theme.colors.primary50};
+  color: ${({ theme }) => theme.colors.secondary80};
   position: absolute;
   right: 1rem;
   top: 0.52rem;
