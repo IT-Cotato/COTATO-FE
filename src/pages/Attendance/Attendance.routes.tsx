@@ -1,6 +1,6 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
+import React, { Suspense } from 'react';
 import AttendanceRedirect from './AttendanceRedirect';
+import { Route, Routes } from 'react-router-dom';
 
 //
 //
@@ -18,13 +18,16 @@ const AttendanceRoutes = () => {
   //
   //
   //
+
   return (
-    <Routes>
-      <Route path="/attendance/list/generation/:generationId" element={<AsyncAttendanceList />} />
-      <Route path="/attendance/attend/*" element={<AsyncAttendanceAttend />} />
-      <Route path="/attendance/report/:generationId" element={<AsyncAttendanceReport />} />
-      <Route path="/" element={<AttendanceRedirect />} />
-    </Routes>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/list/generation/:generationId" element={<AsyncAttendanceList />} />
+        <Route path="/attend/*" element={<AsyncAttendanceAttend />} />
+        <Route path="/report/:generationId" element={<AsyncAttendanceReport />} />
+        <Route path="/" element={<AttendanceRedirect />} />
+      </Routes>
+    </Suspense>
   );
 };
 

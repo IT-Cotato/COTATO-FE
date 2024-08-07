@@ -38,7 +38,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/*" element={<NotFound />} />
           <Route path="/about" element={<ReadyState />} />
-          <Route path="/attendance" element={<AttendanceRoutes />} />
+          <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/findid" element={<FindID />} />
