@@ -19,6 +19,7 @@ import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
+import CotatoAttendanceFab from '@components/CotatoAttendanceFab';
 
 function App() {
   const location = useLocation();
@@ -51,6 +52,7 @@ function App() {
           <Route path="/signin" element={<Login />} />
         </Routes>
         {isInHome ? null : <Footer />}
+        <CotatoAttendanceFab />
       </CotatoThemeProvider>
     </div>
   );
