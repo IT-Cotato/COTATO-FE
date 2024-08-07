@@ -14,6 +14,7 @@ import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
 import SignUpSuccess from '@components/SignUpSuccess';
 import { media } from '@theme/media';
+import { CotatoSendEmailRequest } from 'cotato-openapi-clients';
 
 //
 //
@@ -132,7 +133,7 @@ const SignUp = () => {
 
   const emailData = {
     email: id,
-  };
+  } as CotatoSendEmailRequest;
 
   /**
    *
