@@ -13,6 +13,11 @@ const SignUpSuccess = () => {
     <Wrapper>
       <WelcomeImg src={welcomeImg} alt="welcome" />
       <PotatoImg src={potatoImg} alt="potatoes" />
+      <p>
+        *가입 신청 승인이 완료되면,
+        <br />
+        코테이토의 모든 서비스 이용이 가능합니다.
+      </p>
     </Wrapper>
   );
 };
@@ -23,9 +28,18 @@ const SignUpSuccess = () => {
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   animation: fade_in 0.7s ease-in-out;
+  p {
+    color: ${({ theme }) => theme.colors.gray60};
+    text-align: center;
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    line-height: 1.5rem;
+    width: 20rem;
+    margin-top: 2.7rem;
+  }
   @keyframes fade_in {
     0% {
       opacity: 0;
