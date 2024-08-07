@@ -159,6 +159,26 @@ const SignUp = () => {
   /**
    *
    */
+  const handleEmailAuthError = (errorCode: string) => {
+    switch (errorCode) {
+      case 'A-101':
+        alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
+        break;
+      case 'A-102':
+        alert('인증번호가 만료되었습니다. 다시 인증해주세요.');
+        break;
+      case 'A-202':
+        alert('인증번호 발급에 실패하였습니다. 다시 시도해주세요.');
+        break;
+      default:
+        console.log('Exception Error: 이메일 인증 실패');
+        break;
+    }
+  };
+
+  /**
+   *
+   */
   const handleEmailAuth = async () => {
     await api
       .get('/v1/api/auth/verification', {
@@ -175,9 +195,7 @@ const SignUp = () => {
       .catch((err) => {
         setAuthNum('');
         const errorCode = err.response.data.code;
-        if (errorCode === 'A-101') alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
-        if (errorCode === 'A-102') alert('인증번호가 만료되었습니다. 다시 인증해주세요.');
-        if (errorCode === 'A-202') alert('인증번호 발급에 실패하였습니다. 다시 시도해주세요.');
+        handleEmailAuthError(errorCode);
       });
   };
 
