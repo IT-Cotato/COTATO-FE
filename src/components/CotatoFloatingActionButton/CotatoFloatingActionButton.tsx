@@ -19,7 +19,7 @@ interface CotatoFloatingActionButtonProps {
 //
 
 const FAB_WEB_SIZE = '4.25rem';
-const FAB_MOBILE_SIZE = '3.25rem';
+const FAB_MOBILE_SIZE = '3.5rem';
 
 //
 //
@@ -67,11 +67,13 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
           setIsFabOpen(!isFabOpen);
         }}
       >
-        <Stack>
+        <Stack gap="0.25rem">
           <Box width="100%" height="1.5rem">
             <FabExpandIcon width="100%" height="100%" />
           </Box>
-          <StyledTypography fontSize="0.8rem">{name}</StyledTypography>
+          <StyledTypography fontSize={isMobileOrSmaller ? '0.75rem' : '0.8rem'}>
+            {name}
+          </StyledTypography>
         </Stack>
       </StyledFab>
     </Stack>
@@ -100,7 +102,6 @@ const StyledFab = styled(Fab)<{ isMobileOrSmaller: boolean }>`
 const StyledTypography = styled(Typography)`
   color: #fff;
   font-weight: 500;
-  font-family: 'YComputer' !important;
 `;
 
 const StyledList = styled(List)<{ isMobileOrSmaller: boolean }>`

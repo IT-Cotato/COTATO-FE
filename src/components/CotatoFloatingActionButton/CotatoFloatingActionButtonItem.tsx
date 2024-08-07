@@ -1,4 +1,4 @@
-import { Box, Fab, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material';
+import { Box, Fab, SvgIcon, Tooltip, useMediaQuery } from '@mui/material';
 import { device } from '@theme/media';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
@@ -34,6 +34,16 @@ const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemPro
   const theme = useTheme();
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
 
+  const iconSize = isMobileOrSmaller
+    ? {
+        width: '28px',
+        height: '28px',
+      }
+    : {
+        width: '30px',
+        height: '30px',
+      };
+
   /**
    *
    */
@@ -49,27 +59,26 @@ const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemPro
   //
   //
   return (
-    <StyledFab
-      isMobileOrSmaller={isMobileOrSmaller}
-      sx={{
-        backgroundColor: selected ? theme.colors.primary90 : theme.colors.gray40,
-      }}
-      onClick={handleClick}
-    >
-      <Stack>
-        <Box width="100%" height="1.5rem">
-          <SvgIcon>{icon}</SvgIcon>
+    <Tooltip arrow title={name} placement="left">
+      <StyledFab
+        isMobileOrSmaller={isMobileOrSmaller}
+        sx={{
+          backgroundColor: selected ? theme.colors.primary90 : theme.colors.gray40,
+        }}
+        onClick={handleClick}
+      >
+        <Box width="100%" height="1.75rem">
+          <SvgIcon
+            style={{
+              width: iconSize.width,
+              height: iconSize.height,
+            }}
+          >
+            {icon}
+          </SvgIcon>
         </Box>
-        <StyledTypography
-          fontSize="0.8rem"
-          sx={{
-            wordBreak: 'keep-all',
-          }}
-        >
-          {name}
-        </StyledTypography>
-      </Stack>
-    </StyledFab>
+      </StyledFab>
+    </Tooltip>
   );
 };
 
@@ -89,11 +98,4 @@ const StyledFab = styled(Fab)<{ isMobileOrSmaller: boolean }>`
   &:hover {
     background-color: ${({ theme }) => theme.colors.primary90} !important;
   }
-`;
-
-const StyledTypography = styled(Typography)`
-  color: #fff;
-  font-weight: 500;
-  font-family: 'YComputer' !important;
-  line-height: 1 !important;
 `;
