@@ -179,7 +179,7 @@ const SignUp = () => {
   /**
    *
    */
-  const handleEmailAuth = async () => {
+  const handleAuthButtonClick = async () => {
     await api
       .get('/v1/api/auth/verification', {
         params: {
@@ -315,7 +315,7 @@ const SignUp = () => {
                 value={authNum}
                 onChange={handleAuthNumChange}
               />
-              <AuthButton type="button" onClick={handleEmailAuth} disable={isAuthorized}>
+              <AuthButton type="button" onClick={handleAuthButtonClick} disable={isAuthorized}>
                 인증하기
               </AuthButton>
             </InputDiv>
