@@ -75,16 +75,8 @@ const SignUp = () => {
       const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
       const passwordCurrent = e.target.value;
       setPassword(passwordCurrent);
-      if (passwordLength.test(passwordCurrent)) {
-        setIsPasswordLength(true);
-      } else {
-        setIsPasswordLength(false);
-      }
-      if (passwordRegex.test(passwordCurrent)) {
-        setIsPasswordRegex(true);
-      } else {
-        setIsPasswordRegex(false);
-      }
+      setIsPasswordLength(passwordLength.test(passwordCurrent));
+      setIsPasswordRegex(passwordRegex.test(passwordCurrent));
       if (passwordLength && passwordRegex) setIsPassword(true);
     },
     [isPasswordLength, isPasswordRegex, passwordCheck],
