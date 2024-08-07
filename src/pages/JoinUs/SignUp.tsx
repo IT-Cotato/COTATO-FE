@@ -147,7 +147,6 @@ const SignUp = () => {
           type: 'sign-up',
         },
       })
-      .then(() => {})
       .catch((err) => {
         if (err.response.status === 409) {
           alert('이미 가입된 이메일입니다.');
