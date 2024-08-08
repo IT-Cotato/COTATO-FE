@@ -307,8 +307,8 @@ const SignUp = () => {
           <InputDiv>
             <InputBox
               type="text"
-              id="id"
-              name="id"
+              id="auth"
+              name="auth"
               placeholder="발송된 이메일의 인증번호를 입력해주세요."
               value={authNum}
               onChange={handleAuthNumChange}
