@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Divider, Stack } from '@mui/material';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import SignUpUserAgreementItem from '@components/SignUp/SignUpUserAgreementItem';
 import { v4 as uuid } from 'uuid';
+import { th } from 'date-fns/locale';
+import { set } from 'date-fns';
 
 //
 //
@@ -31,13 +33,17 @@ const AGREEMENT_ITEMS = [
 const SignUpUserAgreement = () => {
   const theme = useTheme();
 
+  const [color, setColor] = useState(theme.colors.gray100);
+
+  const mode = localStorage.getItem('theme');
+
   /**
    *
    */
   const renderTotalAgreement = () => {
     return (
       <TotalDiv>
-        <CheckIcon />
+        <CheckIcon fill={color} />
         <p>이용약관 전체 동의</p>
       </TotalDiv>
     );
@@ -55,16 +61,28 @@ const SignUpUserAgreement = () => {
             name={item.name}
             isRequired={item.isRequired}
             content={item.content}
+            fillColor={color}
           />
         ))}
       </Stack>
     );
   };
 
+  //
+  //
+  //
+  useEffect(() => {
+    if (mode === 'dark') {
+      setColor(theme.colors.gray30);
+    } else {
+      setColor(theme.colors.gray100);
+    }
+  }, [mode]);
+
   return (
     <Wrapper>
       {renderTotalAgreement()}
-      <Divider sx={{ bgcolor: theme.colors.gray100 }} />
+      <Divider sx={{ bgcolor: color }} />
       {renderAgreementItems()}
     </Wrapper>
   );

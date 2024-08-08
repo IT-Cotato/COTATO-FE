@@ -13,6 +13,7 @@ interface SignUpUserAgreementItemProps {
   name: string;
   isRequired: boolean;
   content: string;
+  fillColor: string;
 }
 
 //
@@ -23,6 +24,7 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
   name,
   isRequired,
   content,
+  fillColor,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,7 +34,7 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
    *
    */
   const ArrowButton = () => {
-    return isOpen ? <ArrowUp /> : <ArrowDown />;
+    return isOpen ? <ArrowUp fill={fillColor} /> : <ArrowDown fill={fillColor} />;
   };
 
   /**
@@ -54,7 +56,7 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
     <Wrapper>
       <ItemDiv>
         <CheckSection>
-          <CheckIcon />
+          <CheckIcon fill={fillColor} />
           <p>
             {name} ({necessaryOrOptional})
           </p>
