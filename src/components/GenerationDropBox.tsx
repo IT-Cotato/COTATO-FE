@@ -281,7 +281,7 @@ const DropDownList = styled.div`
     visibility ${FADE_DURATION}ms;
 
   > ul {
-    background-color: ${({ theme }) => theme.colors.gray5};
+    background-color: ${({ theme }) => theme.colors.common.white_const};
     padding: 0;
     margin: 0.25rem 0;
 
