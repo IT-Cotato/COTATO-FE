@@ -3,9 +3,6 @@ import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import idIcon from '@assets/login_id_icon.svg';
 import passwordIcon from '@assets/login_pw_icon.svg';
-import btnDefault from '@assets/login_btn_default.svg';
-import btnHover from '@assets/login_btn_hover.svg';
-import btnClicked from '@assets/login_btn_clicked.svg';
 import line from '@assets/login_line.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '@/api/api';
@@ -14,12 +11,8 @@ import fetcher from '@utils/fetcher';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import LoginSuccess from '@components/LoginSuccess';
-
-//
-//
-//
-
-type btnStateType = 'default' | 'hover' | 'clicked';
+import CotatoPixelButton from '@components/CotatoPixelButton';
+import { ReactComponent as ButtonText } from '@assets/login_btn_text.svg';
 
 //
 //
@@ -32,7 +25,6 @@ const DELAY_TIME = 3000;
 //
 
 const Login = () => {
-  const [btnState, setBtnState] = useState<btnStateType>('default');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -104,22 +96,6 @@ const Login = () => {
   /**
    *
    */
-  const getImgSrcByState = (state: btnStateType) => {
-    switch (state) {
-      case 'default':
-        return btnDefault;
-      case 'hover':
-        return btnHover;
-      case 'clicked':
-        return btnClicked;
-      default:
-        return btnDefault;
-    }
-  };
-
-  /**
-   *
-   */
   const renderLoginForm = () => {
     return (
       <>
@@ -141,16 +117,7 @@ const Login = () => {
               />
             </InputBox>
           </InputContainer>
-          <ButtonContainer>
-            <LoginBtn
-              type="submit"
-              onMouseOver={() => setBtnState('hover')}
-              onMouseLeave={() => setBtnState('default')}
-              onClick={() => setBtnState('clicked')}
-            >
-              <img src={getImgSrcByState(btnState)} style={{ width: '120px' }} />
-            </LoginBtn>
-          </ButtonContainer>
+          <CotatoPixelButton BtnTextImg={ButtonText} />
         </Form>
       </>
     );
@@ -297,34 +264,6 @@ const InputBox = styled.div`
   ${media.mobile`
     width: 220px;
   `}
-`;
-
-const ButtonContainer = styled.div`
-  height: 5rem;
-  display: flex;
-  align-items: end;
-`;
-
-const LoginBtn = styled.button`
-  background: none;
-  border: none;
-  &:hover {
-    animation: spring 0.1s ease-out 0.1s;
-  }
-  @keyframes spring {
-    0% {
-      transform: scaleY(1);
-    }
-    40% {
-      transform: scaleY(0.99);
-    }
-    60% {
-      transform: scaleY(1.01);
-    }
-    100% {
-      transform: scaleY(1);
-    }
-  }
 `;
 
 const LinkContainer = styled.div`
