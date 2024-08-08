@@ -1,20 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import api from '@/api/api';
-import WelcomeImg from '@assets/login_welcome_img.svg';
+import { CotatoSendEmailRequest } from 'cotato-openapi-clients';
 import { CotatoThemeType } from '@theme/theme';
+import { media } from '@theme/media';
+import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
+import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
+import WelcomeImg from '@assets/login_welcome_img.svg';
 import userIcon from '@assets/sign_up_user_icon.svg';
 import phoneIcon from '@assets/sign_up_phone_icon.svg';
 import pwIcon from '@assets/sign_up_pw_icon.svg';
-import CotatoPixelButton from '@components/CotatoPixelButton';
-import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
 import eyesDefaultIcon from '@assets/sign_up_eyes_default_icon.svg';
 import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
-import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
-import SignUpSuccess from '@components/SignUpSuccess';
-import { media } from '@theme/media';
-import { CotatoSendEmailRequest } from 'cotato-openapi-clients';
+import SignUpSuccess from '@components/SignUp/SignUpSuccess';
+import CotatoPixelButton from '@components/CotatoPixelButton';
+import SignUpUserAgreement from '@components/SignUp/SignUpUserAgreement';
 
 //
 //
@@ -270,110 +271,138 @@ const SignUp = () => {
    *
    */
   const renderSignUpForm = () => {
+    return (
+      <>
+        <Label>
+          <span>이름</span>
+          <InputDiv>
+            <Icon src={userIcon} alt="user icon" />
+            <InputBox
+              type="text"
+              id="name"
+              name="name"
+              placeholder="이름을 입력해주세요."
+              value={name}
+              onChange={handleNameChange}
+            />
+          </InputDiv>
+        </Label>
+        <Label>
+          <span>아이디</span>
+          <InputDiv>
+            <Icon src={userIcon} alt="user icon" />
+            <InputBox
+              type="text"
+              id="id"
+              name="id"
+              placeholder="이메일 형식으로 작성해주세요."
+              value={id}
+              onChange={handleIdChange}
+            />
+            <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
+              인증 메일 발송
+            </AuthButton>
+          </InputDiv>
+          {!isId && idMessage && renderErrorMsg(idMessage)}
+          <InputDiv>
+            <InputBox
+              type="text"
+              id="id"
+              name="id"
+              placeholder="발송된 이메일의 인증번호를 입력해주세요."
+              value={authNum}
+              onChange={handleAuthNumChange}
+            />
+            <AuthButton type="button" onClick={handleAuthButtonClick} disable={isAuthorized}>
+              인증하기
+            </AuthButton>
+          </InputDiv>
+        </Label>
+        <Label>
+          <span>전화번호</span>
+          <InputDiv>
+            <Icon src={phoneIcon} alt="phone icon" />
+            <InputBox
+              type="tel"
+              id="tel"
+              name="tel"
+              placeholder="'-'를 제외한 숫자만 입력해주세요."
+              value={tel}
+              onChange={handleTelChange}
+            />
+          </InputDiv>
+          {!isTel && telMessage && renderErrorMsg(telMessage)}
+        </Label>
+        <Label>
+          <span>비밀번호</span>
+          <InputDiv>
+            <Icon src={pwIcon} alt="password icon" />
+            <InputBox
+              type={isPasswordVisible ? 'text' : 'password'}
+              id="password"
+              name="password"
+              placeholder="비밀번호를 입력해주세요."
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            <Eyes
+              src={isPasswordVisible ? eyesInvisibleIcon : eyesDefaultIcon}
+              alt="eyes icon"
+              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            />
+          </InputDiv>
+          <PasswordValidation />
+        </Label>
+        <Label>
+          <span>비밀번호 확인</span>
+          <InputDiv>
+            <Icon src={pwIcon} alt="password icon" />
+            <InputBox
+              type="password"
+              id="passwordCheck"
+              name="passwordCheck"
+              placeholder="비밀번호를 한 번 더 입력해주세요."
+              value={passwordCheck}
+              onChange={handlePasswordCheckChange}
+            />
+          </InputDiv>
+          {mismatchError && renderErrorMsg(passwordCheckMessage)}
+        </Label>
+      </>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderUserAgreement = () => {
+    return (
+      <UserAgreementDiv>
+        <SignUpUserAgreement />
+      </UserAgreementDiv>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderSubmitButton = () => {
+    return <CotatoPixelButton BtnTextImg={ButtonText} />;
+  };
+
+  /**
+   *
+   */
+  const renderSignUp = () => {
     if (isSuccess) return;
 
     return (
       <FormDiv>
         <BackImg src={WelcomeImg} />
         <Form onSubmit={handleSubmit}>
-          <Label>
-            <span>이름</span>
-            <InputDiv>
-              <Icon src={userIcon} alt="user icon" />
-              <InputBox
-                type="text"
-                id="name"
-                name="name"
-                placeholder="이름을 입력해주세요."
-                value={name}
-                onChange={handleNameChange}
-              />
-            </InputDiv>
-          </Label>
-          <Label>
-            <span>아이디</span>
-            <InputDiv>
-              <Icon src={userIcon} alt="user icon" />
-              <InputBox
-                type="text"
-                id="id"
-                name="id"
-                placeholder="이메일 형식으로 작성해주세요."
-                value={id}
-                onChange={handleIdChange}
-              />
-              <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
-                인증 메일 발송
-              </AuthButton>
-            </InputDiv>
-            {!isId && idMessage && renderErrorMsg(idMessage)}
-            <InputDiv>
-              <InputBox
-                type="text"
-                id="id"
-                name="id"
-                placeholder="발송된 이메일의 인증번호를 입력해주세요."
-                value={authNum}
-                onChange={handleAuthNumChange}
-              />
-              <AuthButton type="button" onClick={handleAuthButtonClick} disable={isAuthorized}>
-                인증하기
-              </AuthButton>
-            </InputDiv>
-          </Label>
-          <Label>
-            <span>전화번호</span>
-            <InputDiv>
-              <Icon src={phoneIcon} alt="phone icon" />
-              <InputBox
-                type="tel"
-                id="tel"
-                name="tel"
-                placeholder="'-'를 제외한 숫자만 입력해주세요."
-                value={tel}
-                onChange={handleTelChange}
-              />
-            </InputDiv>
-            {!isTel && telMessage && renderErrorMsg(telMessage)}
-          </Label>
-          <Label>
-            <span>비밀번호</span>
-            <InputDiv>
-              <Icon src={pwIcon} alt="password icon" />
-              <InputBox
-                type={isPasswordVisible ? 'text' : 'password'}
-                id="password"
-                name="password"
-                placeholder="비밀번호를 입력해주세요."
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              <Eyes
-                src={isPasswordVisible ? eyesInvisibleIcon : eyesDefaultIcon}
-                alt="eyes icon"
-                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-              />
-            </InputDiv>
-            <PasswordValidation />
-          </Label>
-          <Label>
-            <span>비밀번호 확인</span>
-            <InputDiv>
-              <Icon src={pwIcon} alt="password icon" />
-              <InputBox
-                type="password"
-                id="passwordCheck"
-                name="passwordCheck"
-                placeholder="비밀번호를 한 번 더 입력해주세요."
-                value={passwordCheck}
-                onChange={handlePasswordCheckChange}
-              />
-            </InputDiv>
-            {mismatchError && renderErrorMsg(passwordCheckMessage)}
-          </Label>
-          <ButtonDiv>
-            <CotatoPixelButton BtnTextImg={ButtonText} />
-          </ButtonDiv>
+          {renderSignUpForm()}
+          {renderUserAgreement()}
+          {renderSubmitButton()}
         </Form>
       </FormDiv>
     );
@@ -390,7 +419,7 @@ const SignUp = () => {
 
   return (
     <Wrapper>
-      {renderSignUpForm()}
+      {renderSignUp()}
       {renderSignUpSuccess()}
     </Wrapper>
   );
@@ -554,8 +583,9 @@ const ValidationDiv = styled.div<{ color: boolean }>`
   }
 `;
 
-const ButtonDiv = styled.div`
-  margin-top: 10rem;
+const UserAgreementDiv = styled.div`
+  margin-top: 4.2rem;
+  margin-bottom: 3rem;
 `;
 
 export default SignUp;
