@@ -198,6 +198,6 @@ const StyledStack = styled(Stack)`
   `}
 
   ${media.mobile`
-    width: 15rem;
+    width: 18rem;
   `}
 `;

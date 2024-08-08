@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
-
-const theme = window.localStorage.getItem('theme') ?? 'dark';
+import { device } from './media';
+import { HEADER_HEIGHT } from './constants/constants';
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -10,6 +10,9 @@ export const GlobalStyle = createGlobalStyle`
   
   body {
     font-family: NanumSquareRound;
-    background-color: ${theme === 'dark' ? '#1A1A1A' : '#F9F9F9'};
+    // global layout
+    @media screen and (min-width: ${device.tablet}) {
+      margin-top: ${HEADER_HEIGHT};
+    }
   }
 `;

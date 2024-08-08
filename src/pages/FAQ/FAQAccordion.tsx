@@ -56,7 +56,7 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
         expandIcon={<span className="material-symbols-outlined">chevron_right</span>}
         onClick={handleAccordionClick}
         sx={{
-          padding: { xs: '1rem 2rem', md: '1.5rem 2rem' },
+          padding: { xs: '0.25rem 2rem', md: '0.25rem 2rem' },
         }}
       >
         <QuestionIndex>Q{index + 1}</QuestionIndex>
@@ -94,7 +94,9 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
   const renderAccordionDetails = () => {
     return (
       <StyledAccordionDetails>
-        <AnswerIndex>A{index + 1}</AnswerIndex>
+        <AnswerIndex>
+          <StyledStack>A{index + 1}</StyledStack>
+        </AnswerIndex>
         <Stack width="25rem" justifyContent="center">
           <StyledTypography
             dangerouslySetInnerHTML={{ __html: answer }}
@@ -188,9 +190,9 @@ const QuestionIndex = styled.div`
 
 const AnswerIndex = styled.div`
   position: relative;
-  left: -1.25rem;
+  left: -1.5rem;
   top: -1.5rem;
-  width: 2rem;
+  width: 0rem;
   height: 1rem;
   text-align: center;
   background-color: ${({ theme }) => theme.colors.common.white};
@@ -207,4 +209,11 @@ const StyledTypography = styled(Typography)`
   ul {
     padding-left: 1rem;
   }
+`;
+
+const StyledStack = styled(Stack)`
+  background-color: ${({ theme }) => theme.colors.common.white};
+  position: absolute;
+  width: 2rem;
+  height: 1rem;
 `;

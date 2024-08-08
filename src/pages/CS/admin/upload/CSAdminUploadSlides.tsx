@@ -1,13 +1,25 @@
 import React, { useCallback } from 'react';
 import DndContainer from './CSAdminUploadDndContainer';
 import styled from 'styled-components';
-import { Multiples, ShortQuizzes } from '@/typing/db';
+import {
+  CotatoCreateMultipleQuizRequest,
+  CotatoCreateShortQuizRequest,
+} from 'cotato-openapi-clients';
+import { createMultipleQuiz } from './utils/createMultipleQuiz';
 
 //
 //
 //
 
-type QuizType = Multiples | ShortQuizzes;
+export interface MultipleQuiz extends CotatoCreateMultipleQuizRequest {
+  previewUrl?: string;
+}
+
+export interface ShortQuiz extends CotatoCreateShortQuizRequest {
+  previewUrl?: string;
+}
+
+export type QuizType = MultipleQuiz | ShortQuiz;
 
 type Props = {
   quiz: QuizType[];
@@ -22,42 +34,22 @@ type Props = {
 
 const CSAdminUploadSlides = ({ quiz, setQuiz, selected, setSelected }: Props) => {
   /**
-   * add new quiz item
+   *
    */
-  const addQuiz = useCallback(() => {
-    checkCanAddQuiz() &&
-      setQuiz((prev) => [
+  const handleClickAddQuiz = () => {
+    if (!checkCanAddQuiz()) {
+      return;
+    }
+
+    setQuiz((prev) => {
+      return [
         ...prev,
-        {
+        createMultipleQuiz({
           number: prev.length + 1,
-          question: '',
-          choices: [
-            {
-              number: 1,
-              content: '',
-              isAnswer: 'ANSWER',
-            },
-            {
-              number: 2,
-              content: '',
-              isAnswer: 'NO_ANSWER',
-            },
-            {
-              number: 3,
-              content: '',
-              isAnswer: 'NO_ANSWER',
-            },
-            {
-              number: 4,
-              content: '',
-              isAnswer: 'NO_ANSWER',
-            },
-          ],
-          image: null,
-          previewUrl: null,
-        },
-      ]);
-  }, [quiz, selected]);
+        }),
+      ];
+    });
+  };
 
   /**
    *
@@ -122,7 +114,7 @@ const CSAdminUploadSlides = ({ quiz, setQuiz, selected, setSelected }: Props) =>
       <button
         style={{ background: '#477FEB', color: 'white' }}
         onClick={() => {
-          addQuiz();
+          handleClickAddQuiz();
         }}
       >
         슬라이드 추가
