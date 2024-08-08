@@ -79,7 +79,7 @@ const CotatoPixelButton: React.FC<Props> = ({ BtnTextImg }) => {
         onClick={() => setBtnState('clicked')}
       >
         <BtnImg src={getImgSrcByState(btnState)} />
-        <BtnTextDiv btnState={btnState} getTextPositionByState={getTextPositionByState}>
+        <BtnTextDiv $btnState={btnState} $getTextPositionByState={getTextPositionByState}>
           <BtnTextImg fill={getTextColorByState(btnState)} />
         </BtnTextDiv>
       </Container>
@@ -125,11 +125,11 @@ const BtnImg = styled.img`
 `;
 
 const BtnTextDiv = styled.div<{
-  btnState: btnStateType;
-  getTextPositionByState: (btnState: btnStateType) => string;
+  $btnState: btnStateType;
+  $getTextPositionByState: (btnState: btnStateType) => string;
 }>`
   position: absolute;
-  top: ${({ btnState, getTextPositionByState }) => getTextPositionByState(btnState)};
+  top: ${({ $btnState, $getTextPositionByState }) => $getTextPositionByState($btnState)};
   left: 50%;
   transform: translate(-50%, -50%);
 `;
