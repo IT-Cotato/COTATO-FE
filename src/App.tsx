@@ -48,6 +48,7 @@ function App() {
           <Route path="/findpw" element={<FindPWProcess />} />
           <Route path="/joinus" element={<SignUp />} />
           <Route path="/mypage/*" element={<MyPage />} />
+          <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
         {isInHome ? null : <Footer />}
