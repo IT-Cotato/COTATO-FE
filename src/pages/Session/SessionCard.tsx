@@ -61,7 +61,7 @@ const SessionCard = ({ session, isActive, handleChangeUpdateSession }: SessionCa
 
     const getHeaderElement = () => (
       <>
-        <SessionIcon Icon={<HeartIcon />} size="lg" />
+        <SessionIcon Icon={<HeartIcon />} size="lg" isActive={isActive} />
         <h3>{session?.title}</h3>
         {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
           <PencilIcon
