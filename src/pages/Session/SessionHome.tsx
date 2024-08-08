@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import SessionCard, { IMAGE_WIDTH } from '@pages/Session/SessionCard';
-import { v4 as uuid } from 'uuid';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import {
@@ -29,6 +28,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import fetchUserData from '@utils/fetchUserData';
 import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
+import SessionDetailModal from './SessionDetailModal';
 
 //
 //
@@ -38,7 +38,7 @@ const SessionHome = () => {
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
-  const { data: sessionList, mutate: mutateSessionList } = useSWR<SessionListInfo[]>(
+  const { data: sessionList, mutate: mutateSessionList } = useSWR<CotatoSessionListResponse[]>(
     '/v1/api/session',
     (url: string) => fetcherWithParams(url, { generationId: selectedGeneration?.generationId }),
   );
@@ -47,6 +47,9 @@ const SessionHome = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
+
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
 
@@ -182,6 +185,21 @@ const SessionHome = () => {
   /**
    *
    */
+  const handleSessionClick = (session: CotatoSessionListResponse) => {
+    setSelectedSession(session);
+    setIsDetailModalOpen(true);
+  };
+
+  /**
+   *
+   */
+  const handleDetailModalClose = () => {
+    setIsDetailModalOpen(false);
+  };
+
+  /**
+   *
+   */
   const renderSettingTab = () => {
     return (
       <SettingTab>
@@ -209,14 +227,15 @@ const SessionHome = () => {
     return (
       <SessionCardGridWrapper>
         {sessionList
-          ? sessionList?.map((session: CotatoSessionListResponse) => (
+          ? sessionList?.map((session: CotatoSessionListResponse, index) => (
               <SessionCard
-                key={uuid()}
+                key={index}
                 session={session}
                 handleChangeUpdateSession={handleChaneUpdateSession}
+                handleSessionClick={handleSessionClick}
               />
             ))
-          : new Array(12).fill(null).map(() => <SessionCard key={uuid()} />)}
+          : new Array(12).fill(null).map((_, index) => <SessionCard key={index} />)}
       </SessionCardGridWrapper>
     );
   };
@@ -247,8 +266,12 @@ const SessionHome = () => {
         modules={[Pagination, Scrollbar]}
       >
         {slideList.map((session: CotatoSessionListResponse | undefined, index: number) => (
-          <StyledSwiperSlide key={uuid()}>
-            <SessionCard session={session} isActive={activeSlideIndex === index} />
+          <StyledSwiperSlide key={index}>
+            <SessionCard
+              session={session}
+              isActive={activeSlideIndex === index}
+              handleSessionClick={handleSessionClick}
+            />
           </StyledSwiperSlide>
         ))}
       </StyledSwiper>
@@ -271,6 +294,11 @@ const SessionHome = () => {
         {renderSessionCards()}
         {renderMobileSessoinCards()}
       </Wrapper>
+      <SessionDetailModal
+        open={isDetailModalOpen}
+        session={selectedSession}
+        handleClose={handleDetailModalClose}
+      />
       <SessionUploadModal
         open={isAddModalOpen}
         handleClose={() => setIsAddModalOpen(false)}

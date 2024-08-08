@@ -24,6 +24,7 @@ interface SessionCardProps {
   session?: CotatoSessionListResponse;
   isActive?: boolean;
   handleChangeUpdateSession?: (Session?: CotatoSessionListResponse) => void;
+  handleSessionClick?: (session: CotatoSessionListResponse) => void;
 }
 
 interface CardImageProps {
@@ -41,7 +42,12 @@ export const IMAGE_WIDTH = '16rem';
 //
 //
 
-const SessionCard = ({ session, isActive, handleChangeUpdateSession }: SessionCardProps) => {
+const SessionCard = ({
+  session,
+  isActive,
+  handleChangeUpdateSession,
+  handleSessionClick,
+}: SessionCardProps) => {
   const { data: userData } = fetchUserData();
 
   const [imageLoading, setImageLoading] = useState(true);
@@ -131,7 +137,10 @@ const SessionCard = ({ session, isActive, handleChangeUpdateSession }: SessionCa
   );
 
   return (
-    <Container $isActive={isActive}>
+    <Container
+      $isActive={isActive}
+      onClick={() => session && handleSessionClick && handleSessionClick(session)}
+    >
       {renderCardHeader()}
       {renderCardImage()}
       {renderSessionContents()}
@@ -153,6 +162,7 @@ const Container = styled.div<{ $isActive?: boolean }>`
   border-radius: 0.6rem;
   background: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
 `;
 
 const CardHeader = styled.div`
