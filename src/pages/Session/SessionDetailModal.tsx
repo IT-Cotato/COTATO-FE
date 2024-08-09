@@ -1,9 +1,14 @@
 import React from 'react';
 import { Fade, Modal, useMediaQuery } from '@mui/material';
-import { CotatoSessionListResponse } from 'cotato-openapi-clients';
+import {
+  CotatoSessionListImageInfoResponse,
+  CotatoSessionListResponse,
+} from 'cotato-openapi-clients';
 import { styled } from 'styled-components';
 import { device } from '@theme/media';
 import SessionDetailModalCard from '@pages/Session/SessionDetailModalCard';
+import SessionDetailModalImage from './SessionDetailModalImage';
+import potato_ready from '@assets/potato_ready.svg';
 
 //
 //
@@ -19,7 +24,7 @@ interface SessionDetailModalProps {
 //
 //
 
-const FADE_DURATION = 300;
+const FADE_DURATION = 200;
 
 //
 //
@@ -36,7 +41,17 @@ const SessionDetailModal = ({ open, session, handleClose }: SessionDetailModalPr
       return null;
     }
 
-    return <SessionDetailModalCard session={session} handleClose={handleClose} />;
+    const imageList: CotatoSessionListImageInfoResponse[] =
+      session?.imageInfos && session.imageInfos.length > 0
+        ? session.imageInfos
+        : [{ imageUrl: potato_ready }];
+
+    return (
+      <>
+        <SessionDetailModalImage imageList={imageList} />
+        <SessionDetailModalCard session={session} handleClose={handleClose} />
+      </>
+    );
   };
 
   return (
@@ -71,6 +86,7 @@ const Container = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
+  align-items: stretch;
 
   &:focus-visible {
     outline: none;
