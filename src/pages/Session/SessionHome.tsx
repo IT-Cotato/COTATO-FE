@@ -11,7 +11,7 @@ import {
   SessionContentsNetworking,
 } from '@/enums/SessionContents';
 import api from '@/api/api';
-import SessionUploadModal from './SessionUploadModal';
+import SessionUploadModal from '@pages/Session/SessionUploadModal';
 import {
   CotatoGenerationInfoResponse,
   CotatoSessionListResponse,
@@ -23,12 +23,12 @@ import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper/modules';
+import fetchUserData from '@utils/fetchUserData';
+import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
+import SessionDetailModal from '@pages/Session/SessionDetailModal';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import fetchUserData from '@utils/fetchUserData';
-import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
-import SessionDetailModal from './SessionDetailModal';
 
 //
 //
@@ -193,8 +193,49 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleDetailModalClose = () => {
-    setIsDetailModalOpen(false);
+  const handlePrevSessionClick = () => {
+    if (!selectedSession || !sessionList) {
+      return;
+    }
+
+    const currentSessionNumber = selectedSession?.sessionNumber || 0;
+
+    if (currentSessionNumber === 0) {
+      return;
+    }
+
+    const prevSession =
+      sessionList?.find((session) => session.sessionNumber === currentSessionNumber - 1) || null;
+
+    setSelectedSession(prevSession);
+
+    if (!prevSession) {
+      setIsDetailModalOpen(false);
+    }
+  };
+
+  /**
+   *
+   */
+  const handleNextSessionClick = () => {
+    if (!selectedSession || !sessionList) {
+      return;
+    }
+
+    const currentSessoinNumber = selectedSession?.sessionNumber || 0;
+
+    if (currentSessoinNumber === sessionList?.length - 1) {
+      return;
+    }
+
+    const nextSession =
+      sessionList?.find((session) => session.sessionNumber === currentSessoinNumber + 1) || null;
+
+    setSelectedSession(nextSession);
+
+    if (!nextSession) {
+      setIsDetailModalOpen(false);
+    }
   };
 
   /**
@@ -297,7 +338,10 @@ const SessionHome = () => {
       <SessionDetailModal
         open={isDetailModalOpen}
         session={selectedSession}
-        handleClose={handleDetailModalClose}
+        sessionCount={sessionList?.length || 0}
+        handleClose={() => setIsDetailModalOpen(false)}
+        handlePrevClick={handlePrevSessionClick}
+        handleNextClick={handleNextSessionClick}
       />
       <SessionUploadModal
         open={isAddModalOpen}

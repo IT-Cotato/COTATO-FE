@@ -54,7 +54,7 @@ const SessionDetailModalImage = ({ imageList }: SessionDetailModalImageProps) =>
 //
 
 const StyledSwiper = styled(Swiper)`
-  background: ${({ theme }) => theme.colors.gray20};
+  background: ${({ theme }) => theme.colors.common.black_const};
   width: ${IMAGE_WIDTH};
 
   .swiper-button-disabled {

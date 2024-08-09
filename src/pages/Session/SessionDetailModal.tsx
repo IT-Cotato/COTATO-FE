@@ -7,7 +7,8 @@ import {
 import { styled } from 'styled-components';
 import { device } from '@theme/media';
 import SessionDetailModalCard from '@pages/Session/SessionDetailModalCard';
-import SessionDetailModalImage from './SessionDetailModalImage';
+import SessionDetailModalImage from '@pages/Session/SessionDetailModalImage';
+import SessionArrowButton from '@components/Session/SessionArrowButton';
 import potato_ready from '@assets/potato_ready.svg';
 
 //
@@ -17,7 +18,10 @@ import potato_ready from '@assets/potato_ready.svg';
 interface SessionDetailModalProps {
   open: boolean;
   session: CotatoSessionListResponse | null;
+  sessionCount: number;
   handleClose: () => void;
+  handlePrevClick: () => void;
+  handleNextClick: () => void;
 }
 
 //
@@ -30,8 +34,45 @@ const FADE_DURATION = 200;
 //
 //
 
-const SessionDetailModal = ({ open, session, handleClose }: SessionDetailModalProps) => {
+const SessionDetailModal = ({
+  open,
+  session,
+  sessionCount,
+  handleClose,
+  handlePrevClick,
+  handleNextClick,
+}: SessionDetailModalProps) => {
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+
+  /**
+   *
+   */
+  const renderPrevButton = () => {
+    if (session?.sessionNumber === 0) {
+      return null;
+    }
+
+    return (
+      <PrevButtonWrapper>
+        <SessionArrowButton direction="prev" onClick={handlePrevClick} />
+      </PrevButtonWrapper>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderNextButton = () => {
+    if (session?.sessionNumber === sessionCount - 1) {
+      return null;
+    }
+
+    return (
+      <NextButtonWrapper>
+        <SessionArrowButton direction="next" onClick={handleNextClick} />
+      </NextButtonWrapper>
+    );
+  };
 
   /**
    *
@@ -48,8 +89,10 @@ const SessionDetailModal = ({ open, session, handleClose }: SessionDetailModalPr
 
     return (
       <>
+        {renderPrevButton()}
         <SessionDetailModalImage imageList={imageList} />
         <SessionDetailModalCard session={session} handleClose={handleClose} />
+        {renderNextButton()}
       </>
     );
   };
@@ -91,6 +134,22 @@ const Container = styled.div`
   &:focus-visible {
     outline: none;
   }
+`;
+
+const PrevButtonWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: -6rem;
+  transform: translateY(-50%);
+  z-index: 10;
+`;
+
+const NextButtonWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  right: -6rem;
+  transform: translateY(-50%);
+  z-index: 10;
 `;
 
 export default SessionDetailModal;

@@ -123,7 +123,7 @@ const DetailCardHeader = styled.div`
   > h3 {
     margin: 0 0.5rem;
     width: 100%;
-    color: ${({ theme }) => theme.colors.gray100};
+    color: ${({ theme }) => theme.colors.common.black};
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.xxl};
     font-weight: 700;
@@ -158,7 +158,7 @@ const InfoItem = styled.span`
   width: 100%;
 
   > span {
-    color: ${({ theme }) => theme.colors.gray100};
+    color: ${({ theme }) => theme.colors.common.black};
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.sm};
     font-weight: 700;
@@ -168,14 +168,13 @@ const InfoItem = styled.span`
 const TextDescription = styled.div`
   display: felx;
   flex-direction: column;
-
   gap: 2rem;
   padding: 1.5rem 1.75rem;
   width: 100%;
   height: 14rem;
 
   > p {
-    color: ${({ theme }) => theme.colors.gray80_2};
+    color: ${({ theme }) => theme.colors.gray80_1};
     font-family: Pretendard;
     font-size: 0.875rem;
     font-size: ${({ theme }) => theme.fontSize.sm};
