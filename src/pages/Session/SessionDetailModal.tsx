@@ -172,6 +172,10 @@ const PrevButtonWrapper = styled.div`
   left: -6rem;
   transform: translateY(-50%);
   z-index: 10;
+
+  ${media.laptop`
+    left: -4rem;
+  `}
 `;
 
 const NextButtonWrapper = styled.div`
@@ -180,6 +184,10 @@ const NextButtonWrapper = styled.div`
   right: -6rem;
   transform: translateY(-50%);
   z-index: 10;
+
+  ${media.laptop`
+    right: -4rem;
+  `}
 `;
 
 const MobileCloseButton = styled.button`

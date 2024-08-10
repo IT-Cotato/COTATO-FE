@@ -119,6 +119,10 @@ const DetailCard = styled.div`
   padding: 0.5rem;
   width: 25rem;
 
+  ${media.laptop`
+    width: 20rem;
+  `}
+
   ${media.tablet`
     width: 100%;
     padding: 0;

@@ -83,6 +83,10 @@ const StyledSwiper = styled(Swiper)`
     display: none;
   }
 
+  ${media.laptop`
+    width: calc(${IMAGE_WIDTH} - 5rem);
+  `}
+
   ${media.tablet`
     width: 100%;
 
