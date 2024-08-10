@@ -8,6 +8,8 @@ import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg
 import { ReactComponent as HomeIcon } from '@assets/home_icon_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted_bg.svg';
 import SessionContents from '@components/Session/SessionContents';
+import { device, media } from '@theme/media';
+import { useMediaQuery } from '@mui/material';
 
 //
 //
@@ -23,17 +25,21 @@ interface SessionDetailModalCardProps {
 //
 
 const SessionDetailModalCard = ({ session, handleClose }: SessionDetailModalCardProps) => {
+  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+
   /**
    *
    */
   const renderCardHeader = () => {
     return (
       <DetailCardHeader>
-        <SessionIcon Icon={<HeartIcon />} size="lg" />
+        <SessionIcon Icon={<HeartIcon />} size={isTabletOrSmaller ? 'md' : 'lg'} />
         <h3>{session?.title}</h3>
-        <CloseButton type="button" onClick={handleClose}>
-          <CloseIcon />
-        </CloseButton>
+        {!isTabletOrSmaller && (
+          <CloseButton type="button" onClick={handleClose}>
+            <CloseIcon />
+          </CloseButton>
+        )}
       </DetailCardHeader>
     );
   };
@@ -82,7 +88,10 @@ const SessionDetailModalCard = ({ session, handleClose }: SessionDetailModalCard
   const renderSessionContents = () => {
     return (
       <ContentsWrapper>
-        <SessionContents contents={session?.sessionContents as CotatoSessionContents} size="lg" />
+        <SessionContents
+          contents={session?.sessionContents as CotatoSessionContents}
+          size={isTabletOrSmaller ? 'md' : 'lg'}
+        />
       </ContentsWrapper>
     );
   };
@@ -109,6 +118,13 @@ const DetailCard = styled.div`
   background-color: ${({ theme }) => theme.colors.common.white};
   padding: 0.5rem;
   width: 25rem;
+
+  ${media.tablet`
+    width: 100%;
+    padding: 0;
+    justify-content: flex-start;
+    flex-grow: 1;
+  `}
 `;
 
 const DetailCardHeader = styled.div`
@@ -131,6 +147,12 @@ const DetailCardHeader = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  ${media.tablet`
+      > h3 {
+        font-size: ${({ theme }: { theme: any }) => theme.fontSize.xl};
+      }
+    `}
 `;
 
 const CloseButton = styled.button`
@@ -150,6 +172,10 @@ const InfoWrapper = styled.div`
   padding: 1.25rem;
   gap: 0.5rem;
   width: 100%;
+
+  ${media.tablet`
+    padding: 1rem 1.25rem;
+  `}
 `;
 
 const InfoItem = styled.span`
@@ -166,7 +192,7 @@ const InfoItem = styled.span`
 `;
 
 const TextDescription = styled.div`
-  display: felx;
+  display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 1.5rem 1.75rem;
@@ -181,6 +207,14 @@ const TextDescription = styled.div`
     font-weight: 400;
     line-height: 1.5rem;
   }
+
+  ${media.tablet`
+    padding: 1rem 1.25rem;
+    gap: 0;
+    justify-content: center;
+    height: auto;
+    flex-grow: 1;
+  `}
 `;
 
 const ContentsWrapper = styled.div`

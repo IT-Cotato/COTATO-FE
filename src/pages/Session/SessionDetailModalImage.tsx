@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { CotatoSessionListImageInfoResponse } from 'cotato-openapi-clients';
 import { Skeleton } from '@mui/material';
+import { media } from '@theme/media';
 
 //
 //
@@ -26,10 +28,17 @@ const IMAGE_WIDTH = '28rem';
 //
 
 const SessionDetailModalImage = ({ imageList }: SessionDetailModalImageProps) => {
-  const [imageLoading, setImageLoading] = useState(imageList ? true : false);
+  const [imageLoading, setImageLoading] = useState(true);
 
   return (
-    <StyledSwiper slidesPerView={1} modules={[Navigation]} navigation={true}>
+    <StyledSwiper
+      slidesPerView={1}
+      modules={[Navigation, Pagination]}
+      navigation={true}
+      pagination={{
+        clickable: false,
+      }}
+    >
       {imageList?.map((image, index) => (
         <StyledSwiperSlide key={index}>
           {imageLoading && (
@@ -69,6 +78,35 @@ const StyledSwiper = styled(Swiper)`
       font-size: 1.25rem;
     }
   }
+
+  .swiper-pagination {
+    display: none;
+  }
+
+  ${media.tablet`
+    width: 100%;
+
+    .swiper-button-prev, 
+    .swiper-button-next {
+      display: none;
+    }
+
+    .swiper-pagination {
+      display: block;
+
+      .swiper-pagination-bullet {
+        width: 0.4rem;
+        height: 0.4rem;
+        margin: 0 0.2rem;
+        background: ${({ theme }: { theme: any }) => theme.colors.gray30};
+        opacity: 1;
+      }
+
+      .swiper-pagination-bullet-active {
+        background: ${({ theme }: { theme: any }) => theme.colors.primary100_1};
+      }
+    }
+  `}
 `;
 
 const StyledSwiperSlide = styled(SwiperSlide)`

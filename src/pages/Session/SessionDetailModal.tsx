@@ -1,15 +1,13 @@
 import React from 'react';
 import { Fade, Modal, useMediaQuery } from '@mui/material';
-import {
-  CotatoSessionListImageInfoResponse,
-  CotatoSessionListResponse,
-} from 'cotato-openapi-clients';
+import { CotatoSessionListResponse } from 'cotato-openapi-clients';
 import { styled } from 'styled-components';
-import { device } from '@theme/media';
+import { device, media } from '@theme/media';
 import SessionDetailModalCard from '@pages/Session/SessionDetailModalCard';
 import SessionDetailModalImage from '@pages/Session/SessionDetailModalImage';
 import SessionArrowButton from '@components/Session/SessionArrowButton';
 import potato_ready from '@assets/potato_ready.svg';
+import { ReactComponent as ArrowNext } from '@assets/arrow_right_dotted.svg';
 
 //
 //
@@ -43,6 +41,15 @@ const SessionDetailModal = ({
   handleNextClick,
 }: SessionDetailModalProps) => {
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+
+  /**
+   *
+   */
+  const getImageList = () => {
+    return session?.imageInfos && session.imageInfos.length > 0
+      ? session.imageInfos
+      : [{ imageUrl: potato_ready }];
+  };
 
   /**
    *
@@ -82,17 +89,31 @@ const SessionDetailModal = ({
       return null;
     }
 
-    const imageList: CotatoSessionListImageInfoResponse[] =
-      session?.imageInfos && session.imageInfos.length > 0
-        ? session.imageInfos
-        : [{ imageUrl: potato_ready }];
-
     return (
       <>
         {renderPrevButton()}
-        <SessionDetailModalImage imageList={imageList} />
+        <SessionDetailModalImage imageList={getImageList()} />
         <SessionDetailModalCard session={session} handleClose={handleClose} />
         {renderNextButton()}
+      </>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderMobileDetailModal = () => {
+    if (!isTabletOrSmaller) {
+      return null;
+    }
+
+    return (
+      <>
+        <MobileCloseButton type="button" onClick={handleClose}>
+          <ArrowLeftIcon />
+        </MobileCloseButton>
+        <SessionDetailModalImage imageList={getImageList()} />
+        <SessionDetailModalCard session={session} handleClose={handleClose} />
       </>
     );
   };
@@ -113,7 +134,10 @@ const SessionDetailModal = ({
       }}
     >
       <Fade in={open} timeout={FADE_DURATION}>
-        <Container>{renderDetailModal()}</Container>
+        <Container>
+          {renderDetailModal()}
+          {renderMobileDetailModal()}
+        </Container>
       </Fade>
     </Modal>
   );
@@ -134,6 +158,12 @@ const Container = styled.div`
   &:focus-visible {
     outline: none;
   }
+
+  ${media.tablet`
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  `}
 `;
 
 const PrevButtonWrapper = styled.div`
@@ -150,6 +180,22 @@ const NextButtonWrapper = styled.div`
   right: -6rem;
   transform: translateY(-50%);
   z-index: 10;
+`;
+
+const MobileCloseButton = styled.button`
+  position: absolute;
+  top: 1.25rem;
+  left: 0.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 10;
+`;
+
+const ArrowLeftIcon = styled(ArrowNext)`
+  transform: rotate(180deg);
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 export default SessionDetailModal;
