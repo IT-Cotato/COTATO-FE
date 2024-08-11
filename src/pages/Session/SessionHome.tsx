@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
 import SessionCard, { IMAGE_WIDTH } from '@pages/Session/SessionCard';
-import { v4 as uuid } from 'uuid';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import {
@@ -12,7 +11,7 @@ import {
   SessionContentsNetworking,
 } from '@/enums/SessionContents';
 import api from '@/api/api';
-import SessionUploadModal from './SessionUploadModal';
+import SessionUploadModal from '@pages/Session/SessionUploadModal';
 import {
   CotatoGenerationInfoResponse,
   CotatoSessionListResponse,
@@ -24,11 +23,12 @@ import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper/modules';
+import fetchUserData from '@utils/fetchUserData';
+import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
+import SessionDetailModal from '@pages/Session/SessionDetailModal';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import fetchUserData from '@utils/fetchUserData';
-import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
 
 //
 //
@@ -38,7 +38,7 @@ const SessionHome = () => {
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
-  const { data: sessionList, mutate: mutateSessionList } = useSWR<SessionListInfo[]>(
+  const { data: sessionList, mutate: mutateSessionList } = useSWR<CotatoSessionListResponse[]>(
     '/v1/api/session',
     (url: string) => fetcherWithParams(url, { generationId: selectedGeneration?.generationId }),
   );
@@ -47,6 +47,9 @@ const SessionHome = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
+
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
 
@@ -182,6 +185,62 @@ const SessionHome = () => {
   /**
    *
    */
+  const handleSessionClick = (session: CotatoSessionListResponse) => {
+    setSelectedSession(session);
+    setIsDetailModalOpen(true);
+  };
+
+  /**
+   *
+   */
+  const handlePrevSessionClick = () => {
+    if (!selectedSession || !sessionList) {
+      return;
+    }
+
+    const currentSessionNumber = selectedSession?.sessionNumber || 0;
+
+    if (currentSessionNumber === 0) {
+      return;
+    }
+
+    const prevSession =
+      sessionList?.find((session) => session.sessionNumber === currentSessionNumber - 1) || null;
+
+    setSelectedSession(prevSession);
+
+    if (!prevSession) {
+      setIsDetailModalOpen(false);
+    }
+  };
+
+  /**
+   *
+   */
+  const handleNextSessionClick = () => {
+    if (!selectedSession || !sessionList) {
+      return;
+    }
+
+    const currentSessionNumber = selectedSession?.sessionNumber || 0;
+
+    if (currentSessionNumber === sessionList?.length - 1) {
+      return;
+    }
+
+    const nextSession =
+      sessionList?.find((session) => session.sessionNumber === currentSessionNumber + 1) || null;
+
+    setSelectedSession(nextSession);
+
+    if (!nextSession) {
+      setIsDetailModalOpen(false);
+    }
+  };
+
+  /**
+   *
+   */
   const renderSettingTab = () => {
     return (
       <SettingTab>
@@ -211,12 +270,13 @@ const SessionHome = () => {
         {sessionList
           ? sessionList?.map((session: CotatoSessionListResponse) => (
               <SessionCard
-                key={uuid()}
+                key={session.sessionId}
                 session={session}
                 handleChangeUpdateSession={handleChaneUpdateSession}
+                handleSessionClick={handleSessionClick}
               />
             ))
-          : new Array(12).fill(null).map(() => <SessionCard key={uuid()} />)}
+          : new Array(12).fill(null).map((_, index) => <SessionCard key={index} />)}
       </SessionCardGridWrapper>
     );
   };
@@ -246,9 +306,13 @@ const SessionHome = () => {
         }}
         modules={[Pagination, Scrollbar]}
       >
-        {slideList.map((session: CotatoSessionListResponse | undefined, index: number) => (
-          <StyledSwiperSlide key={uuid()}>
-            <SessionCard session={session} isActive={activeSlideIndex === index} />
+        {slideList.map((session: CotatoSessionListResponse, index) => (
+          <StyledSwiperSlide key={session.sessionId}>
+            <SessionCard
+              session={session}
+              isActive={activeSlideIndex === index}
+              handleSessionClick={handleSessionClick}
+            />
           </StyledSwiperSlide>
         ))}
       </StyledSwiper>
@@ -271,6 +335,14 @@ const SessionHome = () => {
         {renderSessionCards()}
         {renderMobileSessoinCards()}
       </Wrapper>
+      <SessionDetailModal
+        open={isDetailModalOpen}
+        session={selectedSession}
+        sessionCount={sessionList?.length || 0}
+        handleClose={() => setIsDetailModalOpen(false)}
+        handlePrevClick={handlePrevSessionClick}
+        handleNextClick={handleNextSessionClick}
+      />
       <SessionUploadModal
         open={isAddModalOpen}
         handleClose={() => setIsAddModalOpen(false)}
