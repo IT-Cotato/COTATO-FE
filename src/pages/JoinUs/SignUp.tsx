@@ -436,6 +436,7 @@ const Wrapper = styled.div`
   justify-content: center;
   padding-top: 4rem;
   margin-bottom: 5rem;
+  padding: 0 30rem;
 
   @media screen and (max-width: 392px) {
     margin-top: 40px;
@@ -446,6 +447,7 @@ const FormDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 const BackImg = styled.img`
@@ -463,19 +465,21 @@ const Form = styled.form`
   align-items: center;
   z-index: 100;
   margin-top: -88px;
+  width: 100%;
 `;
 
 const Label = styled.label`
   margin-bottom: 20px;
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.gray100};
+  width: 100%;
   span {
     padding-left: 4px;
   }
 `;
 
 const InputDiv = styled.div`
-  width: 40rem !important;
+  width: 100%;
   height: 3.5rem;
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.colors.primary90} !important;
@@ -483,7 +487,6 @@ const InputDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 512px;
   margin: 0.5rem 0;
   padding: 0 1rem;
   position: relative;
@@ -509,6 +512,7 @@ const InputBox = styled.input`
   border: none;
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
+  font-family: Pretendard;
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.common.black};
   &:focus {
@@ -518,7 +522,7 @@ const InputBox = styled.input`
 
 const AuthButton = styled.button<{ disable: boolean }>`
   width: 6rem;
-  height: 2.25rem;
+  height: 1.75rem;
   font-size: 0.8rem;
   font-weight: 300;
   border-radius: 0.5rem;
@@ -527,7 +531,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   color: ${({ theme }) => theme.colors.secondary80};
   position: absolute;
   right: 1rem;
-  top: 0.5rem;
+  top: 25%;
   cursor: pointer;
   ${(props) =>
     props.disable &&

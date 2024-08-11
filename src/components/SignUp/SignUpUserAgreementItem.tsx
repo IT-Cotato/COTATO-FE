@@ -131,6 +131,7 @@ const CheckSection = styled.div`
     margin-left: 0.3rem;
     color: ${({ theme }) => theme.colors.gray60};
     font-size: ${({ theme }) => theme.fontSize.sm};
+    font-family: Pretendard;
   }
 `;
 
@@ -143,6 +144,7 @@ const ContentSection = styled.div`
     margin-right: 0.5rem;
     color: ${({ theme }) => theme.colors.gray60};
     font-size: ${({ theme }) => theme.fontSize.sm};
+    font-family: Pretendard;
   }
 `;
 
