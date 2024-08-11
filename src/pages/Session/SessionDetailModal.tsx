@@ -20,6 +20,7 @@ interface SessionDetailModalProps {
   handleClose: () => void;
   handlePrevClick: () => void;
   handleNextClick: () => void;
+  handleClickUpdateSession: (session: CotatoSessionListResponse | null) => void;
 }
 
 //
@@ -39,6 +40,7 @@ const SessionDetailModal = ({
   handleClose,
   handlePrevClick,
   handleNextClick,
+  handleClickUpdateSession,
 }: SessionDetailModalProps) => {
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
 
@@ -93,7 +95,11 @@ const SessionDetailModal = ({
       <>
         {renderPrevButton()}
         <SessionDetailModalImage imageList={getImageList()} />
-        <SessionDetailModalCard session={session} handleClose={handleClose} />
+        <SessionDetailModalCard
+          session={session}
+          handleClose={handleClose}
+          handleClickUpdateSession={handleClickUpdateSession}
+        />
         {renderNextButton()}
       </>
     );

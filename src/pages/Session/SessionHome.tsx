@@ -64,13 +64,14 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleChaneUpdateSession = (session?: CotatoSessionListResponse) => {
+  const handleClickUpdateSession = (session: CotatoSessionListResponse | null) => {
     if (!session) {
       return;
     }
 
     const updateSession: SessionListInfo = JSON.parse(JSON.stringify(session));
     setUpdateSession(updateSession);
+    setIsDetailModalOpen(false);
     setIsUpdateModalOpen(true);
   };
 
@@ -279,7 +280,6 @@ const SessionHome = () => {
               <SessionCard
                 key={session.sessionId}
                 session={session}
-                handleChangeUpdateSession={handleChaneUpdateSession}
                 handleSessionClick={handleSessionClick}
               />
             ))
@@ -349,6 +349,7 @@ const SessionHome = () => {
         handleClose={() => setIsDetailModalOpen(false)}
         handlePrevClick={handlePrevSessionClick}
         handleNextClick={handleNextSessionClick}
+        handleClickUpdateSession={handleClickUpdateSession}
       />
       <SessionUploadModal
         open={isAddModalOpen}

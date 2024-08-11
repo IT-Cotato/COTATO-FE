@@ -7,9 +7,11 @@ import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
 import { ReactComponent as HomeIcon } from '@assets/home_icon_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted_bg.svg';
+import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import SessionContents from '@components/Session/SessionContents';
 import { device, media } from '@theme/media';
 import { useMediaQuery } from '@mui/material';
+import fetchUserData from '@utils/fetchUserData';
 
 //
 //
@@ -18,14 +20,20 @@ import { useMediaQuery } from '@mui/material';
 interface SessionDetailModalCardProps {
   session: CotatoSessionListResponse | null;
   handleClose: () => void;
+  handleClickUpdateSession?: (session: CotatoSessionListResponse | null) => void;
 }
 
 //
 //
 //
 
-const SessionDetailModalCard = ({ session, handleClose }: SessionDetailModalCardProps) => {
+const SessionDetailModalCard = ({
+  session,
+  handleClose,
+  handleClickUpdateSession,
+}: SessionDetailModalCardProps) => {
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const { data: useData } = fetchUserData();
 
   /**
    *
@@ -36,9 +44,19 @@ const SessionDetailModalCard = ({ session, handleClose }: SessionDetailModalCard
         <SessionIcon Icon={<HeartIcon />} size={isTabletOrSmaller ? 'md' : 'lg'} />
         <h3>{session?.title}</h3>
         {!isTabletOrSmaller && (
-          <CloseButton type="button" onClick={handleClose}>
-            <CloseIcon />
-          </CloseButton>
+          <>
+            {useData?.role === 'ADMIN' && (
+              <UpdateButton
+                type="button"
+                onClick={() => handleClickUpdateSession && handleClickUpdateSession(session)}
+              >
+                <PencilIcon />
+              </UpdateButton>
+            )}
+            <CloseButton type="button" onClick={handleClose}>
+              <CloseIcon />
+            </CloseButton>
+          </>
         )}
       </DetailCardHeader>
     );
@@ -167,6 +185,21 @@ const CloseButton = styled.button`
   > svg {
     width: 2.25rem;
     height: 2.25rem;
+  }
+`;
+
+const UpdateButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  > svg {
+    width: 1.75rem;
+    height: 1.75rem;
+
+    > path {
+      fill: ${({ theme }) => theme.colors.sub2[401]};
+    }
   }
 `;
 
