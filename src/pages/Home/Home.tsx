@@ -29,7 +29,7 @@ export default Home;
 const Wrapper = styled.div`
   width: 100vw;
   max-width: 100vw;
-  height: fit-content;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
