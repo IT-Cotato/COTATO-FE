@@ -29,6 +29,7 @@ import SessionDetailModal from '@pages/Session/SessionDetailModal';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import { toast } from 'react-toastify';
 
 //
 //
@@ -147,8 +148,11 @@ const SessionHome = () => {
 
     api
       .post('/v1/api/session/add', formData)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then(() => {
+        mutateSessionList();
+        setIsAddModalOpen(false);
+      })
+      .catch(() => toast.error('세션 추가에 실패했습니다.'));
   };
 
   /**
@@ -171,8 +175,11 @@ const SessionHome = () => {
 
     api
       .patch('/v1/api/session/update', updatedSessoinInfo)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then(() => {
+        mutateSessionList();
+        setIsUpdateModalOpen(false);
+      })
+      .catch(() => toast.error('세션 수정에 실패했습니다.'));
   };
 
   /**
