@@ -145,7 +145,7 @@ const SignUpUserAgreement = () => {
 
 const Wrapper = styled.div`
   padding: 0.75rem 0rem;
-  width: 28rem;
+  width: 100%;
   height: fit-content;
 `;
 

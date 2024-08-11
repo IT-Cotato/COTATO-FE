@@ -586,6 +586,7 @@ const ValidationDiv = styled.div<{ color: boolean }>`
 const UserAgreementDiv = styled.div`
   margin-top: 4.2rem;
   margin-bottom: 3rem;
+  width: 100%;
 `;
 
 export default SignUp;
