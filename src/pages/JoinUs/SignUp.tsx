@@ -21,6 +21,27 @@ import SignUpUserAgreement from '@components/SignUp/SignUpUserAgreement';
 //
 //
 
+const AGREEMENT_ITEMS = [
+  {
+    id: 1,
+    name: '개인정보 수집 및 이용',
+    isRequired: true,
+    content:
+      '개인정보보호법에 따라 코테이토에 회원가입을 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용 목적, 개인정보의 보유 및 이용 기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내해 드리니 확인 후 동의하여 주시기를 바랍니다.\n회원 가입을 위해서는 아래와 같이 개인정보를 수집·이용합니다\n\n1. 개인정보 수집 항목: 이름, 아이디(이메일), 비밀번호, 전화번호\n2. 개인정보 수집 목적: 회원 관리\n3. 보유 및 이용 기간: 회원 탈퇴 시까지\n\n이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가 있으나 동의 거부 시 서비스 이용이 제한됩니다.',
+  },
+  {
+    id: 2,
+    name: '개인위치정보 수집 및 이용',
+    isRequired: true,
+    content:
+      '코테이토 페이지에서 서비스 제공을 위해 이용자의 현재 위치 정보를 수집합니다. 이에 따라 위치기반서비스와 관련하여 정보 수집 동의에 관한 사항을 안내해 드리니 확인 후 동의하여 주시기를 바랍니다.\n\n1. 수집 정보 : 현재 GPS 위치 정보\n2. 개인위치정보 수집 목적 : 출석 확인\n3. 개인위치정보 사용 방법 : 출석 체크 시에만 사용되며, 다른 목적으로 사용되지 않습니다. 출석 확인 후 정보가 저장되지 않으며, 즉시 삭제됩니다.\n4. 보유 및 이용 기간: 회원 탈퇴 시까지\n\n이용자는 언제든지 개인위치정보 수집 동의를 철회할 수 있으며, 이 경우 서비스 이용에 일부 제한이 있을 수 있습니다.\n\n수집된 정보는 동아리 활동 종료 시 폐기 됩니다. ',
+  },
+];
+
+//
+//
+//
+
 const SignUp = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -45,9 +66,13 @@ const SignUp = () => {
   const [isName, setIsName] = useState(false);
   const [isTel, setIsTel] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isCheckedAll, setIsCheckedAll] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isChecked, setIsChecked] = useState<Map<number, boolean>>(
+    new Map(AGREEMENT_ITEMS.map((item) => [item.id, false])),
+  );
 
   const theme = useTheme();
 
@@ -55,16 +80,18 @@ const SignUp = () => {
    *
    */
   const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const emailRegex =
-      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    const emailCurrent = e.target.value;
-    setId(emailCurrent);
-    if (!emailRegex.test(emailCurrent)) {
-      setIdMessage('잘못된 이메일 형식입니다.');
-      setIsId(false);
-    } else {
-      setIdMessage('');
-      setIsId(true);
+    if (!isId && !isAuthorized) {
+      const emailRegex =
+        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+      const emailCurrent = e.target.value;
+      setId(emailCurrent);
+      if (!emailRegex.test(emailCurrent)) {
+        setIdMessage('잘못된 이메일 형식입니다.');
+        setIsId(false);
+      } else {
+        setIdMessage('');
+        setIsId(true);
+      }
     }
   }, []);
 
@@ -205,7 +232,7 @@ const SignUp = () => {
    *
    */
   const handleAuthNumChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setAuthNum(e.target.value);
+    if (!isAuthorized) setAuthNum(e.target.value);
   }, []);
 
   /**
@@ -213,8 +240,9 @@ const SignUp = () => {
    */
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
+      console.log(isName, isId, isAuthorized, isTel, isPassword, !mismatchError, isCheckedAll);
       e.preventDefault();
-      if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError) {
+      if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError && isCheckedAll) {
         api
           .post('/v1/api/auth/join', {
             email: id,
@@ -231,7 +259,19 @@ const SignUp = () => {
             if (errorCode === 'A-401') alert('이메일 인증을 완료해주세요.');
           });
       } else {
-        alert('입력값을 확인해주세요.');
+        if (
+          isName &&
+          isId &&
+          isAuthorized &&
+          isTel &&
+          isPassword &&
+          !mismatchError &&
+          !isCheckedAll
+        ) {
+          alert('이용 약관에 동의해주세요.');
+        } else {
+          alert('입력값을 확인해주세요.');
+        }
       }
     },
     [id, password, passwordCheck, name, tel, mismatchError, authNum],
@@ -378,7 +418,13 @@ const SignUp = () => {
   const renderUserAgreement = () => {
     return (
       <UserAgreementDiv>
-        <SignUpUserAgreement />
+        <SignUpUserAgreement
+          agreementItems={AGREEMENT_ITEMS}
+          isCheckedAll={isCheckedAll}
+          setIsCheckedAll={setIsCheckedAll}
+          isChecked={isChecked}
+          setIsChecked={setIsChecked}
+        />
       </UserAgreementDiv>
     );
   };
@@ -434,7 +480,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 4rem;
+  padding-top: 4rem !important;
   margin-bottom: 5rem;
   padding: 0 30rem;
 
