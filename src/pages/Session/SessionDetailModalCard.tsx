@@ -198,7 +198,7 @@ const InfoItem = styled.span`
 const TextDescription = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0rem;
   padding: 1.5rem 1.75rem;
   width: 100%;
   height: 14rem;
@@ -214,7 +214,6 @@ const TextDescription = styled.div`
 
   ${media.tablet`
     padding: 1rem 1.25rem;
-    gap: 0;
     justify-content: center;
     height: auto;
     flex-grow: 1;
