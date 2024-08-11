@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Divider, Stack } from '@mui/material';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import SignUpUserAgreementItem from '@components/SignUp/SignUpUserAgreementItem';
 import { v4 as uuid } from 'uuid';
-import { th } from 'date-fns/locale';
-import { set } from 'date-fns';
+import { produce } from 'immer';
 
 //
 //
@@ -13,12 +12,14 @@ import { set } from 'date-fns';
 
 const AGREEMENT_ITEMS = [
   {
+    id: 1,
     name: '개인정보 수집 및 이용',
     isRequired: true,
     content:
       '개인정보보호법에 따라 코테이토에 회원가입을 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용 목적, 개인정보의 보유 및 이용 기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내해 드리니 확인 후 동의하여 주시기를 바랍니다.\n회원 가입을 위해서는 아래와 같이 개인정보를 수집·이용합니다\n\n1. 개인정보 수집 항목: 이름, 아이디(이메일), 비밀번호, 전화번호\n2. 개인정보 수집 목적: 회원 관리\n3. 보유 및 이용 기간: 회원 탈퇴 시까지\n\n이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가 있으나 동의 거부 시 서비스 이용이 제한됩니다.',
   },
   {
+    id: 2,
     name: '개인위치정보 수집 및 이용',
     isRequired: true,
     content:
@@ -34,16 +35,59 @@ const SignUpUserAgreement = () => {
   const theme = useTheme();
 
   const [color, setColor] = useState(theme.colors.gray100);
+  const [isChecked, setIsChecked] = useState<Map<number, boolean>>(
+    new Map(AGREEMENT_ITEMS.map((item) => [item.id, false])),
+  );
+  const [isCheckedAll, setIsCheckedAll] = useState(false);
 
   const mode = localStorage.getItem('theme');
 
   /**
+   * handler for the click event of the entire agreement button
+   */
+  const handleEntireClick = () => {
+    if (isCheckedAll) {
+      setIsChecked(
+        produce(isChecked, (draft) => draft.forEach((value, id) => draft.set(id, false))),
+      );
+    } else {
+      setIsChecked(
+        produce(isChecked, (draft) => draft.forEach((value, id) => draft.set(id, true))),
+      );
+    }
+    console.log(isChecked);
+  };
+
+  /**
+   * Check the entire agreement button when all the agreement items are checked.
+   */
+  const handleCheckAll = () => {
+    if (Array.from(isChecked.values()).every((value) => value === true)) {
+      setIsCheckedAll(true);
+    } else {
+      setIsCheckedAll(false);
+    }
+    console.log(isCheckedAll);
+  };
+
+  /**
    *
    */
-  const renderTotalAgreement = () => {
+  const getEntireCheckButtonColor = () => {
+    if (isCheckedAll) {
+      return theme.colors.sub3[60];
+    } else {
+      return color;
+    }
+  };
+
+  /**
+   *
+   */
+  const renderEntireAgreement = () => {
     return (
       <TotalDiv>
-        <CheckIcon fill={color} />
+        <CheckIcon fill={getEntireCheckButtonColor()} onClick={handleEntireClick} />
         <p>이용약관 전체 동의</p>
       </TotalDiv>
     );
@@ -58,10 +102,13 @@ const SignUpUserAgreement = () => {
         {AGREEMENT_ITEMS.map((item) => (
           <SignUpUserAgreementItem
             key={uuid()}
+            id={item.id}
             name={item.name}
             isRequired={item.isRequired}
             content={item.content}
             fillColor={color}
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
           />
         ))}
       </Stack>
@@ -79,9 +126,13 @@ const SignUpUserAgreement = () => {
     }
   }, [mode]);
 
+  useEffect(() => {
+    handleCheckAll();
+  }, [isChecked]);
+
   return (
     <Wrapper>
-      {renderTotalAgreement()}
+      {renderEntireAgreement()}
       <Divider sx={{ bgcolor: color }} />
       {renderAgreementItems()}
     </Wrapper>
