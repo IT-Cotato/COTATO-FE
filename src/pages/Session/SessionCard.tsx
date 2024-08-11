@@ -16,7 +16,7 @@ import SessionContents from '@components/Session/SessionContents';
 //
 
 interface SessionCardProps {
-  session?: CotatoSessionListResponse;
+  session?: CotatoSessionListResponse | null;
   isActive?: boolean;
   handleSessionClick?: (session: CotatoSessionListResponse) => void;
 }

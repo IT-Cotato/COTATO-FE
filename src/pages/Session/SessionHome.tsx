@@ -296,7 +296,7 @@ const SessionHome = () => {
       return null;
     }
 
-    const slideList = sessionList ?? new Array(6).fill(undefined);
+    const slideList = sessionList ?? new Array(6).fill(null);
 
     return (
       <StyledSwiper
@@ -313,8 +313,8 @@ const SessionHome = () => {
         }}
         modules={[Pagination, Scrollbar]}
       >
-        {slideList.map((session: CotatoSessionListResponse, index) => (
-          <StyledSwiperSlide key={session.sessionId}>
+        {slideList?.map((session: CotatoSessionListResponse | null, index) => (
+          <StyledSwiperSlide key={session?.sessionId || index}>
             <SessionCard
               session={session}
               isActive={activeSlideIndex === index}
