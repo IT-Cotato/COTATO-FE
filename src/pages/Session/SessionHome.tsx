@@ -222,14 +222,14 @@ const SessionHome = () => {
       return;
     }
 
-    const currentSessoinNumber = selectedSession?.sessionNumber || 0;
+    const currentSessionNumber = selectedSession?.sessionNumber || 0;
 
-    if (currentSessoinNumber === sessionList?.length - 1) {
+    if (currentSessionNumber === sessionList?.length - 1) {
       return;
     }
 
     const nextSession =
-      sessionList?.find((session) => session.sessionNumber === currentSessoinNumber + 1) || null;
+      sessionList?.find((session) => session.sessionNumber === currentSessionNumber + 1) || null;
 
     setSelectedSession(nextSession);
 
