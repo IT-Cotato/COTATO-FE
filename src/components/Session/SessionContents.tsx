@@ -60,6 +60,12 @@ const SessionContents = ({ contents, size = 'sm', isActive }: SessionContentsPro
         padding: `0.4rem ${theme.size.lg}`,
         borderRadius: '6rem',
       };
+    } else if (size === 'lg') {
+      return {
+        fontSize: theme.fontSize.md,
+        padding: `0.5rem 1.25rem`,
+        borderRadius: '7rem',
+      };
     }
 
     return {

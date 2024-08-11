@@ -40,6 +40,8 @@ export type CotatoThemeType = {
     common: {
       white: string;
       black: string;
+      white_const: string;
+      black_const: string;
     };
     gray5: string;
     gray10: string;
@@ -178,6 +180,8 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
     common: {
       white: '#FAFAFA',
       black: '#000000',
+      white_const: '#FAFAFA',
+      black_const: '#000000',
     },
     // gray //
     gray5: '#F4F4F4',
@@ -323,6 +327,8 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
     common: {
       white: CotatoLightTheme.colors.gray100,
       black: CotatoLightTheme.colors.common.white,
+      white_const: CotatoLightTheme.colors.common.white_const,
+      black_const: CotatoLightTheme.colors.common.black_const,
     },
     // gray //
     gray5: '#F4F4F4',

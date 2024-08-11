@@ -273,7 +273,8 @@ const SessionUploadModal = ({
   useEffect(() => {
     if (sessionInfo) {
       setSession(sessionInfo);
-    } else if (lastSessionNumber) {
+    }
+    if (lastSessionNumber !== undefined) {
       setSession(
         produce(session, (darft) => {
           darft.title = lastSessionNumber > 0 ? `${lastSessionNumber}주차 세션` : 'OT';
