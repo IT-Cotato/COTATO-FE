@@ -238,44 +238,40 @@ const SignUp = () => {
   /**
    *
    */
-  const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      console.log(isName, isId, isAuthorized, isTel, isPassword, !mismatchError, isCheckedAll);
-      e.preventDefault();
-      if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError && isCheckedAll) {
-        api
-          .post('/v1/api/auth/join', {
-            email: id,
-            password: password,
-            name: name,
-            phoneNumber: tel,
-          })
-          .then(() => {
-            setIsSuccess(true);
-          })
-          .catch((err) => {
-            const errorCode = err.response.data.code;
-            if (errorCode === 'A-302') alert('이미 가입된 전화번호입니다.');
-            if (errorCode === 'A-401') alert('이메일 인증을 완료해주세요.');
-          });
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError && isCheckedAll) {
+      api
+        .post('/v1/api/auth/join', {
+          email: id,
+          password: password,
+          name: name,
+          phoneNumber: tel,
+        })
+        .then(() => {
+          setIsSuccess(true);
+        })
+        .catch((err) => {
+          const errorCode = err.response.data.code;
+          if (errorCode === 'A-302') alert('이미 가입된 전화번호입니다.');
+          if (errorCode === 'A-401') alert('이메일 인증을 완료해주세요.');
+        });
+    } else {
+      if (
+        isName &&
+        isId &&
+        isAuthorized &&
+        isTel &&
+        isPassword &&
+        !mismatchError &&
+        !isCheckedAll
+      ) {
+        alert('이용 약관에 동의해주세요.');
       } else {
-        if (
-          isName &&
-          isId &&
-          isAuthorized &&
-          isTel &&
-          isPassword &&
-          !mismatchError &&
-          !isCheckedAll
-        ) {
-          alert('이용 약관에 동의해주세요.');
-        } else {
-          alert('입력값을 확인해주세요.');
-        }
+        alert('입력값을 확인해주세요.');
       }
-    },
-    [id, password, passwordCheck, name, tel, mismatchError, authNum],
-  );
+    }
+  };
 
   /**
    *
