@@ -268,9 +268,9 @@ const SessionHome = () => {
     return (
       <SessionCardGridWrapper>
         {sessionList
-          ? sessionList?.map((session: CotatoSessionListResponse, index) => (
+          ? sessionList?.map((session: CotatoSessionListResponse) => (
               <SessionCard
-                key={index}
+                key={session.sessionId}
                 session={session}
                 handleChangeUpdateSession={handleChaneUpdateSession}
                 handleSessionClick={handleSessionClick}
@@ -306,8 +306,8 @@ const SessionHome = () => {
         }}
         modules={[Pagination, Scrollbar]}
       >
-        {slideList.map((session: CotatoSessionListResponse | undefined, index: number) => (
-          <StyledSwiperSlide key={index}>
+        {slideList.map((session: CotatoSessionListResponse, index) => (
+          <StyledSwiperSlide key={session.sessionId}>
             <SessionCard
               session={session}
               isActive={activeSlideIndex === index}
