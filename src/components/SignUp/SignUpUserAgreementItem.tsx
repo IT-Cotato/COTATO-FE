@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Box } from '@mui/material';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
