@@ -68,11 +68,11 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
           setIsFabOpen(!isFabOpen);
         }}
       >
-        <Stack gap="0.25rem">
+        <Stack gap={isMobileOrSmaller ? '0.15rem' : '0.25rem'}>
           <Box width="100%" height="1.5rem">
             {icon}
           </Box>
-          <StyledTypography fontSize={isMobileOrSmaller ? '0.75rem' : '0.8rem'}>
+          <StyledTypography fontSize={isMobileOrSmaller ? '0.6rem' : '0.8rem'}>
             {name}
           </StyledTypography>
         </Stack>
