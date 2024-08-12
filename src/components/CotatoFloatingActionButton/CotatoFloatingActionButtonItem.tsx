@@ -11,6 +11,7 @@ interface CotatoFloatingActionButtonItemProps {
   name: string;
   icon: React.ReactNode;
   selected?: boolean;
+  disabled?: boolean;
   onClick: () => void;
 }
 
@@ -29,6 +30,7 @@ const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemPro
   name,
   icon,
   selected,
+  disabled,
   onClick,
 }) => {
   const theme = useTheme();
@@ -60,24 +62,28 @@ const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemPro
   //
   return (
     <Tooltip arrow title={name} placement="left">
-      <StyledFab
-        isMobileOrSmaller={isMobileOrSmaller}
-        sx={{
-          backgroundColor: selected ? theme.colors.primary90 : theme.colors.gray40,
-        }}
-        onClick={handleClick}
-      >
-        <Box width="100%" height="1.75rem">
-          <SvgIcon
-            style={{
-              width: iconSize.width,
-              height: iconSize.height,
-            }}
-          >
-            {icon}
-          </SvgIcon>
-        </Box>
-      </StyledFab>
+      <div>
+        <StyledFab
+          isMobileOrSmaller={isMobileOrSmaller}
+          disabled={disabled}
+          sx={{
+            backgroundColor: selected ? theme.colors.primary90 : theme.colors.gray40,
+          }}
+          onClick={handleClick}
+        >
+          <Box width="100%" height="1.75rem">
+            <SvgIcon
+              style={{
+                width: iconSize.width,
+                height: iconSize.height,
+                opacity: disabled ? 0.5 : 1,
+              }}
+            >
+              {icon}
+            </SvgIcon>
+          </Box>
+        </StyledFab>
+      </div>
     </Tooltip>
   );
 };
