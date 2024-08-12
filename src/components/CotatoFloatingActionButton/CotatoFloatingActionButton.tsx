@@ -1,6 +1,5 @@
 import { Box, Fab, List, Stack, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
-import { ReactComponent as FabExpandIcon } from '@assets/fab_expand.svg';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { device } from '@theme/media';
@@ -12,6 +11,7 @@ import { device } from '@theme/media';
 interface CotatoFloatingActionButtonProps {
   name: string;
   children: React.ReactNode;
+  icon: React.ReactNode;
 }
 
 //
@@ -27,6 +27,7 @@ const FAB_MOBILE_SIZE = '3.5rem';
 
 const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
   name,
+  icon,
   children,
 }) => {
   const [isFabOpen, setIsFabOpen] = React.useState(false);
@@ -69,7 +70,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
       >
         <Stack gap="0.25rem">
           <Box width="100%" height="1.5rem">
-            <FabExpandIcon width="100%" height="100%" />
+            {icon}
           </Box>
           <StyledTypography fontSize={isMobileOrSmaller ? '0.75rem' : '0.8rem'}>
             {name}
