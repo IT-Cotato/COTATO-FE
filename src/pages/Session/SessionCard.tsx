@@ -136,7 +136,7 @@ const Container = styled.div<{ $isActive?: boolean }>`
   display: flex;
   flex-direction: column;
   width: calc(${IMAGE_WIDTH} + (3px * 2));
-  border: 3px solid
+  border: 2px solid
     ${({ $isActive, theme }) =>
       $isActive !== false ? theme.colors.primary100_1 : theme.colors.gray30};
   border-radius: 0.6rem;
