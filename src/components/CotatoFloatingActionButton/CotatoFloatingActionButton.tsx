@@ -38,7 +38,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
    *
    */
   const animationFormula = (itemLength: number) => {
-    return isMobileOrSmaller ? itemLength * 4.25 + 0.75 : itemLength * 5 + 1;
+    return isMobileOrSmaller ? itemLength * 4.25 + 1.5 : itemLength * 5 + 1;
   };
 
   const animationProps = useSpring({
