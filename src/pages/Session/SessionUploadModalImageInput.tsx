@@ -298,9 +298,11 @@ const SessionUploadModalImageInput = ({
       imageList.some((image, index) => image.imageUrl !== sortedImageList[index]?.imageUrl)
     ) {
       const newImageList = imageSortByOrder(imageList);
+      if (sortedImageList.length === 0) {
+        setSelectedImage(newImageList[0]);
+        setIsImageLoading(true);
+      }
       setSortedImageList(newImageList);
-      setSelectedImage(newImageList[0]);
-      setIsImageLoading(true);
     } else if (imageList.length === 0) {
       setSortedImageList([]);
       setSelectedImage(null);
