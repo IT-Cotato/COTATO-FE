@@ -39,7 +39,7 @@ function App() {
           <Route path="/about" element={<ReadyState />} />
           <Route path="/products" element={<ReadyState />} />
           <Route path="/cs/*" element={<CSPage />} />
-          <Route path="/session" element={<Session />} />
+          <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/findid" element={<FindID />} />
