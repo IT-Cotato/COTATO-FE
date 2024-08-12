@@ -42,7 +42,7 @@ function App() {
           <Route path="/about" element={<ReadyState />} />
           <Route path="/attendance" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
-          <Route path="/session" element={<Session />} />
+          <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/findid" element={<FindID />} />
           <Route path="/findpw" element={<FindPWProcess />} />
