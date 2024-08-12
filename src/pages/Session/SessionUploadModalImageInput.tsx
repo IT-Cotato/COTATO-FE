@@ -42,7 +42,7 @@ const SessionUploadModalImageInput = ({
 }: SessionUploadModalImageInputProps) => {
   const [selectedImage, setSelectedImage] = useState<SessionListImageInfo | null>(null);
   const [sortedImageList, setSortedImageList] = useState<SessionListImageInfo[]>([]);
-  const [isImageLoading, setIsImageLoading] = useState(selectedImage?.imageUrl ? true : false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const theme = useTheme();
 
@@ -293,14 +293,18 @@ const SessionUploadModalImageInput = ({
    * If imageList is changed, set sortedImageList and selectedImage
    */
   useEffect(() => {
-    if (imageList.length > 0) {
-      if (sortedImageList.length === 0) {
-        setSelectedImage(imageList.find((image) => image.order === 0) || null);
-      }
-
-      if (imageList.some((image, index) => image.imageUrl !== sortedImageList[index]?.imageUrl)) {
-        setSortedImageList(imageSortByOrder(imageList));
-      }
+    if (
+      imageList.length > 0 &&
+      imageList.some((image, index) => image.imageUrl !== sortedImageList[index]?.imageUrl)
+    ) {
+      const newImageList = imageSortByOrder(imageList);
+      setSortedImageList(newImageList);
+      setSelectedImage(newImageList[0]);
+      setIsImageLoading(true);
+    } else if (imageList.length === 0) {
+      setSortedImageList([]);
+      setSelectedImage(null);
+      setIsImageLoading(false);
     }
   }, [imageList]);
 
