@@ -352,7 +352,7 @@ const CloseButton = styled.button`
 
 const ModalHeader = styled.div`
   padding: ${({ theme }) => theme.size.md};
-  color: ${({ theme }) => theme.colors.gray100};
+  color: ${({ theme }) => theme.colors.common.black};
   text-align: center;
   font-family: Pretendard-Bold;
   font-size: ${({ theme }) => theme.fontSize.xl};
@@ -383,7 +383,7 @@ const InfoBox = styled.div<InfoBoxProps>`
     padding: 0;
     background: transparent;
     border: none;
-    color: ${({ theme }) => theme.colors.gray60};
+    color: #6a6967;
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.md};
     font-weight: ${({ $bold }) => ($bold ? '600' : '300')};
@@ -425,7 +425,7 @@ const ContentsInputWrapper = styled.span`
   gap: 0.6rem;
 
   > span {
-    color: ${({ theme }) => theme.colors.gray60};
+    color: #6a6967;
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.md};
     font-weight: 300;
