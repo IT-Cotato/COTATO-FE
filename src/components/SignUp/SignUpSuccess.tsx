@@ -11,8 +11,10 @@ import { media } from '@theme/media';
 const SignUpSuccess = () => {
   return (
     <Wrapper>
-      <WelcomeImg src={welcomeImg} alt="welcome" />
-      <PotatoImg src={potatoImg} alt="potatoes" />
+      <div>
+        <WelcomeImg src={welcomeImg} alt="welcome" />
+        <PotatoImg src={potatoImg} alt="potatoes" />
+      </div>
       <p>
         *가입 신청 승인이 완료되면,
         <br />
@@ -32,13 +34,18 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   animation: fade_in 0.7s ease-in-out;
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   p {
     color: ${({ theme }) => theme.colors.gray60};
     text-align: center;
     font-size: ${({ theme }) => theme.fontSize.sm};
     line-height: 1.5rem;
     width: 20rem;
-    margin-top: 2.7rem;
+    margin-top: 2.5rem;
   }
   @keyframes fade_in {
     0% {
@@ -48,28 +55,41 @@ const Wrapper = styled.div`
       opacity: 1;
     }
   }
+
+  ${media.tablet`
+    margin-top: 4.5rem;
+  `}
+  ${media.mobile`
+    div {
+      margin-top: 30%;
+    }
+  `}
 `;
 
 const WelcomeImg = styled.img`
-  position: relative;
+  ${media.landscape`
+    width: 24rem;
+  `}
   ${media.mobile`
-  width: 284px;
-  margin-top: 50%;
+    width: 17rem;
   `}
 `;
 
 const PotatoImg = styled.img`
-  position: absolute;
-  top: 26rem;
+  width: 20rem;
+  margin-top: -3rem;
   animation: bounce 0.5s ease-out infinite alternate;
   @keyframes bounce {
     100% {
       transform: translateY(-4rem);
     }
   }
+
+  ${media.landscape`
+    width: 18rem;
+  `}
   ${media.mobile`
-  width: 240px;
-  top: 26rem;
+    width: 17rem;
   `}
 `;
 
