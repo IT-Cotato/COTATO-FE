@@ -509,7 +509,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 100;
+  z-index: 50;
   margin-top: -88px;
   width: 100%;
 `;
