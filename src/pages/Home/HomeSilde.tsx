@@ -1,5 +1,5 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -9,7 +9,6 @@ import styled from 'styled-components';
 
 import HomeFirstSection from './FirstSection/HomeFirstSection';
 import HomeSecondSection from './SecondSection/HomeSecondSection';
-import Footer from '@components/Footer';
 import HomeNewThirdSection from './ThirdSection/HomeNewThirdSection';
 
 //
@@ -28,6 +27,18 @@ const MOUSE_WHEEL_OPTION = {
 //
 
 const HomeSlide = () => {
+  const swiperRef = React.useRef<SwiperClass | null>();
+
+  /**
+   *
+   */
+  const handleBackToFirstSlide = () => {
+    console.log('handleBackToFirstSlide');
+    if (swiperRef?.current) {
+      swiperRef.current.slideTo(0); // Go to the first slide
+    }
+  };
+
   return (
     <>
       <StyledSwiper
@@ -37,6 +48,9 @@ const HomeSlide = () => {
         modules={[Mousewheel, Pagination]}
         mousewheel={MOUSE_WHEEL_OPTION}
         autoHeight={true}
+        onSwiper={(swiper: SwiperClass) => {
+          swiperRef.current = swiper;
+        }}
       >
         {/* First Section */}
         <StyledSwiperSlide>
@@ -48,20 +62,8 @@ const HomeSlide = () => {
         </StyledSwiperSlide>
         {/* Third Section */}
         <StyledSwiperSlide>
-          <HomeNewThirdSection />
+          <HomeNewThirdSection handleBackToFirstSlide={handleBackToFirstSlide} />
         </StyledSwiperSlide>
-        {/* Footer */}
-        <FooterSwiperSlide>
-          <h2
-            style={{
-              marginBottom: '8rem',
-            }}
-          >
-            코테이토에 대해 더 많이 알고 싶다면?
-          </h2>
-          <p>Contact us ↓ ↓ ↓ ↓ ↓ ↓</p>
-          <Footer />
-        </FooterSwiperSlide>
       </StyledSwiper>
     </>
   );
@@ -90,12 +92,4 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   align-items: center;
   width: 100%;
   height: 100%;
-`;
-
-const FooterSwiperSlide = styled(SwiperSlide)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
 `;
