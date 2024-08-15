@@ -625,10 +625,6 @@ const ValidationDiv = styled.div<{ color: boolean }>`
   flex-direction: row;
   align-items: center;
   margin-right: 0.8rem;
-  img {
-    width: 1.2rem;
-    margin-right: 0.3rem;
-  }
   span {
     font-size: ${({ theme }) => theme.fontSize.sm};
     color: ${({ color, theme }) => (color ? theme.colors.sub3[60] : theme.colors.gray60)};
