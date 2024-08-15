@@ -22,9 +22,6 @@ import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 
 function App() {
-  const location = useLocation();
-  const isInHome = location.pathname === '/';
-
   //
   //
   //
@@ -51,7 +48,6 @@ function App() {
           <Route path="/projects" element={<ReadyState />} />
           <Route path="/signin" element={<Login />} />
         </Routes>
-        {isInHome ? null : <Footer />}
         <CotatoGlobalFab />
       </CotatoThemeProvider>
     </div>
