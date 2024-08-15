@@ -345,7 +345,7 @@ const SignUp = () => {
               type="text"
               id="auth"
               name="auth"
-              placeholder="발송된 이메일의 인증번호를 입력해주세요."
+              placeholder="발송된 인증번호를 입력해주세요."
               value={authNum}
               onChange={handleAuthNumChange}
             />
@@ -478,26 +478,30 @@ const Wrapper = styled.div`
   justify-content: center;
   padding-top: 4rem !important;
   margin-bottom: 5rem;
-  padding: 0 30rem;
-
-  @media screen and (max-width: 392px) {
-    margin-top: 40px;
-  }
+  padding: 0 12rem;
 `;
 
 const FormDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 40rem;
+
+  ${media.tablet`
+  width: 30rem;
+  `}
+  ${media.landscape`
+  width: 20rem;
+  `}
 `;
 
 const BackImg = styled.img`
   z-index: 10;
   width: 24rem;
   top: 0;
+
   ${media.mobile`
-  width: 284px;
+  width: 20rem;
   `}
 `;
 
@@ -505,7 +509,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 100;
+  z-index: 50;
   margin-top: -88px;
   width: 100%;
 `;
@@ -515,7 +519,11 @@ const Label = styled.label`
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.gray100};
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   span {
+    width: 100%;
     padding-left: 4px;
   }
 `;
@@ -532,18 +540,6 @@ const InputDiv = styled.div`
   margin: 0.5rem 0;
   padding: 0 1rem;
   position: relative;
-
-  @media screen and (max-width: 768px) {
-    width: 440px !important;
-  }
-  @media screen and (max-width: 392px) {
-    width: 340px !important;
-    &::placeholder {
-      font-size: 0.74rem;
-    }
-    padding: 0.75rem;
-    margin-bottom: 4px;
-  }
 `;
 
 const Icon = styled.img`
@@ -573,7 +569,8 @@ const AuthButton = styled.button<{ disable: boolean }>`
   color: ${({ theme }) => theme.colors.secondary80};
   position: absolute;
   right: 1rem;
-  top: 25%;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
   ${(props) =>
     props.disable &&
@@ -583,12 +580,10 @@ const AuthButton = styled.button<{ disable: boolean }>`
     cursor: default;
   `}
 
-  @media screen and (max-width: 392px) {
-    width: 72px;
-    height: 32px;
-    font-size: 0.6rem;
-    top: 10px;
-  }
+  ${media.mobile`
+    width: 4.5rem;
+    height: 2rem;
+  `}
 `;
 
 const Eyes = styled.img`
@@ -596,7 +591,7 @@ const Eyes = styled.img`
   right: 0.75rem;
 `;
 
-const Error = styled.p`
+const Error = styled.div`
   color: ${({ theme }) => theme.colors.secondary80};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: 500;
@@ -605,6 +600,16 @@ const Error = styled.p`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
+
+  ${media.mobile`
+    img {
+      width: 1rem;
+    }
+    span {
+      font-size: 0.725rem;
+    }
+  `}
 `;
 
 const ValidationSection = styled.div`
@@ -612,6 +617,7 @@ const ValidationSection = styled.div`
   flex-direction: row;
   align-items: center;
   padding-left: 0.8rem;
+  width: 100%;
 `;
 
 const ValidationDiv = styled.div<{ color: boolean }>`
@@ -619,14 +625,19 @@ const ValidationDiv = styled.div<{ color: boolean }>`
   flex-direction: row;
   align-items: center;
   margin-right: 0.8rem;
-  img {
-    width: 1.2rem;
-    margin-right: 0.3rem;
-  }
   span {
     font-size: ${({ theme }) => theme.fontSize.sm};
     color: ${({ color, theme }) => (color ? theme.colors.sub3[60] : theme.colors.gray60)};
   }
+
+  ${media.mobile`
+    img {
+      width: 1rem;
+    }
+    span {
+      font-size: 0.8rem;
+    }
+  `}
 `;
 
 const UserAgreementDiv = styled.div`
