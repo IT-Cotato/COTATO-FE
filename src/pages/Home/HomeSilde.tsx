@@ -33,7 +33,6 @@ const HomeSlide = () => {
    *
    */
   const handleBackToFirstSlide = () => {
-    console.log('handleBackToFirstSlide');
     if (swiperRef?.current) {
       swiperRef.current.slideTo(0); // Go to the first slide
     }
