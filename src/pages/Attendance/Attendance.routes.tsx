@@ -23,7 +23,10 @@ const AttendanceRoutes = () => {
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/list/generation/:generationId" element={<AsyncAttendanceList />} />
-        <Route path="/attend/*" element={<AsyncAttendanceAttend />} />
+        <Route
+          path="/attend/generation/:generationId/session/:sessionId/*"
+          element={<AsyncAttendanceAttend />}
+        />
         <Route path="/report/:generationId" element={<AsyncAttendanceReport />} />
         <Route path="/" element={<AttendanceRedirect />} />
       </Routes>
