@@ -585,7 +585,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   `}
 
   ${media.mobile`
-    width: 4.5rem;
+    width: 4.25rem;
     height: 2rem;
     padding: 0;
   `}
