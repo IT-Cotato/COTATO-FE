@@ -544,6 +544,10 @@ const InputDiv = styled.div`
 
 const Icon = styled.img`
   padding-right: 0.6rem;
+
+  ${media.mobile`
+    padding-right: 0.4rem;
+  `}
 `;
 
 const InputBox = styled.input`
@@ -560,7 +564,7 @@ const InputBox = styled.input`
 
 const AuthButton = styled.button<{ disable: boolean }>`
   width: 6rem;
-  height: 1.75rem;
+  height: 1.725rem;
   font-size: 0.8rem;
   font-weight: 300;
   border-radius: 0.5rem;
@@ -583,6 +587,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   ${media.mobile`
     width: 4.5rem;
     height: 2rem;
+    padding: 0;
   `}
 `;
 

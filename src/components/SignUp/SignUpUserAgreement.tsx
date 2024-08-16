@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Divider, Stack } from '@mui/material';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
@@ -118,7 +118,7 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
   //
   //
   //
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (mode === 'dark') {
       setColor(theme.colors.gray30);
     } else {
