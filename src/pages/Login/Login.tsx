@@ -270,12 +270,13 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0 1.25rem;
   &:first-child {
     margin-bottom: 1rem;
   }
   input {
     border: none;
-    width: 512px;
+    width: 100%;
     &:focus {
       outline: none;
     }
@@ -288,9 +289,9 @@ const InputBox = styled.div`
   img {
     width: 16px;
     height: 16px;
-    margin-left: 1.25rem;
     margin-right: 0.8rem;
   }
+
   ${media.landscape`
     width: 350px;
   `}
@@ -332,7 +333,7 @@ const LinkContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: fit-content;
+  width: 25rem;
   height: fit-content;
   padding: 0.6rem 1.25rem;
   border-radius: 0.5rem;
@@ -341,7 +342,9 @@ const LinkContainer = styled.div`
   img {
     margin: 0 20px;
   }
+
   ${media.mobile`
+    width: 18rem;
     img {
       margin: 0 12px;
     }
