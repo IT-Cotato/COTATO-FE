@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -29,6 +29,13 @@ const IMAGE_WIDTH = '28rem';
 
 const SessionDetailModalImage = ({ imageList }: SessionDetailModalImageProps) => {
   const [imageLoading, setImageLoading] = useState(true);
+
+  /**
+   *
+   */
+  useEffect(() => {
+    setImageLoading(true);
+  }, imageList);
 
   return (
     <StyledSwiper
