@@ -117,7 +117,6 @@ const StyledSwiper = styled(Swiper)`
 const StyledSwiperSlide = styled(SwiperSlide)`
   display: flex;
   justify-content: center;
-  align-items: center;
 `;
 
 const SlideImage = styled.img<{ $display: string }>`
