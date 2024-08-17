@@ -160,6 +160,7 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
   display: flex;
   align-items: stretch;
+  height: 31rem;
 
   &:focus-visible {
     outline: none;

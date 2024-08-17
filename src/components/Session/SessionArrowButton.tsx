@@ -34,14 +34,22 @@ const ArrowButton = styled.button`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme }) => theme.colors.common.white_const};
   border: none;
   cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary100};
+
+    > svg > path {
+      fill: ${({ theme }) => theme.colors.common.white_const};
+    }
+  }
 `;
 
 const NextIcon = styled(ArrowRightIcon)`
   > path {
-    fill: ${({ theme }) => theme.colors.common.black};
+    fill: ${({ theme }) => theme.colors.common.black_const};
   }
 `;
 
