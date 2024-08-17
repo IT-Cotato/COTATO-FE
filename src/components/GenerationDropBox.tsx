@@ -4,12 +4,11 @@ import { ReactComponent as ArrowDown } from '@assets/arrow_down_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { v4 as uuid } from 'uuid';
 import generationSort from '@utils/newGenerationSort';
-import fetcher from '@utils/fetcher';
-import useSWR from 'swr';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import { useSearchParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -54,10 +53,7 @@ const GenerationDropBox = ({
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
-  const { data: rawGenerations } = useSWR<CotatoGenerationInfoResponse[]>(
-    '/v1/api/generation',
-    fetcher,
-  );
+  const { generations: rawGenerations } = useGeneration();
 
   const [searchParams, setSearchParams] = useSearchParams();
 

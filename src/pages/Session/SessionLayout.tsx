@@ -39,7 +39,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem;
+  padding: 4rem 8rem;
   min-height: calc(100vh - ${HEADER_HEIGHT});
 
   ${media.tablet`
