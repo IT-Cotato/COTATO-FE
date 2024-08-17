@@ -65,6 +65,7 @@ const SessionDetailModalImage = ({ imageList }: SessionDetailModalImageProps) =>
 const StyledSwiper = styled(Swiper)`
   background: ${({ theme }) => theme.colors.common.black_const};
   width: ${IMAGE_WIDTH};
+  height: 100%;
 
   .swiper-button-disabled {
     opacity: 0;
@@ -121,7 +122,9 @@ const StyledSwiperSlide = styled(SwiperSlide)`
 
 const SlideImage = styled.img<{ $display: string }>`
   display: ${({ $display }) => $display};
-  width: 100%;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 export default SessionDetailModalImage;
