@@ -9,6 +9,7 @@ import { Route, Routes } from 'react-router-dom';
 const AsyncAttendanceAttend = React.lazy(() => import('./Attend/AttendanceAttend'));
 const AsyncAttendanceList = React.lazy(() => import('./List/AttendanceList'));
 const AsyncAttendanceReport = React.lazy(() => import('./Report/AttendanceReport'));
+const AsyncAttendanceResult = React.lazy(() => import('./Attend/AttendanceAttendResult'));
 
 //
 //
@@ -26,6 +27,10 @@ const AttendanceRoutes = () => {
         <Route
           path="/attend/generation/:generationId/session/:sessionId/*"
           element={<AsyncAttendanceAttend />}
+        />
+        <Route
+          path="attend/generation/:generationId/session/:sessionId/:attendanceType/:status"
+          element={<AsyncAttendanceResult />}
         />
         <Route path="/report/:generationId" element={<AsyncAttendanceReport />} />
         <Route path="/" element={<AttendanceRedirect />} />
