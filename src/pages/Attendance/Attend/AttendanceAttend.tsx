@@ -1,11 +1,11 @@
 import { useGeneration } from '@/hooks/useGeneration';
 import { useSession } from '@/hooks/useSession';
-import { LoadingIndicator } from '@components/LoadingIndicator';
-import { Box, Container, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Stack, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import CharacterLaptop from '@/assets/character_laptop.svg';
-import CharacterAttendance from '@/assets/attendance_attend.svg';
+
+import onlineCharacter from '@/assets/online_character.svg';
+import offlineTwoCharacter from '@/assets/offline_two_character.svg';
 import ArrowBack from '@/assets/arrow_back.svg';
 import Check from '@/assets/check.svg';
 import styled, { useTheme } from 'styled-components';
@@ -15,6 +15,7 @@ import { useGeolocation } from 'react-use';
 import api from '@/api/api';
 import { CotatoAttendResponse } from 'cotato-openapi-clients';
 import useGetAttendances from '@/hooks/useGetAttendances';
+import { LoadingIndicator } from '@components/LoadingIndicator';
 
 //
 //
@@ -45,19 +46,19 @@ const AttendanceAttend: React.FC = () => {
 
   const sessionId = Number(params.sessionId);
   const { currentGeneration, isGenerationLoading } = useGeneration();
-  const { latitude, longitude } = useGeolocation(geolocationOptions);
+  const { latitude, longitude, error: geoLocationError } = useGeolocation(geolocationOptions);
 
   const { sessions, isSessionLoading } = useSession({
     generationId: currentGeneration?.generationId,
   });
-  const { currentAttendance } = useGetAttendances({
+  const { currentAttendance, isAttendanceLoading, isAttendanceError } = useGetAttendances({
     generationId: currentGeneration?.generationId,
     sessionId: sessionId,
   });
 
   const currentTime = '2024-08-16T19:00:39.617Z';
 
-  const sessionNumber = sessions?.find((session) => session.sessionId === sessionId)?.sessionNumber;
+  const sessionTitle = sessions?.find((session) => session.sessionId === sessionId)?.title;
 
   const [attendanceType, setAttendanceType] = React.useState<
     keyof typeof AttendanceStatusEnum | null
@@ -78,7 +79,10 @@ const AttendanceAttend: React.FC = () => {
     error: string | null,
     attendanceType: keyof typeof AttendanceStatusEnum,
   ) => {
-    console.log(error);
+    if (isAttendanceLoading || isAttendanceError) {
+      return;
+    }
+
     if (error) {
       navigate(`${location.pathname}/${attendanceType.toLowerCase()}/error`, {
         state: { error: error },
@@ -86,7 +90,7 @@ const AttendanceAttend: React.FC = () => {
       return;
     }
 
-    navigate(`${location.pathname}/${attendanceType.toLowerCase()}/${data?.status}`);
+    navigate(`${location.pathname}/${attendanceType.toLowerCase()}/${data?.status?.toLowerCase()}`);
   };
 
   /**
@@ -182,7 +186,7 @@ const AttendanceAttend: React.FC = () => {
   const renderSessionInfo = () => {
     return (
       <Typography variant="h5" color={theme.colors.common.black} fontFamily="YComputer">
-        {currentGeneration?.generationNumber}기 {sessionNumber}주차 세션
+        {currentGeneration?.generationNumber}기 {sessionTitle}
       </Typography>
     );
   };
@@ -216,11 +220,10 @@ const AttendanceAttend: React.FC = () => {
               width={isMobileOrSmaller ? '1rem' : '2rem'}
               height={isMobileOrSmaller ? '1rem' : '2rem'}
             />
-
             <Box
               component="img"
-              src={key === 'ATTEND' ? CharacterAttendance : CharacterLaptop}
-              alt={key === 'ATTEND' ? 'CharacterAttendance' : 'CharacterLaptop'}
+              src={key === 'ONLINE' ? onlineCharacter : offlineTwoCharacter}
+              alt={key === 'ONLINE' ? 'onlineCharacter' : 'offlineTwoCharacter'}
               width={isMobileOrSmaller ? '3rem' : '5rem'}
               height={isMobileOrSmaller ? '2.5rem' : '4rem'}
             />
@@ -241,9 +244,26 @@ const AttendanceAttend: React.FC = () => {
    *
    */
   const renderActionButton = () => {
+    if (isSessionLoading || isAttendanceLoading || isAttendanceError) {
+      return renderLoadingButton();
+    }
+
     return (
       <StyledButton $disabled={!attendanceType} disabled={!attendanceType} onClick={handleSubmit}>
         출석
+      </StyledButton>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderLoadingButton = () => {
+    return (
+      <StyledButton $disabled={true}>
+        <Tooltip arrow title="로딩이 계속되면 새로고침해주세요." placement="top">
+          <CircularProgress size={24} color="inherit" />
+        </Tooltip>
       </StyledButton>
     );
   };
@@ -266,8 +286,6 @@ const AttendanceAttend: React.FC = () => {
     if (isGenerationLoading || isSessionLoading) {
       return <LoadingIndicator />;
     }
-
-    console.log('sessions', sessions);
 
     return (
       <>
@@ -296,6 +314,23 @@ const AttendanceAttend: React.FC = () => {
       </>
     );
   };
+
+  //
+  // 위치 정보 제공 동의 여부 확인
+  //
+  React.useEffect(() => {
+    if (geoLocationError) {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        if (result.state === 'denied') {
+          window.alert('위치 정보 제공에 동의하여야 출석이 가능합니다!');
+        }
+      });
+    }
+  }, [geoLocationError]);
+
+  //
+  //
+  //
 
   return (
     <StyledContainer>
