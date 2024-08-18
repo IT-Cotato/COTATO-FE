@@ -10,9 +10,13 @@ import {
 } from 'cotato-openapi-clients';
 import { ReactComponent as GoalPotato } from '@assets/potato_goal.svg';
 import { useParams, useSearchParams } from 'react-router-dom';
-import AttendanceListGridCard from './AttendanceListGridCard';
-import { AttendanceCard } from '@components/attendance/attedance-card';
+import { AttendanceGridCard, AttendanceListCard } from '@components/attendance/attedance-card';
 import { media } from '@theme/media';
+import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
+import { ReactComponent as OfflineIcon } from '@assets/attendance_offline_icon.svg';
+import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
+import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
+import { Divider } from '@mui/material';
 
 //
 //
@@ -48,7 +52,7 @@ const AttendanceList = () => {
       sessionDate: '2024-08-18',
       isOpened: 'OPEN',
       attendanceType: 'ONLINE',
-      attendanceResult: 'ABSENT',
+      attendanceResult: 'PRESENT',
     };
 
     const garaAttendanceList = {
@@ -71,7 +75,7 @@ const AttendanceList = () => {
       >
         {garaAttendanceList.attendances.map((attendance, index) => (
           <StyledSwiperSlide key={index}>
-            <AttendanceCard
+            <AttendanceListCard
               generationNumber={0}
               attendance={attendance}
               backgroundColor={cardBackgroundColorList[index % cardBackgroundColorList.length]}
@@ -101,16 +105,47 @@ const AttendanceList = () => {
       return null;
     }
 
+    const descriptionList = [
+      { icon: <OfflineIcon />, text: '대면' },
+      { icon: <OnlineIcon />, text: '비대면' },
+      { icon: <AbsetIcon />, text: '결석' },
+      { icon: <LateIcon />, text: '지각' },
+    ];
+
+    const garaAttendance: CotatoMemberAttendResponse = {
+      memberId: 1,
+      sessionTitle: 'xx주차 세션',
+      sessionDate: '2024-08-18',
+      isOpened: 'CLOSED',
+      attendanceType: 'OFFLINE',
+      attendanceResult: 'PRESENT',
+    };
+
+    const garaAttendanceList = {
+      generationNumber: 0,
+      attendances: [garaAttendance, garaAttendance, garaAttendance, garaAttendance, garaAttendance],
+    };
+
     return (
       <GridViewWrapper>
         <GridHeaderWrapper>
           <h3>출석 체크</h3>
         </GridHeaderWrapper>
-        <DescriptionWrapper>아이콘들</DescriptionWrapper>
+        <DescriptionWrapper>
+          {descriptionList.map((description, index) => (
+            <>
+              <Description key={index}>
+                {description.icon}
+                {description.text}
+              </Description>
+              {index !== descriptionList.length - 1 && <Divider orientation="vertical" flexItem />}
+            </>
+          ))}
+        </DescriptionWrapper>
         <GridContainer>
-          {/* {attendanceResponse.memberAttendResponses.attendances.map((attendance) => (
-            <AttendanceListGridCard key={attendance.sessionId} index={attendance.sessionId || 0} />
-          ))} */}
+          {garaAttendanceList.attendances.map((attendance, index) => (
+            <AttendanceGridCard key={index} attendance={attendance} generationNumber={0} />
+          ))}
         </GridContainer>
       </GridViewWrapper>
     );
@@ -198,14 +233,24 @@ const DescriptionWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
+  gap: 0.75rem;
   width: 100%;
   padding: 1rem 0;
+`;
+
+const Description = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: Ycomputer;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.common.black_const};
 `;
 
 const GridContainer = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
   gap: 2rem 1.5rem;
   place-items: center;
   padding: 2rem 0;

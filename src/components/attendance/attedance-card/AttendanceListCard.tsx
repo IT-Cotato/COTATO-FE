@@ -1,12 +1,14 @@
-import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Box, Card, Stack, Typography } from '@mui/material';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as CharacterEyeClose } from '@/assets/character_eye_close.svg';
-import AttendaceStatus from '@components/attendance/attedance-card/AttendanceCardStatus';
+import AttendanceCardStatus from '@components/attendance/attedance-card/AttendanceCardStatus';
 import { CotatoMemberAttendResponse } from 'cotato-openapi-clients';
-import { AttendResponseIsOpenedEnum } from '@/enums/attend/AttendResponseIsOpenedEnum';
-import { AttendResponseAttendanceTypeEnum } from '@/enums/attend/AttendResponseAttendanceTypeEnum';
-import { AttendResponseAttendanceResultEnum } from '@/enums/attend/AttendResponseAttendanceResultEnum';
+import {
+  AttendResponseAttendanceResultEnum,
+  AttendResponseAttendanceTypeEnum,
+  AttendResponseIsOpenedEnum,
+} from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 
 //
@@ -23,7 +25,7 @@ interface AttendanceCardProps {
 //
 //
 
-const AttendanceCard: React.FC<AttendanceCardProps> = ({
+const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   attendance,
   backgroundColor,
   generationNumber,
@@ -101,7 +103,7 @@ const AttendanceCard: React.FC<AttendanceCardProps> = ({
       <Box width="100%" padding="1.5rem 0.5rem 1rem">
         <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
           {renderAttendanceInfo()}
-          <AttendaceStatus
+          <AttendanceCardStatus
             isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
             attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
             attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
@@ -112,7 +114,7 @@ const AttendanceCard: React.FC<AttendanceCardProps> = ({
   );
 };
 
-export default AttendanceCard;
+export default AttendanceCardList;
 
 //
 //

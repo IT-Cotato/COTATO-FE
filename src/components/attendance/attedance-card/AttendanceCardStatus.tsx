@@ -22,7 +22,7 @@ interface AttendaceStatusProps {
 //
 //
 
-const AttendaceStatus: React.FC<AttendaceStatusProps> = ({
+const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({
   isOpened,
   attendanceType,
   attendanceResult,
@@ -61,6 +61,8 @@ const AttendaceStatus: React.FC<AttendaceStatusProps> = ({
   const getAttendanceIcon = () => {
     if (attendanceResult === AttendResponseAttendanceResultEnum.Absent) {
       return <AbsetIcon />;
+    } else if (attendanceResult === null) {
+      return null;
     } else if (attendanceType === AttendResponseAttendanceTypeEnum.Online) {
       return <OnlineIcon />;
     } else if (attendanceType === AttendResponseAttendanceTypeEnum.Offline) {
@@ -128,4 +130,4 @@ const StatusContainer = styled.div<{ $textColor: string }>`
   }
 `;
 
-export default AttendaceStatus;
+export default AttendaceCardStatus;
