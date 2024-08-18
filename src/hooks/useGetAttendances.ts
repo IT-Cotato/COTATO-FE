@@ -32,7 +32,8 @@ const useGetAttendances = ({ sessionId, generationId }: UseGetAttendancesProps) 
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      revalidateIfStale: false,
+      errorRetryInterval: 1000,
+      errorRetryCount: 3,
     },
   );
 
