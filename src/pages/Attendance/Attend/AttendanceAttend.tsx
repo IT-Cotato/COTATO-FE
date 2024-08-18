@@ -3,7 +3,7 @@ import { useSession } from '@/hooks/useSession';
 import { LoadingIndicator } from '@components/LoadingIndicator';
 import { Box, Container, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CharacterLaptop from '@/assets/character_laptop.svg';
 import CharacterAttendance from '@/assets/attendance_attend.svg';
 import ArrowBack from '@/assets/arrow_back.svg';
@@ -11,14 +11,18 @@ import Check from '@/assets/check.svg';
 import styled, { useTheme } from 'styled-components';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import { useGeolocation } from 'react-use';
+import api from '@/api/api';
+import { CotatoAttendResponse } from 'cotato-openapi-clients';
+import useGetAttendances from '@/hooks/useGetAttendances';
 
 //
 //
 //
 
 const AttendanceStatusEnum = {
-  ATTEND: '대면',
-  REMOTE: '비대면',
+  OFFLINE: '대면',
+  ONLINE: '비대면',
 };
 
 //
@@ -29,26 +33,121 @@ const AttendanceAttend: React.FC = () => {
   const theme = useTheme();
   const params = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { isMobileOrSmaller, isLandScapeOrSmaller } = useBreakpoints();
 
+  const geolocationOptions = {
+    enableHighAccuracy: true,
+    timeout: 1000 * 10,
+    maximumAge: 1000 * 3600 * 24,
+  };
+
   const sessionId = Number(params.sessionId);
   const { currentGeneration, isGenerationLoading } = useGeneration();
+  const { latitude, longitude } = useGeolocation(geolocationOptions);
+
   const { sessions, isSessionLoading } = useSession({
     generationId: currentGeneration?.generationId,
   });
+  const { currentAttendance } = useGetAttendances({
+    generationId: currentGeneration?.generationId,
+    sessionId: sessionId,
+  });
+
+  const currentTime = '2024-08-16T19:00:39.617Z';
 
   const sessionNumber = sessions?.find((session) => session.sessionId === sessionId)?.sessionNumber;
 
-  const [attendance, setAttendance] = React.useState<keyof typeof AttendanceStatusEnum | null>(
-    null,
-  );
+  const [attendanceType, setAttendanceType] = React.useState<
+    keyof typeof AttendanceStatusEnum | null
+  >(null);
 
   /**
    *
    */
   const handleAttendanceClick = (status: keyof typeof AttendanceStatusEnum) => {
-    setAttendance(status);
+    setAttendanceType(status);
+  };
+
+  /**
+   *
+   */
+  const handleNavigate = (
+    data: CotatoAttendResponse | null,
+    error: string | null,
+    attendanceType: keyof typeof AttendanceStatusEnum,
+  ) => {
+    console.log(error);
+    if (error) {
+      navigate(`${location.pathname}/${attendanceType.toLowerCase()}/error`, {
+        state: { error: error },
+      });
+      return;
+    }
+
+    navigate(`${location.pathname}/${attendanceType.toLowerCase()}/${data?.status}`);
+  };
+
+  /**
+   *
+   */
+  const handleSubmit = async () => {
+    if (!attendanceType) {
+      return;
+    }
+
+    if (attendanceType === 'OFFLINE') {
+      const data = await postOfflineAttendance();
+      handleNavigate(data.data, data.error, attendanceType);
+    } else {
+      const data = await postOnlineAttendance();
+      handleNavigate(data.data, data.error, attendanceType);
+    }
+  };
+
+  /**
+   *
+   */
+  const postOfflineAttendance = async () => {
+    const result = await api
+      .post<CotatoAttendResponse>('/v2/api/attendances/records/offline', {
+        attendanceId: currentAttendance?.attendanceId,
+        requestTime: currentTime,
+        location: {
+          latitude: latitude,
+          longitude: longitude,
+        },
+      })
+      .then((res) => {
+        return { data: res.data, error: null };
+      })
+      .catch((err) => {
+        console.error(err);
+        return { data: null, error: err.response.data.code };
+      });
+
+    return result;
+  };
+
+  /**
+   *
+   */
+  const postOnlineAttendance = async () => {
+    const result = await api
+      .post('/v2/api/attendances/records/online', {
+        attendanceId: currentAttendance?.attendanceId,
+        requestTime: currentTime,
+      })
+      .then((res) => {
+        return { data: res.data, error: null };
+      })
+      .catch((err) => {
+        console.error(err);
+        return { data: null, error: err.response.data.code };
+      });
+
+    return result;
   };
 
   /**
@@ -107,12 +206,12 @@ const AttendanceAttend: React.FC = () => {
           <StyledBox
             key={key}
             gap="1rem"
-            $isSelected={attendance === key}
+            $isSelected={attendanceType === key}
             onClick={() => handleAttendanceClick(key as keyof typeof AttendanceStatusEnum)}
           >
             <Box
-              component={attendance === key ? 'img' : 'div'}
-              src={attendance === key ? Check : ''}
+              component={attendanceType === key ? 'img' : 'div'}
+              src={attendanceType === key ? Check : ''}
               alt="Check"
               width={isMobileOrSmaller ? '1rem' : '2rem'}
               height={isMobileOrSmaller ? '1rem' : '2rem'}
@@ -143,7 +242,7 @@ const AttendanceAttend: React.FC = () => {
    */
   const renderActionButton = () => {
     return (
-      <StyledButton $disabled={!attendance} disabled={!attendance}>
+      <StyledButton $disabled={!attendanceType} disabled={!attendanceType} onClick={handleSubmit}>
         출석
       </StyledButton>
     );
