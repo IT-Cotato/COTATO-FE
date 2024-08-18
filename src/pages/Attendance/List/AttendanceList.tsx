@@ -1,15 +1,18 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { HEADER_HEIGHT } from '@theme/constants/constants';
-import AttendanceListCard from './AttendanceListCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useSWR from 'swr';
-import fetchUserData from '@utils/fetchUserData';
 import fetcherWithParams from '@utils/fetcherWithParams';
-import { CotatoSessionListResponse } from 'cotato-openapi-clients';
+import {
+  CotatoMemberAttendanceRecordsResponse,
+  CotatoMemberAttendResponse,
+} from 'cotato-openapi-clients';
 import { ReactComponent as GoalPotato } from '@assets/potato_goal.svg';
 import { useParams, useSearchParams } from 'react-router-dom';
 import AttendanceListGridCard from './AttendanceListGridCard';
+import { AttendanceCard } from '@components/attendance/attedance-card';
+import { media } from '@theme/media';
 
 //
 //
@@ -18,11 +21,10 @@ import AttendanceListGridCard from './AttendanceListGridCard';
 const AttendanceList = () => {
   const { generationId } = useParams();
 
-  const { data: sessionList } = useSWR<CotatoSessionListResponse[]>(
-    '/v1/api/session',
-    (url: string) => fetcherWithParams(url, { generationId: generationId }),
+  const { data: attendanceResponse } = useSWR<CotatoMemberAttendanceRecordsResponse>(
+    '/v2/api/attendances/records/members',
+    (url: string) => fetcherWithParams(url, { 'generation-id': generationId }),
   );
-  const { data: userData } = fetchUserData();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [view, setView] = React.useState(searchParams.get('view') || 'list');
@@ -32,22 +34,48 @@ const AttendanceList = () => {
    *
    */
   const renderListCards = () => {
-    if (!sessionList) return null;
+    // if (!attendanceResponse || !attendanceResponse.memberAttendResponses) {
+    //   return null;
+    // }
 
     if (view === 'grid') {
       return null;
     }
 
+    const garaAttendance: CotatoMemberAttendResponse = {
+      memberId: 1,
+      sessionTitle: '가라 세션',
+      sessionDate: '2024-08-18',
+      isOpened: 'OPEN',
+      attendanceType: 'ONLINE',
+      attendanceResult: 'ABSENT',
+    };
+
+    const garaAttendanceList = {
+      generationNumber: 0,
+      attendances: [garaAttendance, garaAttendance, garaAttendance, garaAttendance, garaAttendance],
+    };
+
+    const cardBackgroundColorList = [
+      theme.colors.pastelTone.yellow[100],
+      theme.colors.pastelTone.pink[100],
+      theme.colors.pastelTone.blue[100],
+    ];
+
     return (
       <StyledSwiper
         slidesPerView="auto"
-        spaceBetween={20}
+        spaceBetween={28}
         centeredSlides={true}
-        initialSlide={sessionList?.length - 1}
+        initialSlide={garaAttendanceList.attendances.length - 1}
       >
-        {sessionList?.map((session, index) => (
+        {garaAttendanceList.attendances.map((attendance, index) => (
           <StyledSwiperSlide key={index}>
-            <AttendanceListCard index={index} />
+            <AttendanceCard
+              generationNumber={0}
+              attendance={attendance}
+              backgroundColor={cardBackgroundColorList[index % cardBackgroundColorList.length]}
+            />
           </StyledSwiperSlide>
         ))}
         <span slot="wrapper-end">
@@ -65,7 +93,9 @@ const AttendanceList = () => {
   };
 
   const renderGridCards = () => {
-    if (!sessionList) return null;
+    if (!attendanceResponse || !attendanceResponse.memberAttendResponses) {
+      return null;
+    }
 
     if (view !== 'grid') {
       return null;
@@ -78,9 +108,9 @@ const AttendanceList = () => {
         </GridHeaderWrapper>
         <DescriptionWrapper>아이콘들</DescriptionWrapper>
         <GridContainer>
-          {sessionList?.map((session, index) => (
-            <AttendanceListGridCard key={index} index={index} />
-          ))}
+          {/* {attendanceResponse.memberAttendResponses.attendances.map((attendance) => (
+            <AttendanceListGridCard key={attendance.sessionId} index={attendance.sessionId || 0} />
+          ))} */}
         </GridContainer>
       </GridViewWrapper>
     );
@@ -104,9 +134,16 @@ const Wrapper = styled.div`
   justify-content: center;
   width: 100%;
   min-height: calc(100vh - ${HEADER_HEIGHT});
+
+  ${media.mobile`
+    min-height: 100vh;
+  `}
 `;
 
-const StyledSwiper = styled(Swiper)``;
+const StyledSwiper = styled(Swiper)`
+  width: 100%;
+  padding: 2rem 0;
+`;
 
 const StyledSwiperSlide = styled(SwiperSlide)`
   width: auto;
