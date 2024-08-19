@@ -10,7 +10,6 @@ import {
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { media } from '@theme/media';
-import { Link, useParams } from 'react-router-dom';
 import { useGeneration } from '@/hooks/useGeneration';
 
 //
@@ -19,47 +18,39 @@ import { useGeneration } from '@/hooks/useGeneration';
 
 interface AttendanceCardProps {
   attendance: CotatoMemberAttendResponse;
+  onClick: (attendance: CotatoMemberAttendResponse) => void;
 }
 
 //
 //
 //
 
-const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance }) => {
-  const { generationId } = useParams();
+const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance, onClick }) => {
   const { currentGeneration } = useGeneration();
 
   return (
-    <StyledLink
-      to={`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`}
-    >
-      <Container>
-        {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
-          <StyledLateIcon />
-        )}
-        <Stack gap="0.25rem">
-          <DateText>{attendance.sessionDate}</DateText>
-          <TitleText>
-            {currentGeneration?.generationNumber}기 {attendance.sessionTitle}
-          </TitleText>
-        </Stack>
-        <AttendanceCardStatus
-          isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
-          attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
-          attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
-        />
-      </Container>
-    </StyledLink>
+    <Container onClick={() => onClick(attendance)}>
+      {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
+        <StyledLateIcon />
+      )}
+      <Stack gap="0.25rem">
+        <DateText>{attendance.sessionDate}</DateText>
+        <TitleText>
+          {currentGeneration?.generationNumber}기 {attendance.sessionTitle}
+        </TitleText>
+      </Stack>
+      <AttendanceCardStatus
+        isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
+        attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
+        attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
+      />
+    </Container>
   );
 };
 
 //
 //
 //
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-`;
 
 const Container = styled.div`
   position: relative;
@@ -75,6 +66,7 @@ const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.primary70};
   background: ${({ theme }) => theme.colors.common.white_const};
   box-shadow: 1px 1px 20px 5px rgba(255, 160, 0, 0.15);
+  cursor: pointer;
 
   ${media.tablet`
     width: 9.5rem;
