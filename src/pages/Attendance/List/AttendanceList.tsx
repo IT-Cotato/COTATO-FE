@@ -28,7 +28,10 @@ const AttendanceList = () => {
     (url: string) => fetcherWithParams(url, { 'generation-id': generationId }),
   );
 
+  // use when floating button is applied
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [view, setView] = React.useState(searchParams.get('view') || 'list');
   const theme = useTheme();
 
