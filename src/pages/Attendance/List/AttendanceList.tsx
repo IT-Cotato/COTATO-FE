@@ -4,10 +4,7 @@ import { HEADER_HEIGHT } from '@theme/constants/constants';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
-import {
-  CotatoMemberAttendanceRecordsResponse,
-  CotatoMemberAttendResponse,
-} from 'cotato-openapi-clients';
+import { CotatoMemberAttendanceRecordsResponse } from 'cotato-openapi-clients';
 import { ReactComponent as GoalPotato } from '@assets/potato_goal.svg';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { AttendanceGridCard, AttendanceListCard } from '@components/attendance/attedance-card';
@@ -17,6 +14,7 @@ import { ReactComponent as OfflineIcon } from '@assets/attendance_offline_icon.s
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { Divider } from '@mui/material';
+import { AttendResponseAttendanceResultEnum } from '@/enums/attend';
 
 //
 //
@@ -46,24 +44,22 @@ const AttendanceList = () => {
       return null;
     }
 
-    const garaAttendance: CotatoMemberAttendResponse = {
-      memberId: 1,
-      sessionTitle: '가라 세션',
-      sessionDate: '2024-08-18',
-      isOpened: 'OPEN',
-      attendanceType: 'ONLINE',
-      attendanceResult: 'PRESENT',
-    };
-
-    const garaAttendanceList = {
-      generationNumber: 0,
-      attendances: [garaAttendance, garaAttendance, garaAttendance, garaAttendance, garaAttendance],
-    };
-
+    let cardBackgrooundColorListIndex = 0;
     const cardBackgroundColorList = [
       theme.colors.pastelTone.yellow[100],
       theme.colors.pastelTone.pink[100],
     ];
+
+    const getCardBackgroundColor = (attendanceResult: AttendResponseAttendanceResultEnum) => {
+      if (attendanceResult === 'ABSENT') {
+        return theme.colors.pastelTone.blue[100];
+      }
+
+      const color = cardBackgroundColorList[cardBackgrooundColorListIndex];
+      cardBackgrooundColorListIndex =
+        (cardBackgrooundColorListIndex + 1) % cardBackgroundColorList.length;
+      return color;
+    };
 
     return (
       <StyledSwiper
@@ -77,7 +73,9 @@ const AttendanceList = () => {
             <AttendanceListCard
               generationNumber={0}
               attendance={attendance}
-              backgroundColor={cardBackgroundColorList[index % cardBackgroundColorList.length]}
+              backgroundColor={getCardBackgroundColor(
+                attendance.attendanceResult as AttendResponseAttendanceResultEnum,
+              )}
             />
           </StyledSwiperSlide>
         ))}
@@ -111,20 +109,6 @@ const AttendanceList = () => {
       { icon: <LateIcon />, text: '지각' },
     ];
 
-    const garaAttendance: CotatoMemberAttendResponse = {
-      memberId: 1,
-      sessionTitle: 'xx주차 세션',
-      sessionDate: '2024-08-18',
-      isOpened: 'CLOSED',
-      attendanceType: 'OFFLINE',
-      attendanceResult: 'PRESENT',
-    };
-
-    const garaAttendanceList = {
-      generationNumber: 0,
-      attendances: [garaAttendance, garaAttendance, garaAttendance, garaAttendance, garaAttendance],
-    };
-
     return (
       <GridViewWrapper>
         <GridHeaderWrapper>
@@ -142,7 +126,7 @@ const AttendanceList = () => {
           ))}
         </DescriptionWrapper>
         <GridContainer>
-          {garaAttendanceList.attendances.map((attendance, index) => (
+          {attendanceResponse.memberAttendResponses.map((attendance, index) => (
             <AttendanceGridCard key={index} attendance={attendance} generationNumber={0} />
           ))}
         </GridContainer>

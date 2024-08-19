@@ -10,6 +10,7 @@ import {
   AttendResponseIsOpenedEnum,
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
+import { Link, useParams } from 'react-router-dom';
 
 //
 //
@@ -31,6 +32,7 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   generationNumber,
 }) => {
   const theme = useTheme();
+  const { generationId } = useParams();
 
   /**
    *
@@ -87,30 +89,32 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   //
   //
   return (
-    <StyledCard elevation={0} boxShadowColor={getBoxColor().cardBoxShadow}>
-      <ImageBackground
-        bgcolor={backgroundColor}
-        sx={{ border: `1px solid ${getBoxColor().imageBorderColor}` }}
-        boxShadow={`1px 1px 10px 0px ${getBoxColor().imageBoxShaodwColor}`}
-      >
-        <ImageBox>
-          {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
-            <StyledLateIcon />
-          )}
-          <CharacterEyeClose style={{ width: '100%', height: '100%' }} />
-        </ImageBox>
-      </ImageBackground>
-      <Box width="100%" padding="1.5rem 0.5rem 1rem">
-        <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
-          {renderAttendanceInfo()}
-          <AttendanceCardStatus
-            isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
-            attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
-            attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
-          />
-        </Stack>
-      </Box>
-    </StyledCard>
+    <StyledLink to={`/attend/generation/${generationId}/session/${attendance.sessionId}`}>
+      <StyledCard elevation={0} boxShadowColor={getBoxColor().cardBoxShadow}>
+        <ImageBackground
+          bgcolor={backgroundColor}
+          sx={{ border: `1px solid ${getBoxColor().imageBorderColor}` }}
+          boxShadow={`1px 1px 10px 0px ${getBoxColor().imageBoxShaodwColor}`}
+        >
+          <ImageBox>
+            {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
+              <StyledLateIcon />
+            )}
+            <CharacterEyeClose style={{ width: '100%', height: '100%' }} />
+          </ImageBox>
+        </ImageBackground>
+        <Box width="100%" padding="1.5rem 0.5rem 1rem">
+          <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
+            {renderAttendanceInfo()}
+            <AttendanceCardStatus
+              isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
+              attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
+              attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
+            />
+          </Stack>
+        </Box>
+      </StyledCard>
+    </StyledLink>
   );
 };
 
@@ -119,6 +123,10 @@ export default AttendanceCardList;
 //
 //
 //
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
 
 const StyledCard = styled(Card)<{ boxShadowColor: string }>`
   display: flex;

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { CotatoMemberAttendResponse } from 'cotato-openapi-clients';
 import { Stack } from '@mui/material';
 import AttendanceCardStatus from '@components/attendance/attedance-card/AttendanceCardStatus';
@@ -10,6 +10,7 @@ import {
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { media } from '@theme/media';
+import { Link, useParams } from 'react-router-dom';
 
 //
 //
@@ -25,31 +26,37 @@ interface AttendanceCardProps {
 //
 
 const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance, generationNumber }) => {
-  const theme = useTheme();
+  const { generationId } = useParams();
 
   return (
-    <Container>
-      {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
-        <StyledLateIcon />
-      )}
-      <Stack gap="0.25rem">
-        <DateText>{attendance.sessionDate}</DateText>
-        <TitleText>
-          {generationNumber}기 {attendance.sessionTitle}
-        </TitleText>
-      </Stack>
-      <AttendanceCardStatus
-        isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
-        attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
-        attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
-      />
-    </Container>
+    <StyledLink to={`/attend/generation/${generationId}/session/${attendance.sessionId}`}>
+      <Container>
+        {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
+          <StyledLateIcon />
+        )}
+        <Stack gap="0.25rem">
+          <DateText>{attendance.sessionDate}</DateText>
+          <TitleText>
+            {generationNumber}기 {attendance.sessionTitle}
+          </TitleText>
+        </Stack>
+        <AttendanceCardStatus
+          isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
+          attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
+          attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
+        />
+      </Container>
+    </StyledLink>
   );
 };
 
 //
 //
 //
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
 
 const Container = styled.div`
   position: relative;
