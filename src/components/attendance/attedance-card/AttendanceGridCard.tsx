@@ -11,6 +11,7 @@ import {
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { media } from '@theme/media';
 import { Link, useParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -18,15 +19,15 @@ import { Link, useParams } from 'react-router-dom';
 
 interface AttendanceCardProps {
   attendance: CotatoMemberAttendResponse;
-  generationNumber?: number;
 }
 
 //
 //
 //
 
-const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance, generationNumber }) => {
+const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance }) => {
   const { generationId } = useParams();
+  const { currentGeneration } = useGeneration();
 
   return (
     <StyledLink
@@ -39,7 +40,7 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance, generat
         <Stack gap="0.25rem">
           <DateText>{attendance.sessionDate}</DateText>
           <TitleText>
-            {generationNumber}기 {attendance.sessionTitle}
+            {currentGeneration?.generationNumber}기 {attendance.sessionTitle}
           </TitleText>
         </Stack>
         <AttendanceCardStatus

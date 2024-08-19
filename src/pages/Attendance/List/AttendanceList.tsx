@@ -74,7 +74,6 @@ const AttendanceList = () => {
         {attendanceResponse.memberAttendResponses.map((attendance, index) => (
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
-              generationNumber={0}
               attendance={attendance}
               backgroundColor={getCardBackgroundColor(
                 attendance.attendanceResult as AttendResponseAttendanceResultEnum,
@@ -130,7 +129,7 @@ const AttendanceList = () => {
         </DescriptionWrapper>
         <GridContainer>
           {attendanceResponse.memberAttendResponses.map((attendance, index) => (
-            <AttendanceGridCard key={index} attendance={attendance} generationNumber={0} />
+            <AttendanceGridCard key={index} attendance={attendance} />
           ))}
         </GridContainer>
       </GridViewWrapper>

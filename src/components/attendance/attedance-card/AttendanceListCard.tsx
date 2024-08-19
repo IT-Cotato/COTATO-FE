@@ -11,6 +11,7 @@ import {
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { Link, useParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -19,20 +20,16 @@ import { Link, useParams } from 'react-router-dom';
 interface AttendanceCardProps {
   attendance: CotatoMemberAttendResponse;
   backgroundColor: string;
-  generationNumber?: number;
 }
 
 //
 //
 //
 
-const AttendanceCardList: React.FC<AttendanceCardProps> = ({
-  attendance,
-  backgroundColor,
-  generationNumber,
-}) => {
+const AttendanceCardList: React.FC<AttendanceCardProps> = ({ attendance, backgroundColor }) => {
   const theme = useTheme();
   const { generationId } = useParams();
+  const { currentGeneration } = useGeneration();
 
   /**
    *
@@ -76,7 +73,7 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
     return (
       <Stack>
         <StyledTypography variant="h6" fontSize="1.125rem">
-          {generationNumber}기 {attendance.sessionTitle}
+          {currentGeneration?.generationNumber}기 {attendance.sessionTitle}
         </StyledTypography>
         <StyledTypography variant="body2" fontSize="0.875rem" color={theme.colors.gray50}>
           {attendance.sessionDate}
