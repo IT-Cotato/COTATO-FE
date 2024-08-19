@@ -38,9 +38,9 @@ const AttendanceList = () => {
    *
    */
   const renderListCards = () => {
-    // if (!attendanceResponse || !attendanceResponse.memberAttendResponses) {
-    //   return null;
-    // }
+    if (!attendanceResponse || !attendanceResponse.memberAttendResponses) {
+      return null;
+    }
 
     if (view === 'grid') {
       return null;
@@ -63,7 +63,6 @@ const AttendanceList = () => {
     const cardBackgroundColorList = [
       theme.colors.pastelTone.yellow[100],
       theme.colors.pastelTone.pink[100],
-      theme.colors.pastelTone.blue[100],
     ];
 
     return (
@@ -71,9 +70,9 @@ const AttendanceList = () => {
         slidesPerView="auto"
         spaceBetween={28}
         centeredSlides={true}
-        initialSlide={garaAttendanceList.attendances.length - 1}
+        initialSlide={attendanceResponse.memberAttendResponses.length - 1}
       >
-        {garaAttendanceList.attendances.map((attendance, index) => (
+        {attendanceResponse.memberAttendResponses.map((attendance, index) => (
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
               generationNumber={0}
