@@ -239,7 +239,7 @@ const Description = styled.span`
   gap: 0.75rem;
   font-family: Ycomputer;
   font-size: 1rem;
-  color: ${({ theme }) => theme.colors.common.black_const};
+  color: ${({ theme }) => theme.colors.common.black};
 
   ${media.tablet`
     gap: 0.25rem;
