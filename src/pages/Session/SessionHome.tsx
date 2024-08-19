@@ -37,7 +37,6 @@ import { toast } from 'react-toastify';
 
 const SessionHome = () => {
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const { data: sessionList, mutate: mutateSessionList } = useSWR<CotatoSessionListResponse[]>(
     '/v1/api/session',
@@ -48,6 +47,7 @@ const SessionHome = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
@@ -127,7 +127,7 @@ const SessionHome = () => {
    */
   const handleSessionAdd = (session: SessionListInfo) => {
     const formData = new FormData();
-    formData.append('generationId', '1');
+    formData.append('generationId', selectedGeneration?.generationId?.toString() || '');
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
     formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
