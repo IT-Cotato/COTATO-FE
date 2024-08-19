@@ -19,6 +19,7 @@ import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
 import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
+import { About } from '@pages/About';
 
 function App() {
   const location = useLocation();
@@ -48,7 +49,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ReadyState />} />
-          <Route path="/about" element={<ReadyState />} />
+          <Route path="/about" element={<About />} />
           <Route path="/products" element={<ReadyState />} />
           <Route path="/cs/*" element={<CSPage />} />
           <Route path="/session/*" element={<Session />} />
