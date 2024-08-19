@@ -3,7 +3,6 @@ import styled, { useTheme } from 'styled-components';
 import { ReactComponent as LocationIcon } from '@assets/attendance_location_pin_stroke.svg';
 import { ReactComponent as SearchIcon } from '@assets/search.svg';
 import { Box } from '@mui/material';
-import { render } from '@testing-library/react';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
 
 //
