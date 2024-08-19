@@ -212,6 +212,14 @@ const GridViewWrapper = styled.div`
   min-height: 100vh;
   width: 100%;
   padding: 2rem 10rem;
+
+  ${media.laptop`
+    padding: 2rem 8rem;
+  `}
+
+  ${media.tablet`
+    padding: 4rem 1rem;
+  `}
 `;
 
 const GridHeaderWrapper = styled.div`
@@ -236,6 +244,10 @@ const DescriptionWrapper = styled.div`
   gap: 0.75rem;
   width: 100%;
   padding: 1rem 0;
+
+  ${media.tablet`
+    gap: 0.5rem;
+  `}
 `;
 
 const Description = styled.span`
@@ -245,15 +257,30 @@ const Description = styled.span`
   font-family: Ycomputer;
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.common.black_const};
+
+  ${media.tablet`
+    gap: 0.25rem;
+    font-size: 0.75rem;
+
+    > svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  `}
 `;
 
 const GridContainer = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-  gap: 2rem 1.5rem;
+  gap: 2rem;
   place-items: center;
   padding: 2rem 0;
+
+  ${media.tablet`
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));  
+    gap: 1rem;
+  `}
 `;
 
 export default AttendanceList;
