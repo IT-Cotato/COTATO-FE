@@ -45,7 +45,6 @@ const AttendanceList = () => {
    *
    */
   const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
-    `/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`;
     if (attendance.isOpened === AttendResponseIsOpenedEnum.Open) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
     }
