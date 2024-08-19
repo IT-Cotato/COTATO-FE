@@ -18,6 +18,7 @@ import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { Divider } from '@mui/material';
 import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -36,6 +37,7 @@ const AttendanceList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [view, setView] = React.useState(searchParams.get('view') || 'list');
+  const { currentGeneration } = useGeneration();
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -92,6 +94,7 @@ const AttendanceList = () => {
               backgroundColor={getCardBackgroundColor(
                 attendance.attendanceResult as AttendResponseAttendanceResultEnum,
               )}
+              generationNumber={currentGeneration?.generationNumber || 0}
               onClick={handleCardClick}
             />
           </StyledSwiperSlide>
@@ -144,7 +147,12 @@ const AttendanceList = () => {
         </DescriptionWrapper>
         <GridContainer>
           {attendanceResponse.memberAttendResponses.map((attendance, index) => (
-            <AttendanceGridCard key={index} attendance={attendance} onClick={handleCardClick} />
+            <AttendanceGridCard
+              key={index}
+              attendance={attendance}
+              generationNumber={currentGeneration?.generationNumber || 0}
+              onClick={handleCardClick}
+            />
           ))}
         </GridContainer>
       </GridViewWrapper>

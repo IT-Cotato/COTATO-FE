@@ -10,7 +10,6 @@ import {
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { media } from '@theme/media';
-import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -18,6 +17,7 @@ import { useGeneration } from '@/hooks/useGeneration';
 
 interface AttendanceCardProps {
   attendance: CotatoMemberAttendResponse;
+  generationNumber: number;
   onClick: (attendance: CotatoMemberAttendResponse) => void;
 }
 
@@ -25,9 +25,11 @@ interface AttendanceCardProps {
 //
 //
 
-const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance, onClick }) => {
-  const { currentGeneration } = useGeneration();
-
+const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
+  attendance,
+  generationNumber,
+  onClick,
+}) => {
   return (
     <Container onClick={() => onClick(attendance)}>
       {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
@@ -36,7 +38,7 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance, onClick
       <Stack gap="0.25rem">
         <DateText>{attendance.sessionDate}</DateText>
         <TitleText>
-          {currentGeneration?.generationNumber}기 {attendance.sessionTitle}
+          {generationNumber}기 {attendance.sessionTitle}
         </TitleText>
       </Stack>
       <AttendanceCardStatus

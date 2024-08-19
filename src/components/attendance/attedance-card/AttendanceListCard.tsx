@@ -10,7 +10,6 @@ import {
   AttendResponseIsOpenedEnum,
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
-import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -19,6 +18,7 @@ import { useGeneration } from '@/hooks/useGeneration';
 interface AttendanceCardProps {
   attendance: CotatoMemberAttendResponse;
   backgroundColor: string;
+  generationNumber: number;
   onClick: (attendance: CotatoMemberAttendResponse) => void;
 }
 
@@ -29,10 +29,10 @@ interface AttendanceCardProps {
 const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   attendance,
   backgroundColor,
+  generationNumber,
   onClick,
 }) => {
   const theme = useTheme();
-  const { currentGeneration } = useGeneration();
 
   /**
    *
@@ -80,7 +80,7 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
     return (
       <Stack>
         <StyledTypography variant="h6" fontSize="1.125rem">
-          {currentGeneration?.generationNumber}기 {attendance.sessionTitle}
+          {generationNumber}기 {attendance.sessionTitle}
         </StyledTypography>
         <StyledTypography variant="body2" fontSize="0.875rem" color={theme.colors.gray50}>
           {attendance.sessionDate}
