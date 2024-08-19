@@ -89,7 +89,9 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   //
   //
   return (
-    <StyledLink to={`/attend/generation/${generationId}/session/${attendance.sessionId}`}>
+    <StyledLink
+      to={`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`}
+    >
       <StyledCard elevation={0} boxShadowColor={getBoxColor().cardBoxShadow}>
         <ImageBackground
           bgcolor={backgroundColor}

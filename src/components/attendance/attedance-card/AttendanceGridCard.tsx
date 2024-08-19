@@ -29,7 +29,9 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({ attendance, generat
   const { generationId } = useParams();
 
   return (
-    <StyledLink to={`/attend/generation/${generationId}/session/${attendance.sessionId}`}>
+    <StyledLink
+      to={`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`}
+    >
       <Container>
         {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
           <StyledLateIcon />
