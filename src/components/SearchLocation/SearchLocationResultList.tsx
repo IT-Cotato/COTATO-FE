@@ -41,7 +41,8 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({ results, pa
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 11rem;
+  /* height: 11rem; */
+  flex: 1;
   overflow-y: auto;
 `;
 

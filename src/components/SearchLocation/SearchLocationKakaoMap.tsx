@@ -40,13 +40,13 @@ const SearchLocationKakaoMap: React.FC<KakaoMapProps> = ({
     script.onload = () => {
       if (window.kakao && window.kakao.maps) {
         window.kakao.maps.load(() => {
-          const mapContainer = document.getElementById('map') as HTMLElement;
-          const mapOption = {
-            center: new window.kakao.maps.LatLng(37.5665, 126.978),
-            level: 3,
-          };
+          // const mapContainer = document.getElementById('map') as HTMLElement;
+          // const mapOption = {
+          //   center: new window.kakao.maps.LatLng(37.5665, 126.978),
+          //   level: 3,
+          // };
 
-          const map = new window.kakao.maps.Map(mapContainer, mapOption);
+          // const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
           if (window.kakao.maps.services) {
             const ps = new window.kakao.maps.services.Places();
@@ -55,7 +55,7 @@ const SearchLocationKakaoMap: React.FC<KakaoMapProps> = ({
               ps.keywordSearch(searchKeyword, (data: Place[], status: string, pagination: any) => {
                 if (status === window.kakao.maps.services.Status.OK) {
                   onSearchResults(data);
-                  displayPlaces(map, data);
+                  // displayPlaces(map, data);
 
                   if (paginationRef.current) {
                     displayPagination(pagination);
@@ -79,21 +79,22 @@ const SearchLocationKakaoMap: React.FC<KakaoMapProps> = ({
     document.head.appendChild(script);
   }, [searchKeyword, onSearchResults]);
 
-  const displayPlaces = (map: any, places: Place[]) => {
-    const bounds = new window.kakao.maps.LatLngBounds();
+  // const displayPlaces = (map: any, places: Place[]) => {
+  //   const bounds = new window.kakao.maps.LatLngBounds();
 
-    places.forEach((place) => {
-      const markerPosition = new window.kakao.maps.LatLng(place.y, place.x);
-      const marker = new window.kakao.maps.Marker({
-        map: map,
-        position: markerPosition,
-      });
+  //   places.forEach((place, i) => {
+  //     const markerPosition = new window.kakao.maps.LatLng(place.y, place.x);
+  //     const marker = new window.kakao.maps.Marker({
+  //       map: map,
+  //       position: markerPosition,
+  //     });
+  //     console.log(marker);
 
-      bounds.extend(markerPosition);
-    });
+  //     bounds.extend(markerPosition);
+  //   });
 
-    map.setBounds(bounds);
-  };
+  //   map.setBounds(bounds);
+  // };
 
   const displayPagination = (pagination: any) => {
     const paginationEl = paginationRef.current;
@@ -132,7 +133,8 @@ const SearchLocationKakaoMap: React.FC<KakaoMapProps> = ({
     paginationEl.appendChild(fragment);
   };
 
-  return <div id="map" style={{ width: '100%', height: '12rem', marginBottom: '0.5rem' }}></div>;
+  // return <div id="map" style={{ width: '100%', height: '12rem', marginBottom: '0.5rem' }}></div>;
+  return null;
 };
 
 export default SearchLocationKakaoMap;
