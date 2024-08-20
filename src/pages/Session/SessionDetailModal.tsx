@@ -160,6 +160,7 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
   display: flex;
   align-items: stretch;
+  height: 30rem;
 
   &:focus-visible {
     outline: none;
@@ -168,7 +169,7 @@ const Container = styled.div`
   ${media.tablet`
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
   `}
 `;
 
@@ -210,6 +211,10 @@ const ArrowLeftIcon = styled(ArrowNext)`
   transform: rotate(180deg);
   width: 1.5rem;
   height: 1.5rem;
+
+  > path {
+    fill: ${({ theme }) => theme.colors.common.white_const};
+  }
 `;
 
 export default SessionDetailModal;

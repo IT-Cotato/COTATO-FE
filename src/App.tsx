@@ -18,12 +18,23 @@ import CSPage from '@pages/CS/CSPage';
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
+import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
-import CotatoAttendanceFab from '@components/CotatoAttendanceFab';
 
 function App() {
   const location = useLocation();
   const isInHome = location.pathname === '/';
+
+  //
+  //
+  //
+  React.useEffect(() => {
+    if (isInHome) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isInHome]);
 
   //
   //
@@ -52,7 +63,7 @@ function App() {
           <Route path="/*" element={<NotFound />} />
         </Routes>
         {isInHome ? null : <Footer />}
-        <CotatoAttendanceFab />
+        <CotatoGlobalFab />
       </CotatoThemeProvider>
     </div>
   );

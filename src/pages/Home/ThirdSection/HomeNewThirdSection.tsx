@@ -7,10 +7,15 @@ import { ReactComponent as CotatoCharacterPM } from '@assets/cotato_character_pm
 import { ReactComponent as CotatoCharacterDesign } from '@assets/cotato_character_design.svg';
 import { device, media } from '@theme/media';
 import CotatoTooltip from '@components/CotatoTooltip';
+import { ReactComponent as ArrowUp } from '@assets/arrow_up.svg';
 
 //
 //
 //
+
+interface HomeNewThirdSectionProps {
+  handleBackToFirstSlide: () => void;
+}
 
 interface CotatoCharacterProps {
   component: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -65,7 +70,7 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
 //
 //
 
-const HomeNewThirdSection = () => {
+const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProps) => {
   const theme = useTheme();
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
@@ -177,6 +182,34 @@ const HomeNewThirdSection = () => {
     );
   };
 
+  /**
+   *
+   */
+  const renderArrowUpButton = () => {
+    if (isTabletOrSmaller) {
+      return null;
+    }
+
+    return (
+      <StyledBox
+        boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
+        borderRadius="50%"
+        padding="0.5rem"
+        position="absolute"
+        bottom="5.5rem"
+      >
+        <ArrowUp
+          onClick={handleBackToFirstSlide}
+          style={{
+            cursor: 'pointer',
+            width: '2rem',
+            height: '2rem',
+          }}
+        />
+      </StyledBox>
+    );
+  };
+
   //
   // Intersection Observer for Tooltip
   //
@@ -223,6 +256,7 @@ const HomeNewThirdSection = () => {
         {renderDescription()}
       </StyledStack>
       <Stack>{renderCotatoCharacters()}</Stack>
+      {renderArrowUpButton()}
     </Wrapper>
   );
 };
@@ -253,6 +287,13 @@ const Wrapper = styled.section`
   ${media.mobile`
     padding: 2.5rem 0;
   `}
+`;
+
+const StyledBox = styled(Box)`
+  &:hover {
+    transform: translateY(-0.25rem);
+    transition: transform 0.3s;
+  }
 `;
 
 export default HomeNewThirdSection;

@@ -1,6 +1,5 @@
 import { Box, Fab, List, Stack, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
-import { ReactComponent as FabExpandIcon } from '@assets/fab_expand.svg';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { device } from '@theme/media';
@@ -12,6 +11,7 @@ import { device } from '@theme/media';
 interface CotatoFloatingActionButtonProps {
   name: string;
   children: React.ReactNode;
+  icon: React.ReactNode;
 }
 
 //
@@ -19,7 +19,7 @@ interface CotatoFloatingActionButtonProps {
 //
 
 const FAB_WEB_SIZE = '4.25rem';
-const FAB_MOBILE_SIZE = '3.25rem';
+const FAB_MOBILE_SIZE = '3.5rem';
 
 //
 //
@@ -27,6 +27,7 @@ const FAB_MOBILE_SIZE = '3.25rem';
 
 const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
   name,
+  icon,
   children,
 }) => {
   const [isFabOpen, setIsFabOpen] = React.useState(false);
@@ -37,7 +38,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
    *
    */
   const animationFormula = (itemLength: number) => {
-    return isMobileOrSmaller ? itemLength * 4.25 + 0.75 : itemLength * 5 + 1;
+    return isMobileOrSmaller ? itemLength * 4.25 + 1.5 : itemLength * 5 + 1;
   };
 
   const animationProps = useSpring({
@@ -67,11 +68,13 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
           setIsFabOpen(!isFabOpen);
         }}
       >
-        <Stack>
+        <Stack gap={isMobileOrSmaller ? '0.15rem' : '0.25rem'}>
           <Box width="100%" height="1.5rem">
-            <FabExpandIcon width="100%" height="100%" />
+            {icon}
           </Box>
-          <StyledTypography fontSize="0.8rem">{name}</StyledTypography>
+          <StyledTypography fontSize={isMobileOrSmaller ? '0.6rem' : '0.8rem'}>
+            {name}
+          </StyledTypography>
         </Stack>
       </StyledFab>
     </Stack>
@@ -100,7 +103,6 @@ const StyledFab = styled(Fab)<{ isMobileOrSmaller: boolean }>`
 const StyledTypography = styled(Typography)`
   color: #fff;
   font-weight: 500;
-  font-family: 'YComputer' !important;
 `;
 
 const StyledList = styled(List)<{ isMobileOrSmaller: boolean }>`

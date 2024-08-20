@@ -30,6 +30,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 //
 //
@@ -37,7 +38,6 @@ import { toast } from 'react-toastify';
 
 const SessionHome = () => {
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const { data: sessionList, mutate: mutateSessionList } = useSWR<CotatoSessionListResponse[]>(
     '/v1/api/session',
@@ -48,11 +48,12 @@ const SessionHome = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
-
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const navigate = useNavigate();
 
   /**
    *
@@ -127,7 +128,7 @@ const SessionHome = () => {
    */
   const handleSessionAdd = (session: SessionListInfo) => {
     const formData = new FormData();
-    formData.append('generationId', '1');
+    formData.append('generationId', selectedGeneration?.generationId?.toString() || '');
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
     formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
@@ -334,6 +335,28 @@ const SessionHome = () => {
       mutateSessionList();
     }
   }, [selectedGeneration]);
+
+  /**
+   * prevent before page when tablet or smaller
+   */
+  useEffect(() => {
+    window.history.pushState(null, '', window.location.href);
+
+    const handlePopState = () => {
+      if (isDetailModalOpen && isTabletOrSmaller) {
+        window.history.pushState(null, '', window.location.href);
+        setIsDetailModalOpen(false);
+      } else {
+        navigate(-1);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isDetailModalOpen, isTabletOrSmaller]);
 
   return (
     <>

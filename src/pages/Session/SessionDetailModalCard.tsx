@@ -12,6 +12,7 @@ import SessionContents from '@components/Session/SessionContents';
 import { device, media } from '@theme/media';
 import { useMediaQuery } from '@mui/material';
 import fetchUserData from '@utils/fetchUserData';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -34,6 +35,7 @@ const SessionDetailModalCard = ({
 }: SessionDetailModalCardProps) => {
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
   const { data: useData } = fetchUserData();
+  const { generations } = useGeneration();
 
   /**
    *
@@ -90,10 +92,14 @@ const SessionDetailModalCard = ({
    *
    */
   const renderCardTextDescription = () => {
+    const generationNumber = generations?.find(
+      (generation) => generation.generationId === session?.generationId,
+    )?.generationNumber;
+
     return (
       <TextDescription>
         <p>
-          {session?.title} <br /> COTATO {session?.generationId}기
+          {session?.title} <br /> COTATO {generationNumber || ''}기
         </p>
         <p>{session?.description}</p>
       </TextDescription>
@@ -134,7 +140,7 @@ const DetailCard = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.colors.common.white};
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   width: 25rem;
 
   ${media.laptop`
@@ -146,6 +152,7 @@ const DetailCard = styled.div`
     padding: 0;
     justify-content: flex-start;
     flex-grow: 1;
+    overflow-y: scroll;
   `}
 `;
 
