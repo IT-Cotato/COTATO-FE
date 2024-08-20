@@ -56,7 +56,7 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
         expandIcon={<span className="material-symbols-outlined">chevron_right</span>}
         onClick={handleAccordionClick}
         sx={{
-          padding: { xs: '1rem 2rem', md: '1.5rem 2rem' },
+          padding: { xs: '0.25rem 2rem', md: '0.25rem 2rem' },
         }}
       >
         <QuestionIndex>Q{index + 1}</QuestionIndex>
