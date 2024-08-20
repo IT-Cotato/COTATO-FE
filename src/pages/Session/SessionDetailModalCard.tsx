@@ -152,6 +152,7 @@ const DetailCard = styled.div`
     padding: 0;
     justify-content: flex-start;
     flex-grow: 1;
+    overflow-y: scroll;
   `}
 `;
 
