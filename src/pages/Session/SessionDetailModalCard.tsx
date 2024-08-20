@@ -140,7 +140,7 @@ const DetailCard = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.colors.common.white};
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   width: 25rem;
 
   ${media.laptop`

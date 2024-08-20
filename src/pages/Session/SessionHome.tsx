@@ -30,6 +30,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 //
 //
@@ -48,11 +49,11 @@ const SessionHome = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const navigate = useNavigate();
 
   /**
    *
@@ -334,6 +335,28 @@ const SessionHome = () => {
       mutateSessionList();
     }
   }, [selectedGeneration]);
+
+  /**
+   * prevent before page when tablet or smaller
+   */
+  useEffect(() => {
+    window.history.pushState(null, '', window.location.href);
+
+    const handlePopState = () => {
+      if (isDetailModalOpen && isTabletOrSmaller) {
+        window.history.pushState(null, '', window.location.href);
+        setIsDetailModalOpen(false);
+      } else {
+        navigate(-1);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isDetailModalOpen, isTabletOrSmaller]);
 
   return (
     <>

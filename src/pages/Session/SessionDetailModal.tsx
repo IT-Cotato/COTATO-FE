@@ -160,7 +160,7 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
   display: flex;
   align-items: stretch;
-  height: 31rem;
+  height: 30rem;
 
   &:focus-visible {
     outline: none;
@@ -211,6 +211,10 @@ const ArrowLeftIcon = styled(ArrowNext)`
   transform: rotate(180deg);
   width: 1.5rem;
   height: 1.5rem;
+
+  > path {
+    fill: ${({ theme }) => theme.colors.common.white_const};
+  }
 `;
 
 export default SessionDetailModal;
