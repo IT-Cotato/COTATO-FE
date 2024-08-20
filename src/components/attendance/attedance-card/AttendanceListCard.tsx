@@ -10,7 +10,6 @@ import {
   AttendResponseIsOpenedEnum,
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
-import { Link, useParams } from 'react-router-dom';
 
 //
 //
@@ -19,7 +18,8 @@ import { Link, useParams } from 'react-router-dom';
 interface AttendanceCardProps {
   attendance: CotatoMemberAttendResponse;
   backgroundColor: string;
-  generationNumber?: number;
+  generationNumber: number;
+  onClick: (attendance: CotatoMemberAttendResponse) => void;
 }
 
 //
@@ -30,9 +30,13 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   attendance,
   backgroundColor,
   generationNumber,
+  onClick,
 }) => {
   const theme = useTheme();
-  const { generationId } = useParams();
+
+  /**
+   *
+   */
 
   /**
    *
@@ -74,8 +78,8 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
    */
   const renderAttendanceInfo = () => {
     return (
-      <Stack>
-        <StyledTypography variant="h6" fontSize="1.125rem">
+      <Stack width="10rem">
+        <StyledTypography variant="h6" fontSize="1.125rem" color={theme.colors.common.black_const}>
           {generationNumber}기 {attendance.sessionTitle}
         </StyledTypography>
         <StyledTypography variant="body2" fontSize="0.875rem" color={theme.colors.gray50}>
@@ -89,34 +93,34 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   //
   //
   return (
-    <StyledLink
-      to={`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`}
+    <StyledCard
+      elevation={0}
+      boxShadowColor={getBoxColor().cardBoxShadow}
+      onClick={() => onClick(attendance)}
     >
-      <StyledCard elevation={0} boxShadowColor={getBoxColor().cardBoxShadow}>
-        <ImageBackground
-          bgcolor={backgroundColor}
-          sx={{ border: `1px solid ${getBoxColor().imageBorderColor}` }}
-          boxShadow={`1px 1px 10px 0px ${getBoxColor().imageBoxShaodwColor}`}
-        >
-          <ImageBox>
-            {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
-              <StyledLateIcon />
-            )}
-            <CharacterEyeClose style={{ width: '100%', height: '100%' }} />
-          </ImageBox>
-        </ImageBackground>
-        <Box width="100%" padding="1.5rem 0.5rem 1rem">
-          <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
-            {renderAttendanceInfo()}
-            <AttendanceCardStatus
-              isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
-              attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
-              attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
-            />
-          </Stack>
-        </Box>
-      </StyledCard>
-    </StyledLink>
+      <ImageBackground
+        bgcolor={backgroundColor}
+        sx={{ border: `1px solid ${getBoxColor().imageBorderColor}` }}
+        boxShadow={`1px 1px 10px 0px ${getBoxColor().imageBoxShaodwColor}`}
+      >
+        <ImageBox>
+          {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
+            <StyledLateIcon />
+          )}
+          <CharacterEyeClose style={{ width: '100%', height: '100%' }} />
+        </ImageBox>
+      </ImageBackground>
+      <Box width="100%" padding="1.5rem 0.5rem 1rem">
+        <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
+          {renderAttendanceInfo()}
+          <AttendanceCardStatus
+            isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
+            attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
+            attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
+          />
+        </Stack>
+      </Box>
+    </StyledCard>
   );
 };
 
@@ -126,10 +130,6 @@ export default AttendanceCardList;
 //
 //
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-`;
-
 const StyledCard = styled(Card)<{ boxShadowColor: string }>`
   display: flex;
   flex-direction: column;
@@ -137,6 +137,7 @@ const StyledCard = styled(Card)<{ boxShadowColor: string }>`
   padding: 0.75rem;
   border-radius: 2.25rem !important;
   box-shadow: 1px 1px 10px 10px ${({ boxShadowColor }) => boxShadowColor} !important;
+  cursor: pointer;
 `;
 
 const StyledTypography = styled(Typography)`

@@ -4,9 +4,12 @@ import { HEADER_HEIGHT } from '@theme/constants/constants';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
-import { CotatoMemberAttendanceRecordsResponse } from 'cotato-openapi-clients';
+import {
+  CotatoMemberAttendanceRecordsResponse,
+  CotatoMemberAttendResponse,
+} from 'cotato-openapi-clients';
 import { ReactComponent as GoalPotato } from '@assets/potato_goal.svg';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { AttendanceGridCard, AttendanceListCard } from '@components/attendance/attedance-card';
 import { media } from '@theme/media';
 import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
@@ -14,7 +17,8 @@ import { ReactComponent as OfflineIcon } from '@assets/attendance_offline_icon.s
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { Divider } from '@mui/material';
-import { AttendResponseAttendanceResultEnum } from '@/enums/attend';
+import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -33,7 +37,18 @@ const AttendanceList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [view, setView] = React.useState(searchParams.get('view') || 'list');
+  const { currentGeneration } = useGeneration();
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  /**
+   *
+   */
+  const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
+    if (attendance.isOpened === AttendResponseIsOpenedEnum.Open) {
+      navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
+    }
+  };
 
   /**
    *
@@ -74,11 +89,12 @@ const AttendanceList = () => {
         {attendanceResponse.memberAttendResponses.map((attendance, index) => (
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
-              generationNumber={0}
               attendance={attendance}
               backgroundColor={getCardBackgroundColor(
                 attendance.attendanceResult as AttendResponseAttendanceResultEnum,
               )}
+              generationNumber={currentGeneration?.generationNumber || 0}
+              onClick={handleCardClick}
             />
           </StyledSwiperSlide>
         ))}
@@ -130,7 +146,12 @@ const AttendanceList = () => {
         </DescriptionWrapper>
         <GridContainer>
           {attendanceResponse.memberAttendResponses.map((attendance, index) => (
-            <AttendanceGridCard key={index} attendance={attendance} generationNumber={0} />
+            <AttendanceGridCard
+              key={index}
+              attendance={attendance}
+              generationNumber={currentGeneration?.generationNumber || 0}
+              onClick={handleCardClick}
+            />
           ))}
         </GridContainer>
       </GridViewWrapper>
