@@ -3,6 +3,7 @@ import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
+import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
@@ -13,6 +14,8 @@ import {
   SessionContentsNetworking,
   SessionContentsDevTalk,
 } from '@/enums/SessionContents';
+import CotatoDatePicker from '@components/CotatoDatePicker';
+import dayjs from 'dayjs';
 
 //
 //
@@ -44,6 +47,7 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
   sessionNumber: 0,
   title: '',
   description: '',
+  sessionDate: '',
   generationId: 0,
   sessionContents: {
     itIssue: SessionContentsItIssue.ON,
@@ -70,6 +74,7 @@ const SessionUploadModal = ({
   requestImageRemove,
 }: SessionUploadModalProps) => {
   const [session, setSession] = useState<SessionListInfo>(INITIAL_SESSION_STATE);
+  const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
 
   /**
    *
@@ -163,6 +168,17 @@ const SessionUploadModal = ({
   /**
    *
    */
+  const handleSessionDateChange = (date: Date) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.sessionDate = dayjs(date).format('YYYY-MM-DD');
+      }),
+    );
+  };
+
+  /**
+   *
+   */
   const renerCloseButton = () => (
     <CloseButton type="button" onClick={handleClose}>
       <CloseIcon />
@@ -235,13 +251,22 @@ const SessionUploadModal = ({
       <InfoInputWrapper>
         <TitleBox $bold={true}>
           <input value={session.title} onChange={handleTitleChange} />
-          <PencilIcon />
+          <button type="button">
+            <PencilIcon />
+          </button>
         </TitleBox>
         <InfoBox>
-          <input value="날짜 (출석 기능 출시 이후 활성화)" readOnly={true} />
+          <input
+            placeholder="세션 날짜를 선택해 주세요."
+            value={session.sessionDate && dayjs(session.sessionDate).format('YYYY년 MM월 DD일')}
+            readOnly={true}
+          />
+          <button type="button" onClick={() => setIsDayPickerOpen(true)}>
+            <CalendarIcon />
+          </button>
         </InfoBox>
         <InfoBox>
-          <input value="장소 (출석 기능 출시 이후 활성화)" readOnly={true} />
+          <input value="장소 (아직 활성화 안됨)" readOnly={true} />
         </InfoBox>
         <InfoBox>
           <input value="시간 (출석 기능 출시 이후 활성화)" readOnly={true} />
@@ -303,6 +328,12 @@ const SessionUploadModal = ({
           {renderInfoInput()}
           {renderUplaodButton()}
         </Wrapper>
+        <CotatoDatePicker
+          open={isDayPickerOpen}
+          date={session.sessionDate ? new Date(session.sessionDate) : undefined}
+          onDateChange={handleSessionDateChange}
+          onClose={() => setIsDayPickerOpen(false)}
+        />
       </UploadContainer>
     </Modal>
   );
@@ -390,7 +421,7 @@ const InfoBox = styled.div<InfoBoxProps>`
     line-height: 125%;
 
     &::placeholder {
-      font-size: ${({ theme }) => theme.fontSize.md};
+      font-size: ${({ theme }) => theme.fontSize.sm};
       font-weight: 300;
     }
 
@@ -403,13 +434,19 @@ const InfoBox = styled.div<InfoBoxProps>`
     resize: none;
   }
 
-  > svg {
+  > button {
+    border: none;
+    background: none;
     position: absolute;
     top: 50%;
     right: 1rem;
     transform: translateY(-50%);
-    width: 1.2rem;
-    height: 1.2rem;
+    cursor: pointer;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
   }
 `;
 
