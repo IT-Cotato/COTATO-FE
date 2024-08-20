@@ -37,7 +37,7 @@ const CotatoAttendanceFab = () => {
   //
   //
   return (
-    <CotatoFloatingActionButton name="출석부">
+    <CotatoFloatingActionButton icon={<></>} name="출석부">
       {Object.entries(FAB_KEY_LIST).map(([key, value]) => (
         <CotatoFloatingActionButtonItem
           key={key}
