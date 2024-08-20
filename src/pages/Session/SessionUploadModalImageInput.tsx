@@ -5,7 +5,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import SessionUploadModalImageInputThumnail from '@pages/Session/SessionUploadModalImageInputThumnail';
 import { SessionListImageInfo } from '@/typing/session';
 import { ReactComponent as ImageCloseIcon } from '@assets/close_dotted.svg';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import imageSortByOrder from '@utils/imageSortByOrder';
 import { produce } from 'immer';
 import { CotatoSessionListImageInfoResponse } from 'cotato-openapi-clients';
@@ -329,12 +329,6 @@ const SessionUploadModalImageInput = ({
         {renderImageBox()}
         {renderImageDnd()}
       </ImageInputWrapper>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        pauseOnFocusLoss={false}
-        theme={localStorage.getItem('theme') || 'light'}
-      />
     </>
   );
 };

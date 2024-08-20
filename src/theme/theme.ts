@@ -183,7 +183,7 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
       real_white: '#FFFFFF',
       white: '#FFFBF6',
       black: '#000000',
-      white_const: '#FAFAFA',
+      white_const: '#FFFBF6',
       black_const: '#000000',
     },
     // gray //
