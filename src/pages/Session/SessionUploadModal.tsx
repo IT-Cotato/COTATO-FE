@@ -16,6 +16,7 @@ import {
 } from '@/enums/SessionContents';
 import CotatoDatePicker from '@components/CotatoDatePicker';
 import dayjs from 'dayjs';
+import { ToastContainer } from 'react-toastify';
 
 //
 //
@@ -49,6 +50,8 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
   description: '',
   sessionDate: '',
   generationId: 0,
+  attendanceDeadLine: '',
+  lateDeadLine: '',
   sessionContents: {
     itIssue: SessionContentsItIssue.ON,
     csEducation: SessionContentsCsEducation.ON,
@@ -269,7 +272,18 @@ const SessionUploadModal = ({
           <input value="장소 (아직 활성화 안됨)" readOnly={true} />
         </InfoBox>
         <InfoBox>
-          <input value="시간 (출석 기능 출시 이후 활성화)" readOnly={true} />
+          <input
+            placeholder="지각 인정 시간 (19:10:00 형식으로 정확히 입력하세요.)"
+            value={session.lateDeadLine || undefined}
+            disabled={session.lateDeadLine === undefined ? true : false}
+          />
+        </InfoBox>
+        <InfoBox>
+          <input
+            placeholder="출석 인정 시간 (19:20:00 형식으로 정확히 입력하세요.)"
+            value={session.attendanceDeadLine || undefined}
+            disabled={session.attendanceDeadLine === undefined ? true : false}
+          />
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
         <InfoBox $height="8rem">
@@ -298,7 +312,10 @@ const SessionUploadModal = ({
   useEffect(() => {
     if (sessionInfo) {
       setSession(sessionInfo);
+    } else {
+      setSession(INITIAL_SESSION_STATE);
     }
+
     if (lastSessionNumber !== undefined) {
       setSession(
         produce(session, (darft) => {
@@ -320,21 +337,29 @@ const SessionUploadModal = ({
         },
       }}
     >
-      <UploadContainer>
-        <Wrapper>
-          {renerCloseButton()}
-          {renderHeader()}
-          {renderImageInput()}
-          {renderInfoInput()}
-          {renderUplaodButton()}
-        </Wrapper>
-        <CotatoDatePicker
-          open={isDayPickerOpen}
-          date={session.sessionDate ? new Date(session.sessionDate) : undefined}
-          onDateChange={handleSessionDateChange}
-          onClose={() => setIsDayPickerOpen(false)}
+      <>
+        <UploadContainer>
+          <Wrapper>
+            {renerCloseButton()}
+            {renderHeader()}
+            {renderImageInput()}
+            {renderInfoInput()}
+            {renderUplaodButton()}
+          </Wrapper>
+          <CotatoDatePicker
+            open={isDayPickerOpen}
+            date={session.sessionDate ? new Date(session.sessionDate) : undefined}
+            onDateChange={handleSessionDateChange}
+            onClose={() => setIsDayPickerOpen(false)}
+          />
+        </UploadContainer>
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          pauseOnFocusLoss={false}
+          theme={localStorage.getItem('theme') || 'light'}
         />
-      </UploadContainer>
+      </>
     </Modal>
   );
 };

@@ -127,10 +127,26 @@ const SessionHome = () => {
    *
    */
   const handleSessionAdd = (session: SessionListInfo) => {
+    if (!session.sessionDate) {
+      toast.error('세션 날짜를 입력해주세요.');
+      return;
+    }
+
+    if (!session.attendanceDeadLine) {
+      toast.error('출석 인정 시간을 입력해주세요.');
+      return;
+    }
+
+    if (!session.lateDeadLine) {
+      toast.error('지각 인정 시간을 입력해주세요.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('generationId', selectedGeneration?.generationId?.toString() || '');
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
+    formData.append('sessionDate', session.sessionDate || '');
     formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
     formData.append(
       'csEducation',
@@ -141,6 +157,8 @@ const SessionHome = () => {
       session.sessionContents?.networking || SessionContentsNetworking.OFF,
     );
     formData.append('devTalk', session.sessionContents?.devTalk || SessionContentsDevTalk.OFF);
+    formData.append('attendanceDeadLine', session.attendanceDeadLine || '');
+    formData.append('lateDeadLine', session.lateDeadLine || '');
 
     session.imageInfos.forEach((imageInfo) => {
       if (imageInfo.imageFile) {
