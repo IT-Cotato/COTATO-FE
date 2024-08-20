@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SearchIcon } from '@assets/search.svg';
 import { ReactComponent as DeleteIcon } from '@assets/delete.svg';
@@ -31,14 +31,15 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({ setIsSearchMo
   const [keyword, setKeyword] = useState('');
   const [results, setResults] = useState<Place[]>([]);
 
+  const paginationRef = useRef<HTMLDivElement>(null);
+
   /**
    *
    */
   const handleSearch = () => {
-    console.log(1, results);
     // 검색어가 변경되면 KakaoMap 컴포넌트에서 지도가 업데이트 됨
-    setResults([]); // 기존 검색 결과를 초기화
-    console.log(2, results);
+    // setResults([]); // 기존 검색 결과를 초기화
+    console.log(results);
   };
 
   return (
@@ -60,8 +61,12 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({ setIsSearchMo
             <DeleteIcon />
           </Box>
         </SearchBar>
-        <KakaoMap searchKeyword={keyword} onSearchResults={setResults} />
-        <SearchResultList results={results} />
+        <KakaoMap
+          searchKeyword={keyword}
+          onSearchResults={setResults}
+          paginationRef={paginationRef}
+        />
+        <SearchResultList results={results} paginationRef={paginationRef} />
       </Modal>
     </Background>
   );

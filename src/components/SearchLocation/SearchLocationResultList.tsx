@@ -13,22 +13,28 @@ interface Place {
 
 interface SearchResultListProps {
   results: Place[];
+  paginationRef: React.RefObject<HTMLDivElement>;
 }
 
 //
 //
 //
 
-const SearchLocationResultList: React.FC<SearchResultListProps> = ({ results }) => {
+const SearchLocationResultList: React.FC<SearchResultListProps> = ({ results, paginationRef }) => {
+  if (results.length === 0) {
+    return <></>;
+  }
+
   return (
     <Wrapper>
       {results.map((result, index) => (
-        <Item key={index}>
+        <Item key={index} id={index === 0 ? 'top' : ''}>
           <h3>{result.place_name}</h3>
           <span>{result.address_name}</span>
           <p>{result.phone}</p>
         </Item>
       ))}
+      <Pagination ref={paginationRef} />
     </Wrapper>
   );
 };
@@ -64,6 +70,31 @@ const Item = styled.div`
     margin-top: 0.5rem;
     margin-bottom: 0;
     padding-left: 0.25rem;
+  }
+`;
+
+const Pagination = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  a {
+    padding: 0 0.25rem;
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.gray90};
+    &:not(:last-child) {
+      margin-right: 0.725rem;
+    }
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.primary20};
+      color: ${({ theme }) => theme.colors.primary90};
+      border-radius: 0.25rem;
+    }
+    &.on {
+      color: ${({ theme }) => theme.colors.common.real_white};
+      background-color: ${({ theme }) => theme.colors.primary90};
+      border-radius: 0.25rem;
+    }
   }
 `;
 
