@@ -64,7 +64,7 @@ const CSRecord = () => {
               {localeKr[(user?.memberRole as keyof typeof localeKr) || 'NONE']}
             </Badge>
           </BadgeDiv>
-          <h2>감자 {user?.memberName}님 반갑습니다.</h2>
+          <h2>감자 {user?.name}님 반갑습니다.</h2>
           <RecordDiv>
             <img
               src="https://velog.velcdn.com/images/ea_st_ring/post/bc09a715-202b-41ee-acee-1c3f22be4644/image.svg"
