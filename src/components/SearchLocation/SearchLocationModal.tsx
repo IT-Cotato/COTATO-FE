@@ -21,13 +21,17 @@ interface Place {
 
 interface SearchLocationModalProps {
   setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setLocationName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 //
 //
 //
 
-const SearchLocationModal: React.FC<SearchLocationModalProps> = ({ setIsSearchModalOpen }) => {
+const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
+  setIsSearchModalOpen,
+  setLocationName,
+}) => {
   const [keyword, setKeyword] = useState('');
   const [results, setResults] = useState<Place[]>([]);
 
@@ -66,7 +70,13 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({ setIsSearchMo
           onSearchResults={setResults}
           paginationRef={paginationRef}
         />
-        <SearchResultList results={results} paginationRef={paginationRef} keyword={keyword} />
+        <SearchResultList
+          results={results}
+          paginationRef={paginationRef}
+          keyword={keyword}
+          setIsSearchModalOpen={setIsSearchModalOpen}
+          setLocationName={setLocationName}
+        />
       </Modal>
     </Background>
   );

@@ -54,6 +54,8 @@ const AttendanceModal = () => {
         <AttendanceLocationTab
           isSearchModalOpen={isSearchModalOpen}
           setIsSearchModalOpen={setIsSearchModalOpen}
+          setLocationName={setLocationName}
+          locationName={locationName}
         />
       </StyledTabPanel>
     );

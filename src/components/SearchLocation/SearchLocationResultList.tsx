@@ -15,6 +15,8 @@ interface SearchResultListProps {
   results: Place[];
   paginationRef: React.RefObject<HTMLDivElement>;
   keyword: string;
+  setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setLocationName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 //
@@ -25,7 +27,21 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({
   results,
   paginationRef,
   keyword,
+  setIsSearchModalOpen,
+  setLocationName,
 }) => {
+  /**
+   *
+   */
+  const handleClick = (target: any) => {
+    // target은 선택한 장소의 정보를 담고 있음. 다음과 같이 사용
+    // setLatitude(target.y); // 위도
+    // setLongitude(target.x); // 경도
+    // setLocationName(target.place_name); // 장소명
+    setLocationName(target.place_name);
+    setIsSearchModalOpen(false);
+  };
+
   /**
    *
    */
@@ -43,7 +59,7 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({
       return (
         <>
           {results.map((result, index) => (
-            <Item key={index} id={index === 0 ? 'top' : ''}>
+            <Item key={index} id={index === 0 ? 'top' : ''} onClick={() => handleClick(result)}>
               <h3>{result.place_name}</h3>
               <span>{result.address_name}</span>
               <p>{result.phone}</p>

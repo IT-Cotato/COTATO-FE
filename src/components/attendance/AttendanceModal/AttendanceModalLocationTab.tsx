@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as LocationIcon } from '@assets/attendance_location_pin_stroke.svg';
 import { ReactComponent as SearchIcon } from '@assets/search.svg';
@@ -12,6 +12,8 @@ import SearchLocationModal from '@components/SearchLocation/SearchLocationModal'
 interface AttendanceModalLocationTabProps {
   isSearchModalOpen: boolean;
   setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setLocationName: React.Dispatch<React.SetStateAction<string>>;
+  locationName: string;
 }
 
 //
@@ -21,6 +23,8 @@ interface AttendanceModalLocationTabProps {
 const AttendanceModalLocationTab: React.FC<AttendanceModalLocationTabProps> = ({
   isSearchModalOpen,
   setIsSearchModalOpen,
+  setLocationName,
+  locationName,
 }) => {
   const theme = useTheme();
 
@@ -29,9 +33,21 @@ const AttendanceModalLocationTab: React.FC<AttendanceModalLocationTabProps> = ({
    */
   const renderSearchModal = () => {
     if (isSearchModalOpen) {
-      return <SearchLocationModal setIsSearchModalOpen={setIsSearchModalOpen} />;
+      return (
+        <SearchLocationModal
+          setIsSearchModalOpen={setIsSearchModalOpen}
+          setLocationName={setLocationName}
+        />
+      );
     }
   };
+
+  //
+  //
+  //
+  useEffect(() => {
+    console.log(locationName);
+  }, [locationName]);
 
   return (
     <div>
