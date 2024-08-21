@@ -28,7 +28,7 @@ const CotatoGlobalFab = () => {
     attendance: {
       name: isOverOldMember ? '출석' : '코테이토 회원 전용 기능입니다!',
       icon: <AttendanceIcon width="100%" height="100%" />,
-      disabled: false,
+      disabled: !isOverOldMember,
       onClick: () => {
         navigate('/attendance');
       },
