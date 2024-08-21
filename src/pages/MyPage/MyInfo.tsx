@@ -78,7 +78,7 @@ const MyInfo = () => {
             <InfoWrapper>
               <p>포지션</p>
               <TextContainer>
-                <p>{myInfo?.memberPosition}</p>
+                <p>{myInfo?.position}</p>
               </TextContainer>
             </InfoWrapper>
             <InfoWrapper>
