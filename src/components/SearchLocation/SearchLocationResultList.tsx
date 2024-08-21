@@ -58,7 +58,7 @@ const Item = styled.div`
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.md};
     margin-top: 0 !important;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem !important;
   }
   span {
     font-family: Pretendard;
