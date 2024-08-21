@@ -1,4 +1,5 @@
 import { useGeneration } from '@/hooks/useGeneration';
+import { useAttendanceListLayoutStore } from '@/zustand-stores/useAttendanceListLayoutStore';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const AttendanceRedirect = () => {
   const navigate = useNavigate();
   const { currentGeneration, isGenerationLoading } = useGeneration();
+  const { listLayoutType } = useAttendanceListLayoutStore();
 
   //
   // redirect logic
@@ -28,7 +30,7 @@ const AttendanceRedirect = () => {
     }
 
     // navigate to current generation page
-    navigate(`/attendance/list/generation/${generationId}`);
+    navigate(`/attendance/list/generation/${generationId}?viewType=${listLayoutType}`);
 
     return;
   }, [isGenerationLoading]);

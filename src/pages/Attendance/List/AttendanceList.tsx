@@ -19,27 +19,29 @@ import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { Divider } from '@mui/material';
 import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
 import { useGeneration } from '@/hooks/useGeneration';
+import {
+  AttendanceListLayoutType,
+  useAttendanceListLayoutStore,
+} from '@/zustand-stores/useAttendanceListLayoutStore';
 
 //
 //
 //
 
 const AttendanceList = () => {
+  const theme = useTheme();
+  const navigate = useNavigate();
   const { generationId } = useParams();
+  const { currentGeneration } = useGeneration();
 
   const { data: attendanceResponse } = useSWR<CotatoMemberAttendanceRecordsResponse>(
     '/v2/api/attendances/records/members',
-    (url: string) => fetcherWithParams(url, { 'generation-id': generationId }),
+    (url: string) => fetcherWithParams(url, { generationId: generationId }),
   );
 
-  // use when floating button is applied
+  const [, setSearchParams] = useSearchParams();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [searchParams, setSearchParams] = useSearchParams();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [view, setView] = React.useState(searchParams.get('view') || 'list');
-  const { currentGeneration } = useGeneration();
-  const theme = useTheme();
-  const navigate = useNavigate();
+  const { listLayoutType: view } = useAttendanceListLayoutStore();
 
   /**
    *
@@ -48,6 +50,13 @@ const AttendanceList = () => {
     if (attendance.isOpened === AttendResponseIsOpenedEnum.Open) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
     }
+  };
+
+  /**
+   *
+   */
+  const handleUrlChange = (viewType: AttendanceListLayoutType) => {
+    setSearchParams({ viewType });
   };
 
   /**
@@ -158,6 +167,16 @@ const AttendanceList = () => {
     );
   };
 
+  //
+  //
+  //
+  React.useEffect(() => {
+    handleUrlChange(view);
+  }, [view]);
+
+  //
+  //
+  //
   return (
     <Wrapper>
       {renderListCards()}
