@@ -8,7 +8,6 @@ import Session from '@pages/Session/Session';
 import SignUp from '@pages/JoinUs/SignUp';
 import MyPage from '@pages/MyPage/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
-import Footer from '@components/Footer';
 import FindID from '@pages/Login/FindID';
 import FindPWProcess from '@pages/Login/FindPWProcess';
 import ReadyState from '@components/ReadyState';
@@ -20,8 +19,10 @@ import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgCompone
 import { FAQ } from '@pages/FAQ';
 import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
+import { AttendanceFab } from '@components/attendance/attendance-fab';
 
 function App() {
+  const isAttendance = useLocation().pathname.includes('/attendance');
   const location = useLocation();
   const isInHome = location.pathname === '/';
 
@@ -51,7 +52,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
           <Route path="/about" element={<ReadyState />} />
-          <Route path="/attendance" element={<AttendanceRoutes />} />
+          <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
           <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
@@ -59,11 +60,12 @@ function App() {
           <Route path="/findpw" element={<FindPWProcess />} />
           <Route path="/joinus" element={<SignUp />} />
           <Route path="/mypage/*" element={<MyPage />} />
+          <Route path="/products" element={<ReadyState />} />
+          <Route path="/projects" element={<ReadyState />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
-        {isInHome ? null : <Footer />}
-        <CotatoGlobalFab />
+        {isAttendance ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>
   );
