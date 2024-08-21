@@ -66,7 +66,7 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({ setIsSearchMo
           onSearchResults={setResults}
           paginationRef={paginationRef}
         />
-        <SearchResultList results={results} paginationRef={paginationRef} />
+        <SearchResultList results={results} paginationRef={paginationRef} keyword={keyword} />
       </Modal>
     </Background>
   );

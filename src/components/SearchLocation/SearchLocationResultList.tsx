@@ -14,27 +14,51 @@ interface Place {
 interface SearchResultListProps {
   results: Place[];
   paginationRef: React.RefObject<HTMLDivElement>;
+  keyword: string;
 }
 
 //
 //
 //
 
-const SearchLocationResultList: React.FC<SearchResultListProps> = ({ results, paginationRef }) => {
-  if (results.length === 0) {
-    return <></>;
-  }
+const SearchLocationResultList: React.FC<SearchResultListProps> = ({
+  results,
+  paginationRef,
+  keyword,
+}) => {
+  /**
+   *
+   */
+  const renderNoResult = () => {
+    if (keyword && results.length === 0) {
+      return <NoResultText>검색 결과가 없습니다.</NoResultText>;
+    }
+  };
+
+  /**
+   *
+   */
+  const renderResultList = () => {
+    if (results.length !== 0) {
+      return (
+        <>
+          {results.map((result, index) => (
+            <Item key={index} id={index === 0 ? 'top' : ''}>
+              <h3>{result.place_name}</h3>
+              <span>{result.address_name}</span>
+              <p>{result.phone}</p>
+            </Item>
+          ))}
+          <Pagination ref={paginationRef} />
+        </>
+      );
+    }
+  };
 
   return (
     <Wrapper>
-      {results.map((result, index) => (
-        <Item key={index} id={index === 0 ? 'top' : ''}>
-          <h3>{result.place_name}</h3>
-          <span>{result.address_name}</span>
-          <p>{result.phone}</p>
-        </Item>
-      ))}
-      <Pagination ref={paginationRef} />
+      {renderNoResult()}
+      {renderResultList()}
     </Wrapper>
   );
 };
@@ -97,6 +121,13 @@ const Pagination = styled.div`
       border-radius: 0.25rem;
     }
   }
+`;
+
+const NoResultText = styled.p`
+  width: 100%;
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  margin-top: 25%;
 `;
 
 export default SearchLocationResultList;
