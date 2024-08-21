@@ -5,6 +5,7 @@ import { ReactComponent as LocationPinIcon } from '@assets/attendance_location_p
 import PrevButton from '@assets/pixel_arrow_left.svg';
 import { Tabs, Tab, Box } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
+import { media } from '@theme/media';
 
 //
 //
@@ -109,6 +110,11 @@ const Modal = styled.div`
   border-radius: 1.725rem;
   background-color: ${({ theme }) => theme.colors.common.white_const};
   padding: 2.5rem 2.25rem;
+
+  ${media.mobile`
+    width: 22rem;
+    height: 34rem;
+  `}
 `;
 
 const Header = styled.div`
