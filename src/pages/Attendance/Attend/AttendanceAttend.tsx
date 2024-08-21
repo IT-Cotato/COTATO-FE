@@ -56,13 +56,23 @@ const AttendanceAttend: React.FC = () => {
     sessionId: sessionId,
   });
 
-  const currentTime = '2024-08-16T19:00:39.617Z';
-
   const sessionTitle = sessions?.find((session) => session.sessionId === sessionId)?.title;
 
   const [attendanceType, setAttendanceType] = React.useState<
     keyof typeof AttendanceStatusEnum | null
   >(null);
+
+  /**
+   *
+   */
+  const getCurrentISOTime = () => {
+    const offset = new Date().getTimezoneOffset() * 60000;
+    const now = new Date(Date.now() - offset);
+
+    return now.toISOString();
+  };
+
+  console.log('currentGeneration', getCurrentISOTime(), new Date());
 
   /**
    *
@@ -117,7 +127,7 @@ const AttendanceAttend: React.FC = () => {
     const result = await api
       .post<CotatoAttendResponse>('/v2/api/attendances/records/offline', {
         attendanceId: currentAttendance?.attendanceId,
-        requestTime: currentTime,
+        requestTime: getCurrentISOTime(),
         location: {
           latitude: latitude,
           longitude: longitude,
@@ -141,7 +151,7 @@ const AttendanceAttend: React.FC = () => {
     const result = await api
       .post('/v2/api/attendances/records/online', {
         attendanceId: currentAttendance?.attendanceId,
-        requestTime: currentTime,
+        requestTime: getCurrentISOTime(),
       })
       .then((res) => {
         return { data: res.data, error: null };
