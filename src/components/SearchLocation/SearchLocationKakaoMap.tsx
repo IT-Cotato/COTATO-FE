@@ -66,6 +66,8 @@ const SearchLocationKakaoMap: React.FC<KakaoMapProps> = ({
                   onSearchResults([]);
                 }
               });
+            } else {
+              onSearchResults([]);
             }
           } else {
             console.error('kakao.maps.services가 로드되지 않았습니다.');
