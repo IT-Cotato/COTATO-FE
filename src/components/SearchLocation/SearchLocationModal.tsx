@@ -6,6 +6,7 @@ import PrevButton from '@assets/pixel_arrow_left.svg';
 import KakaoMap from '@/components/SearchLocation/SearchLocationKakaoMap';
 import SearchResultList from '@/components/SearchLocation/SearchLocationResultList';
 import { Box } from '@mui/system';
+import { media } from '@theme/media';
 
 //
 //
@@ -114,6 +115,11 @@ const Modal = styled.div`
     font-size: ${({ theme }) => theme.fontSize.lg};
     margin: 1rem 0 1.5rem 0;
   }
+
+  ${media.mobile`
+    width: 22rem;
+    height: 34rem;
+  `}
 `;
 
 const Header = styled.div`
