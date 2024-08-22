@@ -85,7 +85,7 @@ const ProjectsCard = ({
         height="15rem"
         borderRadius="0.625rem"
         sx={{
-          objectFit: 'cover',
+          objectFit: 'contain',
         }}
       />
       <Stack>
