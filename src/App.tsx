@@ -28,6 +28,17 @@ function App() {
   //
   //
   //
+  React.useEffect(() => {
+    if (isInHome) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isInHome]);
+
+  //
+  //
+  //
 
   return (
     <div className="App">
