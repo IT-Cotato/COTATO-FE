@@ -97,6 +97,7 @@ const StyledSwiper = styled(Swiper)`
 
   ${media.tablet`
     width: 100%;
+    height: auto;
 
     .swiper-button-prev, 
     .swiper-button-next {

@@ -179,9 +179,10 @@ const GenerationDropBox = ({
       return;
     }
 
-    const sortedGenerations = generationSort(rawGenerations).filter(
-      (generation) => generation.generationNumber && generation.generationNumber >= 8,
-    );
+    const sortedGenerations = generationSort(rawGenerations);
+    // .filter(
+    //   (generation) => generation.generationNumber && generation.generationNumber >= 8,
+    // );
     setGenerations(sortedGenerations);
 
     const generationId = searchParams.get('generationId');
