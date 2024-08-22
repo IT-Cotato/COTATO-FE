@@ -31,6 +31,15 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Save Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: |
+            build
+            appspec.yml
+            deploy.sh
+
   production-deploy:
     needs: build
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release'
@@ -40,11 +49,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Check Node v
-        run: node -v
-
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
 
       - name: Set Environment Variables
         run: |
@@ -60,9 +68,6 @@ jobs:
           REACT_APP_SOCKET_URL: ${{ secrets.REACT_APP_SOCKET_URL }}
           REACT_APP_QA_BASE_URL: ${{ secrets.REACT_APP_QA_BASE_URL }}
           REACT_APP_QA_SOCKET_URL: ${{ secrets.REACT_APP_QA_SOCKET_URL }}
-
-      - name: Build
-        run: yarn build
 
       - name: Configure AWS Credentials 
         uses: aws-actions/configure-aws-credentials@v3 
