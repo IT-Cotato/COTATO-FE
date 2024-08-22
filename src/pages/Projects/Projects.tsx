@@ -11,6 +11,7 @@ import fetcher from '@utils/fetcher';
 import { CotatoProjectSummaryResponse } from 'cotato-openapi-clients';
 import ProjectsCard from './ProjectsCard';
 import { ReactComponent as CotatoChip } from '@assets/cotato_chip.svg';
+import ReadyState from '@components/ReadyState';
 
 const Projects = () => {
   const { isTabletOrSmaller } = useBreakpoints();
@@ -18,7 +19,10 @@ const Projects = () => {
 
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
-  const { data: projects } = useSWR<CotatoProjectSummaryResponse[]>('/v2/api/projects', fetcher);
+  const { data: projects, isLoading } = useSWR<CotatoProjectSummaryResponse[]>(
+    '/v2/api/projects',
+    fetcher,
+  );
 
   /**
    *
@@ -45,7 +49,7 @@ const Projects = () => {
    *
    */
   const renderProjects = () => {
-    if (!projects) {
+    if (isLoading) {
       return Array.from({ length: 3 }).map((_, index) => {
         return (
           <StyledGrid item key={index} xl={3} alignItems="center" justifyContent="center">
@@ -55,7 +59,11 @@ const Projects = () => {
       });
     }
 
-    return projects.map((project) => (
+    if (!projects) {
+      return <ReadyState />;
+    }
+
+    return projects?.map((project) => (
       <StyledGrid item key={project.projectId} xl={3} alignItems="center" justifyContent="center">
         <ProjectsCard
           {...project}
