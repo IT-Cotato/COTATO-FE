@@ -110,7 +110,13 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
       const members = project?.memberInfos.filter((member) => member.position === position);
 
       return (
-        <Stack key={position} direction="row" justifyContent="space-between" alignItems="center">
+        <Stack
+          key={position}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          gap="1rem"
+        >
           <Typography
             fontSize={isMobileOrSmaller ? '0.75rem' : isLandScapeOrSmaller ? '0.8rem' : '1rem'}
             fontWeight={700}
@@ -161,10 +167,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
               {renderLeftPart()}
             </Stack>
 
-            <Stack
-              width={isLandScapeOrSmaller ? '8rem' : isTabletOrSmaller ? '12rem' : '14rem'}
-              gap={isLandScapeOrSmaller ? '0rem' : '1rem'}
-            >
+            <Stack width="fit-content" gap={isLandScapeOrSmaller ? '0rem' : '1rem'}>
               {renderRightPart()}
             </Stack>
           </Stack>
