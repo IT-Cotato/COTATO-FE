@@ -168,6 +168,7 @@ const SessionHome = () => {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
+      sessionDate: session.sessionDate || '',
       itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
       csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
       networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,

@@ -173,7 +173,7 @@ const AttendanceAttendResultLayout: React.FC<AttendanceAttendResultLayoutProps> 
           fontSize={isLandScapeOrSmaller ? '1.2rem' : '1.6rem'}
           color={theme.colors.primary100_1}
         >
-          {user?.memberName} 님!
+          {user?.name} 님!
         </Typography>
         <Typography fontFamily="YComputer" fontSize={isLandScapeOrSmaller ? '1.0rem' : '1.2rem'}>
           {getAttendanceTypeText()} {getStatusText()}

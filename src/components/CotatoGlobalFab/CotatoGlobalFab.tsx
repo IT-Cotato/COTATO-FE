@@ -21,7 +21,7 @@ const COTATO_KAKAO_PLUS_FRIEND_URL = 'https://pf.kakao.com/_LQLyG';
 const CotatoGlobalFab = () => {
   const navigate = useNavigate();
   const { data: user } = fetchUserData();
-  const isOverOldMember = MemberRole[user?.role] >= MemberRole.OLD_MEMBER;
+  const isOverOldMember = user?.role ? MemberRole[user.role] >= MemberRole.OLD_MEMBER : false;
 
   //
   const fabList = {
