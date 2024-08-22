@@ -11,6 +11,17 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ~/.yarn
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Check Node v
         run: node -v
 
