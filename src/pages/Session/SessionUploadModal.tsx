@@ -3,6 +3,7 @@ import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
+import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
 import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
@@ -13,6 +14,9 @@ import {
   SessionContentsNetworking,
   SessionContentsDevTalk,
 } from '@/enums/SessionContents';
+import CotatoDatePicker from '@components/CotatoDatePicker';
+import dayjs from 'dayjs';
+import { ToastContainer } from 'react-toastify';
 
 //
 //
@@ -44,7 +48,10 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
   sessionNumber: 0,
   title: '',
   description: '',
+  sessionDate: '',
   generationId: 0,
+  attendanceDeadLine: '',
+  lateDeadLine: '',
   sessionContents: {
     itIssue: SessionContentsItIssue.ON,
     csEducation: SessionContentsCsEducation.ON,
@@ -70,6 +77,7 @@ const SessionUploadModal = ({
   requestImageRemove,
 }: SessionUploadModalProps) => {
   const [session, setSession] = useState<SessionListInfo>(INITIAL_SESSION_STATE);
+  const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
 
   /**
    *
@@ -163,6 +171,39 @@ const SessionUploadModal = ({
   /**
    *
    */
+  const handleSessionDateChange = (date: Date) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.sessionDate = dayjs(date).format('YYYY-MM-DD');
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleDeadlineChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.lateDeadLine = e.target.value;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleAttendanceDeadLineChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.attendanceDeadLine = e.target.value;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
   const renerCloseButton = () => (
     <CloseButton type="button" onClick={handleClose}>
       <CloseIcon />
@@ -235,16 +276,38 @@ const SessionUploadModal = ({
       <InfoInputWrapper>
         <TitleBox $bold={true}>
           <input value={session.title} onChange={handleTitleChange} />
-          <PencilIcon />
+          <button type="button">
+            <PencilIcon />
+          </button>
         </TitleBox>
         <InfoBox>
-          <input value="날짜 (출석 기능 출시 이후 활성화)" readOnly={true} />
+          <input
+            placeholder="세션 날짜를 선택해 주세요."
+            value={session.sessionDate && dayjs(session.sessionDate).format('YYYY년 MM월 DD일')}
+            readOnly={true}
+          />
+          <button type="button" onClick={() => setIsDayPickerOpen(true)}>
+            <CalendarIcon />
+          </button>
         </InfoBox>
         <InfoBox>
-          <input value="장소 (출석 기능 출시 이후 활성화)" readOnly={true} />
+          <input value="장소 (아직 활성화 안됨)" readOnly={true} />
         </InfoBox>
         <InfoBox>
-          <input value="시간 (출석 기능 출시 이후 활성화)" readOnly={true} />
+          <input
+            placeholder="출석 인정 시간 (19:10:00 형식으로 정확히 입력하세요.)"
+            value={session.attendanceDeadLine || undefined}
+            onChange={handleAttendanceDeadLineChange}
+            disabled={session.attendanceDeadLine === undefined ? true : false}
+          />
+        </InfoBox>
+        <InfoBox>
+          <input
+            placeholder="지각 인정 시간 (19:20:00 형식으로 정확히 입력하세요.)"
+            value={session.lateDeadLine || undefined}
+            onChange={handleDeadlineChange}
+            disabled={session.lateDeadLine === undefined ? true : false}
+          />
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
         <InfoBox $height="8rem">
@@ -273,7 +336,10 @@ const SessionUploadModal = ({
   useEffect(() => {
     if (sessionInfo) {
       setSession(sessionInfo);
+    } else {
+      setSession(INITIAL_SESSION_STATE);
     }
+
     if (lastSessionNumber !== undefined) {
       setSession(
         produce(session, (darft) => {
@@ -295,15 +361,29 @@ const SessionUploadModal = ({
         },
       }}
     >
-      <UploadContainer>
-        <Wrapper>
-          {renerCloseButton()}
-          {renderHeader()}
-          {renderImageInput()}
-          {renderInfoInput()}
-          {renderUplaodButton()}
-        </Wrapper>
-      </UploadContainer>
+      <>
+        <UploadContainer>
+          <Wrapper>
+            {renerCloseButton()}
+            {renderHeader()}
+            {renderImageInput()}
+            {renderInfoInput()}
+            {renderUplaodButton()}
+          </Wrapper>
+          <CotatoDatePicker
+            open={isDayPickerOpen}
+            date={session.sessionDate ? new Date(session.sessionDate) : undefined}
+            onDateChange={handleSessionDateChange}
+            onClose={() => setIsDayPickerOpen(false)}
+          />
+        </UploadContainer>
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          pauseOnFocusLoss={false}
+          theme={localStorage.getItem('theme') || 'light'}
+        />
+      </>
     </Modal>
   );
 };
@@ -383,14 +463,14 @@ const InfoBox = styled.div<InfoBoxProps>`
     padding: 0;
     background: transparent;
     border: none;
-    color: #6a6967;
+    color: ${({ theme }) => theme.colors.gray100};
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.md};
     font-weight: ${({ $bold }) => ($bold ? '600' : '300')};
     line-height: 125%;
 
     &::placeholder {
-      font-size: ${({ theme }) => theme.fontSize.md};
+      font-size: ${({ theme }) => theme.fontSize.sm};
       font-weight: 300;
     }
 
@@ -403,19 +483,25 @@ const InfoBox = styled.div<InfoBoxProps>`
     resize: none;
   }
 
-  > svg {
+  > button {
+    border: none;
+    background: none;
     position: absolute;
     top: 50%;
     right: 1rem;
     transform: translateY(-50%);
-    width: 1.2rem;
-    height: 1.2rem;
+    cursor: pointer;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
   }
 `;
 
 const TitleBox = styled(InfoBox)`
   border: 2px solid ${({ theme }) => theme.colors.primary90};
-  background: transparent;
+  background: ${({ theme }) => theme.colors.common.white_const};
 `;
 
 const ContentsInputWrapper = styled.span`
@@ -426,6 +512,7 @@ const ContentsInputWrapper = styled.span`
 
   > span {
     color: #6a6967;
+    color: ${({ theme }) => theme.colors.gray100};
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.md};
     font-weight: 300;
