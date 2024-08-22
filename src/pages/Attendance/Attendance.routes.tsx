@@ -6,8 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 //
 //
 
-const AsyncAttendanceList = React.lazy(() => import('./List/AttendanceList'));
 const AsyncAttendanceAttend = React.lazy(() => import('./Attend/AttendanceAttend'));
+const AsyncAttendanceList = React.lazy(() => import('./List/AttendanceList'));
 const AsyncAttendanceReport = React.lazy(() => import('./Report/AttendanceReport'));
 
 //
