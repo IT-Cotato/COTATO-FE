@@ -48,7 +48,7 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
   sessionNumber: 0,
   title: '',
   description: '',
-  sessionDate: '',
+  sessionDate: undefined,
   generationId: 0,
   attendanceDeadLine: '',
   lateDeadLine: '',
@@ -174,7 +174,7 @@ const SessionUploadModal = ({
   const handleSessionDateChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionDate = dayjs(date).format('YYYY-MM-DD');
+        draft.sessionDate = date;
       }),
     );
   };

@@ -31,6 +31,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 //
 //
@@ -146,7 +147,7 @@ const SessionHome = () => {
     formData.append('generationId', selectedGeneration?.generationId?.toString() || '');
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
-    formData.append('sessionDate', session.sessionDate || '');
+    formData.append('sessionDate', dayjs(session.sessionDate).format('YYYY-MM-DD') || '');
     formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
     formData.append(
       'csEducation',
@@ -187,7 +188,7 @@ const SessionHome = () => {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
-      sessionDate: session.sessionDate || '',
+      sessionDate: session.sessionDate!,
       itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
       csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
       networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
