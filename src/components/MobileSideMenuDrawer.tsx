@@ -88,7 +88,7 @@ const MobileSideMenuDrawer: React.FC<MobileSideMenuDrawerProps> = ({ navList, op
           }}
         >
           <MemberRoleIcon src={getMemberRoleIcon(user.role)} />
-          <StyledLinkTypography>{user.memberName}</StyledLinkTypography>
+          <StyledLinkTypography>{user.name}</StyledLinkTypography>
         </ListItem>
       </Link>
     );

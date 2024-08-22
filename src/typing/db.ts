@@ -1,6 +1,6 @@
 export interface MemberData {
   memberId: number;
-  memberName: string;
+  name: string;
   backFourNumber: number;
   role: 'ADMIN' | 'EDUCATION' | 'GENERAL' | 'MEMBER' | 'OLD_MEMBER' | 'REFUSED';
 }
@@ -140,7 +140,7 @@ export interface IApplyMember {
 
 export interface IEnrollMember {
   memberId: number;
-  memberName: string;
+  name: string;
   position: string;
   generationNumber: number;
   role: string;
@@ -151,7 +151,7 @@ export interface IMyPageInfo {
   email: string;
   name: string;
   generationNumber: number;
-  memberPosition: string;
+  position: string;
   phoneNumber: string;
 }
 
