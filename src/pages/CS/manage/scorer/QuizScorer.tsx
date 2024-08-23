@@ -10,6 +10,7 @@ import ToggleButton from '@components/ToggleButton';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
 import WaitPopup from '@pages/CS/manage/WaitPopup';
+import { CotatoRecordResponse, CotatoScorerResponse } from 'cotato-openapi-clients';
 
 const QuizScorer = () => {
   const navigate = useNavigate();
@@ -33,8 +34,8 @@ const QuizScorer = () => {
     refreshInterval: 1000,
   });
 
-  const [submits, setSubmits] = useState<IQuizAdminSubmit[]>();
-  const [scorer, setScorer] = useState<IQuizAdminScorer>();
+  const [submits, setSubmits] = useState<CotatoRecordResponse[]>();
+  const [scorer, setScorer] = useState<CotatoScorerResponse>();
   const [quizStatus, setQuizStatus] = useState('');
   const [quizStart, setQuizStart] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -167,7 +168,7 @@ const QuizScorer = () => {
                 {submits?.map((submit, index) => (
                   <SubmitContent key={index}>
                     <p>
-                      {submit.memberName}({submit.backFourNumber})
+                      {submit.name}({submit.backFourNumber})
                     </p>
                     <SubmitResult>
                       <p>
@@ -182,7 +183,7 @@ const QuizScorer = () => {
             <HalfContainer width="45%">
               <p>득점자</p>
               <ScorerBox>
-                <p>{scorer?.memberName ? `${scorer.memberName}(${scorer.backFourNumber})` : ''}</p>
+                <p>{scorer?.name ? `${scorer.name}(${scorer.backFourNumber})` : ''}</p>
               </ScorerBox>
               <p>문제 정답</p>
               <AnswerBox>
