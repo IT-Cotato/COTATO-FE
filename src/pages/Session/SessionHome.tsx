@@ -184,11 +184,16 @@ const SessionHome = () => {
       return;
     }
 
+    const offset = new Date().getTimezoneOffset() * 60000;
+    const sessionDate = session?.sessionDate
+      ? new Date(session.sessionDate.getTime() - offset)
+      : new Date(Date.now() - offset);
+
     const updatedSessoinInfo: CotatoUpdateSessionRequest = {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
-      sessionDate: session.sessionDate!,
+      sessionDate: sessionDate,
       itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
       csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
       networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
