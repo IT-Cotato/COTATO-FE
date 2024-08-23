@@ -76,9 +76,9 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             display="flex"
             alignItems="center"
             bgcolor={theme.colors.gray20}
-            width="4.5rem"
-            height="2rem"
-            padding="0.5rem"
+            width={isLandScapeOrSmaller ? '3.25rem' : '4.5rem'}
+            height={isLandScapeOrSmaller ? '1.5rem' : '2rem'}
+            padding={isLandScapeOrSmaller ? '0.25rem' : '0.5rem'}
             borderRadius="0.25rem"
             gap="0.5rem"
             sx={{
@@ -88,8 +88,8 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
               window.open(project?.projectUrl, '_blank');
             }}
           >
-            <LinkIcon />
-            <Typography>링크</Typography>
+            <LinkIcon width={isLandScapeOrSmaller ? '0.75rem' : '1rem'} />
+            <Typography fontSize={isLandScapeOrSmaller ? '0.7rem' : '1rem'}>링크</Typography>
           </Box>
         ) : (
           <Box height="2rem" />
@@ -124,8 +124,13 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
           >
             {title}
           </Typography>
-          <Stack minWidth="7.5rem">
-            <Box display="flex" width="100%" gap={isLandScapeOrSmaller ? '0.25rem' : '0.5rem'}>
+          <Stack minWidth="6.5rem">
+            <Box
+              display="flex"
+              width="100%"
+              justifyContent="flex-end"
+              gap={isLandScapeOrSmaller ? '0.25rem' : '0.5rem'}
+            >
               {members?.map((member) => (
                 <Typography
                   key={member.memberId}
@@ -168,7 +173,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
           height={isLandScapeOrSmaller ? '12rem' : '15rem'}
           padding={
             isLandScapeOrSmaller
-              ? '1.8rem 0 0 1.5rem'
+              ? '1.8rem 1.5rem 0 1.5rem'
               : isTabletOrSmaller
               ? '2rem 1.8rem'
               : '3rem 3.5rem'
