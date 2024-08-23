@@ -4,19 +4,14 @@ import background from '@assets/bg_kingking.svg';
 import mobile from '@assets/bg_kingking_mobile.svg';
 import api from '@/api/api';
 import BgWaiting from './BgWaiting';
-
-type KingMembers = {
-  memberId: number;
-  memberName: string;
-  backFourNumber: string;
-};
+import { CotatoKingMemberInfo } from 'cotato-openapi-clients';
 
 interface BgKingKingProps {
   quizId: number | null;
 }
 
 const BgKingKing: React.FC<BgKingKingProps> = ({ quizId }) => {
-  const [kingMembers, setKingMembers] = useState<KingMembers[]>([]);
+  const [kingMembers, setKingMembers] = useState<CotatoKingMemberInfo[]>([]);
   const [educationId, setEducationId] = useState<number>(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showWaiting, setShowWaiting] = useState<boolean>(false);
@@ -75,7 +70,7 @@ const BgKingKing: React.FC<BgKingKingProps> = ({ quizId }) => {
       <div className="box">
         {kingMembers.map((member) => (
           <div key={member.memberId}>
-            {member.memberName}({member.backFourNumber})
+            {member.name}({member.backFourNumber})
           </div>
         ))}
       </div>

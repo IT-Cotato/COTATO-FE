@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as BittenPotato } from '@assets/potato_bitten.svg';
+import { media } from '@theme/media';
 
 const NotFound = () => {
   return (
@@ -52,6 +53,19 @@ const Wrapper = styled.div`
     border: 4px solid ${({ theme }) => theme.colors.primary100_1};
     z-index: 100;
   }
+
+  ${media.landscape`
+    h1 {
+      font-size: 20px;
+    }
+
+    button {
+      padding: 12px 28px;
+      margin-top: 20px;
+      font-size: 16px;
+      border-radius: 80px;
+    }
+  `}
 `;
 
 const StyledBittenPotato = styled(BittenPotato)`
@@ -59,6 +73,11 @@ const StyledBittenPotato = styled(BittenPotato)`
   width: 180px;
   height: 140px;
   margin-bottom: 16px;
+
+  ${media.landscape`
+    width: 140px;
+    height: 120px;
+  `}
 `;
 
 export default NotFound;

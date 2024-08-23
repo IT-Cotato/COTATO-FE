@@ -60,9 +60,15 @@ const CSHome = () => {
     setIsCSModalOpen(false);
   }, []);
 
-  if (error || user?.role === 'GENERAL') {
-    navigate('/');
-  }
+  //
+  //
+  //
+  React.useEffect(() => {
+    if (error || user?.role === 'GENERAL') {
+      window.alert('코테이토 회원 전용 페이지입니다.');
+      navigate('/');
+    }
+  }, [error, user]);
 
   return (
     <>

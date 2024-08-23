@@ -20,6 +20,7 @@ export type LegacyThemeType = typeof LegacyTheme;
 
 export const LegacyTheme = {
   color: {
+    real_white: '#FFFFFF',
     white: '#FFFFFF',
     lightBlue: '#D2E0FB',
     yellow: '#F9F3CC',
@@ -38,6 +39,7 @@ export const LegacyTheme = {
 export type CotatoThemeType = {
   colors: {
     common: {
+      real_white: string;
       white: string;
       black: string;
       white_const: string;
@@ -178,9 +180,10 @@ export type CotatoThemeType = {
 export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
   colors: {
     common: {
-      white: '#FAFAFA',
+      real_white: '#FFFFFF',
+      white: '#FFFBF6',
       black: '#000000',
-      white_const: '#FAFAFA',
+      white_const: '#FFFBF6',
       black_const: '#000000',
     },
     // gray //
@@ -325,6 +328,7 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
 export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
   colors: {
     common: {
+      real_white: CotatoLightTheme.colors.common.real_white,
       white: CotatoLightTheme.colors.gray100,
       black: CotatoLightTheme.colors.common.white,
       white_const: CotatoLightTheme.colors.common.white_const,

@@ -18,10 +18,25 @@ import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
 import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
+import Projects from '@pages/Projects/Projects';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
 
 function App() {
+  const location = useLocation();
+  const isInHome = location.pathname === '/';
+
+  //
+  //
+  //
+  React.useEffect(() => {
+    if (isInHome) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isInHome]);
+
   const isAttendance = useLocation().pathname.includes('/attendance');
 
   //
@@ -36,7 +51,7 @@ function App() {
         <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/about" element={<ReadyState />} />
           <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
@@ -49,6 +64,7 @@ function App() {
           <Route path="/products" element={<ReadyState />} />
           <Route path="/projects" element={<ReadyState />} />
           <Route path="/signin" element={<Login />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
         {isAttendance ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
