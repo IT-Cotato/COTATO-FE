@@ -12,17 +12,23 @@ import { MemberRole } from '@/enums';
 //
 //
 
+const COTATO_KAKAO_PLUS_FRIEND_URL = 'https://pf.kakao.com/_LQLyG';
+
+//
+//
+//
+
 const CotatoGlobalFab = () => {
   const navigate = useNavigate();
   const { data: user } = fetchUserData();
-  const isOverOldMember = MemberRole[user?.role] >= MemberRole.OLD_MEMBER;
+  const isOverOldMember = user?.role ? MemberRole[user.role] >= MemberRole.OLD_MEMBER : false;
 
   //
   const fabList = {
     attendance: {
-      name: isOverOldMember ? '곧 공개됩니다!' : '코테이토 회원 전용 기능입니다!',
+      name: isOverOldMember ? '출석' : '코테이토 회원 전용 기능입니다!',
       icon: <AttendanceIcon width="100%" height="100%" />,
-      disabled: true,
+      disabled: !isOverOldMember,
       onClick: () => {
         navigate('/attendance');
       },
@@ -32,7 +38,7 @@ const CotatoGlobalFab = () => {
       icon: <KaKaoTalkIcon width="100%" height="100%" />,
       disabled: false,
       onClick: () => {
-        window.open('https://pf.kakao.com/_LQLyG', '_blank');
+        window.open(COTATO_KAKAO_PLUS_FRIEND_URL, '_blank');
       },
     },
   };

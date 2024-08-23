@@ -92,7 +92,7 @@ const GenerationDropBox = ({
    */
   const setGenerationSearchParam = (generation: CotatoGenerationInfoResponse) => {
     if (generation?.generationId) {
-      setSearchParams({ 'generation-id': generation.generationId.toString() });
+      setSearchParams({ generationId: generation.generationId.toString() });
     }
   };
 
