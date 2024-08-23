@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Dialog, DialogContent, Stack, Typography } from '@mui/material';
 import fetcher from '@utils/fetcher';
 import {
@@ -6,7 +7,6 @@ import {
 } from 'cotato-openapi-clients';
 import { ReactComponent as LinkIcon } from '@assets/link.svg';
 
-import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import useSWR from 'swr';
 import { media } from '@theme/media';
@@ -52,10 +52,10 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
   //   );
 
   const memberPositionMap = {
-    BE: 'BACK-END',
-    FE: 'FRONT-END',
-    DESIGN: 'DESIGN',
-    PM: 'PRODUCT',
+    BE: isLandScapeOrSmaller ? 'BE' : 'BACK-END',
+    FE: isLandScapeOrSmaller ? 'FE' : 'FRONT-END',
+    DESIGN: isLandScapeOrSmaller ? 'DE' : 'DESIGN',
+    PM: isLandScapeOrSmaller ? 'PM' : 'PRODUCT',
   };
 
   /**
@@ -113,8 +113,9 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
         <Stack
           key={position}
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+          justifyContent={isLandScapeOrSmaller ? 'auto' : 'space-between'}
+          alignItems={isLandScapeOrSmaller ? 'flex-end' : 'center'}
+          height="100%"
           gap="1rem"
         >
           <Typography
@@ -123,10 +124,15 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
           >
             {title}
           </Typography>
-          <Stack>
-            <Box display="flex" gap="0.5rem">
+          <Stack minWidth="7.5rem">
+            <Box display="flex" width="100%" gap={isLandScapeOrSmaller ? '0.25rem' : '0.5rem'}>
               {members?.map((member) => (
-                <Typography key={member.memberId} fontWeight={700}>
+                <Typography
+                  key={member.memberId}
+                  fontWeight={700}
+                  flexWrap="wrap"
+                  fontSize={isLandScapeOrSmaller ? '0.7rem' : isTabletOrSmaller ? '0.8rem' : '1rem'}
+                >
                   {member.name}
                 </Typography>
               ))}
@@ -158,16 +164,30 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             alt="thumbnail"
           />
         )}
-        <Box height="15rem" padding={isLandScapeOrSmaller ? '1.8rem 2.1rem' : '3rem 3.5rem'}>
+        <Box
+          height={isLandScapeOrSmaller ? '12rem' : '15rem'}
+          padding={
+            isLandScapeOrSmaller
+              ? '1.8rem 0 0 1.5rem'
+              : isTabletOrSmaller
+              ? '2rem 1.8rem'
+              : '3rem 3.5rem'
+          }
+        >
           <Stack direction="row" justifyContent="space-between">
             <Stack
-              width={isLandScapeOrSmaller ? '8rem' : isTabletOrSmaller ? '12rem' : '18rem'}
+              width={isLandScapeOrSmaller ? '8rem' : isTabletOrSmaller ? '10rem' : '18rem'}
               gap="2rem"
             >
               {renderLeftPart()}
             </Stack>
 
-            <Stack width="fit-content" gap={isLandScapeOrSmaller ? '0rem' : '1rem'}>
+            <Stack
+              width="fit-content"
+              gap={isLandScapeOrSmaller ? '0rem' : '1rem'}
+              height="fit-content"
+              alignSelf={isLandScapeOrSmaller ? 'flex-end' : 'center'}
+            >
               {renderRightPart()}
             </Stack>
           </Stack>
