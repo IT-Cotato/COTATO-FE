@@ -24,8 +24,9 @@ import { AttendanceFab } from '@components/attendance/attendance-fab';
 
 function App() {
   const location = useLocation();
-  const isInHome = location.pathname === '/';
 
+  const isInHome = location.pathname === '/';
+  const isAttendance = location.pathname.includes('/attendance');
   //
   //
   //
@@ -36,8 +37,6 @@ function App() {
       document.body.style.overflow = 'auto';
     }
   }, [isInHome]);
-
-  const isAttendance = useLocation().pathname.includes('/attendance');
 
   //
   //
