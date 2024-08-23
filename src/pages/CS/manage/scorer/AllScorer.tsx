@@ -4,7 +4,8 @@ import CSManageLayout from '../CSManageLayout';
 import { css, styled } from 'styled-components';
 import useSWRImmutable from 'swr/immutable';
 import fetcher from '@utils/fetcher';
-import { IKingMember, IQuizAllScorer } from '@/typing/db';
+import { IQuizAllScorer } from '@/typing/db';
+import { CotatoKingMemberInfo } from 'cotato-openapi-clients';
 
 const AllScorer = () => {
   const [searchParams] = useSearchParams();
@@ -14,7 +15,7 @@ const AllScorer = () => {
     `/v1/api/quiz/cs-admin/results?educationId=${educationId}`,
     fetcher,
   );
-  const { data: kingMembers } = useSWRImmutable<IKingMember[]>(
+  const { data: kingMembers } = useSWRImmutable<CotatoKingMemberInfo[]>(
     `/v1/api/education/kings?educationId=${educationId}`,
     fetcher,
   );
@@ -48,7 +49,7 @@ const AllScorer = () => {
           <FinalistBox>
             {kingMembers?.map((king) => (
               <p key={king.memberId}>
-                {king.memberName}({king.backFourNumber})
+                {king.name}({king.backFourNumber})
               </p>
             ))}
           </FinalistBox>

@@ -15,7 +15,7 @@ import { MemberRole } from '@/enums';
 const CotatoGlobalFab = () => {
   const navigate = useNavigate();
   const { data: user } = fetchUserData();
-  const isOverOldMember = MemberRole[user?.role] >= MemberRole.OLD_MEMBER;
+  const isOverOldMember = MemberRole[user?.role ?? 'REFUSED'] >= MemberRole.OLD_MEMBER;
 
   //
   const fabList = {
