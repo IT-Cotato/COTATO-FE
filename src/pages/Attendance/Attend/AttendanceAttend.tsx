@@ -30,6 +30,12 @@ const AttendanceStatusEnum = {
 //
 //
 
+const USER_DENIED_ERROR_CODE = 1;
+
+//
+//
+//
+
 const AttendanceAttend: React.FC = () => {
   const theme = useTheme();
   const params = useParams();
@@ -72,8 +78,6 @@ const AttendanceAttend: React.FC = () => {
     return now.toISOString();
   };
 
-  console.log('currentGeneration', getCurrentISOTime(), new Date());
-
   /**
    *
    */
@@ -106,12 +110,44 @@ const AttendanceAttend: React.FC = () => {
   /**
    *
    */
+  const checkGeolocationExists = () => {
+    if (!latitude || !longitude) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          return true;
+        },
+        (error) => {
+          if (error.code === USER_DENIED_ERROR_CODE) {
+            alert('위치 정보를 허용해주세요!');
+          }
+
+          return false;
+        },
+        geolocationOptions,
+      );
+
+      return Boolean(latitude && longitude);
+    }
+
+    return true;
+  };
+
+  /**
+   *
+   */
   const handleSubmit = async () => {
     if (!attendanceType) {
       return;
     }
 
     if (attendanceType === 'OFFLINE') {
+      const geolocation = checkGeolocationExists();
+
+      if (!geolocation) {
+        console.log(geoLocationError);
+        return;
+      }
+
       const data = await postOfflineAttendance();
       handleNavigate(data.data, data.error, attendanceType);
     } else {
@@ -324,19 +360,6 @@ const AttendanceAttend: React.FC = () => {
       </>
     );
   };
-
-  //
-  // 위치 정보 제공 동의 여부 확인
-  //
-  React.useEffect(() => {
-    if (geoLocationError) {
-      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        if (result.state === 'denied') {
-          window.alert('위치 정보 제공에 동의하여야 출석이 가능합니다!');
-        }
-      });
-    }
-  }, [geoLocationError]);
 
   //
   //
