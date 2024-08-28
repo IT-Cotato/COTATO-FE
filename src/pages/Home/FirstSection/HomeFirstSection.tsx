@@ -6,7 +6,6 @@ import styled, { useTheme } from 'styled-components';
 import HomeFirstSectionCotato from './HomeFirstSectionCotato';
 import { media } from '@theme/media';
 import SloganSvgComponent from './SvgComponent/SloganSvgComponent';
-import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
@@ -14,8 +13,6 @@ import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 const HomeFirstSection = () => {
   const theme = useTheme();
-
-  const isMobileOrSmaller = useBreakpoints().isMobileOrSmaller;
 
   /**
    *
@@ -57,20 +54,12 @@ const HomeFirstSection = () => {
     return <HomeFirstSectionCotato />;
   };
 
-  /**
-   *
-   */
-  const renderNotification = () => {
-    return isMobileOrSmaller ? <Notification>현재 10기 모집 중 !</Notification> : null;
-  };
-
   return (
     <Wrapper>
       {renderTitle()}
       {renderSlogan()}
       {renderFry()}
       {renderCotato()}
-      {renderNotification()}
     </Wrapper>
   );
 };
@@ -176,14 +165,5 @@ const StyledFries = styled.div`
   ${media.mobile`
     width: 12rem;
     height: 18rem;
-  `}
-`;
-
-const Notification = styled.h2`
-  color: ${({ theme }) => theme.colors.common.black};
-  font-size: ${({ theme }) => theme.fontSize.xxl};
-  ${media.mobile`
-    margin-top: 3rem;
-    margin-bottom: 1rem;
   `}
 `;
