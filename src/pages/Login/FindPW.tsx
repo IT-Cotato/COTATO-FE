@@ -15,6 +15,10 @@ interface FindPWProps {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
 
+//
+//
+//
+
 const FindPW: React.FC<FindPWProps> = ({
   goToNextStep,
   isEmail,
@@ -24,11 +28,7 @@ const FindPW: React.FC<FindPWProps> = ({
   email,
   setEmail,
 }) => {
-  // const [email, setEmail] = useState('');
   const [errMessage, setErrMessage] = useState('');
-  // const [isEmail, setIsEmail] = useState(false);
-
-  // const [showEmailAuth, setShowEmailAuth] = useState(false);
 
   const onChangeEmail = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,36 +54,30 @@ const FindPW: React.FC<FindPWProps> = ({
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (isEmail) {
-        console.log(email);
-        api
-          .post('/v1/api/auth/verification', emailData, {
-            params: {
-              type: 'find-password',
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            console.log('이메일이 발송되었습니다.');
-            goToNextStep();
-          })
-          .catch((err) => {
-            console.log(err);
-            if (err.response.status === 404) {
-              alert('존재하지 않는 계정입니다.');
-            }
-          });
-      } else if (!isEmail) {
+
+      if (!isEmail) {
         alert('이메일을 입력해주세요.');
         return;
       }
+
+      api
+        .post('/v1/api/auth/verification', emailData, {
+          params: {
+            type: 'find-password',
+          },
+        })
+        .then(() => {
+          goToNextStep();
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.status === 404) {
+            alert('존재하지 않는 계정입니다.');
+          }
+        });
     },
     [email],
   );
-
-  // if (showEmailAuth) {
-  //   return <EmailAuth />;
-  // }
 
   return (
     <Wrapper>
