@@ -10,12 +10,7 @@ interface EmailAuthProps {
 
 const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
   const [inputs, setInputs] = useState<number[]>(Array(6).fill(null));
-  const inputRef = useRef<any>([]);
-
-  // 컴포넌트 마운트시 inputRef.current[0].focus() 실행
-  useEffect(() => {
-    inputRef.current[0]?.focus();
-  }, []);
+  const inputRef = useRef<any>(Array(6).fill(null));
 
   /**
    *
@@ -31,22 +26,26 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
   /**
    *
    */
-  const handleInputChange = (idx: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInputs = [...inputs];
-
-    if (newInputs.length === 6) {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+    if (e.target.value.length >= 6) {
       handlePasteEvent(e.target.value);
       return;
     }
 
+    const newInputs = [...inputs];
+    let value = e.target.value;
+
     if (newInputs[idx] !== null) {
-      newInputs[idx] = parseInt(e.target.value.slice(-1));
+      const prevValue = inputs[idx].toString();
+      value = e.target.value.replace(prevValue, '');
     }
 
-    if (e.target.value.length === 1 && idx < 5) {
+    newInputs[idx] = parseInt(value);
+    setInputs(newInputs);
+
+    if (idx < inputs.length - 1) {
       inputRef.current[idx + 1]?.focus();
     }
-    setInputs(newInputs);
   };
 
   /**
@@ -101,6 +100,36 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
     }
   };
 
+  /**
+   *
+   */
+  const handleResendClick = async () => {
+    api
+      .post(
+        '/v1/api/auth/verification',
+        { email: email },
+        {
+          params: {
+            type: 'find-password',
+          },
+        },
+      )
+      .then(() => {
+        alert('인증 이메일이 재발송 되었습니다.');
+      });
+  };
+
+  //
+  //
+  //
+  useEffect(() => {
+    if (!inputRef.current) {
+      return;
+    }
+
+    inputRef.current[0]?.focus();
+  }, []);
+
   return (
     <Wrapper>
       <h3>승인 요청 이메일이 발송되었습니다.</h3>
@@ -111,16 +140,20 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
       </p>
       <Form onSubmit={onSubmit}>
         <InputContainer>
-          {inputs.map((input, idx) => (
-            <InputBox
-              key={idx}
-              type="number"
-              value={input}
-              onChange={handleInputChange(idx)}
-              ref={(el) => (inputRef.current[idx] = el)}
-              filled={input !== null}
-            />
-          ))}
+          {inputs.map((input, idx) => {
+            return (
+              <InputBox
+                key={idx}
+                type="number"
+                value={input}
+                onChange={(e) => {
+                  handleInputChange(e, idx);
+                }}
+                ref={(el) => (inputRef.current[idx] = el)}
+                filled={inputs[idx] !== null}
+              />
+            );
+          })}
         </InputContainer>
         <p>
           인증 메일은 발송 시점부터 30분 유효하며,
@@ -132,7 +165,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
         </Button>
       </Form>
       <p>
-        혹시 이메일을 못받으셨나요? <span>메일 다시 보내기</span>
+        혹시 이메일을 못받으셨나요? <span onClick={handleResendClick}>메일 다시 보내기</span>
       </p>
     </Wrapper>
   );
@@ -145,7 +178,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   color: ${({ theme }) => theme.colors.common.black};
-  margin-top: 120px;
+  padding: 5rem 0;
   h3 {
     font-size: 1.8rem;
     margin-top: 0;
