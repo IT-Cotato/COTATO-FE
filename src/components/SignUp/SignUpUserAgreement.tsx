@@ -5,20 +5,16 @@ import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import SignUpUserAgreementItem from '@components/SignUp/SignUpUserAgreementItem';
 import { v4 as uuid } from 'uuid';
 import { produce } from 'immer';
+import api from '@/api/api';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
+import { CotatoPoliciesResponse } from 'cotato-openapi-clients';
 
 //
 //
 //
-
-type AgreementItemType = {
-  id: number;
-  name: string;
-  isRequired: boolean;
-  content: string;
-};
 
 interface SignUpUserAgreementItemProps {
-  agreementItems: AgreementItemType[];
   isCheckedAll: boolean;
   setIsCheckedAll: React.Dispatch<React.SetStateAction<boolean>>;
   isChecked: Map<number, boolean>;
@@ -30,17 +26,18 @@ interface SignUpUserAgreementItemProps {
 //
 
 const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
-  agreementItems,
   isCheckedAll,
   setIsCheckedAll,
   isChecked,
   setIsChecked,
 }) => {
   const theme = useTheme();
+  const { data: policiesData } = useSWR<CotatoPoliciesResponse>('/v2/api/policies', fetcher, {
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+  });
 
-  const [color, setColor] = useState(theme.colors.gray100);
-
-  const mode = localStorage.getItem('theme');
+  const policies = policiesData?.policies;
 
   /**
    * handler for the click event of the entire agreement button
@@ -55,7 +52,6 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
         produce(isChecked, (draft) => draft.forEach((value, id) => draft.set(id, true))),
       );
     }
-    console.log(isChecked);
   };
 
   /**
@@ -67,18 +63,6 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
     } else {
       setIsCheckedAll(false);
     }
-    console.log(isCheckedAll);
-  };
-
-  /**
-   *
-   */
-  const getEntireCheckButtonColor = () => {
-    if (isCheckedAll) {
-      return theme.colors.sub3[60];
-    } else {
-      return color;
-    }
   };
 
   /**
@@ -87,7 +71,10 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
   const renderEntireAgreement = () => {
     return (
       <TotalDiv>
-        <CheckIcon fill={getEntireCheckButtonColor()} onClick={handleEntireClick} />
+        <CheckIcon
+          fill={isCheckedAll ? theme.colors.sub3[60] : theme.colors.gray80_2}
+          onClick={handleEntireClick}
+        />
         <p>이용약관 전체 동의</p>
       </TotalDiv>
     );
@@ -97,34 +84,29 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
    *
    */
   const renderAgreementItems = () => {
+    if (!policies) {
+      return null;
+    }
+
     return (
       <Stack>
-        {agreementItems.map((item) => (
-          <SignUpUserAgreementItem
-            key={uuid()}
-            id={item.id}
-            name={item.name}
-            isRequired={item.isRequired}
-            content={item.content}
-            fillColor={color}
-            isChecked={isChecked}
-            setIsChecked={setIsChecked}
-          />
-        ))}
+        {policies?.map((policy) => {
+          if (!policy) {
+            return null;
+          }
+
+          return (
+            <SignUpUserAgreementItem
+              key={policy.policyId}
+              {...policy}
+              isChecked={isChecked}
+              setIsChecked={setIsChecked}
+            />
+          );
+        })}
       </Stack>
     );
   };
-
-  //
-  //
-  //
-  useLayoutEffect(() => {
-    if (mode === 'dark') {
-      setColor(theme.colors.gray30);
-    } else {
-      setColor(theme.colors.gray100);
-    }
-  }, [mode]);
 
   useEffect(() => {
     handleCheckAll();
@@ -133,7 +115,7 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
   return (
     <Wrapper>
       {renderEntireAgreement()}
-      <Divider sx={{ bgcolor: color }} />
+      <Divider sx={{ bgcolor: theme.colors.gray80_2 }} />
       {renderAgreementItems()}
     </Wrapper>
   );
@@ -156,7 +138,7 @@ const TotalDiv = styled.div`
   width: 100%;
   p {
     margin-left: 0.3rem;
-    color: ${({ theme }) => theme.colors.gray60};
+    color: ${({ theme }) => theme.colors.gray80_2};
     font-size: ${({ theme }) => theme.fontSize.sm};
     font-family: Pretendard;
   }
