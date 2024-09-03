@@ -71,7 +71,7 @@ const ProjectsCard = ({
     <StyledStack
       id={projectId?.toString()}
       justifyContent="center"
-      padding="1.5rem"
+      padding="0.25rem 1.5rem 1.5rem"
       gap="2rem"
       bgcolor={theme.colors.common.real_white}
       borderRadius="0.625rem"

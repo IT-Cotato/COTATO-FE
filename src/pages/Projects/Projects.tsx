@@ -5,7 +5,7 @@ import { ReactComponent as ProjectTag } from '@assets/project.svg';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import ProjectDialog from './ProjectDialog';
-import { Box, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import { Grid2, Skeleton, Stack, Typography } from '@mui/material';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { CotatoProjectSummaryResponse } from 'cotato-openapi-clients';
@@ -52,9 +52,9 @@ const Projects = () => {
     if (isLoading) {
       return Array.from({ length: 3 }).map((_, index) => {
         return (
-          <StyledGrid item key={index} xl={3} alignItems="center" justifyContent="center">
+          <Grid2 key={index} alignItems="center" justifyContent="center">
             <Skeleton key={index} variant="rectangular" width="18rem" height="22rem" />
-          </StyledGrid>
+          </Grid2>
         );
       });
     }
@@ -64,24 +64,22 @@ const Projects = () => {
     }
 
     return projects?.map((project) => (
-      <StyledGrid item key={project.projectId} xl={3} alignItems="center" justifyContent="center">
+      <Grid2 key={project.projectId} size="auto">
         <ProjectsCard
           {...project}
           onClick={() => setSelectedId((project.projectId as number).toString())}
         />
-      </StyledGrid>
+      </Grid2>
     ));
   };
 
   return (
     <Wrapper>
       <ProjectTag width={isTabletOrSmaller ? '8.8rem' : '10rem'} />
-      <Box>
-        {renderSubtitle()}
-        <Grid padding="1rem" container spacing={6}>
-          {renderProjects()}
-        </Grid>
-      </Box>
+      {renderSubtitle()}
+      <Grid2 container spacing={8} padding="0 4rem">
+        {renderProjects()}
+      </Grid2>
       <ProjectDialog projectId={Number(selectedId)} open={!!selectedId} onClose={handleClose} />
     </Wrapper>
   );
@@ -95,20 +93,14 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 8rem;
+  padding: 0 0 4rem 0;
   gap: 2.5rem;
   min-height: calc(100vh - ${HEADER_HEIGHT});
 
   ${media.tablet`
-    padding: 2rem 0;
+    padding: 2rem;
     min-height: 100vh;
   `}
-`;
-
-const StyledGrid = styled(Grid)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
 `;
 
 export default Projects;
