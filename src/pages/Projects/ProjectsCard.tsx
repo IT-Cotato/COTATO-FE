@@ -98,7 +98,13 @@ const ProjectsCard = ({
           >
             {renderInfo()}
           </Stack>
-          <Typography fontSize="1rem" color={theme.colors.gray80_2} maxWidth="15rem" height="3rem">
+          <Typography
+            fontSize="1rem"
+            color={theme.colors.gray80_2}
+            width="15rem"
+            maxWidth="15rem"
+            height="3rem"
+          >
             {introduction}
           </Typography>
         </Stack>
