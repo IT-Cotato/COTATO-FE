@@ -9,6 +9,7 @@ import {
   accordionSummaryClasses,
   accordionClasses,
   useMediaQuery,
+  IconButton,
 } from '@mui/material';
 import styled from 'styled-components';
 import { device } from '@theme/media';
@@ -16,6 +17,7 @@ import {
   CotatoCharacterImageMapType,
   convertCotatoCharcterImage,
 } from '@utils/convertCotatoCharcterImage';
+import { ReactComponent as ExpandIcon } from '@assets/expand_icon.svg';
 
 //
 //
@@ -53,7 +55,11 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
   const renderAccordionSummary = () => {
     return (
       <StyledAccordionSummary
-        expandIcon={<span className="material-symbols-outlined">chevron_right</span>}
+        expandIcon={
+          <IconButton>
+            <ExpandIcon />
+          </IconButton>
+        }
         onClick={handleAccordionClick}
         sx={{
           padding: { xs: '0.25rem 2rem', md: '0.25rem 2rem' },
@@ -160,9 +166,6 @@ const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
 
   [`& .${accordionSummaryClasses.expandIconWrapper}`]: {
     color: theme.colors.secondary60,
-    '&.Mui-expanded': {
-      transform: 'rotate(90deg)',
-    },
   },
 }));
 
