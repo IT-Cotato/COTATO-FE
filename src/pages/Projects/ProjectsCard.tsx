@@ -100,7 +100,7 @@ const ProjectsCard = ({
           </Stack>
           <Typography
             fontSize="1rem"
-            color={theme.colors.gray80_2}
+            color={theme.colors.common.black_const}
             width="15rem"
             maxWidth="15rem"
             height="3rem"
