@@ -98,7 +98,13 @@ const ProjectsCard = ({
           >
             {renderInfo()}
           </Stack>
-          <Typography fontSize="1rem" color={theme.colors.gray80_2}>
+          <Typography
+            fontSize="1rem"
+            color={theme.colors.gray80_2}
+            width="15rem"
+            maxWidth="15rem"
+            height="3rem"
+          >
             {introduction}
           </Typography>
         </Stack>
@@ -132,5 +138,6 @@ const Introduction = styled.p`
   margin: 0;
   font-size: 1.5rem;
   font-family: Pretendard;
+
   color: ${({ theme }) => theme.colors.common.black_const};
 `;
