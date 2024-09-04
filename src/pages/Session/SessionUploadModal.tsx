@@ -48,7 +48,7 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
   sessionNumber: 0,
   title: '',
   description: '',
-  sessionDate: '',
+  sessionDate: undefined,
   generationId: 0,
   attendanceDeadLine: '',
   lateDeadLine: '',
@@ -174,7 +174,29 @@ const SessionUploadModal = ({
   const handleSessionDateChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionDate = dayjs(date).format('YYYY-MM-DD');
+        draft.sessionDate = date;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleDeadlineChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.lateDeadLine = e.target.value;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleAttendanceDeadLineChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.attendanceDeadLine = e.target.value;
       }),
     );
   };
@@ -273,16 +295,18 @@ const SessionUploadModal = ({
         </InfoBox>
         <InfoBox>
           <input
-            placeholder="지각 인정 시간 (19:10:00 형식으로 정확히 입력하세요.)"
-            value={session.lateDeadLine || undefined}
-            disabled={session.lateDeadLine === undefined ? true : false}
+            placeholder="출석 인정 시간 (19:10:00 형식으로 정확히 입력하세요.)"
+            value={session.attendanceDeadLine || undefined}
+            onChange={handleAttendanceDeadLineChange}
+            disabled={session.attendanceDeadLine === undefined ? true : false}
           />
         </InfoBox>
         <InfoBox>
           <input
-            placeholder="출석 인정 시간 (19:20:00 형식으로 정확히 입력하세요.)"
-            value={session.attendanceDeadLine || undefined}
-            disabled={session.attendanceDeadLine === undefined ? true : false}
+            placeholder="지각 인정 시간 (19:20:00 형식으로 정확히 입력하세요.)"
+            value={session.lateDeadLine || undefined}
+            onChange={handleDeadlineChange}
+            disabled={session.lateDeadLine === undefined ? true : false}
           />
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
@@ -487,6 +511,7 @@ const ContentsInputWrapper = styled.span`
   gap: 0.6rem;
 
   > span {
+    color: #6a6967;
     color: ${({ theme }) => theme.colors.gray100};
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.md};

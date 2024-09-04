@@ -1,13 +1,13 @@
 import useSWR from 'swr';
 import fetcher from './fetcher';
-import type { MemberData } from '@/typing/db';
+import { CotatoMemberInfoResponse } from 'cotato-openapi-clients';
 /**
  * fetch user's name, role, and etc
  * @returns {Object}
  */
 
 interface FetchUserData {
-  data: MemberData;
+  data: CotatoMemberInfoResponse;
   isLoading: boolean;
 }
 

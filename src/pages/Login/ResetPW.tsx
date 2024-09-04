@@ -146,7 +146,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 120px;
+  padding: 5rem 0;
   h3 {
     font-size: 1.8rem;
     margin-bottom: 56px;

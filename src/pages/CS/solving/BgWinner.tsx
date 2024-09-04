@@ -3,19 +3,22 @@ import styled from 'styled-components';
 import background from '@assets/bg_kingking.svg';
 import mobile from '@assets/bg_kingking_mobile.svg';
 import api from '@/api/api';
+import { CotatoWinnerInfoResponse } from 'cotato-openapi-clients';
 
-type Winner = {
-  memberId: number;
-  memberName: string;
-  backFourNumber: string;
-};
+//
+//
+//
 
 interface BgWinnerProps {
   quizId: number | null;
 }
 
+//
+//
+//
+
 const BgWinner: React.FC<BgWinnerProps> = ({ quizId }) => {
-  const [winner, setWinner] = useState<Winner>();
+  const [winner, setWinner] = useState<CotatoWinnerInfoResponse>();
   const [educationId, setEducationId] = useState<number>(0);
 
   useEffect(() => {
@@ -66,7 +69,7 @@ const BgWinner: React.FC<BgWinnerProps> = ({ quizId }) => {
       <h3>퀴즈 우승자</h3>
       <p>축하합니다!</p>
       <div className="box">
-        {winner?.memberName}({winner?.backFourNumber})
+        {winner?.name}({winner?.backFourNumber})
       </div>
     </Wrapper>
   );

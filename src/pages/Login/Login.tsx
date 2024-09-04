@@ -144,9 +144,7 @@ const Login = () => {
    *
    */
   const renderLogin = () => {
-    if (isSuccess) {
-      return null;
-    }
+    if (isSuccess) return;
 
     return (
       <>
@@ -160,24 +158,10 @@ const Login = () => {
    *
    */
   const renderLoginSuccess = () => {
-    if (!isSuccess) {
-      return null;
-    }
+    if (!isSuccess) return;
 
     return <LoginSuccess />;
   };
-
-  //
-  //
-  //
-  useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-    if (isLoading) {
-      return;
-    }
-  }, [user, isLoading]);
 
   return (
     <Wrapper>

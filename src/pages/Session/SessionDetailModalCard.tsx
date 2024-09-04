@@ -6,13 +6,13 @@ import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
 import { ReactComponent as HomeIcon } from '@assets/home_icon_dotted.svg';
-import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted_bg.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import SessionContents from '@components/Session/SessionContents';
 import { device, media } from '@theme/media';
 import { useMediaQuery } from '@mui/material';
 import fetchUserData from '@utils/fetchUserData';
 import { useGeneration } from '@/hooks/useGeneration';
+import dayjs from 'dayjs';
 
 //
 //
@@ -69,9 +69,14 @@ const SessionDetailModalCard = ({
    */
   const renderCardInfo = () => {
     const infoList = [
-      { icon: <CalendarIcon />, title: '일시', content: '-' },
-      { icon: <HomeIcon />, title: '장소', content: '-' },
-      { icon: <CheckIcon />, title: '출석 인정시간', content: '-' },
+      {
+        icon: <CalendarIcon />,
+        title: '일시',
+        content: session?.sessionDate
+          ? dayjs(session?.sessionDate).format('YYYY년 MM월 DD일')
+          : '-',
+      },
+      { icon: <HomeIcon />, title: '장소', content: session?.placeName || '-' },
     ];
 
     return (

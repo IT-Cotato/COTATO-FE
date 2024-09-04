@@ -22,10 +22,21 @@ const GlobalBackgroundSvgComponent = () => {
   const yellowStarColor = theme.colors.primary60;
   const orangeStarColor = theme.colors.secondary40;
 
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+
   //
   //
   //
   React.useLayoutEffect(() => {
+    if (width < windowWidth || height < windowHeight) {
+      setViewPort({
+        width: windowWidth,
+        height: windowHeight,
+      });
+      return;
+    }
+
     setViewPort({
       width,
       height: viewPortHeight,
@@ -40,13 +51,17 @@ const GlobalBackgroundSvgComponent = () => {
     <svg
       width={viewPort.width}
       height={viewPort.height}
-      viewBox={`0 0 ${viewPort.width} ${viewPort.height}`}
+      viewBox={`0 0 ${viewPort.width < windowWidth ? windowWidth : viewPort.width} ${
+        viewPort.height < windowHeight ? windowHeight : viewPort.height
+      }`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         position: 'fixed',
         width: '100vw !important',
         height: '100vh !important',
+        minWidth: '100vw',
+        minHeight: '100vh',
         zIndex: -1,
         background: theme.colors.common.white,
         transition: THEME_CHANGE_TRANSITION,
