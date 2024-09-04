@@ -1,14 +1,11 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Divider, Stack } from '@mui/material';
 import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import SignUpUserAgreementItem from '@components/SignUp/SignUpUserAgreementItem';
-import { v4 as uuid } from 'uuid';
+
 import { produce } from 'immer';
-import api from '@/api/api';
-import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
-import { CotatoPoliciesResponse } from 'cotato-openapi-clients';
+import { CotatoPolicyInfoResponse } from 'cotato-openapi-clients';
 
 //
 //
@@ -16,8 +13,9 @@ import { CotatoPoliciesResponse } from 'cotato-openapi-clients';
 
 interface SignUpUserAgreementItemProps {
   isCheckedAll: boolean;
-  setIsCheckedAll: React.Dispatch<React.SetStateAction<boolean>>;
   isChecked: Map<number, boolean>;
+  policies?: CotatoPolicyInfoResponse[];
+  setIsCheckedAll: React.Dispatch<React.SetStateAction<boolean>>;
   setIsChecked: React.Dispatch<React.SetStateAction<Map<number, boolean>>>;
 }
 
@@ -26,18 +24,13 @@ interface SignUpUserAgreementItemProps {
 //
 
 const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
+  policies,
   isCheckedAll,
   setIsCheckedAll,
   isChecked,
   setIsChecked,
 }) => {
   const theme = useTheme();
-  const { data: policiesData } = useSWR<CotatoPoliciesResponse>('/v2/api/policies', fetcher, {
-    revalidateOnFocus: false,
-    keepPreviousData: true,
-  });
-
-  const policies = policiesData?.policies;
 
   /**
    * handler for the click event of the entire agreement button
