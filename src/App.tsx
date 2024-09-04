@@ -21,11 +21,13 @@ import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
 import Projects from '@pages/Projects/Projects';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
+import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 
 function App() {
   const location = useLocation();
-  const isInHome = location.pathname === '/';
 
+  const isInHome = location.pathname === '/';
+  const isAttendance = location.pathname.includes('/attendance');
   //
   //
   //
@@ -37,8 +39,6 @@ function App() {
     }
   }, [isInHome]);
 
-  const isAttendance = useLocation().pathname.includes('/attendance');
-
   //
   //
   //
@@ -48,11 +48,11 @@ function App() {
       <CotatoThemeProvider>
         <GlobalStyle />
         <Header />
+        <AgreementConfirmDialog />
         <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/about" element={<ReadyState />} />
           <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
