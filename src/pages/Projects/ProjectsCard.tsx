@@ -71,7 +71,7 @@ const ProjectsCard = ({
     <StyledStack
       id={projectId?.toString()}
       justifyContent="center"
-      padding="1.5rem"
+      padding="0.25rem 1.5rem 1.5rem"
       gap="2rem"
       bgcolor={theme.colors.common.real_white}
       borderRadius="0.625rem"
@@ -98,7 +98,13 @@ const ProjectsCard = ({
           >
             {renderInfo()}
           </Stack>
-          <Typography fontSize="1rem" color={theme.colors.gray80_2}>
+          <Typography
+            fontSize="1rem"
+            color={theme.colors.common.black_const}
+            width="15rem"
+            maxWidth="15rem"
+            height="3rem"
+          >
             {introduction}
           </Typography>
         </Stack>
@@ -132,5 +138,6 @@ const Introduction = styled.p`
   margin: 0;
   font-size: 1.5rem;
   font-family: Pretendard;
+
   color: ${({ theme }) => theme.colors.common.black_const};
 `;

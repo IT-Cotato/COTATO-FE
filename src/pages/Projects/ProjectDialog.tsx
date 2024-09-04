@@ -45,11 +45,10 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
       imageInfo.projectImageType === CotatoProjectImageInfoResponseProjectImageTypeEnum.Thumbnail,
   );
 
-  // TODO: add details bottom the dialog
-  //   const details = imageInfos?.filter(
-  //     (imageInfo) =>
-  //       imageInfo.projectImageType === CotatoProjectImageInfoResponseProjectImageTypeEnum.Detail,
-  //   );
+  const details = imageInfos?.filter(
+    (imageInfo) =>
+      imageInfo.projectImageType === CotatoProjectImageInfoResponseProjectImageTypeEnum.Detail,
+  );
 
   const memberPositionMap = {
     BE: isLandScapeOrSmaller ? 'BE' : 'BACK-END',
@@ -197,6 +196,23 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             </Stack>
           </Stack>
         </Box>
+        <Stack>
+          {details?.map((detail) => (
+            <Box
+              key={detail.imageId}
+              display="flex"
+              alignItems="flex-start"
+              width="100%"
+              sx={{
+                objectFit: 'cover',
+                objectPosition: 'top',
+              }}
+              component="img"
+              src={detail.imageUrl}
+              alt="detail"
+            />
+          ))}
+        </Stack>
       </StyledDialogContent>
     </Dialog>
   );
