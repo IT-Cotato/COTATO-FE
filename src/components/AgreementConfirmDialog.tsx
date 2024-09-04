@@ -41,6 +41,7 @@ const AgreementConfirmDialog = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const isOverRefused = MemberRole[user?.role ?? 'REFUSED'] >= MemberRole.REFUSED;
+  const alreadyAgreed = localStorage.getItem('agreement') === 'true';
 
   /**
    *
@@ -114,7 +115,13 @@ const AgreementConfirmDialog = () => {
       .then(() => {
         setIsLoading(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        // TODO: add error code
+        if (error.response.data.code === 'P-301') {
+          localStorage.setItem('agreement', 'true');
+          return;
+        }
+
         alert(
           '약관 동의에 실패했습니다. 네트워크 상태를 확인해주세요. 현상이 지속될 경우 운영진 문의 부탁드립니다.',
         );
@@ -237,7 +244,7 @@ const AgreementConfirmDialog = () => {
   //
 
   return (
-    <StyledDialog open={Boolean(essentialPolicies.length && isOverRefused)}>
+    <StyledDialog open={Boolean(essentialPolicies.length && isOverRefused && !alreadyAgreed)}>
       <DialogTitle>{renderTitle()}</DialogTitle>
       <DialogContent>
         <Stack gap="1rem">{renderPolicies()}</Stack>
