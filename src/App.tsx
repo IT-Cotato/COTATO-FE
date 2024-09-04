@@ -21,6 +21,7 @@ import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
 import Projects from '@pages/Projects/Projects';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
+import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 
 function App() {
   const location = useLocation();
@@ -48,6 +49,7 @@ function App() {
       <CotatoThemeProvider>
         <GlobalStyle />
         <Header />
+        <AgreementConfirmDialog />
         <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
