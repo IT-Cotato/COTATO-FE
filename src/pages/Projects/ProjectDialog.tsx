@@ -174,8 +174,8 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             isLandScapeOrSmaller
               ? '1.8rem 1.5rem 0 1.5rem'
               : isTabletOrSmaller
-                ? '2rem 1.8rem'
-                : '3rem 3.5rem'
+              ? '2rem 1.8rem'
+              : '3rem 3.5rem'
           }
         >
           <Stack direction="row" justifyContent="space-between">

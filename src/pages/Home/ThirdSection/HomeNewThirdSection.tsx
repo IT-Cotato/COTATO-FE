@@ -158,8 +158,8 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
                       isMobileOrSmaller
                         ? `calc(${width} * 0.7)`
                         : isTabletOrSmaller
-                          ? `calc(${width} * 0.9)`
-                          : width
+                        ? `calc(${width} * 0.9)`
+                        : width
                     }
                     height={height}
                   />
