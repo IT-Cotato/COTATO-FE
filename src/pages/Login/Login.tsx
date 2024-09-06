@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import idIcon from '@assets/login_id_icon.svg';
@@ -33,11 +33,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const {
-    data: user,
-    mutate,
-    isLoading,
-  } = useSWR('/v1/api/member/info', fetcher, {
+  const { mutate } = useSWR('/v1/api/member/info', fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -144,9 +140,7 @@ const Login = () => {
    *
    */
   const renderLogin = () => {
-    if (isSuccess) {
-      return null;
-    }
+    if (isSuccess) return;
 
     return (
       <>
@@ -160,24 +154,10 @@ const Login = () => {
    *
    */
   const renderLoginSuccess = () => {
-    if (!isSuccess) {
-      return null;
-    }
+    if (!isSuccess) return;
 
     return <LoginSuccess />;
   };
-
-  //
-  //
-  //
-  useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-    if (isLoading) {
-      return;
-    }
-  }, [user, isLoading]);
 
   return (
     <Wrapper>
