@@ -6,6 +6,8 @@ import { ReactComponent as ArrowDown } from '@assets/pixel_arrow_down.svg';
 import { ReactComponent as ArrowUp } from '@assets/pixel_arrow_up.svg';
 import { produce, enableMapSet } from 'immer';
 import { CotatoPolicyInfoResponse, CotatoPolicyInfoResponseTypeEnum } from 'cotato-openapi-clients';
+import { marked } from 'marked';
+import { sanitize } from 'dompurify';
 
 //
 //
@@ -71,9 +73,20 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
       return null;
     }
 
+    const parsedHtml = marked.parse(content) as string;
+
     return (
-      <Box sx={{ padding: '0.6rem 1.5rem' }}>
-        <ContentText>{content}</ContentText>
+      <Box sx={{ padding: '0.5rem 1.5rem' }}>
+        <div
+          style={{
+            fontSize: theme.fontSize.xs,
+            color: theme.colors.common.black,
+            lineHeight: '1rem',
+            wordBreak: 'keep-all',
+            whiteSpace: 'pre-wrap',
+          }}
+          dangerouslySetInnerHTML={{ __html: sanitize(parsedHtml) }}
+        />
       </Box>
     );
   };
@@ -109,6 +122,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
+
+  * {
+    font-family: Pretendard !important;
+  }
 `;
 
 const ItemDiv = styled.div`
@@ -142,16 +159,6 @@ const ContentSection = styled.div`
     font-size: ${({ theme }) => theme.fontSize.sm};
     font-family: Pretendard;
   }
-`;
-
-const ContentText = styled.p`
-  margin: 0;
-  font-family: Pretendard;
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  color: ${({ theme }) => theme.colors.common.black};
-  line-height: 1rem;
-  word-break: keep-all;
-  white-space: pre-wrap;
 `;
 
 export default SignUpUserAgreementItem;
