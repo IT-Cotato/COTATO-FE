@@ -16,13 +16,15 @@ import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg'
 import { ReactComponent as OfflineIcon } from '@assets/attendance_offline_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
-import { Divider } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
 import { useGeneration } from '@/hooks/useGeneration';
 import {
   AttendanceListLayoutType,
   useAttendanceListLayoutStore,
 } from '@/zustand-stores/useAttendanceListLayoutStore';
+import useUser from '@/hooks/useUser';
+import { MemberRole } from '@/enums';
 
 //
 //
@@ -33,6 +35,9 @@ const AttendanceList = () => {
   const navigate = useNavigate();
   const { generationId } = useParams();
   const { currentGeneration } = useGeneration();
+  const { user } = useUser();
+
+  const isAdmin = MemberRole[user?.role ?? 'REFUSED'] >= MemberRole.EDUCATION;
 
   const { data: attendanceResponse } = useSWR<CotatoMemberAttendanceRecordsResponse>(
     '/v2/api/attendances/records/members',
@@ -40,7 +45,6 @@ const AttendanceList = () => {
   );
 
   const [, setSearchParams] = useSearchParams();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { listLayoutType: view } = useAttendanceListLayoutStore();
 
   /**
@@ -62,6 +66,14 @@ const AttendanceList = () => {
   /**
    *
    */
+  const handleClickReport = () => {
+    const currentMonth = new Date().getMonth() + 1;
+    navigate(`/attendance/report/${generationId}/month/${currentMonth}`);
+  };
+
+  /**
+   *
+   */
   const renderListCards = () => {
     if (!attendanceResponse || !attendanceResponse.memberAttendResponses) {
       return null;
@@ -71,7 +83,7 @@ const AttendanceList = () => {
       return null;
     }
 
-    let cardBackgrooundColorListIndex = 0;
+    let cardBackgroundColorListIndex = 0;
     const cardBackgroundColorList = [
       theme.colors.pastelTone.yellow[100],
       theme.colors.pastelTone.pink[100],
@@ -82,9 +94,9 @@ const AttendanceList = () => {
         return theme.colors.pastelTone.blue[100];
       }
 
-      const color = cardBackgroundColorList[cardBackgrooundColorListIndex];
-      cardBackgrooundColorListIndex =
-        (cardBackgrooundColorListIndex + 1) % cardBackgroundColorList.length;
+      const color = cardBackgroundColorList[cardBackgroundColorListIndex];
+      cardBackgroundColorListIndex =
+        (cardBackgroundColorListIndex + 1) % cardBackgroundColorList.length;
       return color;
     };
 
@@ -121,6 +133,9 @@ const AttendanceList = () => {
     );
   };
 
+  /**
+   *
+   */
   const renderGridCards = () => {
     if (!attendanceResponse || !attendanceResponse.memberAttendResponses) {
       return null;
@@ -167,6 +182,21 @@ const AttendanceList = () => {
     );
   };
 
+  /**
+   *
+   */
+  const renderActions = () => {
+    if (!isAdmin) {
+      return null;
+    }
+
+    return (
+      <Stack alignItems="center" onClick={handleClickReport}>
+        <StyledButton>출석부 확인하기</StyledButton>
+      </Stack>
+    );
+  };
+
   //
   //
   //
@@ -179,8 +209,11 @@ const AttendanceList = () => {
   //
   return (
     <Wrapper>
-      {renderListCards()}
-      {renderGridCards()}
+      <Stack>
+        {renderListCards()}
+        {renderGridCards()}
+        {renderActions()}
+      </Stack>
     </Wrapper>
   );
 };
@@ -307,6 +340,20 @@ const GridContainer = styled.div`
     grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));  
     gap: 1rem;
   `}
+`;
+
+const StyledButton = styled.button`
+  width: 17.625rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background-color: ${({ theme }) => theme.colors.common.white_const};
+  border: ${({ theme }) => `1px solid ${theme.colors.primary100_1}`};
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary50};
+  }
 `;
 
 export default AttendanceList;
