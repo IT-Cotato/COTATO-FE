@@ -1,18 +1,19 @@
 import useSWR from 'swr';
 import fetcher from './fetcher';
-import type { MemberData } from '@/typing/db';
+import { CotatoMemberInfoResponse } from 'cotato-openapi-clients';
 /**
  * fetch user's name, role, and etc
  * @returns {Object}
  */
 
 interface FetchUserData {
-  data: MemberData;
+  data: CotatoMemberInfoResponse;
   isLoading: boolean;
+  mutate: () => void;
 }
 
 export default function fetchUserData(): FetchUserData {
-  const { data, isLoading } = useSWR('/v1/api/member/info', fetcher, {
+  const { data, isLoading, mutate } = useSWR('/v1/api/member/info', fetcher, {
     revalidateOnFocus: false,
     revalidateIfStale: false,
     dedupingInterval: 6000000, // 10분동안은 데이터가 변경되지 않는 한 재요청이 발생하지 않음
@@ -21,5 +22,5 @@ export default function fetchUserData(): FetchUserData {
       if (retryCount >= 10) return;
     },
   });
-  return { data, isLoading };
+  return { data, isLoading, mutate };
 }

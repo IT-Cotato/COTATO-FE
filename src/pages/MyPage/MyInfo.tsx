@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import useSWRImmutable from 'swr/immutable';
 import { IMyPageInfo } from '@/typing/db';
-import api from '@/api/api';
+import { logout } from '@utils/logout';
 
 const MyInfo = () => {
   const { data: user } = useSWR('/v1/api/member/info', fetcher);
@@ -17,20 +17,7 @@ const MyInfo = () => {
   );
 
   const onClickLogout = useCallback(() => {
-    api
-      .post('v1/api/auth/logout', {
-        accessToken: localStorage.getItem('token'),
-      })
-      .then(() => {
-        localStorage.clear();
-        window.location.replace('/');
-      })
-      .catch((err) => {
-        console.error(err);
-        // 에러 발생해도 로그아웃 로직
-        localStorage.clear();
-        window.location.replace('/');
-      });
+    logout();
   }, []);
 
   return (
@@ -78,7 +65,7 @@ const MyInfo = () => {
             <InfoWrapper>
               <p>포지션</p>
               <TextContainer>
-                <p>{myInfo?.memberPosition}</p>
+                <p>{myInfo?.position}</p>
               </TextContainer>
             </InfoWrapper>
             <InfoWrapper>

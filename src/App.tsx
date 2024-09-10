@@ -8,7 +8,6 @@ import Session from '@pages/Session/Session';
 import SignUp from '@pages/JoinUs/SignUp';
 import MyPage from '@pages/MyPage/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
-import Footer from '@components/Footer';
 import FindID from '@pages/Login/FindID';
 import FindPWProcess from '@pages/Login/FindPWProcess';
 import ReadyState from '@components/ReadyState';
@@ -18,10 +17,28 @@ import CSPage from '@pages/CS/CSPage';
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
+import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
+import Projects from '@pages/Projects/Projects';
+import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
+import { AttendanceFab } from '@components/attendance/attendance-fab';
+import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 
 function App() {
   const location = useLocation();
   const isInHome = location.pathname === '/';
+
+  //
+  //
+  //
+  React.useEffect(() => {
+    if (isInHome) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isInHome]);
+
+  const isAttendance = useLocation().pathname.includes('/attendance');
 
   //
   //
@@ -32,23 +49,26 @@ function App() {
       <CotatoThemeProvider>
         <GlobalStyle />
         <Header />
+        <AgreementConfirmDialog />
         <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<ReadyState />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/about" element={<ReadyState />} />
-          <Route path="/products" element={<ReadyState />} />
+          <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
-          <Route path="/session" element={<Session />} />
+          <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/signin" element={<Login />} />
           <Route path="/findid" element={<FindID />} />
           <Route path="/findpw" element={<FindPWProcess />} />
           <Route path="/joinus" element={<SignUp />} />
           <Route path="/mypage/*" element={<MyPage />} />
+          <Route path="/products" element={<ReadyState />} />
+          <Route path="/projects" element={<ReadyState />} />
+          <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
-        {isInHome ? null : <Footer />}
+        {isAttendance ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>
   );

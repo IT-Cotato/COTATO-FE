@@ -1,16 +1,14 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Mousewheel, Pagination } from 'swiper/modules';
 import styled from 'styled-components';
-import useMediaQuery from '@mui/material/useMediaQuery';
+
 import HomeFirstSection from './FirstSection/HomeFirstSection';
-import HomeThirdSection from './ThirdSection/HomeThirdSection';
-import Footer from '@components/Footer';
-import { device } from '@theme/media';
+import HomeNewThirdSection from './ThirdSection/HomeNewThirdSection';
 import HomeNewSecondSection from './SecondSection/HomeNewSecondSection';
 
 //
@@ -22,7 +20,6 @@ const SWIPER_SLIDES_PER_VIEW = 1;
 const MOUSE_WHEEL_OPTION = {
   forceToAxis: true,
   sensitivity: 1,
-  releaseOnEdges: true,
 };
 
 //
@@ -30,7 +27,16 @@ const MOUSE_WHEEL_OPTION = {
 //
 
 const HomeSlide = () => {
-  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const swiperRef = React.useRef<SwiperClass | null>();
+
+  /**
+   *
+   */
+  const handleBackToFirstSlide = () => {
+    if (swiperRef?.current) {
+      swiperRef.current.slideTo(0); // Go to the first slide
+    }
+  };
 
   return (
     <>
@@ -41,6 +47,9 @@ const HomeSlide = () => {
         modules={[Mousewheel, Pagination]}
         mousewheel={MOUSE_WHEEL_OPTION}
         autoHeight={true}
+        onSwiper={(swiper: SwiperClass) => {
+          swiperRef.current = swiper;
+        }}
       >
         {/* First Section */}
         <StyledSwiperSlide>
@@ -52,13 +61,8 @@ const HomeSlide = () => {
         </StyledSwiperSlide>
         {/* Third Section */}
         <StyledSwiperSlide>
-          <HomeThirdSection />
+          <HomeNewThirdSection handleBackToFirstSlide={handleBackToFirstSlide} />
         </StyledSwiperSlide>
-        {!isTabletOrSmaller && <SwiperSlide />}
-        {/* Footer */}
-        <FooterSwiperSlide>
-          <Footer />
-        </FooterSwiperSlide>
       </StyledSwiper>
     </>
   );
@@ -85,15 +89,6 @@ const StyledSwiperSlide = styled(SwiperSlide)`
   display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
-`;
-
-const FooterSwiperSlide = styled(SwiperSlide)`
-  height: 100vh;
-  display: flex;
-  align-items: flex-end;
 `;

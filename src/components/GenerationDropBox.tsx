@@ -4,12 +4,11 @@ import { ReactComponent as ArrowDown } from '@assets/arrow_down_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { v4 as uuid } from 'uuid';
 import generationSort from '@utils/newGenerationSort';
-import fetcher from '@utils/fetcher';
-import useSWR from 'swr';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import { useSearchParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -54,10 +53,7 @@ const GenerationDropBox = ({
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
-  const { data: rawGenerations } = useSWR<CotatoGenerationInfoResponse[]>(
-    '/v1/api/generation',
-    fetcher,
-  );
+  const { generations: rawGenerations } = useGeneration();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -92,7 +88,7 @@ const GenerationDropBox = ({
    */
   const setGenerationSearchParam = (generation: CotatoGenerationInfoResponse) => {
     if (generation?.generationId) {
-      setSearchParams({ 'generation-id': generation.generationId.toString() });
+      setSearchParams({ generationId: generation.generationId.toString() });
     }
   };
 
@@ -143,16 +139,18 @@ const GenerationDropBox = ({
   const renderDropDownList = () => (
     <DropDownList className={isDropBoxOpen ? 'fade-in' : 'fade-out'}>
       <ul>
-        {generations.map((generation) => (
-          <li
-            key={uuid()}
-            className={generation === selectedGeneration ? 'selected' : ''}
-            onClick={() => handleGenerationClick(generation)}
-          >
-            {generation === selectedGeneration && <StyledCheckIcon />}
-            {generation.generationNumber}기
-          </li>
-        ))}
+        {generations
+          .filter((generation) => generation?.generationNumber && generation.generationNumber >= 8)
+          .map((generation) => (
+            <li
+              key={uuid()}
+              className={generation === selectedGeneration ? 'selected' : ''}
+              onClick={() => handleGenerationClick(generation)}
+            >
+              {generation === selectedGeneration && <StyledCheckIcon />}
+              {generation.generationNumber}기
+            </li>
+          ))}
       </ul>
     </DropDownList>
   );
@@ -182,9 +180,12 @@ const GenerationDropBox = ({
     }
 
     const sortedGenerations = generationSort(rawGenerations);
+    // .filter(
+    //   (generation) => generation.generationNumber && generation.generationNumber >= 8,
+    // );
     setGenerations(sortedGenerations);
 
-    const generationId = searchParams.get('generation-id');
+    const generationId = searchParams.get('generationId');
     const searchedGeneration = sortedGenerations.find(
       (generation) => generation.generationId === Number(generationId),
     );
@@ -281,9 +282,9 @@ const DropDownList = styled.div`
     visibility ${FADE_DURATION}ms;
 
   > ul {
-    background-color: ${({ theme }) => theme.colors.common.white};
+    background-color: ${({ theme }) => theme.colors.common.white_const};
     padding: 0;
-    margin: ${({ theme }) => theme.size.sm} 0;
+    margin: 0.25rem 0;
 
     > li {
       list-style-type: none;

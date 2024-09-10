@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import idIcon from '@assets/login_id_icon.svg';
 import passwordIcon from '@assets/login_pw_icon.svg';
-import btnDefault from '@assets/login_btn_default.svg';
-import btnHover from '@assets/login_btn_hover.svg';
-import btnClicked from '@assets/login_btn_clicked.svg';
 import line from '@assets/login_line.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '@/api/api';
@@ -14,12 +11,8 @@ import fetcher from '@utils/fetcher';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import LoginSuccess from '@components/LoginSuccess';
-
-//
-//
-//
-
-type btnStateType = 'default' | 'hover' | 'clicked';
+import CotatoPixelButton from '@components/CotatoPixelButton';
+import { ReactComponent as ButtonText } from '@assets/login_btn_text.svg';
 
 //
 //
@@ -32,7 +25,6 @@ const DELAY_TIME = 3000;
 //
 
 const Login = () => {
-  const [btnState, setBtnState] = useState<btnStateType>('default');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -41,11 +33,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const {
-    data: user,
-    mutate,
-    isLoading,
-  } = useSWR('/v1/api/member/info', fetcher, {
+  const { mutate } = useSWR('/v1/api/member/info', fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -104,22 +92,6 @@ const Login = () => {
   /**
    *
    */
-  const getImgSrcByState = (state: btnStateType) => {
-    switch (state) {
-      case 'default':
-        return btnDefault;
-      case 'hover':
-        return btnHover;
-      case 'clicked':
-        return btnClicked;
-      default:
-        return btnDefault;
-    }
-  };
-
-  /**
-   *
-   */
   const renderLoginForm = () => {
     return (
       <>
@@ -141,16 +113,7 @@ const Login = () => {
               />
             </InputBox>
           </InputContainer>
-          <ButtonContainer>
-            <LoginBtn
-              type="submit"
-              onMouseOver={() => setBtnState('hover')}
-              onMouseLeave={() => setBtnState('default')}
-              onClick={() => setBtnState('clicked')}
-            >
-              <img src={getImgSrcByState(btnState)} style={{ width: '120px' }} />
-            </LoginBtn>
-          </ButtonContainer>
+          <CotatoPixelButton BtnTextImg={ButtonText} />
         </Form>
       </>
     );
@@ -177,9 +140,7 @@ const Login = () => {
    *
    */
   const renderLogin = () => {
-    if (isSuccess) {
-      return null;
-    }
+    if (isSuccess) return;
 
     return (
       <>
@@ -193,24 +154,10 @@ const Login = () => {
    *
    */
   const renderLoginSuccess = () => {
-    if (!isSuccess) {
-      return null;
-    }
+    if (!isSuccess) return;
 
     return <LoginSuccess />;
   };
-
-  //
-  //
-  //
-  useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-    if (isLoading) {
-      return;
-    }
-  }, [user, isLoading]);
 
   return (
     <Wrapper>
@@ -270,12 +217,13 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0 1.25rem;
   &:first-child {
     margin-bottom: 1rem;
   }
   input {
     border: none;
-    width: 512px;
+    width: 100%;
     &:focus {
       outline: none;
     }
@@ -288,9 +236,9 @@ const InputBox = styled.div`
   img {
     width: 16px;
     height: 16px;
-    margin-left: 1.25rem;
     margin-right: 0.8rem;
   }
+
   ${media.landscape`
     width: 350px;
   `}
@@ -299,40 +247,12 @@ const InputBox = styled.div`
   `}
 `;
 
-const ButtonContainer = styled.div`
-  height: 5rem;
-  display: flex;
-  align-items: end;
-`;
-
-const LoginBtn = styled.button`
-  background: none;
-  border: none;
-  &:hover {
-    animation: spring 0.1s ease-out 0.1s;
-  }
-  @keyframes spring {
-    0% {
-      transform: scaleY(1);
-    }
-    40% {
-      transform: scaleY(0.99);
-    }
-    60% {
-      transform: scaleY(1.01);
-    }
-    100% {
-      transform: scaleY(1);
-    }
-  }
-`;
-
 const LinkContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: fit-content;
+  width: 25rem;
   height: fit-content;
   padding: 0.6rem 1.25rem;
   border-radius: 0.5rem;
@@ -341,7 +261,9 @@ const LinkContainer = styled.div`
   img {
     margin: 0 20px;
   }
+
   ${media.mobile`
+    width: 18rem;
     img {
       margin: 0 12px;
     }

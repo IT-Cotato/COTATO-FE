@@ -5,7 +5,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import SessionUploadModalImageInputThumnail from '@pages/Session/SessionUploadModalImageInputThumnail';
 import { SessionListImageInfo } from '@/typing/session';
 import { ReactComponent as ImageCloseIcon } from '@assets/close_dotted.svg';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import imageSortByOrder from '@utils/imageSortByOrder';
 import { produce } from 'immer';
 import { CotatoSessionListImageInfoResponse } from 'cotato-openapi-clients';
@@ -42,7 +42,7 @@ const SessionUploadModalImageInput = ({
 }: SessionUploadModalImageInputProps) => {
   const [selectedImage, setSelectedImage] = useState<SessionListImageInfo | null>(null);
   const [sortedImageList, setSortedImageList] = useState<SessionListImageInfo[]>([]);
-  const [isImageLoading, setIsImageLoading] = useState(selectedImage?.imageUrl ? true : false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const theme = useTheme();
 
@@ -293,14 +293,20 @@ const SessionUploadModalImageInput = ({
    * If imageList is changed, set sortedImageList and selectedImage
    */
   useEffect(() => {
-    if (imageList.length > 0) {
+    if (
+      imageList.length > 0 &&
+      imageList.some((image, index) => image.imageUrl !== sortedImageList[index]?.imageUrl)
+    ) {
+      const newImageList = imageSortByOrder(imageList);
       if (sortedImageList.length === 0) {
-        setSelectedImage(imageList.find((image) => image.order === 0) || null);
+        setSelectedImage(newImageList[0]);
+        setIsImageLoading(true);
       }
-
-      if (imageList.some((image, index) => image.imageUrl !== sortedImageList[index]?.imageUrl)) {
-        setSortedImageList(imageSortByOrder(imageList));
-      }
+      setSortedImageList(newImageList);
+    } else if (imageList.length === 0) {
+      setSortedImageList([]);
+      setSelectedImage(null);
+      setIsImageLoading(false);
     }
   }, [imageList]);
 
@@ -323,12 +329,6 @@ const SessionUploadModalImageInput = ({
         {renderImageBox()}
         {renderImageDnd()}
       </ImageInputWrapper>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        pauseOnFocusLoss={false}
-        theme={localStorage.getItem('theme') || 'light'}
-      />
     </>
   );
 };

@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import EmailAuth from './EmailAuth';
 import api from '@/api/api';
+import { LoadingButton } from '@mui/lab';
 
 interface FindPWProps {
   goToNextStep: () => void;
@@ -15,6 +16,10 @@ interface FindPWProps {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
 
+//
+//
+//
+
 const FindPW: React.FC<FindPWProps> = ({
   goToNextStep,
   isEmail,
@@ -24,11 +29,10 @@ const FindPW: React.FC<FindPWProps> = ({
   email,
   setEmail,
 }) => {
-  // const [email, setEmail] = useState('');
   const [errMessage, setErrMessage] = useState('');
-  // const [isEmail, setIsEmail] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // const [showEmailAuth, setShowEmailAuth] = useState(false);
+  const theme = useTheme();
 
   const onChangeEmail = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,37 +57,35 @@ const FindPW: React.FC<FindPWProps> = ({
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
+      setIsLoading(true);
       e.preventDefault();
-      if (isEmail) {
-        console.log(email);
-        api
-          .post('/v1/api/auth/verification', emailData, {
-            params: {
-              type: 'find-password',
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            console.log('이메일이 발송되었습니다.');
-            goToNextStep();
-          })
-          .catch((err) => {
-            console.log(err);
-            if (err.response.status === 404) {
-              alert('존재하지 않는 계정입니다.');
-            }
-          });
-      } else if (!isEmail) {
+
+      if (!isEmail) {
         alert('이메일을 입력해주세요.');
+        setIsLoading(false);
         return;
       }
+
+      api
+        .post('/v1/api/auth/verification', emailData, {
+          params: {
+            type: 'find-password',
+          },
+        })
+        .then(() => {
+          setIsLoading(false);
+          goToNextStep();
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.status === 404) {
+            alert('존재하지 않는 계정입니다.');
+            setIsLoading(false);
+          }
+        });
     },
     [email],
   );
-
-  // if (showEmailAuth) {
-  //   return <EmailAuth />;
-  // }
 
   return (
     <Wrapper>
@@ -101,7 +103,21 @@ const FindPW: React.FC<FindPWProps> = ({
           />
           {!isEmail && <Error>{errMessage}</Error>}
         </Label>
-        <Button type="submit">인증 이메일 보내기</Button>
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          loading={isLoading}
+          sx={{
+            backgroundColor: theme.colors.primary100_2 + ' !important',
+            width: '500px',
+            height: '52px',
+            borderRadius: '2rem',
+            color: theme.colors.common.white,
+            opacity: isLoading ? '0.5 !important' : 1,
+          }}
+        >
+          인증 이메일 보내기
+        </LoadingButton>
       </Form>
     </Wrapper>
   );
@@ -171,18 +187,4 @@ const Error = styled.p`
   margin: 0;
   padding-left: 4px;
   padding-top: 4px;
-`;
-
-const Button = styled.button`
-  width: 500px;
-  height: 52px;
-  background: ${({ theme }) => theme.colors.primary100_2};
-  color: ${({ theme }) => theme.colors.common.white};
-  font-size: 1.1rem;
-  font-weight: 400;
-  border-radius: 28px;
-  border: none;
-  &:hover {
-    cursor: pointer;
-  }
 `;
