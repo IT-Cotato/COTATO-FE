@@ -131,6 +131,11 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ${media.tablet`
+    padding: 5rem 0;
+    justify-content: flex-start;
+  `}
 `;
 
 const Title = styled.div`
