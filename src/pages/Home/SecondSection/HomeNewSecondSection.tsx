@@ -29,14 +29,25 @@ import styles from './style.module.css';
 import { CotatoThemeType } from '@theme/theme';
 import { FreeMode } from 'swiper/modules';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
+import HomeNewSecondSectionMobileSwiper from './HomeNewSecondSectionMobileSwiper';
 
 //
 //
 //
 
-const LIGHT_ASSETS = [itLight, csLight, networkLight, hackathonLight, devtalkLight, demodayLight];
-const DARK_ASSETS = [itDark, csDark, networkDark, hackathonDark, devtalkDark, demodayDark];
-const CARD_INFOS = [
+export const LIGHT_ASSETS = [
+  itLight,
+  csLight,
+  networkLight,
+  hackathonLight,
+  devtalkLight,
+  demodayLight,
+];
+
+export const DARK_ASSETS = [itDark, csDark, networkDark, hackathonDark, devtalkDark, demodayDark];
+
+export const CARD_INFOS = [
   { title: 'IT 이슈', description: '각 팀별로 최신 IT 이슈에 대해 조사하고 발표합니다.' },
   {
     title: 'CS 교육',
@@ -53,7 +64,8 @@ const CARD_INFOS = [
     description: '주제별로 6개월 간 진행한 스터디와 프로젝트에서 각자 완성한 결과물을 발표합니다.',
   },
 ];
-const ICON_ASSETS = [
+
+export const ICON_ASSETS = [
   <ItIcon />,
   <CsIcon />,
   <NetworkIcon />,
@@ -68,7 +80,29 @@ const ICON_ASSETS = [
 
 const HomeNewSecondSection = () => {
   const theme = useTheme();
+  const { isLandScapeOrSmaller } = useBreakpoints();
+
   const { DefaultTheme } = React.useContext(ThemeContext);
+
+  /**
+   *
+   */
+  const renderDesktopSwiper = () => {
+    return (
+      <StyledSwiper freeMode={true} slidesPerView="auto" spaceBetween={25} modules={[FreeMode]}>
+        {Array.from({ length: 6 }).map((_, index) => (
+          <StyledSwiperSlide key={`home-section-two-slide-${index}`}>
+            <HomeSecondSectionCard
+              imgSrc={DefaultTheme === 'light' ? LIGHT_ASSETS[index] : DARK_ASSETS[index]}
+              title={CARD_INFOS[index].title}
+              description={CARD_INFOS[index].description}
+              icon={ICON_ASSETS[index]}
+            />
+          </StyledSwiperSlide>
+        ))}
+      </StyledSwiper>
+    );
+  };
 
   //
   //
@@ -80,18 +114,7 @@ const HomeNewSecondSection = () => {
         <SectionTwoTitle fill={theme.colors.gray80_2} className={styles['section_two_title']} />
         <p>코테이토의 활동을 소개할게요!</p>
       </Title>
-      <StyledSwiper freeMode={true} slidesPerView="auto" spaceBetween={25} modules={[FreeMode]}>
-        {Array.from({ length: 6 }).map((_, index) => (
-          <StyledSwiperSlide key={index}>
-            <HomeSecondSectionCard
-              imgSrc={DefaultTheme === 'light' ? LIGHT_ASSETS[index] : DARK_ASSETS[index]}
-              title={CARD_INFOS[index].title}
-              description={CARD_INFOS[index].description}
-              icon={ICON_ASSETS[index]}
-            />
-          </StyledSwiperSlide>
-        ))}
-      </StyledSwiper>
+      {isLandScapeOrSmaller ? <HomeNewSecondSectionMobileSwiper /> : renderDesktopSwiper()}
     </Wrapper>
   );
 };
@@ -119,8 +142,8 @@ const Title = styled.div`
     height: 40px;
   }
   p {
-    margin-top: 20px;
-    margin-bottom: 60px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
     font-size: ${({ theme }) => theme.fontSize.xl};
     font-weight: 700;
     color: ${({ theme }) => theme.colors.gray80_2};
@@ -143,11 +166,6 @@ const StyledSwiper = styled(Swiper)`
   ${media.tablet`
     padding-left: 4rem;
     padding-right: 4rem;
-  `}
-
-  ${media.mobile`
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
   `}
 `;
 
