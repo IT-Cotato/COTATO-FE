@@ -67,7 +67,7 @@ const GenerationModal = ({ modalOpen, setModalOpen }: Props) => {
     }
 
     api
-      .post('v1/api/generation/add', {
+      .post('/v1/api/generation/add', {
         generationNumber: parseInt(generation),
         sessionCount: parseInt(sessionCount),
         startDate: dates?.at(0),
