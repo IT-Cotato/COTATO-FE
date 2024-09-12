@@ -8,8 +8,8 @@ import { Mousewheel, Pagination } from 'swiper/modules';
 import styled from 'styled-components';
 
 import HomeFirstSection from './FirstSection/HomeFirstSection';
-import HomeSecondSection from './SecondSection/HomeSecondSection';
 import HomeNewThirdSection from './ThirdSection/HomeNewThirdSection';
+import HomeNewSecondSection from './SecondSection/HomeNewSecondSection';
 
 //
 //
@@ -57,7 +57,7 @@ const HomeSlide = () => {
         </StyledSwiperSlide>
         {/* Second Section */}
         <StyledSwiperSlide>
-          <HomeSecondSection />
+          <HomeNewSecondSection />
         </StyledSwiperSlide>
         {/* Third Section */}
         <StyledSwiperSlide>
