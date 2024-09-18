@@ -48,7 +48,7 @@ const INITIAL_SESSION_STATE: SessionListInfo = {
   sessionNumber: 0,
   title: '',
   description: '',
-  sessionDate: new Date(),
+  sessionDateTime: new Date(),
   generationId: 0,
   attendanceDeadLine: '',
   lateDeadLine: '',
@@ -174,7 +174,7 @@ const SessionUploadModal = ({
   const handleSessionDateChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionDate = new Date(date);
+        draft.sessionDateTime = new Date(date);
       }),
     );
   };
@@ -283,7 +283,9 @@ const SessionUploadModal = ({
         <InfoBox>
           <input
             placeholder="세션 날짜를 선택해 주세요."
-            value={session.sessionDate && dayjs(session.sessionDate).format('YYYY년 MM월 DD일')}
+            value={
+              session.sessionDateTime && dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일')
+            }
             readOnly={true}
           />
           <button type="button" onClick={() => setIsDayPickerOpen(true)}>
@@ -372,7 +374,7 @@ const SessionUploadModal = ({
           </Wrapper>
           <CotatoDatePicker
             open={isDayPickerOpen}
-            date={session.sessionDate ? new Date(session.sessionDate) : undefined}
+            date={session.sessionDateTime ? new Date(session.sessionDateTime) : undefined}
             onDateChange={handleSessionDateChange}
             onClose={() => setIsDayPickerOpen(false)}
           />

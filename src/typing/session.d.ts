@@ -16,6 +16,6 @@ export type SessionListImageInfo = CotatoSessionListImageInfoResponse & ImageFil
 
 export type SessionListInfo = Omit<CotatoSessionListResponse, 'imageInfos'> & {
   imageInfos: SessionListImageInfo[];
-  attendanceDeadLine: ?string;
+  attendanceDeadLine?: string;
   lateDeadLine?: string;
 };

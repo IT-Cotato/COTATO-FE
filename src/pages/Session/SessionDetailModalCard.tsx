@@ -73,8 +73,8 @@ const SessionDetailModalCard = ({
       {
         icon: <CalendarIcon />,
         title: '일시',
-        content: session?.sessionDate
-          ? dayjs(session?.sessionDate).format('YYYY년 MM월 DD일')
+        content: session?.sessionDateTime
+          ? dayjs(session?.sessionDateTime).format('YYYY년 MM월 DD일')
           : '-',
       },
       { icon: <HomeIcon />, title: '장소', content: session?.placeName || '-' },

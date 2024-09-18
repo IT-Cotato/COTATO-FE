@@ -127,7 +127,7 @@ const SessionHome = () => {
    *
    */
   const handleSessionAdd = (session: SessionListInfo) => {
-    if (!session.sessionDate) {
+    if (!session.sessionDateTime) {
       toast.error('세션 날짜를 입력해주세요.');
       return;
     }
@@ -146,7 +146,7 @@ const SessionHome = () => {
     formData.append('generationId', selectedGeneration?.generationId?.toString() || '');
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
-    formData.append('sessionDate', session.sessionDate.toDateString() || '');
+    formData.append('sessionDate', session.sessionDateTime.toDateString() || '');
     formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
     formData.append(
       'csEducation',
@@ -187,7 +187,7 @@ const SessionHome = () => {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
-      sessionDate: new Date(session.sessionDate || ''),
+      sessionDateTime: new Date(session.sessionDateTime || ''),
       itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
       csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
       networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
