@@ -108,6 +108,55 @@ export type CotatoThemeType = {
       80: string;
       100: string;
     };
+    pastel: {
+      yellow: {
+        10: string;
+        20: string;
+        30: string;
+        40: string;
+        50: string;
+        60: string;
+        70: string;
+        80: string;
+        90: string;
+      };
+      pink: {
+        10: string;
+        20: string;
+        30: string;
+        40: string;
+        50: string;
+        60: string;
+        70: string;
+        80: string;
+        90: string;
+      };
+      blue: {
+        10: string;
+        20: string;
+        30: string;
+        40: string;
+        50: string;
+        60: string;
+        70: string;
+        80: string;
+        90: string;
+      };
+    };
+    pastelTone: {
+      yellow: {
+        100: string;
+      };
+      pink: {
+        100: string;
+      };
+      blue: {
+        100: string;
+      };
+      blurBlue: {
+        100: string;
+      };
+    };
   };
   fontSize: {
     xs: string;
@@ -206,6 +255,56 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
       80: '#2A6F22',
       100: '#1A5912',
     },
+    // pastel //
+    pastel: {
+      yellow: {
+        '10': '#FFFDF5',
+        '20': '#FFF8EB',
+        '30': '#FFF8E0',
+        '40': '#FFF6D6',
+        '50': '#FFF4CC',
+        '60': '#CCC3A3',
+        '70': '#99927A',
+        '80': '#666252',
+        '90': '#333129',
+      },
+      pink: {
+        '10': '#FEFAFD',
+        '20': '#FDF4FB',
+        '30': '#FDEFF8',
+        '40': '#FCE9F6',
+        '50': '#FBE4F4',
+        '60': '#C9B6C3',
+        '70': '#978992',
+        '80': '#645B62',
+        '90': '#322E31',
+      },
+      blue: {
+        '10': '#F7F8FD',
+        '20': '#EFF2FB',
+        '30': '#E6EBF9',
+        '40': '#DEE5F7',
+        '50': '#D6DEF5',
+        '60': '#ABB2C4',
+        '70': '#808593',
+        '80': '#565962',
+        '90': '#2B2C31',
+      },
+    },
+    pastelTone: {
+      yellow: {
+        100: '#FFF4CC',
+      },
+      pink: {
+        100: '#FBE4F4',
+      },
+      blue: {
+        100: '#D6DEF5',
+      },
+      blurBlue: {
+        100: '#305BCF',
+      },
+    },
   },
   fontSize: {
     xs: '0.75rem',
@@ -303,6 +402,56 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
       60: '#37922C',
       80: '#2A6F22',
       100: '#1A5912',
+    },
+    // pastel //
+    pastel: {
+      yellow: {
+        '10': '#FFFDF5',
+        '20': '#FFF8EB',
+        '30': '#FFF8E0',
+        '40': '#FFF6D6',
+        '50': '#FFF4CC',
+        '60': '#CCC3A3',
+        '70': '#99927A',
+        '80': '#666252',
+        '90': '#333129',
+      },
+      pink: {
+        '10': '#FEFAFD',
+        '20': '#FDF4FB',
+        '30': '#FDEFF8',
+        '40': '#FCE9F6',
+        '50': '#FBE4F4',
+        '60': '#C9B6C3',
+        '70': '#978992',
+        '80': '#645B62',
+        '90': '#322E31',
+      },
+      blue: {
+        '10': '#F7F8FD',
+        '20': '#EFF2FB',
+        '30': '#E6EBF9',
+        '40': '#DEE5F7',
+        '50': '#D6DEF5',
+        '60': '#ABB2C4',
+        '70': '#808593',
+        '80': '#565962',
+        '90': '#2B2C31',
+      },
+    },
+    pastelTone: {
+      yellow: {
+        100: '#FFF4CC',
+      },
+      pink: {
+        100: '#FBE4F4',
+      },
+      blue: {
+        100: '#D6DEF5',
+      },
+      blurBlue: {
+        100: '#305BCF',
+      },
     },
   },
   fontSize: {
