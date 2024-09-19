@@ -4,14 +4,7 @@ import { ReactComponent as Timer } from '@assets/timer.svg';
 import background from '@assets/bg_waiting.svg';
 import mobile from '@assets/bg_waiting_mobile.svg';
 
-type Props = {
-  quizNum?: number;
-  setShowKingKing?: (value: boolean) => void;
-};
-
-const BgWaiting = ({ quizNum }: Props) => {
-  console.log('quizNum', quizNum);
-
+const BgWaiting = () => {
   return (
     <Wrapper>
       <Waiting>
