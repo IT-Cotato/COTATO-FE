@@ -5,45 +5,21 @@ import mobile from '@assets/bg_kingking_mobile.svg';
 import api from '@/api/api';
 import BgWaiting from './BgWaiting';
 import { CotatoKingMemberInfo } from 'cotato-openapi-clients';
+import { LoadingIndicator } from '@components/LoadingIndicator';
 
 interface BgKingKingProps {
-  quizId: number | null;
+  educationId: number;
 }
 
-const BgKingKing: React.FC<BgKingKingProps> = ({ quizId }) => {
+const BgKingKing: React.FC<BgKingKingProps> = ({ educationId }) => {
   const [kingMembers, setKingMembers] = useState<CotatoKingMemberInfo[]>([]);
-  const [educationId, setEducationId] = useState<number>(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showWaiting, setShowWaiting] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleKingKing = async () => {
-      const eduId = await fetchEducationId();
-      fetchKing(eduId);
-    };
-    handleKingKing();
-  }, []);
-
-  const fetchEducationId = async (): Promise<number> => {
-    let fetchedEducationId: number = 0;
-    await api
-      .get('/v1/api/education/from', {
-        params: {
-          quizId: quizId,
-        },
-      })
-      .then((res) => {
-        fetchedEducationId = res.data.educationId;
-        setEducationId(fetchedEducationId);
-        console.log(educationId);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    return fetchedEducationId;
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchKing = async (educationId: number) => {
+    setIsLoading(true);
+
     await api
       .get('/v1/api/education/kings', {
         params: {
@@ -53,11 +29,30 @@ const BgKingKing: React.FC<BgKingKingProps> = ({ quizId }) => {
       .then((res) => {
         console.log(res);
         setKingMembers(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
+
+  //
+  //
+  //
+  useEffect(() => {
+    fetchKing(educationId);
+  }, []);
+
+  //
+  //
+  //
+
+  if (isLoading) {
+    return <LoadingIndicator isLoading={isLoading} />;
+  }
 
   return (
     <Wrapper>
