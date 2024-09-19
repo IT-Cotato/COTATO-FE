@@ -340,7 +340,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
       {showCorrect && <BgCorrect />}
       {showIncorrect && <BgIncorrect />}
       {showKingKing && educationId && <BgKingKing educationId={educationId} />}
-      {returnToWaiting && <BgWaiting quizNum={(quizData?.number as number) + 1} />}
+      {returnToWaiting && <BgWaiting />}
     </Wrapper>
   );
 };
