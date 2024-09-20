@@ -3,7 +3,7 @@ import { DayPicker } from 'react-day-picker';
 import { ko } from 'date-fns/locale';
 import styled, { useTheme } from 'styled-components';
 import { Modal } from '@mui/material';
-import dayjs from 'dayjs';
+import CotatoTimePicker from './CotatoTimePicker';
 
 //
 //
@@ -26,24 +26,32 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
   onDateChange,
   onClose,
 }) => {
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(date);
+  const [selectedDate, setSelectedDate] = React.useState<Date>(date || new Date());
 
   const theme = useTheme();
 
-  const handleCancelClick = () => {
+  const handleDateClick = (date: Date) => {
+    date.setHours(19, 0, 0, 0);
     setSelectedDate(date);
+  };
+
+  const handleCancelClick = () => {
     onClose();
   };
 
   const handleConfirmlClick = () => {
-    selectedDate && onDateChange(selectedDate);
+    onDateChange(selectedDate);
     onClose();
   };
 
-  const renderPickerFooter = () => {
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+  };
+
+  const renderTimePicker = () => {
     return (
       <PickerFotter>
-        <SessionDate>{selectedDate && dayjs(selectedDate).format('YYYY년 MM월 DD일')}</SessionDate>
+        <CotatoTimePicker date={selectedDate} onDateChange={handleDateChange} />
         <ButtwonWrapper>
           <StyledButton $color={theme.colors.gray50} onClick={handleCancelClick}>
             취소
@@ -61,9 +69,9 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
       <StyledDayPicker
         mode="single"
         selected={selectedDate}
-        onDayClick={setSelectedDate}
+        onDayClick={handleDateClick}
         locale={ko}
-        footer={renderPickerFooter()}
+        footer={renderTimePicker()}
       />
     </Modal>
   );
@@ -105,12 +113,6 @@ const PickerFotter = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 1rem 0.5rem 0.5rem;
-`;
-
-const SessionDate = styled.span`
-  font-size: 1rem;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.gray100};
 `;
 
 const ButtwonWrapper = styled.span`
