@@ -1,21 +1,16 @@
 import {
-  CotatoSessionListResponse,
   CotatoSessionListImageInfoResponse,
+  CotatoUpdateSessionRequest,
 } from 'cotato-openapi-clients';
 
 interface ImageFile {
   imageFile?: File;
 }
 
-interface SessionDeadline {
-  attendDeadLine: ?string;
-  lateDeadLine?: string;
-}
-
 export type SessionListImageInfo = CotatoSessionListImageInfoResponse & ImageFile;
 
-export type SessionListInfo = Omit<CotatoSessionListResponse, 'imageInfos'> & {
+export type SessionUploadInfo = Omit<CotatoUpdateSessionRequest, 'sessionId'> & {
+  sessionId?: number;
+  generationId?: number;
   imageInfos: SessionListImageInfo[];
-  attendanceDeadLine?: string;
-  lateDeadLine?: string;
 };
