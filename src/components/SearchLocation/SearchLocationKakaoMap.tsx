@@ -1,16 +1,17 @@
+import { Place } from '@/typing/place';
 import React, { useEffect } from 'react';
 
 //
 //
 //
 
-interface Place {
-  place_name: string;
-  address_name: string;
-  phone: string;
-  x: string;
-  y: string;
-}
+// interface Place {
+//   place_name: string;
+//   address_name: string;
+//   phone: string;
+//   x: string;
+//   y: string;
+// }
 
 interface KakaoMapProps {
   searchKeyword: string;
@@ -52,9 +53,18 @@ const SearchLocationKakaoMap: React.FC<KakaoMapProps> = ({
             const ps = new window.kakao.maps.services.Places();
 
             if (searchKeyword) {
-              ps.keywordSearch(searchKeyword, (data: Place[], status: string, pagination: any) => {
+              ps.keywordSearch(searchKeyword, (data: any[], status: string, pagination: any) => {
                 if (status === window.kakao.maps.services.Status.OK) {
-                  onSearchResults(data);
+                  const places: Place[] = data.map((place) => ({
+                    placeName: place.place_name,
+                    location: {
+                      latitude: place.y,
+                      longitude: place.x,
+                    },
+                    addressName: place.address_name,
+                    phone: place.phone,
+                  }));
+                  onSearchResults(places);
                   // displayPlaces(map, data);
 
                   if (paginationRef.current) {

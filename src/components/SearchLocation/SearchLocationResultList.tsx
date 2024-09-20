@@ -1,3 +1,4 @@
+import { Place } from '@/typing/place';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -5,11 +6,11 @@ import styled from 'styled-components';
 //
 //
 
-interface Place {
-  place_name: string;
-  address_name: string;
-  phone: string;
-}
+// interface Place {
+//   place_name: string;
+//   address_name: string;
+//   phone: string;
+// }
 
 interface SearchResultListProps {
   results: Place[];
@@ -17,6 +18,7 @@ interface SearchResultListProps {
   keyword: string;
   setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setLocationName: React.Dispatch<React.SetStateAction<string>>;
+  setPlace?: React.Dispatch<React.SetStateAction<Place>>;
 }
 
 //
@@ -29,6 +31,7 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({
   keyword,
   setIsSearchModalOpen,
   setLocationName,
+  setPlace,
 }) => {
   /**
    *
@@ -39,6 +42,8 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({
     // setLongitude(target.x); // 경도
     // setLocationName(target.place_name); // 장소명
     setLocationName(target.place_name);
+    console.log(target);
+    setPlace && setPlace(target);
     setIsSearchModalOpen(false);
   };
 
@@ -60,8 +65,8 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({
         <>
           {results.map((result, index) => (
             <Item key={index} id={index === 0 ? 'top' : ''} onClick={() => handleClick(result)}>
-              <h3>{result.place_name}</h3>
-              <span>{result.address_name}</span>
+              <h3>{result.placeName}</h3>
+              <span>{result.addressName}</span>
               <p>{result.phone}</p>
             </Item>
           ))}

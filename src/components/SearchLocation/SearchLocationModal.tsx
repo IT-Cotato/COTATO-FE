@@ -7,22 +7,24 @@ import KakaoMap from '@/components/SearchLocation/SearchLocationKakaoMap';
 import SearchResultList from '@/components/SearchLocation/SearchLocationResultList';
 import { Box } from '@mui/system';
 import { media } from '@theme/media';
+import { Place } from '@/typing/place';
 
 //
 //
 //
 
-interface Place {
-  place_name: string;
-  address_name: string;
-  phone: string;
-  x: string;
-  y: string;
-}
+// interface Place {
+//   place_name: string;
+//   address_name: string;
+//   phone: string;
+//   x: string;
+//   y: string;
+// }
 
 interface SearchLocationModalProps {
   setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setLocationName: React.Dispatch<React.SetStateAction<string>>;
+  setPlace?: React.Dispatch<React.SetStateAction<Place>>;
 }
 
 //
@@ -32,6 +34,7 @@ interface SearchLocationModalProps {
 const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
   setIsSearchModalOpen,
   setLocationName,
+  setPlace,
 }) => {
   const [keyword, setKeyword] = useState('');
   const [results, setResults] = useState<Place[]>([]);
