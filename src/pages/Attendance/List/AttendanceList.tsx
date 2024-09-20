@@ -43,6 +43,7 @@ const AttendanceList = () => {
     '/v2/api/attendances/records/members',
     (url: string) => fetcherWithParams(url, { generationId: generationId }),
   );
+  const [attendanceList, setAttendanceList] = React.useState<CotatoMemberAttendResponse[]>([]);
 
   const [, setSearchParams] = useSearchParams();
   const { listLayoutType: view } = useAttendanceListLayoutStore();
@@ -107,7 +108,7 @@ const AttendanceList = () => {
         centeredSlides={true}
         initialSlide={attendanceResponse.memberAttendResponses.length - 1}
       >
-        {attendanceResponse.memberAttendResponses.map((attendance, index) => (
+        {attendanceList.map((attendance, index) => (
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
               attendance={attendance}
@@ -169,7 +170,7 @@ const AttendanceList = () => {
           ))}
         </DescriptionWrapper>
         <GridContainer>
-          {attendanceResponse.memberAttendResponses.map((attendance, index) => (
+          {attendanceList.map((attendance, index) => (
             <AttendanceGridCard
               key={index}
               attendance={attendance}
@@ -197,12 +198,29 @@ const AttendanceList = () => {
     );
   };
 
-  //
-  //
-  //
+  /**
+   *
+   */
   React.useEffect(() => {
     handleUrlChange(view);
   }, [view]);
+
+  /**
+   *
+   */
+  React.useEffect(() => {
+    if (attendanceResponse?.memberAttendResponses) {
+      const newMemberAttendaceResponse = [...attendanceResponse.memberAttendResponses];
+      newMemberAttendaceResponse.sort((a, b) => {
+        if (a.sessionId && b.sessionId) {
+          return a.sessionId - b.sessionId;
+        }
+
+        return 0;
+      });
+      setAttendanceList(newMemberAttendaceResponse);
+    }
+  }, [attendanceResponse]);
 
   //
   //
