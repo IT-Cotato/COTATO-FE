@@ -72,7 +72,7 @@ const StyledSwiper = styled(Swiper)`
 
 const StyledSwiperSlide = styled(SwiperSlide)`
   width: 100%;
-  padding: 1rem 0 2rem;
+  padding: 2rem 0;
   display: flex;
   justify-content: center;
 `;
