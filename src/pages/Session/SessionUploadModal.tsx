@@ -5,7 +5,7 @@ import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
-import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
+import { SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
 import { produce } from 'immer';
 import {
@@ -17,6 +17,14 @@ import {
 import CotatoDatePicker from '@components/CotatoDatePicker';
 import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
+import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
+import {
+  CotatoSessionContentsCsEducationEnum,
+  CotatoSessionContentsDevTalkEnum,
+  CotatoSessionContentsItIssueEnum,
+  CotatoSessionContentsNetworkingEnum,
+  CotatoSessionListResponse,
+} from 'cotato-openapi-clients';
 
 //
 //
@@ -26,8 +34,8 @@ interface SessionUploadModalProps {
   open: boolean;
   headerText: string;
   handleClose: () => void;
-  handleUpload: (session: SessionListInfo) => void;
-  sessionInfo?: SessionListInfo | null;
+  handleUpload: (session: SessionUploadInfo) => void;
+  sessionInfo?: CotatoSessionListResponse | null;
   lastSessionNumber?: number;
   requestImageAdd?: (image: SessionListImageInfo) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => Promise<any>;
@@ -43,21 +51,14 @@ interface InfoBoxProps {
 //
 //
 
-const INITIAL_SESSION_STATE: SessionListInfo = {
-  sessionId: 0,
-  sessionNumber: 0,
+const INITIAL_SESSION_STATE: SessionUploadInfo = {
   title: '',
   description: '',
   sessionDateTime: new Date(),
-  generationId: 0,
-  attendanceDeadLine: '',
-  lateDeadLine: '',
-  sessionContents: {
-    itIssue: SessionContentsItIssue.ON,
-    csEducation: SessionContentsCsEducation.ON,
-    networking: SessionContentsNetworking.OFF,
-    devTalk: SessionContentsDevTalk.OFF,
-  },
+  itIssue: CotatoSessionContentsItIssueEnum.Off,
+  csEducation: CotatoSessionContentsCsEducationEnum.On,
+  networking: CotatoSessionContentsNetworkingEnum.On,
+  devTalk: CotatoSessionContentsDevTalkEnum.Off,
   imageInfos: [],
 };
 
@@ -76,9 +77,11 @@ const SessionUploadModal = ({
   requestImageReorder,
   requestImageRemove,
 }: SessionUploadModalProps) => {
-  const [session, setSession] = useState<SessionListInfo>(INITIAL_SESSION_STATE);
+  const [session, setSession] = useState<SessionUploadInfo>(INITIAL_SESSION_STATE);
   const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
-
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [str, setStr] = useState('');
+  console.log(session);
   /**
    *
    */
@@ -107,8 +110,8 @@ const SessionUploadModal = ({
   const handleItIssueChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.itIssue =
-          session.sessionContents?.itIssue === SessionContentsItIssue.ON
+        draft.itIssue =
+          session.itIssue === SessionContentsItIssue.ON
             ? SessionContentsItIssue.OFF
             : SessionContentsItIssue.ON;
       }),
@@ -121,8 +124,8 @@ const SessionUploadModal = ({
   const handleCsEducationChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.csEducation =
-          session.sessionContents?.csEducation === SessionContentsCsEducation.ON
+        draft.csEducation =
+          session.csEducation === SessionContentsCsEducation.ON
             ? SessionContentsCsEducation.OFF
             : SessionContentsCsEducation.ON;
       }),
@@ -135,8 +138,8 @@ const SessionUploadModal = ({
   const handleNetworkingChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.networking =
-          session.sessionContents?.networking === SessionContentsNetworking.ON
+        draft.networking =
+          session.networking === SessionContentsNetworking.ON
             ? SessionContentsNetworking.OFF
             : SessionContentsNetworking.ON;
       }),
@@ -149,8 +152,8 @@ const SessionUploadModal = ({
   const handleDevTalkChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.devTalk =
-          session.sessionContents?.devTalk === SessionContentsDevTalk.ON
+        draft.devTalk =
+          session.devTalk === SessionContentsDevTalk.ON
             ? SessionContentsDevTalk.OFF
             : SessionContentsDevTalk.ON;
       }),
@@ -185,7 +188,7 @@ const SessionUploadModal = ({
   const handleDeadlineChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSession(
       produce(session, (draft) => {
-        draft.lateDeadLine = e.target.value;
+        // draft.attendTime?.attendanceDeadLine = e.target.value;
       }),
     );
   };
@@ -196,7 +199,7 @@ const SessionUploadModal = ({
   const handleAttendanceDeadLineChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSession(
       produce(session, (draft) => {
-        draft.attendanceDeadLine = e.target.value;
+        // draft.attendTime?.lateDeadLine = e.target.value;
       }),
     );
   };
@@ -234,28 +237,26 @@ const SessionUploadModal = ({
    *
    */
   const renderInfoInput = () => {
-    const { itIssue, csEducation, networking, devTalk } = session.sessionContents!;
-
     const getContentsInput = () => {
       const contentList = [
         {
           name: 'IT 이슈',
-          checked: itIssue === SessionContentsItIssue.ON,
+          checked: session.itIssue === CotatoSessionContentsItIssueEnum.On,
           hanldeChange: handleItIssueChange,
         },
         {
           name: 'CS 교육',
-          checked: csEducation === SessionContentsCsEducation.ON,
+          checked: session.csEducation === CotatoSessionContentsCsEducationEnum.Off,
           hanldeChange: handleCsEducationChange,
         },
         {
           name: '네트워킹',
-          checked: networking === SessionContentsNetworking.ON,
+          checked: session.networking === CotatoSessionContentsNetworkingEnum.On,
           hanldeChange: handleNetworkingChange,
         },
         {
           name: '데브토크',
-          checked: devTalk === SessionContentsDevTalk.ON,
+          checked: session.devTalk === CotatoSessionContentsDevTalkEnum.On,
           hanldeChange: handleDevTalkChange,
         },
       ];
@@ -298,17 +299,17 @@ const SessionUploadModal = ({
         <InfoBox>
           <input
             placeholder="출석 인정 시간 (19:10:00 형식으로 정확히 입력하세요.)"
-            value={session.attendanceDeadLine || undefined}
+            value={session.attendTime?.attendanceDeadLine?.hour || undefined}
             onChange={handleAttendanceDeadLineChange}
-            disabled={session.attendanceDeadLine === undefined ? true : false}
+            disabled={session.attendTime?.attendanceDeadLine === undefined ? true : false}
           />
         </InfoBox>
         <InfoBox>
           <input
             placeholder="지각 인정 시간 (19:20:00 형식으로 정확히 입력하세요.)"
-            value={session.lateDeadLine || undefined}
+            value={session.attendTime?.lateDeadLine?.hour || undefined}
             onChange={handleDeadlineChange}
-            disabled={session.lateDeadLine === undefined ? true : false}
+            disabled={session.attendTime?.lateDeadLine === undefined ? true : false}
           />
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
@@ -337,9 +338,23 @@ const SessionUploadModal = ({
    */
   useEffect(() => {
     if (sessionInfo) {
-      setSession(sessionInfo);
+      // setSession(sessionInfo);
     } else {
-      setSession(INITIAL_SESSION_STATE);
+      const getNextFiday = () => {
+        const today = new Date();
+        const day = today.getDay();
+        const diff = 5 - day;
+        const nextFriday = new Date(today);
+        nextFriday.setDate(today.getDate() + diff);
+        nextFriday.setHours(19, 0, 0, 0);
+        return nextFriday;
+      };
+
+      const initialSession = produce(INITIAL_SESSION_STATE, (draft) => {
+        draft.sessionDateTime = getNextFiday();
+      });
+
+      setSession(initialSession);
     }
 
     if (lastSessionNumber !== undefined) {
@@ -366,6 +381,10 @@ const SessionUploadModal = ({
       <>
         <UploadContainer>
           <Wrapper>
+            <SearchLocationModal
+              setIsSearchModalOpen={setIsLocationModalOpen}
+              setLocationName={setStr}
+            />
             {renerCloseButton()}
             {renderHeader()}
             {renderImageInput()}

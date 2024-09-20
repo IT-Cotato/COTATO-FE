@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import useSWR from 'swr';
 import SessionCard, { IMAGE_WIDTH } from '@pages/Session/SessionCard';
 import fetcherWithParams from '@utils/fetcherWithParams';
-import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
+import { SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import {
   SessionContentsCsEducation,
   SessionContentsDevTalk,
@@ -14,6 +14,10 @@ import api from '@/api/api';
 import SessionUploadModal from '@pages/Session/SessionUploadModal';
 import {
   CotatoGenerationInfoResponse,
+  CotatoLocalTime,
+  CotatoSessionContentsCsEducationEnum,
+  CotatoSessionContentsItIssueEnum,
+  CotatoSessionContentsNetworkingEnum,
   CotatoSessionListResponse,
   CotatoUpdateSessionRequest,
 } from 'cotato-openapi-clients';
@@ -47,7 +51,7 @@ const SessionHome = () => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
+  const [updateSession, setUpdateSession] = useState<CotatoSessionListResponse | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
@@ -70,7 +74,7 @@ const SessionHome = () => {
       return;
     }
 
-    const updateSession: SessionListInfo = JSON.parse(JSON.stringify(session));
+    const updateSession: CotatoSessionListResponse = JSON.parse(JSON.stringify(session));
     setUpdateSession(updateSession);
     setIsDetailModalOpen(false);
     setIsUpdateModalOpen(true);
@@ -126,18 +130,18 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleSessionAdd = (session: SessionListInfo) => {
+  const handleSessionAdd = (session: SessionUploadInfo) => {
     if (!session.sessionDateTime) {
       toast.error('세션 날짜를 입력해주세요.');
       return;
     }
 
-    if (!session.attendanceDeadLine) {
+    if (!session.attendTime?.attendanceDeadLine) {
       toast.error('출석 인정 시간을 입력해주세요.');
       return;
     }
 
-    if (!session.lateDeadLine) {
+    if (!session.attendTime?.lateDeadLine) {
       toast.error('지각 인정 시간을 입력해주세요.');
       return;
     }
@@ -147,18 +151,17 @@ const SessionHome = () => {
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
     formData.append('sessionDate', session.sessionDateTime.toDateString() || '');
-    formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
-    formData.append(
-      'csEducation',
-      session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
-    );
-    formData.append(
-      'networking',
-      session.sessionContents?.networking || SessionContentsNetworking.OFF,
-    );
-    formData.append('devTalk', session.sessionContents?.devTalk || SessionContentsDevTalk.OFF);
-    formData.append('attendanceDeadLine', session.attendanceDeadLine || '');
-    formData.append('lateDeadLine', session.lateDeadLine || '');
+    formData.append('itIssue', session.itIssue);
+    formData.append('csEducation', session.csEducation);
+    formData.append('networking', session.networking);
+    formData.append('devTalk', session.devTalk);
+
+    const getDeadLineString = (deadLine: CotatoLocalTime) => {
+      return `${deadLine.hour}:${deadLine.minute}:${deadLine.second}`;
+    };
+
+    formData.append('attendanceDeadLine', getDeadLineString(session.attendTime.attendanceDeadLine));
+    formData.append('lateDeadLine', getDeadLineString(session.attendTime.lateDeadLine));
 
     session.imageInfos.forEach((imageInfo) => {
       if (imageInfo.imageFile) {
@@ -178,7 +181,7 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleSessionUpdate = (session: SessionListInfo) => {
+  const handleSessionUpdate = (session: SessionUploadInfo) => {
     if (!session.sessionId) {
       return;
     }
@@ -187,11 +190,14 @@ const SessionHome = () => {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
-      sessionDateTime: new Date(session.sessionDateTime || ''),
-      itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
-      csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
-      networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
-      devTalk: session.sessionContents?.devTalk || SessionContentsDevTalk.OFF,
+      sessionDateTime: session.sessionDateTime,
+      placeName: session.placeName,
+      location: session.location,
+      attendTime: session.attendTime,
+      itIssue: session.itIssue,
+      csEducation: session.csEducation,
+      networking: session.networking,
+      devTalk: session.devTalk,
     };
 
     api
