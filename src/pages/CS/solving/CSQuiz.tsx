@@ -16,6 +16,7 @@ type MessageType = {
   status?: string | null;
   start?: string | null;
   quizId: number | null;
+  educationId?: number | null;
   command: string;
 };
 
@@ -33,6 +34,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const [showWinner, setShowWinner] = useState<boolean>(false);
   const [allowSubmit, setAllowSubmit] = useState<boolean>(false);
   const [problemId, setProblemId] = useState<number>(0); // = quizId
+  const [educationId, setEducationId] = useState<number>(0);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showHeader, setShowHeader] = useState<boolean>(true);
@@ -47,7 +49,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const educationId = { ...location.state };
 
   useEffect(() => {
     initializeWebSocket();
@@ -84,8 +85,8 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   // WebSocket 연결
   const connectWebSocket = () => {
     webSocket.current = new WebSocket(
-      `/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
-        educationId.educationId
+      `${process.env.REACT_APP_SOCKET_URL}/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
+        location.state.educationId
       }`,
     );
     webSocket.current.onopen = () => {
@@ -128,7 +129,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
           message.quizId === null &&
           message.command === 'show'
         ) {
-          console.log('최초 접속- 대기 상태');
           // 대기 화면 보여주기
           setShowProblem(false);
         } else if (
@@ -137,7 +137,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
           message.quizId > 0 &&
           message.command === 'show'
         ) {
-          console.log('최초 접속- 문제 접근 허용 상태 / ADMIN- 문제 접근 허용 시작');
           // 문제 보여주기, 전구 비활성화, 정답 제출 비허용
           setShowProblem(true);
           setAllowSubmit(false);
@@ -147,31 +146,28 @@ const CSQuiz: React.FC<WaitingProps> = () => {
           message.quizId > 0 &&
           message.command === 'show'
         ) {
-          console.log('최초 접속- 정답 제출 허용 상태');
           // 전구 활성화, 정답 제출 허용
           setShowProblem(true);
           setAllowSubmit(true);
         } else if (message.quizId !== 0 && message.command === 'start') {
-          console.log('ADMIN- 정답 제출 허용 시작 ');
           // 전구 활성화, 정답 제출 허용
           setShowProblem(true);
           setAllowSubmit(true);
         } else if (message.command === 'exit') {
-          console.log('퀴즈 닫기');
           navigate('/cs');
-        } else if (message.quizId > 0 && message.command === 'king') {
-          console.log('킹킹 문제 풀 사람 반환');
+        } else if (message.educationId && message.command === 'king') {
           // 9번 문제 제출 -> 정답 여부 화면 띄웠다가 -> 대기화면 띄워주고 -
           // > 메시지 받으면 킹킹 화면 띄우고 -> 몇 초 보여주고 대기화면 띄우기
           // 9번 문제 다음 -> 대기화면 띄워주고 -> 메시지 받으면 킹킹 화면 띄우고 -
           // > 몇 초 보여주고 다시 대기화면 띄우기
+          setEducationId(message.educationId);
           setShowKingKing(true);
         } else if (message.quizId > 0 && message.command === 'winner') {
-          console.log('킹킹 문제 반환');
           // 10번 문제 제출 -> 정답 여부 화면 띄웠다가 -> 다시 10번 문제로 -
           // > 메시지 받으면 우승자 화면 띄우고 끝
           setShowWinner(true);
         } else {
+          console.log(message);
           console.log('exception error');
         }
       } catch (error) {
@@ -192,12 +188,12 @@ const CSQuiz: React.FC<WaitingProps> = () => {
             quizId={message.quizId}
             submitAllowed={allowSubmit}
             problemId={problemId}
+            educationId={educationId}
             showKingKing={showKingKing}
             setShowKingKing={setShowKingKing}
           />
         </div>
       )}
-      {/* {showKingKing && <BgKingKing quizId={message.quizId} />} */}
       {showWinner && <BgWinner quizId={message.quizId} />}
     </Wrapper>
   );
