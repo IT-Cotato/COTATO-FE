@@ -11,7 +11,7 @@ import CotatoTimePicker from './CotatoTimePicker';
 
 interface CotatoDatePickerProps {
   open: boolean;
-  date?: Date;
+  date: Date;
   onDateChange: (date: Date) => void;
   onClose: () => void;
 }
@@ -26,7 +26,7 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
   onDateChange,
   onClose,
 }) => {
-  const [selectedDate, setSelectedDate] = React.useState<Date>(date || new Date());
+  const [selectedDate, setSelectedDate] = React.useState<Date>(date);
 
   const theme = useTheme();
 
@@ -36,6 +36,7 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
   };
 
   const handleCancelClick = () => {
+    setSelectedDate(date);
     onClose();
   };
 
