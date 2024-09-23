@@ -19,12 +19,14 @@ import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
 import {
+  CotatoLocalTime,
   CotatoSessionContentsCsEducationEnum,
   CotatoSessionContentsDevTalkEnum,
   CotatoSessionContentsItIssueEnum,
   CotatoSessionContentsNetworkingEnum,
   CotatoSessionListResponse,
 } from 'cotato-openapi-clients';
+import CotatoTimePicker from '@components/CotatoTimePicker';
 
 //
 //
@@ -55,6 +57,18 @@ const INITIAL_SESSION_STATE: SessionUploadInfo = {
   title: '',
   description: '',
   sessionDateTime: new Date(),
+  attendTime: {
+    attendanceDeadLine: {
+      hour: 19,
+      minute: 10,
+      second: 0,
+    },
+    lateDeadLine: {
+      hour: 19,
+      minute: 20,
+      second: 0,
+    },
+  },
   itIssue: CotatoSessionContentsItIssueEnum.Off,
   csEducation: CotatoSessionContentsCsEducationEnum.On,
   networking: CotatoSessionContentsNetworkingEnum.On,
@@ -82,6 +96,18 @@ const SessionUploadModal = ({
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [str, setStr] = useState('');
   console.log(session);
+
+  /**
+   *
+   */
+  const convertCotatoLocalTimeToDate = (localTime?: CotatoLocalTime): Date => {
+    const date = new Date();
+    date.setHours(localTime?.hour || 0);
+    date.setMinutes(localTime?.minute || 0);
+    date.setSeconds(localTime?.second || 0);
+    return date;
+  };
+
   /**
    *
    */
@@ -185,10 +211,22 @@ const SessionUploadModal = ({
   /**
    *
    */
-  const handleDeadlineChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAttendanceDeadlineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        // draft.attendTime?.attendanceDeadLine = e.target.value;
+        if (draft.attendTime?.attendanceDeadLine) {
+          draft.attendTime.attendanceDeadLine.hour = date.getHours();
+          draft.attendTime.attendanceDeadLine.minute = date.getMinutes();
+          draft.attendTime.attendanceDeadLine.second = date.getSeconds();
+        } else {
+          draft.attendTime = {
+            attendanceDeadLine: {
+              hour: date.getHours(),
+              minute: date.getMinutes(),
+              second: date.getSeconds(),
+            },
+          };
+        }
       }),
     );
   };
@@ -196,10 +234,22 @@ const SessionUploadModal = ({
   /**
    *
    */
-  const handleAttendanceDeadLineChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleLateDeadLineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        // draft.attendTime?.lateDeadLine = e.target.value;
+        if (draft.attendTime?.lateDeadLine) {
+          draft.attendTime.lateDeadLine.hour = date.getHours();
+          draft.attendTime.lateDeadLine.minute = date.getMinutes();
+          draft.attendTime.lateDeadLine.second = date.getSeconds();
+        } else {
+          draft.attendTime = {
+            lateDeadLine: {
+              hour: date.getHours(),
+              minute: date.getMinutes(),
+              second: date.getSeconds(),
+            },
+          };
+        }
       }),
     );
   };
@@ -246,7 +296,7 @@ const SessionUploadModal = ({
         },
         {
           name: 'CS 교육',
-          checked: session.csEducation === CotatoSessionContentsCsEducationEnum.Off,
+          checked: session.csEducation === CotatoSessionContentsCsEducationEnum.On,
           hanldeChange: handleCsEducationChange,
         },
         {
@@ -285,7 +335,8 @@ const SessionUploadModal = ({
           <input
             placeholder="세션 날짜를 선택해 주세요."
             value={
-              session.sessionDateTime && dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일')
+              session.sessionDateTime &&
+              dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일 HH시 mm분')
             }
             readOnly={true}
           />
@@ -297,20 +348,20 @@ const SessionUploadModal = ({
           <input value="장소 (아직 활성화 안됨)" readOnly={true} />
         </InfoBox>
         <InfoBox>
-          <input
-            placeholder="출석 인정 시간 (19:10:00 형식으로 정확히 입력하세요.)"
-            value={session.attendTime?.attendanceDeadLine?.hour || undefined}
-            onChange={handleAttendanceDeadLineChange}
-            disabled={session.attendTime?.attendanceDeadLine === undefined ? true : false}
-          />
-        </InfoBox>
-        <InfoBox>
-          <input
-            placeholder="지각 인정 시간 (19:20:00 형식으로 정확히 입력하세요.)"
-            value={session.attendTime?.lateDeadLine?.hour || undefined}
-            onChange={handleDeadlineChange}
-            disabled={session.attendTime?.lateDeadLine === undefined ? true : false}
-          />
+          <div>
+            출석 인정
+            <CotatoTimePicker
+              date={convertCotatoLocalTimeToDate(session.attendTime?.attendanceDeadLine)}
+              onDateChange={handleAttendanceDeadlineChange}
+            />
+          </div>
+          <div>
+            지각 인정
+            <CotatoTimePicker
+              date={convertCotatoLocalTimeToDate(session?.attendTime?.lateDeadLine)}
+              onDateChange={handleLateDeadLineChange}
+            />
+          </div>
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
         <InfoBox $height="8rem">
@@ -381,10 +432,10 @@ const SessionUploadModal = ({
       <>
         <UploadContainer>
           <Wrapper>
-            <SearchLocationModal
+            {/* <SearchLocationModal
               setIsSearchModalOpen={setIsLocationModalOpen}
               setLocationName={setStr}
-            />
+            /> */}
             {renerCloseButton()}
             {renderHeader()}
             {renderImageInput()}
@@ -393,7 +444,7 @@ const SessionUploadModal = ({
           </Wrapper>
           <CotatoDatePicker
             open={isDayPickerOpen}
-            date={session.sessionDateTime ? new Date(session.sessionDateTime) : undefined}
+            date={session.sessionDateTime}
             onDateChange={handleSessionDateChange}
             onClose={() => setIsDayPickerOpen(false)}
           />
@@ -471,6 +522,7 @@ const InfoBox = styled.div<InfoBoxProps>`
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 34rem;
   height: ${({ $height }) => $height || '3.2rem'};
   padding: ${({ theme }) => theme.size.lg} ${({ theme }) => theme.size.md};
@@ -502,6 +554,17 @@ const InfoBox = styled.div<InfoBoxProps>`
 
   > textarea {
     resize: none;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: ${({ theme }) => theme.colors.gray100};
+    font-family: Pretendard;
+    font-size: ${({ theme }) => theme.fontSize.md};
+    font-weight: ${({ $bold }) => ($bold ? '600' : '300')};
+    line-height: 125%;
   }
 
   > button {
