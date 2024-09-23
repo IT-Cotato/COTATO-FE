@@ -36,14 +36,14 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({ date, onDateChange 
             border: `1px solid ${theme.colors.gray60}`,
             borderRadius: '0.5rem',
             background: theme.colors.common.white,
-            width: '11rem',
+            width: '9rem',
           },
           ['& .MuiInputBase-input']: {
             fontFamily: 'Pretendard',
             color: theme.colors.gray90,
             fontSize: '0.875rem',
             fontWeight: 300,
-            padding: '0.75rem',
+            padding: '0.5rem 0.75rem',
           },
           ['& .MuiOutlinedInput-notchedOutline']: {
             border: 'none',
