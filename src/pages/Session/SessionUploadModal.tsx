@@ -4,8 +4,9 @@ import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
+import { ReactComponent as SearchIcon } from '@assets/search_icon.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
-import { SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
+import { Place, SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
 import { produce } from 'immer';
 import {
@@ -47,6 +48,10 @@ interface SessionUploadModalProps {
 interface InfoBoxProps {
   $height?: string;
   $bold?: boolean;
+}
+
+interface LocationInputBoxProps {
+  $width?: string;
 }
 
 //
@@ -94,8 +99,12 @@ const SessionUploadModal = ({
   const [session, setSession] = useState<SessionUploadInfo>(INITIAL_SESSION_STATE);
   const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [str, setStr] = useState('');
+  const [address, setAddress] = useState('');
+
   console.log(session);
+  const newDate = new Date(session.sessionDateTime);
+  newDate.setHours(session.sessionDateTime.getHours() + 9);
+  console.log(newDate.toISOString());
 
   /**
    *
@@ -106,6 +115,13 @@ const SessionUploadModal = ({
     date.setMinutes(localTime?.minute || 0);
     date.setSeconds(localTime?.second || 0);
     return date;
+  };
+
+  /**
+   *
+   */
+  const handleSearchLocationButtonClick = () => {
+    setIsLocationModalOpen(true);
   };
 
   /**
@@ -126,6 +142,33 @@ const SessionUploadModal = ({
     setSession(
       produce(session, (draft) => {
         draft.title = e.target.value;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleLocationChange = (place: Place) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.placeName = place.placeName;
+        draft.location = {
+          latitude: place.location.latitude,
+          longitude: place.location.longitude,
+        };
+      }),
+    );
+    setAddress(place.addressName || '');
+  };
+
+  /**
+   *
+   */
+  const handlePlaceNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.placeName = e.target.value;
       }),
     );
   };
@@ -344,10 +387,26 @@ const SessionUploadModal = ({
             <CalendarIcon />
           </button>
         </InfoBox>
-        <InfoBox>
-          <input value="장소 (아직 활성화 안됨)" readOnly={true} />
+        <InfoBox $bold={true}>
+          <div>세션 장소</div>
+          <div>
+            <LocationInputBox>
+              <input placeholder="장소 검색" value={address} readOnly={true} />
+              <button type="button" onClick={handleSearchLocationButtonClick}>
+                <SearchIcon />
+              </button>
+            </LocationInputBox>
+            <LocationInputBox $width="9rem">
+              <input
+                placeholder="장소명"
+                value={session.placeName}
+                readOnly={session.location === undefined}
+                onChange={handlePlaceNameChange}
+              />
+            </LocationInputBox>
+          </div>
         </InfoBox>
-        <InfoBox>
+        <InfoBox $bold={true}>
           <div>
             출석 인정
             <CotatoTimePicker
@@ -373,6 +432,20 @@ const SessionUploadModal = ({
         </InfoBox>
       </InfoInputWrapper>
     );
+  };
+
+  /**
+   *
+   */
+  const renderSearchLocationModal = () => {
+    if (isLocationModalOpen) {
+      return (
+        <SearchLocationModal
+          setIsSearchModalOpen={setIsLocationModalOpen}
+          onPlaceChange={handleLocationChange}
+        />
+      );
+    }
   };
 
   /**
@@ -432,15 +505,12 @@ const SessionUploadModal = ({
       <>
         <UploadContainer>
           <Wrapper>
-            {/* <SearchLocationModal
-              setIsSearchModalOpen={setIsLocationModalOpen}
-              setLocationName={setStr}
-            /> */}
             {renerCloseButton()}
             {renderHeader()}
             {renderImageInput()}
             {renderInfoInput()}
             {renderUplaodButton()}
+            {renderSearchLocationModal()}
           </Wrapper>
           <CotatoDatePicker
             open={isDayPickerOpen}
@@ -580,6 +650,39 @@ const InfoBox = styled.div<InfoBoxProps>`
       width: 1.25rem;
       height: 1.25rem;
     }
+  }
+`;
+
+const LocationInputBox = styled.span<LocationInputBoxProps>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: ${({ $width }) => $width || '10rem'};
+  border-radius: 0.5rem;
+  border: 1px solid ${({ theme }) => theme.colors.gray60};
+  background: ${({ theme }) => theme.colors.common.white_const};
+
+  > input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: none;
+    font-family: Pretendard;
+    font-size: 0.875rem;
+
+    &::placeholder {
+      font-weight: 200;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  > button {
+    border: none;
+    background: none;
+    cursor: pointer;
   }
 `;
 

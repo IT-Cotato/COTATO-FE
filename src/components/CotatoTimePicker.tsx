@@ -29,13 +29,13 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({ date, onDateChange 
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
       <TimePicker
         value={dayjs(date)}
-        onChange={(newDate) => handleDateChange(newDate)}
+        onChange={handleDateChange}
         sx={{
           ['& .MuiFormControl-root']: { width: '10rem' },
           ['& .MuiInputBase-root']: {
             border: `1px solid ${theme.colors.gray60}`,
             borderRadius: '0.5rem',
-            background: theme.colors.common.white,
+            background: theme.colors.common.white_const,
             width: '9rem',
           },
           ['& .MuiInputBase-input']: {
@@ -44,6 +44,7 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({ date, onDateChange 
             fontSize: '0.875rem',
             fontWeight: 300,
             padding: '0.5rem 0.75rem',
+            lineHeight: '100%',
           },
           ['& .MuiOutlinedInput-notchedOutline']: {
             border: 'none',

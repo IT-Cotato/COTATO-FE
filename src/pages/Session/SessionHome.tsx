@@ -4,20 +4,11 @@ import useSWR from 'swr';
 import SessionCard, { IMAGE_WIDTH } from '@pages/Session/SessionCard';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import { SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
-import {
-  SessionContentsCsEducation,
-  SessionContentsDevTalk,
-  SessionContentsItIssue,
-  SessionContentsNetworking,
-} from '@/enums/SessionContents';
 import api from '@/api/api';
 import SessionUploadModal from '@pages/Session/SessionUploadModal';
 import {
   CotatoGenerationInfoResponse,
   CotatoLocalTime,
-  CotatoSessionContentsCsEducationEnum,
-  CotatoSessionContentsItIssueEnum,
-  CotatoSessionContentsNetworkingEnum,
   CotatoSessionListResponse,
   CotatoUpdateSessionRequest,
 } from 'cotato-openapi-clients';
@@ -150,14 +141,31 @@ const SessionHome = () => {
     formData.append('generationId', selectedGeneration?.generationId?.toString() || '');
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
-    formData.append('sessionDate', session.sessionDateTime.toDateString() || '');
+
+    formData.append('latitude', session.location?.latitude?.toString() || '');
+    formData.append('longitude', session.location?.longitude?.toString() || '');
+    formData.append('placeName', session.placeName || '');
+
+    const dateISO = new Date(session.sessionDateTime);
+    dateISO.setHours(dateISO.getHours() + 9);
+    formData.append('sessionDateTime', dateISO.toISOString().substring(0, 19) || '');
     formData.append('itIssue', session.itIssue);
     formData.append('csEducation', session.csEducation);
     formData.append('networking', session.networking);
     formData.append('devTalk', session.devTalk);
 
     const getDeadLineString = (deadLine: CotatoLocalTime) => {
-      return `${deadLine.hour}:${deadLine.minute}:${deadLine.second}`;
+      const numToString = (num?: number) => {
+        if (!num) {
+          return '00';
+        }
+
+        return num.toString().padStart(2, '0');
+      };
+
+      return `${numToString(deadLine.hour)}:${numToString(deadLine.minute)}:${numToString(
+        deadLine.second,
+      )}`;
     };
 
     formData.append('attendanceDeadLine', getDeadLineString(session.attendTime.attendanceDeadLine));
