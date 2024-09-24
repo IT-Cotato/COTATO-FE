@@ -1,5 +1,5 @@
-import { Place } from '@/typing/place';
 import React, { useEffect } from 'react';
+import { Place } from '@/typing/session';
 
 //
 //

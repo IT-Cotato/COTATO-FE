@@ -1,6 +1,6 @@
-import { Place } from '@/typing/place';
 import React from 'react';
 import styled from 'styled-components';
+import { Place } from '@/typing/session';
 
 //
 //
@@ -17,8 +17,8 @@ interface SearchResultListProps {
   paginationRef: React.RefObject<HTMLDivElement>;
   keyword: string;
   setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setLocationName: React.Dispatch<React.SetStateAction<string>>;
-  setPlace?: React.Dispatch<React.SetStateAction<Place>>;
+  setLocationName?: React.Dispatch<React.SetStateAction<string>>;
+  onPlaceChange?: (place: Place) => void;
 }
 
 //
@@ -31,7 +31,7 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({
   keyword,
   setIsSearchModalOpen,
   setLocationName,
-  setPlace,
+  onPlaceChange,
 }) => {
   /**
    *
@@ -41,9 +41,9 @@ const SearchLocationResultList: React.FC<SearchResultListProps> = ({
     // setLatitude(target.y); // 위도
     // setLongitude(target.x); // 경도
     // setLocationName(target.place_name); // 장소명
-    setLocationName(target.place_name);
     console.log(target);
-    setPlace && setPlace(target);
+    setLocationName && setLocationName(target.place_name);
+    onPlaceChange && onPlaceChange(target);
     setIsSearchModalOpen(false);
   };
 

@@ -7,7 +7,7 @@ import KakaoMap from '@/components/SearchLocation/SearchLocationKakaoMap';
 import SearchResultList from '@/components/SearchLocation/SearchLocationResultList';
 import { Box } from '@mui/system';
 import { media } from '@theme/media';
-import { Place } from '@/typing/place';
+import { Place } from '@/typing/session';
 
 //
 //
@@ -23,8 +23,8 @@ import { Place } from '@/typing/place';
 
 interface SearchLocationModalProps {
   setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setLocationName: React.Dispatch<React.SetStateAction<string>>;
-  setPlace?: React.Dispatch<React.SetStateAction<Place>>;
+  setLocationName?: React.Dispatch<React.SetStateAction<string>>;
+  onPlaceChange?: (place: Place) => void;
 }
 
 //
@@ -34,7 +34,7 @@ interface SearchLocationModalProps {
 const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
   setIsSearchModalOpen,
   setLocationName,
-  setPlace,
+  onPlaceChange,
 }) => {
   const [keyword, setKeyword] = useState('');
   const [results, setResults] = useState<Place[]>([]);
@@ -49,6 +49,10 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
     // setResults([]); // 기존 검색 결과를 초기화
     console.log(results);
   };
+
+  if (!open) {
+    return null;
+  }
 
   return (
     <Background>
@@ -80,6 +84,7 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
           keyword={keyword}
           setIsSearchModalOpen={setIsSearchModalOpen}
           setLocationName={setLocationName}
+          onPlaceChange={onPlaceChange}
         />
       </Modal>
     </Background>
