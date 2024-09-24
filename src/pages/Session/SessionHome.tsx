@@ -74,7 +74,7 @@ const SessionHome = () => {
   /**
    *
    */
-  const requestImageAdd = (image: SessionListImageInfo): Promise<any> => {
+  const requestImageAdd = (image: SessionListImageInfo, order: number): Promise<any> => {
     if (!image.imageFile) {
       return Promise.reject('No image file');
     }
@@ -82,6 +82,7 @@ const SessionHome = () => {
     const formData = new FormData();
     formData.append('sessionId', updateSession?.sessionId?.toString() || '');
     formData.append('image', image.imageFile);
+    formData.append('order', order.toString());
 
     return api.post('v1/api/session/image', formData);
   };

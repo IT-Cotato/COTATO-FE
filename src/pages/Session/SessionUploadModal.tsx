@@ -40,7 +40,7 @@ interface SessionUploadModalProps {
   handleUpload: (session: SessionUploadInfo) => void;
   sessionInfo?: CotatoSessionListResponse | null;
   lastSessionNumber?: number;
-  requestImageAdd?: (image: SessionListImageInfo) => Promise<any>;
+  requestImageAdd?: (image: SessionListImageInfo, order: number) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => Promise<any>;
   requestImageRemove?: (image: SessionListImageInfo) => Promise<any>;
 }
