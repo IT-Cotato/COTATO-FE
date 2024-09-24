@@ -101,11 +101,6 @@ const SessionUploadModal = ({
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [address, setAddress] = useState('');
 
-  console.log(session);
-  const newDate = new Date(session.sessionDateTime);
-  newDate.setHours(session.sessionDateTime.getHours() + 9);
-  console.log(newDate.toISOString());
-
   /**
    *
    */
@@ -462,7 +457,19 @@ const SessionUploadModal = ({
    */
   useEffect(() => {
     if (sessionInfo) {
-      // setSession(sessionInfo);
+      setSession({
+        title: sessionInfo.title || '',
+        description: sessionInfo.description || '',
+        sessionDateTime: new Date(sessionInfo.sessionDateTime || ''),
+        placeName: sessionInfo.placeName || '',
+        itIssue: sessionInfo.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
+        csEducation:
+          sessionInfo.sessionContents?.csEducation || CotatoSessionContentsCsEducationEnum.On,
+        networking:
+          sessionInfo.sessionContents?.networking || CotatoSessionContentsNetworkingEnum.On,
+        devTalk: sessionInfo.sessionContents?.devTalk || CotatoSessionContentsDevTalkEnum.Off,
+        imageInfos: sessionInfo.imageInfos || [],
+      });
     } else {
       const getNextFiday = () => {
         const today = new Date();
