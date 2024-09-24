@@ -14,3 +14,13 @@ export type SessionUploadInfo = Omit<CotatoUpdateSessionRequest, 'sessionId'> & 
   generationId?: number;
   imageInfos: SessionListImageInfo[];
 };
+
+export interface Place {
+  placeName: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+  addressName?: string;
+  phone?: string;
+}
