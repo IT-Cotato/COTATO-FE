@@ -20,7 +20,6 @@ import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
 import {
-  CotatoAttendanceTimeResponse,
   CotatoLocalTime,
   CotatoSessionContentsCsEducationEnum,
   CotatoSessionContentsDevTalkEnum,

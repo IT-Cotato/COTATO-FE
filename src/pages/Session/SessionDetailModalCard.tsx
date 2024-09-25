@@ -6,7 +6,6 @@ import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
 import { ReactComponent as HomeIcon } from '@assets/home_icon_dotted.svg';
-import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted_bg.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import SessionContents from '@components/Session/SessionContents';
 import { device, media } from '@theme/media';
@@ -107,7 +106,14 @@ const SessionDetailModalCard = ({
         <p>
           {session?.title} <br /> COTATO {generationNumber || ''}기
         </p>
-        <p>{session?.description}</p>
+        <p>
+          {session?.description?.split('\n').map((line) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
+        </p>
       </TextDescription>
     );
   };
@@ -252,6 +258,11 @@ const TextDescription = styled.div`
   padding: 1.5rem 1.75rem;
   width: 100%;
   height: 14rem;
+  overflow: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   > p {
     color: ${({ theme }) => theme.colors.gray80_1};
