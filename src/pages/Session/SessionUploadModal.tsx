@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
 import {
+  CotatoAttendanceTimeResponse,
   CotatoLocalTime,
   CotatoSessionContentsCsEducationEnum,
   CotatoSessionContentsDevTalkEnum,
@@ -28,6 +29,7 @@ import {
   CotatoSessionListResponse,
 } from 'cotato-openapi-clients';
 import CotatoTimePicker from '@components/CotatoTimePicker';
+import api from '@/api/api';
 
 //
 //
@@ -100,6 +102,54 @@ const SessionUploadModal = ({
   const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [address, setAddress] = useState('');
+
+  /**
+   *
+   */
+  const fetchUpdateSession = async () => {
+    try {
+      const response = await api.get('/v2/api/attendances/info', {
+        params: {
+          sessionId: sessionInfo?.sessionId,
+        },
+      });
+
+      const updateSession: SessionUploadInfo = {
+        sessionId: sessionInfo?.sessionId || 0,
+        title: sessionInfo?.title || '',
+        description: sessionInfo?.description || '',
+        sessionDateTime: sessionInfo?.sessionDateTime || new Date(),
+        placeName: sessionInfo?.placeName || '',
+        location: {
+          latitude: response.data.location?.latitude,
+          longitude: response.data.location?.longitude,
+        },
+        attendTime: {
+          attendanceDeadLine: {
+            hour: response.data.attendanceDeadLine?.hour || 19,
+            minute: response.data.attendanceDeadLine?.minute || 10,
+            second: response.data.attendanceDeadLine?.second || 0,
+          },
+          lateDeadLine: {
+            hour: response.data.lateDeadLine?.hour || 19,
+            minute: response.data.lateDeadLine?.minute || 20,
+            second: response.data.lateDeadLine?.second || 0,
+          },
+        },
+        itIssue: sessionInfo?.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
+        csEducation:
+          sessionInfo?.sessionContents?.csEducation || CotatoSessionContentsCsEducationEnum.On,
+        networking:
+          sessionInfo?.sessionContents?.networking || CotatoSessionContentsNetworkingEnum.On,
+        devTalk: sessionInfo?.sessionContents?.devTalk || CotatoSessionContentsDevTalkEnum.Off,
+        imageInfos: sessionInfo?.imageInfos || [],
+      };
+
+      setSession(updateSession);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   /**
    *
@@ -457,19 +507,7 @@ const SessionUploadModal = ({
    */
   useEffect(() => {
     if (sessionInfo) {
-      setSession({
-        title: sessionInfo.title || '',
-        description: sessionInfo.description || '',
-        sessionDateTime: new Date(sessionInfo.sessionDateTime || ''),
-        placeName: sessionInfo.placeName || '',
-        itIssue: sessionInfo.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
-        csEducation:
-          sessionInfo.sessionContents?.csEducation || CotatoSessionContentsCsEducationEnum.On,
-        networking:
-          sessionInfo.sessionContents?.networking || CotatoSessionContentsNetworkingEnum.On,
-        devTalk: sessionInfo.sessionContents?.devTalk || CotatoSessionContentsDevTalkEnum.Off,
-        imageInfos: sessionInfo.imageInfos || [],
-      });
+      fetchUpdateSession();
     } else {
       const getNextFiday = () => {
         const today = new Date();

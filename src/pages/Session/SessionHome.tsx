@@ -10,7 +10,6 @@ import {
   CotatoGenerationInfoResponse,
   CotatoLocalTime,
   CotatoSessionListResponse,
-  CotatoUpdateSessionRequest,
 } from 'cotato-openapi-clients';
 import GenerationDropBox from '@components/GenerationDropBox';
 import { useMediaQuery } from '@mui/material';
@@ -49,6 +48,36 @@ const SessionHome = () => {
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
   const navigate = useNavigate();
+
+  /**
+   *
+   */
+  const getDeadLineString = (deadLine?: CotatoLocalTime) => {
+    if (!deadLine) {
+      return '00:00:00';
+    }
+
+    const numToString = (num?: number) => {
+      if (!num) {
+        return '00';
+      }
+
+      return num.toString().padStart(2, '0');
+    };
+
+    return `${numToString(deadLine.hour)}:${numToString(deadLine.minute)}:${numToString(
+      deadLine.second,
+    )}`;
+  };
+
+  /**
+   *
+   */
+  const getDateString = (date: Date) => {
+    const dateISO = new Date(date);
+    dateISO.setHours(dateISO.getHours() + 9);
+    return dateISO.toISOString().substring(0, 19);
+  };
 
   /**
    *
@@ -147,27 +176,11 @@ const SessionHome = () => {
     formData.append('longitude', session.location?.longitude?.toString() || '');
     formData.append('placeName', session.placeName || '');
 
-    const dateISO = new Date(session.sessionDateTime);
-    dateISO.setHours(dateISO.getHours() + 9);
-    formData.append('sessionDateTime', dateISO.toISOString().substring(0, 19) || '');
+    formData.append('sessionDateTime', getDateString(session.sessionDateTime));
     formData.append('itIssue', session.itIssue);
     formData.append('csEducation', session.csEducation);
     formData.append('networking', session.networking);
     formData.append('devTalk', session.devTalk);
-
-    const getDeadLineString = (deadLine: CotatoLocalTime) => {
-      const numToString = (num?: number) => {
-        if (!num) {
-          return '00';
-        }
-
-        return num.toString().padStart(2, '0');
-      };
-
-      return `${numToString(deadLine.hour)}:${numToString(deadLine.minute)}:${numToString(
-        deadLine.second,
-      )}`;
-    };
 
     formData.append('attendanceDeadLine', getDeadLineString(session.attendTime.attendanceDeadLine));
     formData.append('lateDeadLine', getDeadLineString(session.attendTime.lateDeadLine));
@@ -191,18 +204,22 @@ const SessionHome = () => {
    *
    */
   const handleSessionUpdate = (session: SessionUploadInfo) => {
+    console.log(session);
     if (!session.sessionId) {
       return;
     }
 
-    const updatedSessoinInfo: CotatoUpdateSessionRequest = {
+    const updatedSessoinInfo = {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
-      sessionDateTime: session.sessionDateTime,
+      sessionDateTime: getDateString(session.sessionDateTime),
       placeName: session.placeName,
       location: session.location,
-      attendTime: session.attendTime,
+      attendTime: {
+        attendanceDeadLine: getDeadLineString(session?.attendTime?.attendanceDeadLine),
+        lateDeadLine: getDeadLineString(session?.attendTime?.lateDeadLine),
+      },
       itIssue: session.itIssue,
       csEducation: session.csEducation,
       networking: session.networking,
