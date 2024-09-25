@@ -117,7 +117,7 @@ const SessionUploadModal = ({
         sessionId: sessionInfo?.sessionId || 0,
         title: sessionInfo?.title || '',
         description: sessionInfo?.description || '',
-        sessionDateTime: sessionInfo?.sessionDateTime || new Date(),
+        sessionDateTime: new Date(sessionInfo?.sessionDateTime || ''),
         placeName: sessionInfo?.placeName || '',
         location: {
           latitude: response.data.location?.latitude,

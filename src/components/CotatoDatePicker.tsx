@@ -65,6 +65,10 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
     );
   };
 
+  React.useEffect(() => {
+    setSelectedDate(date);
+  }, [date]);
+
   return (
     <Modal open={open}>
       <StyledDayPicker
