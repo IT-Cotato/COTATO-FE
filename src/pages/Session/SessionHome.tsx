@@ -3,19 +3,13 @@ import { styled } from 'styled-components';
 import useSWR from 'swr';
 import SessionCard, { IMAGE_WIDTH } from '@pages/Session/SessionCard';
 import fetcherWithParams from '@utils/fetcherWithParams';
-import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
-import {
-  SessionContentsCsEducation,
-  SessionContentsDevTalk,
-  SessionContentsItIssue,
-  SessionContentsNetworking,
-} from '@/enums/SessionContents';
+import { SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import api from '@/api/api';
 import SessionUploadModal from '@pages/Session/SessionUploadModal';
 import {
   CotatoGenerationInfoResponse,
+  CotatoLocalTime,
   CotatoSessionListResponse,
-  CotatoUpdateSessionRequest,
 } from 'cotato-openapi-clients';
 import GenerationDropBox from '@components/GenerationDropBox';
 import { useMediaQuery } from '@mui/material';
@@ -48,13 +42,43 @@ const SessionHome = () => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateSession, setUpdateSession] = useState<SessionListInfo | null>(null);
+  const [updateSession, setUpdateSession] = useState<CotatoSessionListResponse | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
   const navigate = useNavigate();
+
+  /**
+   *
+   */
+  const getDeadLineString = (deadLine?: CotatoLocalTime) => {
+    if (!deadLine) {
+      return '00:00:00';
+    }
+
+    const numToString = (num?: number) => {
+      if (!num) {
+        return '00';
+      }
+
+      return num.toString().padStart(2, '0');
+    };
+
+    return `${numToString(deadLine.hour)}:${numToString(deadLine.minute)}:${numToString(
+      deadLine.second,
+    )}`;
+  };
+
+  /**
+   *
+   */
+  const getDateString = (date: Date) => {
+    const dateISO = new Date(date);
+    dateISO.setHours(dateISO.getHours() + 9);
+    return dateISO.toISOString().substring(0, 19);
+  };
 
   /**
    *
@@ -71,7 +95,7 @@ const SessionHome = () => {
       return;
     }
 
-    const updateSession: SessionListInfo = JSON.parse(JSON.stringify(session));
+    const updateSession: CotatoSessionListResponse = JSON.parse(JSON.stringify(session));
     setUpdateSession(updateSession);
     setIsDetailModalOpen(false);
     setIsUpdateModalOpen(true);
@@ -80,7 +104,7 @@ const SessionHome = () => {
   /**
    *
    */
-  const requestImageAdd = (image: SessionListImageInfo): Promise<any> => {
+  const requestImageAdd = (image: SessionListImageInfo, order: number): Promise<any> => {
     if (!image.imageFile) {
       return Promise.reject('No image file');
     }
@@ -88,6 +112,7 @@ const SessionHome = () => {
     const formData = new FormData();
     formData.append('sessionId', updateSession?.sessionId?.toString() || '');
     formData.append('image', image.imageFile);
+    formData.append('order', order.toString());
 
     return api.post('v1/api/session/image', formData);
   };
@@ -127,18 +152,18 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleSessionAdd = (session: SessionListInfo) => {
-    if (!session.sessionDate) {
+  const handleSessionAdd = (session: SessionUploadInfo) => {
+    if (!session.sessionDateTime) {
       toast.error('세션 날짜를 입력해주세요.');
       return;
     }
 
-    if (!session.attendanceDeadLine) {
+    if (!session.attendTime?.attendanceDeadLine) {
       toast.error('출석 인정 시간을 입력해주세요.');
       return;
     }
 
-    if (!session.lateDeadLine) {
+    if (!session.attendTime?.lateDeadLine) {
       toast.error('지각 인정 시간을 입력해주세요.');
       return;
     }
@@ -147,19 +172,19 @@ const SessionHome = () => {
     formData.append('generationId', selectedGeneration?.generationId?.toString() || '');
     formData.append('title', session.title || '');
     formData.append('description', session.description || '');
-    formData.append('sessionDate', dayjs(session.sessionDate).format('YYYY-MM-DD') || '');
-    formData.append('itIssue', session.sessionContents?.itIssue || SessionContentsItIssue.OFF);
-    formData.append(
-      'csEducation',
-      session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
-    );
-    formData.append(
-      'networking',
-      session.sessionContents?.networking || SessionContentsNetworking.OFF,
-    );
-    formData.append('devTalk', session.sessionContents?.devTalk || SessionContentsDevTalk.OFF);
-    formData.append('attendanceDeadLine', session.attendanceDeadLine || '');
-    formData.append('lateDeadLine', session.lateDeadLine || '');
+
+    formData.append('latitude', session.location?.latitude?.toString() || '');
+    formData.append('longitude', session.location?.longitude?.toString() || '');
+    formData.append('placeName', session.placeName || '');
+
+    formData.append('sessionDateTime', getDateString(session.sessionDateTime));
+    formData.append('itIssue', session.itIssue);
+    formData.append('csEducation', session.csEducation);
+    formData.append('networking', session.networking);
+    formData.append('devTalk', session.devTalk);
+
+    formData.append('attendanceDeadLine', getDeadLineString(session.attendTime.attendanceDeadLine));
+    formData.append('lateDeadLine', getDeadLineString(session.attendTime.lateDeadLine));
 
     session.imageInfos.forEach((imageInfo) => {
       if (imageInfo.imageFile) {
@@ -179,26 +204,27 @@ const SessionHome = () => {
   /**
    *
    */
-  const handleSessionUpdate = (session: SessionListInfo) => {
+  const handleSessionUpdate = (session: SessionUploadInfo) => {
+    console.log(session);
     if (!session.sessionId) {
       return;
     }
 
-    const offset = new Date().getTimezoneOffset() * 60000;
-    const sessionDate = session?.sessionDate
-      ? new Date(session.sessionDate.getTime() - offset)
-      : new Date(Date.now() - offset);
-
-    const updatedSessoinInfo: CotatoUpdateSessionRequest = {
+    const updatedSessoinInfo = {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
-      sessionDate: sessionDate,
-      itIssue: session.sessionContents?.itIssue || SessionContentsItIssue.OFF,
-      csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
-      networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
-      devTalk: session.sessionContents?.devTalk || SessionContentsDevTalk.OFF,
-      sessionDateTime: session.sessionDateTime || new Date(),
+      sessionDateTime: getDateString(session.sessionDateTime),
+      placeName: session.placeName,
+      location: session.location,
+      attendTime: {
+        attendanceDeadLine: getDeadLineString(session?.attendTime?.attendanceDeadLine),
+        lateDeadLine: getDeadLineString(session?.attendTime?.lateDeadLine),
+      },
+      itIssue: session.itIssue,
+      csEducation: session.csEducation,
+      networking: session.networking,
+      devTalk: session.devTalk,
     };
 
     api
