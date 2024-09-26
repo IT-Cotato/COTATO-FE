@@ -1,8 +1,9 @@
 import React from 'react';
 import AboutLayout from './AboutLayout';
 import AboutStatus from './AboutStatus';
-import exampleIcon from '@assets/sign_up_user_icon.svg';
+import AboutStructureDiagram from './AboutStructureDiagram';
 import analyticsIcon from '@assets/analytics_icon.svg';
+import userCrownIcon from '@assets/user_crown_icon.svg';
 
 //
 //
@@ -17,7 +18,11 @@ const About = () => {
         dividerIcon={analyticsIcon}
         content={<AboutStatus />}
       />
-      <AboutLayout title="운영진 구조도" dividerIcon={exampleIcon} content={<></>} />
+      <AboutLayout
+        title="운영진 구조도"
+        dividerIcon={userCrownIcon}
+        content={<AboutStructureDiagram />}
+      />
     </div>
   );
 };
