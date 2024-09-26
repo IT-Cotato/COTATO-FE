@@ -2,16 +2,21 @@ import React from 'react';
 import AboutLayout from './AboutLayout';
 import AboutStatus from './AboutStatus';
 import AboutStructureDiagram from './AboutStructureDiagram';
+import AboutActivity from './AboutActivity';
+import AboutReview from './AboutReview';
 import analyticsIcon from '@assets/analytics_icon.svg';
 import userCrownIcon from '@assets/user_crown_icon.svg';
 import usersIcon from '@assets/users_icon.svg';
-import AboutActivity from './AboutActivity';
+import quoteIcon from '@assets/quote_icon.svg';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
 //
 
 const About = () => {
+  const { isLaptopOrSmaller } = useBreakpoints();
+
   return (
     <div>
       {/* 맨 위 홈 자리 */}
@@ -26,6 +31,9 @@ const About = () => {
         content={<AboutStructureDiagram />}
       />
       <AboutLayout title="감자들의 활동" dividerIcon={usersIcon} content={<AboutActivity />} />
+      {!isLaptopOrSmaller && (
+        <AboutLayout title="찐 감자들의 후기" dividerIcon={quoteIcon} content={<AboutReview />} />
+      )}
     </div>
   );
 };
