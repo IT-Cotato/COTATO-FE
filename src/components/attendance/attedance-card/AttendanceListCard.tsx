@@ -83,7 +83,7 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
           {generationNumber}기 {attendance.sessionTitle}
         </StyledTypography>
         <StyledTypography variant="body2" fontSize="0.875rem" color={theme.colors.gray50}>
-          {attendance.sessionDate as unknown as string}
+          {attendance.sessionDateTime as unknown as string}
         </StyledTypography>
       </Stack>
     );

@@ -36,7 +36,7 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
         <StyledLateIcon />
       )}
       <Stack gap="0.25rem">
-        <DateText>{attendance.sessionDate as unknown as string}</DateText>
+        <DateText>{attendance.sessionDateTime as unknown as string}</DateText>
         <TitleText>
           {generationNumber}기 {attendance.sessionTitle}
         </TitleText>
