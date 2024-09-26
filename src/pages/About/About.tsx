@@ -20,11 +20,11 @@ const About = () => {
         dividerIcon={analyticsIcon}
         content={<AboutStatus />}
       />
-      {/* <AboutLayout
+      <AboutLayout
         title="운영진 구조도"
         dividerIcon={userCrownIcon}
         content={<AboutStructureDiagram />}
-      /> */}
+      />
       <AboutLayout title="감자들의 활동" dividerIcon={usersIcon} content={<AboutActivity />} />
     </div>
   );
