@@ -58,7 +58,7 @@ const AboutLayout: React.FC<AboutLayoutProps> = ({ dividerIcon, title, content }
           }}
         />
       </Stack>
-      <Stack padding="5rem">{content}</Stack>
+      <Stack padding="5rem 2rem">{content}</Stack>
     </Stack>
   );
 };
