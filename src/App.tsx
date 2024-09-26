@@ -22,6 +22,7 @@ import Projects from '@pages/Projects/Projects';
 import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
 import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
+import { About } from '@pages/About';
 
 function App() {
   const location = useLocation();
@@ -53,7 +54,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/about" element={<ReadyState />} />
+          <Route path="/about" element={<About />} />
           <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSPage />} />
           <Route path="/session/*" element={<Session />} />
