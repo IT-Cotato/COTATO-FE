@@ -172,6 +172,7 @@ const SessionHome = () => {
       csEducation: session.sessionContents?.csEducation || SessionContentsCsEducation.OFF,
       networking: session.sessionContents?.networking || SessionContentsNetworking.OFF,
       devTalk: session.sessionContents?.devTalk || SessionContentsDevTalk.OFF,
+      sessionDateTime: session.sessionDateTime || new Date(),
     };
 
     api
