@@ -90,7 +90,7 @@ const DescriptionBox = styled.div`
   }
 
   > span {
-    color: ${({ theme }) => theme.colors.gray80_1};
+    color: ${({ theme }) => theme.colors.gray100};
     font-family: Ycomputer;
     font-size: 2.25rem;
     z-index: 1;
@@ -148,7 +148,7 @@ const ActivityCard = styled.div`
   padding: 0.5rem 0.5rem 1.5rem;
   border: 2.5px solid ${({ theme }) => theme.colors.primary100_2};
   border-radius: 1rem;
-  background-color: ${({ theme }) => theme.colors.common.white};
+  background-color: ${({ theme }) => theme.colors.common.white_const};
 
   > img {
     width: 14rem;
@@ -182,7 +182,7 @@ const CardTitle = styled.span`
 
 const CardContent = styled.span`
   width: 11rem;
-  color: ${({ theme }) => theme.colors.gray80_2};
+  color: ${({ theme }) => theme.colors.gray70};
   font-family: Pretendard;
   font-size: 0.875rem;
 
