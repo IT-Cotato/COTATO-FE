@@ -4,6 +4,7 @@ import AboutStatus from './AboutStatus';
 import AboutStructureDiagram from './AboutStructureDiagram';
 import AboutActivity from './AboutActivity';
 import AboutReview from './AboutReview';
+import AboutMain from './AboutMain';
 import analyticsIcon from '@assets/analytics_icon.svg';
 import userCrownIcon from '@assets/user_crown_icon.svg';
 import usersIcon from '@assets/users_icon.svg';
@@ -19,7 +20,7 @@ const About = () => {
 
   return (
     <div>
-      {/* 맨 위 홈 자리 */}
+      <AboutMain />
       <AboutLayout
         title="성장추구형 코테이토"
         dividerIcon={analyticsIcon}
