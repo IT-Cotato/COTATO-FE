@@ -40,6 +40,8 @@ function App() {
     }
   }, [isInHome]);
 
+  console.log('api', process.env.REACT_APP_BASE_URL);
+
   //
   //
   //
