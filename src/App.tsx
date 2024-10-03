@@ -40,7 +40,7 @@ function App() {
     }
   }, [isInHome]);
 
-  console.log('api', process.env.REACT_APP_BASE_URL);
+  console.log('api', process.env.REACT_APP_BASE_URL, 'qa', process.env.REACT_APP_QA_BASE_URL);
 
   //
   //
