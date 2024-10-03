@@ -5,6 +5,8 @@ const api = axios.create({
   withCredentials: true,
 });
 
+console.log('process.env.REACT_APP_BASE_URL', process.env.REACT_APP_BASE_URL);
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
