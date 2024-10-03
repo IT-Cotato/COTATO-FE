@@ -26,20 +26,29 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
   onDateChange,
   onClose,
 }) => {
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(date);
-
   const theme = useTheme();
 
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(date);
+
+  /**
+   *
+   */
   const handleCancelClick = () => {
     setSelectedDate(date);
     onClose();
   };
 
+  /**
+   *
+   */
   const handleConfirmlClick = () => {
     selectedDate && onDateChange(selectedDate);
     onClose();
   };
 
+  /**
+   *
+   */
   const renderPickerFooter = () => {
     return (
       <PickerFotter>
@@ -55,6 +64,10 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
       </PickerFotter>
     );
   };
+
+  //
+  //
+  //
 
   return (
     <Modal open={open}>
