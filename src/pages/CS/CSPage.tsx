@@ -20,7 +20,7 @@ const CSPage = () => {
       <Route path="/manage/*" element={<CSManage />} />
       <Route path="/start" element={<CSStart />} />
       <Route path="/upload" element={<CSUpload />} />
-      <Route path="/solving" element={<CSQuiz />} />
+      <Route path="/solving/:educationId" element={<CSQuiz />} />
     </Routes>
   );
 };
