@@ -5,7 +5,7 @@ import mobile from '@assets/bg_waiting_mobile.svg';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import api from '@/api/api';
 import CSProblem from './CSProblem';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BgWinner from './BgWinner';
 
 interface WaitingProps {
