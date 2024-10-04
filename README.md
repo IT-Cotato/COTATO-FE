@@ -46,7 +46,7 @@ Team COTATO 프론트엔드 **Version 2** 레포지토리
 ### 4. Attendance
 <div id="attendance"></div>
 
-![readme_ui_001](https://github.com/user-attachments/assets/22ca46ee-48c6-4e1f-978b-1a7e016e282e)
+![readme_ui_002](https://github.com/user-attachments/assets/656e1b38-61a1-4be5-96bd-017d65dd5ad5)
 
 ### 5. Session
 <div id="session"></div>
