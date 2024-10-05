@@ -537,6 +537,7 @@ const SessionUploadModal = ({
   return (
     <Modal
       open={open}
+      onClose={handleClose}
       slotProps={{
         backdrop: {
           sx: {
