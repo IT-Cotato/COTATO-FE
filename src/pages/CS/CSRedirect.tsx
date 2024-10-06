@@ -16,7 +16,9 @@ const CSRedirect = () => {
   //
   //
   useEffect(() => {
-    if (params.generationId === undefined) {
+    if (params.generationId !== undefined) {
+      navigate(`/cs/${currentGeneration?.generationId}`);
+    } else {
       navigate(`/cs/${currentGeneration?.generationId}`);
     }
   }, []);
