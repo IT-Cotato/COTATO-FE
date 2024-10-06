@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CSAdminUploadLayout from './CSAdminUploadLayout';
 import CSAdminUploadContent from './CSAdminUploadContent';
 import fetchUserData from '@utils/fetchUserData';
 import api from '@/api/api';
 import { MultipleQuiz, ShortQuiz } from './CSAdminUploadSlides';
 import { createMultipleQuiz } from './utils/createMultipleQuiz';
+import { useGeneration } from '@/hooks/useGeneration';
+import { useEducation } from '@/hooks/useEducation';
+
+//
+//
+//
 
 type QuizType = MultipleQuiz | ShortQuiz;
+
+//
+//
+//
 
 const CSAdminUpload = () => {
   // 현재 선택된 슬라이드를 나타내기 위한 state
@@ -16,10 +26,13 @@ const CSAdminUpload = () => {
   const [quiz, setQuiz] = useState<QuizType[]>([createMultipleQuiz()]);
 
   const { data: userData, isLoading } = fetchUserData();
-  const [params] = useSearchParams();
-  const educationId = Number(params.get('educationId'));
-  const educationNumber = params.get('educationNumber') || '';
-  const generationNumber = params.get('generationNumber') || '';
+  const { generationId, educationId } = useParams();
+
+  const { targetGeneration } = useGeneration({ generationId });
+  const { targetEducation } = useEducation({
+    generationId: Number(generationId),
+    educationId: educationId,
+  });
 
   /**
    * fetch quiz list data if it exists
@@ -76,13 +89,16 @@ const CSAdminUpload = () => {
   }, 500);
 
   return (
-    <CSAdminUploadLayout generationNumber={generationNumber} educationNumber={educationNumber}>
+    <CSAdminUploadLayout
+      generationNumber={targetGeneration?.generationNumber?.toString()}
+      educationNumber={targetEducation?.educationNumber?.toString()}
+    >
       <CSAdminUploadContent
         quiz={quiz}
         setQuiz={setQuiz}
         selected={selected}
         setSelected={setSelected}
-        educationId={educationId}
+        educationId={Number(educationId)}
       />
     </CSAdminUploadLayout>
   );

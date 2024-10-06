@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { IApplyMember, IEnrollMember, IGeneration } from '@/typing/db';
+import { IApplyMember, IEnrollMember } from '@/typing/db';
 import styled from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_icon.svg';
 import { ReactComponent as ApproveIcon } from '@assets/approve_icon.svg';
@@ -8,11 +8,12 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import api from '@/api/api';
 import useSWRImmutable from 'swr/immutable';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 
 interface Props {
   mode: string;
   member: IApplyMember;
-  generation?: IGeneration;
+  generation?: CotatoGenerationInfoResponse;
   position: string;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
