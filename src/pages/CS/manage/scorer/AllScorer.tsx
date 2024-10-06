@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CSManageLayout from '../CSManageLayout';
 import { css, styled } from 'styled-components';
 import useSWRImmutable from 'swr/immutable';
@@ -8,8 +8,7 @@ import { IQuizAllScorer } from '@/typing/db';
 import { CotatoKingMemberInfo } from 'cotato-openapi-clients';
 
 const AllScorer = () => {
-  const [searchParams] = useSearchParams();
-  const educationId = searchParams.get('educationId');
+  const { educationId } = useParams();
 
   const { data } = useSWRImmutable<IQuizAllScorer[]>(
     `/v1/api/quiz/cs-admin/results?educationId=${educationId}`,

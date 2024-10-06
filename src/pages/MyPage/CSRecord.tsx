@@ -27,9 +27,13 @@ const medalImgSrcs = [
 const CSRecord = () => {
   const { user } = useUser();
   const [params] = useSearchParams();
-  const generationId = params.get('generationId') ?? '0';
+  const generationId = params.get('generationId');
 
-  const { targetGeneration } = useGeneration({ generationId });
+  const [selectedGenerationId, setSelectedGenerationId] = React.useState<string | undefined>(
+    generationId || undefined,
+  );
+
+  const { targetGeneration } = useGeneration({ generationId: selectedGenerationId });
 
   const { data: hallOfFameData } = useSWR(
     '/v1/api/mypage/hall-of-fame?generationId=' + targetGeneration?.generationId,
@@ -44,7 +48,11 @@ const CSRecord = () => {
     <Wrapper>
       <Title>내가 풀어본 CS 문제풀이</Title>
       <SelectGenerationDiv>
-        <GenerationDropBox handleGenerationChange={() => {}} />
+        <GenerationDropBox
+          handleGenerationChange={(generation) => {
+            setSelectedGenerationId(generation?.generationId?.toString());
+          }}
+        />
         {/* </select> */}
       </SelectGenerationDiv>
       <MyInfoBox>

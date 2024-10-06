@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as ArrowBack } from '@assets/arrow_back.svg';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useMatch, useNavigate, useParams } from 'react-router-dom';
 
 interface Props {
   header: string;
@@ -11,15 +11,15 @@ interface Props {
 const CSManageLayout = ({ header, children }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams] = useSearchParams();
+  const { generationId, educationId } = useParams();
 
-  const educationId = searchParams.get('educationId');
+  const match = useMatch('/cs/manage/generation/:generationId/education/:educationId');
 
   const handlePrevButton = useCallback(() => {
-    if (location.pathname === '/cs/manage') {
-      navigate('/cs');
+    if (match) {
+      navigate(`/cs/start/generation/${generationId}/education/${educationId}`);
     } else {
-      navigate(`/cs/manage?educationId=${educationId}`);
+      navigate(`/cs/manage/generation/${generationId}/education/${educationId}`);
     }
   }, [location.pathname]);
 
@@ -50,6 +50,7 @@ const BackButton = styled(ArrowBack)`
   position: absolute;
   left: 72px;
   top: 64px;
+  cursor: pointer;
 `;
 
 const CSManageHeader = styled.div`
