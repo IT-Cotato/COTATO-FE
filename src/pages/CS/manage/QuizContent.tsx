@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { css, styled } from 'styled-components';
 import ToggleButton from '@components/ToggleButton';
 import { ReactComponent as ArrowBack } from '@assets/arrow_back.svg';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { IQuizAdmin } from '@/typing/db';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -12,22 +12,30 @@ import { ToastContainer, toast } from 'react-toastify';
 
 interface Props {
   quiz: IQuizAdmin;
-  educationId: string | null;
   educationStatus?: string;
   quizStatus: string;
 }
 
-const QuizContent = ({ quiz, educationId, educationStatus, quizStatus }: Props) => {
+const QuizContent = ({ quiz, educationStatus, quizStatus }: Props) => {
+  const { educationId } = useParams();
+  const location = useLocation();
+
   const { mutate } = useSWR(`/v1/api/quiz/cs-admin/all?educationId=${educationId}`, fetcher);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const navigate = useNavigate();
 
+  /**
+   *
+   */
   const onClickQuestionButton = useCallback(() => {
-    navigate(`quizscorer?educationId=${educationId}&quizId=${quiz.quizId}`);
+    navigate(location.pathname + `/quiz/${quiz.quizId}/quizscorer`);
   }, [quiz]);
 
+  /**
+   *
+   */
   const onClickApproach = useCallback(() => {
     if (educationStatus !== 'ONGOING') {
       toast.error('교육을 시작해주세요.');
@@ -82,7 +90,7 @@ const QuizContent = ({ quiz, educationId, educationStatus, quizStatus }: Props) 
         setIsPopupOpen(false);
         mutate();
       });
-  }, [quiz.start, educationStatus, quizStatus]);
+  }, [quiz.start, educationStatus, quizStatus, educationId]);
 
   return (
     <>

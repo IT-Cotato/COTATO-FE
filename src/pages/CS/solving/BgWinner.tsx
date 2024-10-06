@@ -1,54 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import background from '@assets/bg_kingking.svg';
 import mobile from '@assets/bg_kingking_mobile.svg';
 import api from '@/api/api';
 import { CotatoWinnerInfoResponse } from 'cotato-openapi-clients';
+import { useParams } from 'react-router-dom';
+import { useMount } from 'react-use';
 
 //
 //
 //
 
-interface BgWinnerProps {
-  quizId: number | null;
-}
-
-//
-//
-//
-
-const BgWinner: React.FC<BgWinnerProps> = ({ quizId }) => {
+const BgWinner: React.FC = () => {
   const [winner, setWinner] = useState<CotatoWinnerInfoResponse>();
-  const [educationId, setEducationId] = useState<number>(0);
+  const { educationId } = useParams();
 
-  useEffect(() => {
-    const handleWinner = async () => {
-      const eduId = await fetchEducationId();
-      fetchWinner(eduId);
-    };
-    handleWinner();
-  }, []);
-
-  const fetchEducationId = async (): Promise<number> => {
-    let fetchedEducationId: number = 0;
-    await api
-      .get('/v1/api/education/from', {
-        params: {
-          quizId: quizId,
-        },
-      })
-      .then((res) => {
-        fetchedEducationId = res.data.educationId;
-        setEducationId(fetchedEducationId);
-        console.log(educationId);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    return fetchedEducationId;
-  };
-
-  const fetchWinner = async (educationId: number) => {
+  /**
+   *
+   */
+  const fetchWinner = async () => {
     await api
       .get('/v1/api/education/winner', {
         params: {
@@ -57,12 +27,22 @@ const BgWinner: React.FC<BgWinnerProps> = ({ quizId }) => {
       })
       .then((res) => {
         setWinner(res.data);
-        console.log(winner);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  //
+  //
+  //
+  useMount(() => {
+    fetchWinner();
+  });
+
+  //
+  //
+  //
 
   return (
     <Wrapper>
