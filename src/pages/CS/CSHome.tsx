@@ -5,29 +5,35 @@ import { ReactComponent as SettingIcon } from '@assets/setting_icon.svg';
 import { ReactComponent as AddIcon } from '@assets/add_icon.svg';
 import GenerationSelect from '@components/GenerationSelect';
 import CSModal from '@pages/CS/CSModal';
-import { IEducation, IGeneration } from '@/typing/db';
+import { IEducation } from '@/typing/db';
 import api from '@/api/api';
-import fetcher from '@utils/fetcher';
-import useSWR from 'swr';
 import { useNavigate } from 'react-router-dom';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { useGeneration } from '@/hooks/useGeneration';
+import useUser from '@/hooks/useUser';
 
 const CSHome = () => {
-  const { data: user, error } = useSWR('/v1/api/member/info', fetcher);
+  const { currentGeneration } = useGeneration();
+  const { user } = useUser();
 
   const [educations, setEducations] = useState<undefined | IEducation[]>();
   const [isCSModalOpen, setIsCSModalOpen] = useState(false);
   const [modifyEducation, setModifyEducation] = useState<undefined | IEducation>();
-  const [selectedGeneration, setSelectedGeneration] = useState<undefined | IGeneration>();
+  const [selectedGeneration, setSelectedGeneration] = useState<
+    undefined | CotatoGenerationInfoResponse
+  >(currentGeneration);
 
   const navigate = useNavigate();
 
   const onChangeGeneration = useCallback(
-    (generation?: IGeneration) => {
+    (generation?: CotatoGenerationInfoResponse) => {
       setSelectedGeneration(generation);
 
       if (generation) {
         fetchEducations(generation.generationId);
       }
+
+      navigate(`/cs/${generation?.generationId}`);
     },
     [selectedGeneration],
   );
@@ -59,16 +65,6 @@ const CSHome = () => {
   const onCloseModal = useCallback(() => {
     setIsCSModalOpen(false);
   }, []);
-
-  //
-  //
-  //
-  React.useEffect(() => {
-    if (error || user?.role === 'GENERAL') {
-      window.alert('코테이토 회원 전용 페이지입니다.');
-      navigate('/');
-    }
-  }, [error, user]);
 
   return (
     <>

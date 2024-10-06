@@ -3,14 +3,15 @@ import { styled, css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ModifyIcon } from '@assets/modify_icon.svg';
 import background from '@assets/cs_content_background.svg';
-import { IGeneration, IEducation } from '@/typing/db';
+import { IEducation } from '@/typing/db';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 
 interface Props {
   education: IEducation;
   handleModifyButton: (education: IEducation) => void;
-  generation?: IGeneration;
+  generation?: CotatoGenerationInfoResponse;
 }
 
 const CSContent = ({ education, handleModifyButton, generation }: Props) => {
@@ -20,14 +21,7 @@ const CSContent = ({ education, handleModifyButton, generation }: Props) => {
   const navigate = useNavigate();
 
   const onclickContent = useCallback(() => {
-    navigate(
-      `/cs/start?generationId=${generation?.generationId}&generationNumber=${generation?.generationNumber}&educationId=${education.educationId}&educationNumber=${education.educationNumber}`,
-      {
-        state: {
-          subject: education.subject,
-        },
-      },
-    );
+    navigate(`/cs/start/generation/${generation?.generationId}/education/${education.educationId}`);
   }, [generation?.generationId, education.educationNumber]);
 
   const onClickModifyButton = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
@@ -41,7 +35,7 @@ const CSContent = ({ education, handleModifyButton, generation }: Props) => {
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      <ContentWeek>{`${education.educationNumber}주차 문제`}</ContentWeek>
+      <ContentWeek>{`${education.educationNumber}차시 문제`}</ContentWeek>
       <ContentTitle>{education.subject}</ContentTitle>
       {user?.role === 'ADMIN' && isHover && (
         <HoverContent>
