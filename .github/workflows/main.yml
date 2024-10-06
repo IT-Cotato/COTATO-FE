@@ -25,6 +25,21 @@ jobs:
       - name: Check Node v
         run: node -v
 
+      - name: Set Environment Variables
+        run: |
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env.production
+            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_SOCKET_URL }}" >> .env.production
+          elif [ "${GITHUB_REF}" == "refs/heads/release" ]; then
+            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_QA_BASE_URL }}" >> .env.qa
+            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_QA_SOCKET_URL }}" >> .env.qa
+          fi
+        env:
+          REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+          REACT_APP_SOCKET_URL: ${{ secrets.REACT_APP_SOCKET_URL }}
+          REACT_APP_QA_BASE_URL: ${{ secrets.REACT_APP_QA_BASE_URL }}
+          REACT_APP_QA_SOCKET_URL: ${{ secrets.REACT_APP_QA_SOCKET_URL }}
+
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
