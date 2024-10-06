@@ -5,7 +5,7 @@ import mobile from '@assets/bg_waiting_mobile.svg';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import api from '@/api/api';
 import CSProblem from './CSProblem';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BgWinner from './BgWinner';
 
 interface WaitingProps {
@@ -21,6 +21,8 @@ type MessageType = {
 };
 
 const CSQuiz: React.FC<WaitingProps> = () => {
+  const params = useParams();
+  const currentEducationId = params.educationId;
   const webSocket = React.useRef<WebSocket | undefined>(undefined);
 
   const [message, setMessage] = useState<MessageType>({
@@ -48,7 +50,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   });
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     initializeWebSocket();
@@ -85,8 +86,8 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   // WebSocket 연결
   const connectWebSocket = () => {
     webSocket.current = new WebSocket(
-      `/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
-        location.state.educationId
+      `${process.env.REACT_APP_SOCKET_URL}/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
+        currentEducationId
       }`,
     );
     webSocket.current.onopen = () => {

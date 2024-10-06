@@ -77,7 +77,7 @@ const Projects = () => {
     <Wrapper>
       <ProjectTag width={isTabletOrSmaller ? '8.8rem' : '10rem'} />
       {renderSubtitle()}
-      <Grid2 container spacing={8} padding="0 4rem">
+      <Grid2 container spacing={8} justifyContent="center">
         {renderProjects()}
       </Grid2>
       <ProjectDialog projectId={Number(selectedId)} open={!!selectedId} onClose={handleClose} />

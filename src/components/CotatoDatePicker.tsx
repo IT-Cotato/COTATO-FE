@@ -40,6 +40,9 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
     onClose();
   };
 
+  /**
+   *
+   */
   const handleConfirmlClick = () => {
     onDateChange(selectedDate);
     onClose();
