@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
 import { ReactComponent as ArrowDown } from '@assets/arrow_down_dotted.svg';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
-import { v4 as uuid } from 'uuid';
 import generationSort from '@utils/newGenerationSort';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
@@ -20,7 +19,7 @@ interface GenerationDropBoxProps {
    * @param generation selected generation
    */
   handleGenerationChange: (generation: CotatoGenerationInfoResponse) => void;
-  color: DropBoxColorEnum;
+  color?: DropBoxColorEnum;
   width?: string;
   height?: string;
 }
@@ -53,9 +52,10 @@ const GenerationDropBox = ({
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
-  const { generations: rawGenerations } = useGeneration();
+  const theme = useTheme();
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const { generations: rawGenerations, isGenerationLoading } = useGeneration();
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
   const [generations, setGenerations] = useState<CotatoGenerationInfoResponse[]>([]);
@@ -65,7 +65,7 @@ const GenerationDropBox = ({
 
   const generationDropBoxRef = useRef<HTMLDivElement>(null);
 
-  const theme = useTheme();
+  const isInProduction = process.env.NODE_ENV === 'production';
 
   /**
    * get drop box style of color
@@ -136,24 +136,30 @@ const GenerationDropBox = ({
   /**
    *
    */
-  const renderDropDownList = () => (
-    <DropDownList className={isDropBoxOpen ? 'fade-in' : 'fade-out'}>
-      <ul>
-        {generations
-          .filter((generation) => generation?.generationNumber && generation.generationNumber >= 8)
-          .map((generation) => (
-            <li
-              key={uuid()}
-              className={generation === selectedGeneration ? 'selected' : ''}
-              onClick={() => handleGenerationClick(generation)}
-            >
-              {generation === selectedGeneration && <StyledCheckIcon />}
-              {generation.generationNumber}기
-            </li>
-          ))}
-      </ul>
-    </DropDownList>
-  );
+  const renderDropDownList = () => {
+    return (
+      <DropDownList className={isDropBoxOpen ? 'fade-in' : 'fade-out'}>
+        <ul>
+          {generations
+            .filter(
+              (generation) =>
+                !isInProduction ||
+                (generation?.generationNumber && generation.generationNumber >= 8),
+            )
+            .map((generation) => (
+              <li
+                key={generation.generationId}
+                className={generation === selectedGeneration ? 'selected' : ''}
+                onClick={() => handleGenerationClick(generation)}
+              >
+                {generation === selectedGeneration && <StyledCheckIcon />}
+                {generation.generationNumber}기
+              </li>
+            ))}
+        </ul>
+      </DropDownList>
+    );
+  };
 
   /**
    *
@@ -175,7 +181,7 @@ const GenerationDropBox = ({
    *
    */
   useEffect(() => {
-    if (!rawGenerations) {
+    if (!rawGenerations || isGenerationLoading) {
       return;
     }
 
@@ -191,7 +197,7 @@ const GenerationDropBox = ({
     );
 
     handleGenerationSelect(searchedGeneration || sortedGenerations[0]);
-  }, [rawGenerations]);
+  }, [rawGenerations, isGenerationLoading]);
 
   return (
     <Wrapper ref={generationDropBoxRef} $width={width}>
