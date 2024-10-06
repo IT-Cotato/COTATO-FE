@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import api from '@/api/api';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Tooltip } from 'react-tooltip';
-import fetchUserData from '@utils/fetchUserData';
+import { useGeneration } from '@/hooks/useGeneration';
+import { useEducation } from '@/hooks/useEducation';
+import useUser from '@/hooks/useUser';
 
 const CSStart = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const search = location.search;
+
+  const { user } = useUser();
+  const { generationId, educationId } = useParams();
+  const { targetGeneration } = useGeneration({ generationId });
+  const { targetEducation } = useEducation({
+    generationId: Number(generationId) ?? 0,
+    educationId,
+  });
+
   const [educationStatus, setEducationStatus] = useState<'BEFORE' | 'ONGOING' | 'FINISHED'>(
     'BEFORE',
   );
-  const { data: userData } = fetchUserData();
-  const navigate = useNavigate();
-  const [params] = useSearchParams();
-  const generationNumber = params.get('generationNumber');
-  const educationNumber = params.get('educationNumber');
-  const educationId = params.get('educationId');
-  const location = useLocation();
-  const subject = location?.state?.subject;
-  const search = location.search;
 
   /**
    * fetch education status ->
@@ -36,10 +41,6 @@ const CSStart = () => {
     fetchEducationStatus();
   }, []);
 
-  if (userData?.role === null) {
-    navigate('/signin');
-  }
-
   /**
    *
    */
@@ -51,11 +52,7 @@ const CSStart = () => {
    *
    */
   const handleClickUploadButton = () => {
-    navigate('/cs/upload' + search, {
-      state: {
-        subject: subject,
-      },
-    });
+    navigate(`/cs/upload/generation/${generationId}/education/${educationId}`);
   };
 
   /**
@@ -86,8 +83,8 @@ const CSStart = () => {
       <TitleBox>
         <h3>COTATO</h3>
         <h1>CS QUIZ</h1>
-        <p>{`${generationNumber}기/ ${educationNumber}차 세션`}</p>
-        <span>{subject}</span>
+        <p>{`${targetGeneration?.generationNumber}기 ${targetEducation?.educationNumber}차시 교육`}</p>
+        <span>{targetEducation?.subject}</span>
       </TitleBox>
     );
   };
@@ -115,12 +112,12 @@ const CSStart = () => {
         </StartButton>
         <OtherButton
           onClick={() => {
-            window.location.href = '/cs';
+            navigate(`/cs/${generationId}`);
           }}
         >
           <p>이전세션 선택하기</p>
         </OtherButton>
-        {['ADMIN', 'EDUCATION'].includes(userData?.role as string) ? (
+        {['ADMIN', 'EDUCATION'].includes(user?.role as string) ? (
           <>
             {educationStatus === 'ONGOING' && (
               <Tooltip
