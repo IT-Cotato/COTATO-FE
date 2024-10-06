@@ -3,14 +3,44 @@ import styled, { css } from 'styled-components';
 import cotato from '@assets/cotato_icon.png';
 import { ReactComponent as ButtonIcon } from '@assets/button_icon.svg';
 import { Link } from 'react-router-dom';
-import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import useSWRImmutable from 'swr/immutable';
 import { IMyPageInfo } from '@/typing/db';
 import { logout } from '@utils/logout';
+import { Stack } from '@mui/material';
+import cotatoCharacterFront from '@assets/cotato_character_front.svg';
+import cotatoCharacterBack from '@assets/cotato_character_back.svg';
+import cotatoCharacterPM from '@assets/cotato_character_pm.svg';
+import cotatoCharacterDesign from '@assets/cotato_character_design.svg';
+import useUser from '@/hooks/useUser';
+import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
+
+//
+//
+//
+
+interface CotatoCharacterProps {
+  imgSrc: string;
+}
+
+const COTATO_CHARCTER_SVG_MAP: Partial<
+  Record<CotatoMemberInfoResponsePositionEnum, CotatoCharacterProps>
+> = {
+  FE: {
+    imgSrc: cotatoCharacterFront,
+  },
+  BE: { imgSrc: cotatoCharacterBack },
+  PM: { imgSrc: cotatoCharacterPM },
+  DESIGN: { imgSrc: cotatoCharacterDesign },
+  NONE: { imgSrc: cotato },
+};
+
+//
+//
+//
 
 const MyInfo = () => {
-  const { data: user } = useSWR('/v1/api/member/info', fetcher);
+  const { user } = useUser();
   const { data: myInfo } = useSWRImmutable<IMyPageInfo>(
     `/v1/api/member/${user?.memberId}/mypage`,
     fetcher,
@@ -33,7 +63,15 @@ const MyInfo = () => {
         {user?.role !== 'GENERAL' && (
           <DataBox>
             <IDWrapper>
-              <ProfileImage />
+              <Stack justifyContent="center" alignItems="center">
+                <ProfileImage
+                  src={
+                    COTATO_CHARCTER_SVG_MAP[
+                      user?.position ?? CotatoMemberInfoResponsePositionEnum.None
+                    ]?.imgSrc ?? cotato
+                  }
+                />
+              </Stack>
               <InfoWrapper>
                 <p>아이디</p>
                 <TextContainer>
@@ -77,35 +115,37 @@ const MyInfo = () => {
           </DataBox>
         )}
         {user?.role !== 'GENERAL' && (
-          <ButtonContainer>
-            <p>내가 풀어본 CS 문제풀이</p>
-            <Link to="cs-record">
+          <StyledLink to="cs-record">
+            <ButtonContainer>
+              <p>내가 풀어본 CS 문제풀이</p>
               <ButtonIcon />
-            </Link>
-          </ButtonContainer>
+            </ButtonContainer>
+          </StyledLink>
         )}
         {user?.role === 'ADMIN' && (
-          <ButtonContainer>
-            <p>신입 감자 가입요청 확인/승인 </p>
-            <Link to="request">
+          <StyledLink to="request">
+            <ButtonContainer>
+              <p>신입 감자 가입요청 확인/승인 </p>
               <ButtonIcon />
-            </Link>
-          </ButtonContainer>
+            </ButtonContainer>
+          </StyledLink>
         )}{' '}
         {user?.role === 'ADMIN' && (
-          <ButtonContainer>
-            <p>관리자 권한 설정 </p>
-            <Link to="role-grant">
+          <StyledLink to="role-grant">
+            <ButtonContainer>
+              <p>관리자 권한 설정 </p>
               <ButtonIcon />
-            </Link>
-          </ButtonContainer>
+            </ButtonContainer>
+          </StyledLink>
         )}
-        <ButtonContainer>
-          <p>시스템 설정</p>
-          <Link to="setting">
-            <ButtonIcon />
-          </Link>
-        </ButtonContainer>
+        {user?.role === 'ADMIN' && (
+          <StyledLink to="setting">
+            <ButtonContainer>
+              <p>시스템 설정</p>
+              <ButtonIcon />
+            </ButtonContainer>
+          </StyledLink>
+        )}
         <LogoutButtonWrapper>
           <button onClick={onClickLogout}>
             <p>로그아웃</p>
@@ -262,12 +302,12 @@ const IDWrapper = styled.div`
   }
 `;
 
-const ProfileImage = styled.div`
-  width: 90px;
-  height: 100px;
+const ProfileImage = styled.div<{ src: string }>`
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   margin-right: 32px;
-  background-image: url(${cotato});
+  background-image: url(${(props) => props.src});
   background-size: cover;
 `;
 
@@ -319,4 +359,9 @@ const LogoutButtonWrapper = styled.div`
       color: ${({ theme }) => theme.colors.common.black};
     }
   }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.common.black};
 `;

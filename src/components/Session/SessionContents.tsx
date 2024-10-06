@@ -42,7 +42,10 @@ interface ContentProps {
 const SessionContents = ({ contents, size = 'sm', isActive }: SessionContentsProps) => {
   const theme = useTheme();
 
-  const { itIssue, networking, csEducation, devTalk } = contents;
+  const itIssue = contents?.itIssue;
+  const networking = contents?.networking;
+  const csEducation = contents?.csEducation;
+  const devTalk = contents?.devTalk;
 
   /**
    *

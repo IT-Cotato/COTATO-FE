@@ -48,7 +48,7 @@ const Wrapper = styled.div`
 
 const Header = styled.h1`
   margin: 132px 0 100px;
-  color: #1d1d1d;
+  color: ${({ theme }) => theme.colors.common.black};
   font-family: NanumSquareRound;
   font-size: 28px;
   font-weight: 800;
