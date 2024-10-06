@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { Box } from '@pages/MyPage/RoleApproveLayout';
-import { IApplyMember, IGeneration } from '@/typing/db';
+import { IApplyMember } from '@/typing/db';
 import RequestDropBox from '@components/RequestDropBox';
 import { styled } from 'styled-components';
 import ApprovePopup from '@pages/MyPage/request/RequestPopup';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 
 interface Props {
   mode: string;
@@ -11,12 +12,12 @@ interface Props {
 }
 
 const RequestContent = ({ mode, member }: Props) => {
-  const [generation, setGeneration] = useState<IGeneration>();
+  const [generation, setGeneration] = useState<CotatoGenerationInfoResponse>();
   const [position, setPosition] = useState('');
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupMode, setPopupMode] = useState('');
 
-  const onChangeGeneration = useCallback((selectedGeneration: IGeneration) => {
+  const onChangeGeneration = useCallback((selectedGeneration?: CotatoGenerationInfoResponse) => {
     setGeneration(selectedGeneration);
   }, []);
 
