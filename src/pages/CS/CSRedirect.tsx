@@ -8,8 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const CSRedirect = () => {
   const params = useParams();
-
   const navigate = useNavigate();
+
   const { currentGeneration } = useGeneration();
 
   //
@@ -21,7 +21,7 @@ const CSRedirect = () => {
     } else {
       navigate(`/cs/${currentGeneration?.generationId}`);
     }
-  }, []);
+  }, [currentGeneration]);
 
   //
   //
