@@ -25,7 +25,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 //
 //
