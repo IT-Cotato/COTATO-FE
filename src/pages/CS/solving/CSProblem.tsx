@@ -178,7 +178,11 @@ const CSProblem: React.FC<CSProblemProps> = ({
       const timeoutId = setTimeout(() => setShowIncorrect(false), 2500);
       return () => clearTimeout(timeoutId);
     }
-  }, [showCorrect, showIncorrect]);
+    if (returnToWaiting) {
+      const timeoutId = setTimeout(() => setReturnToWaiting(false), 2000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [showCorrect, showIncorrect, returnToWaiting]);
 
   // 주관식 문제 입력 이벤트
   const onChangeShortAns = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -728,8 +732,9 @@ const ShortAnswerContainer = styled.div`
   background: #fff;
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
   display: flex;
-  padding-left: 80px;
+  padding: 0 5rem;
   input {
+    width: 100%;
     border: none;
     outline: none;
     font-family: NanumSquareRound;
