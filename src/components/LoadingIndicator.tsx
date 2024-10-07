@@ -3,9 +3,21 @@ import { usePromiseTracker } from 'react-promise-tracker';
 import styled from 'styled-components';
 import loadingGif from '@/assets/loading.svg';
 
-export const LoadingIndicator = () => {
+//
+//
+//
+
+interface LoadingIndicatorProps {
+  isLoading?: boolean;
+}
+
+//
+//
+//
+
+export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ isLoading }) => {
   const { promiseInProgress } = usePromiseTracker();
-  return promiseInProgress ? (
+  return promiseInProgress || isLoading ? (
     <Loading>
       <LoadingGif />
     </Loading>

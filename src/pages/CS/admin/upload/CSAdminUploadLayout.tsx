@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as ArrowBack } from '@/assets/arrow_back.svg';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface CSAdminUploadLayoutProps {
   children: React.ReactNode;
-  generationNumber: string;
-  educationNumber: string;
+  generationNumber?: string;
+  educationNumber?: string;
 }
 
 const CSAdminUploadLayout: React.FC<CSAdminUploadLayoutProps> = ({
@@ -13,6 +14,12 @@ const CSAdminUploadLayout: React.FC<CSAdminUploadLayoutProps> = ({
   generationNumber,
   educationNumber,
 }) => {
+  const navigate = useNavigate();
+  const { generationId, educationId } = useParams();
+
+  //
+  //
+  //
   return (
     <Wrapper>
       <TitleBox>
@@ -20,7 +27,7 @@ const CSAdminUploadLayout: React.FC<CSAdminUploadLayoutProps> = ({
           onClick={() => {
             const confirm = window.confirm('저장하지 않고 나가면 변경사항이 사라질 수 있어요!');
             if (confirm) {
-              window.history.back();
+              navigate(`/cs/start/generation/${generationId}/education/${educationId}`);
             }
           }}
         />

@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { css, styled } from 'styled-components';
 import arrow_down_thin from '@assets/arrow_dwon_thin.svg';
 import arrow_up_thin from '@assets/arrow_up_thin.svg';
-import fetcher from '@utils/fetcher';
-import { IGeneration } from '@/typing/db';
-import useSWRImmutable from 'swr/immutable';
 import generationSort from '@utils/generationSort';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { useParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 interface Props {
   /**
@@ -13,21 +13,39 @@ interface Props {
    * @param generation
    * @returns
    */
-  onChangeGeneration: (generation?: IGeneration) => void;
+  onChangeGeneration: (generation?: CotatoGenerationInfoResponse) => void;
   /**
    * 현재 선택된 기수
    */
-  selectedGeneration?: IGeneration;
+  selectedGeneration?: CotatoGenerationInfoResponse;
 }
 
-const GenerationSelect = ({ onChangeGeneration, selectedGeneration }: Props) => {
-  const { data: generationData } = useSWRImmutable<IGeneration[]>('/v1/api/generation', fetcher);
+//
+//
+//
 
-  const [generations, setGenerations] = useState<IGeneration[]>();
+const GenerationSelect = ({ onChangeGeneration, selectedGeneration }: Props) => {
+  const { generationId } = useParams();
+  const { generations, targetGeneration } = useGeneration({ generationId });
+
   const [isOpen, setIsOpen] = useState(false);
+  const [sortedGenerations, setSortedGenerations] = useState<
+    CotatoGenerationInfoResponse[] | undefined
+  >([]);
 
   const generationDropRef = useRef<HTMLDivElement>(null);
 
+  /**
+   *
+   */
+  const onClickGeneration = useCallback((generation: CotatoGenerationInfoResponse) => {
+    onChangeGeneration(generation);
+    setIsOpen(false);
+  }, []);
+
+  //
+  //
+  //
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (generationDropRef.current && !generationDropRef.current.contains(e.target as Node)) {
@@ -38,18 +56,24 @@ const GenerationSelect = ({ onChangeGeneration, selectedGeneration }: Props) => 
     return () => window.removeEventListener('mousedown', handleClick);
   }, [generationDropRef]);
 
+  //
+  //
+  //
   useEffect(() => {
-    if (generationData) {
-      const newGenerations = generationSort(generationData);
-      setGenerations(newGenerations);
-      onChangeGeneration(newGenerations.at(0));
+    if (generations) {
+      const newGenerations = generationSort(generations);
+      setSortedGenerations(newGenerations);
     }
-  }, [generationData]);
+  }, [generations]);
 
-  const onClickGeneration = useCallback((generation: IGeneration) => {
-    onChangeGeneration(generation);
-    setIsOpen(false);
-  }, []);
+  //
+  //
+  //
+  useEffect(() => {
+    if (generationId && targetGeneration) {
+      onChangeGeneration(targetGeneration);
+    }
+  }, [targetGeneration]);
 
   return (
     <GenerationSelectWrapper ref={generationDropRef}>
@@ -65,7 +89,7 @@ const GenerationSelect = ({ onChangeGeneration, selectedGeneration }: Props) => 
         {isOpen && (
           <GenerationList>
             <ul>
-              {generations?.map((generation: IGeneration) => (
+              {sortedGenerations?.map((generation) => (
                 <li key={generation.generationId} onClick={() => onClickGeneration(generation)}>
                   {`${generation.generationNumber}기`}
                 </li>

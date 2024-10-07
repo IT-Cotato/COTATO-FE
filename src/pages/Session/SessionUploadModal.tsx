@@ -743,6 +743,7 @@ const ContentsInputWrapper = styled.span`
   gap: 0.6rem;
 
   > span {
+    color: #6a6967;
     color: ${({ theme }) => theme.colors.gray100};
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.md};

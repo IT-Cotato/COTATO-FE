@@ -17,9 +17,9 @@ import api from '@/api/api';
 
 interface CSAdminUploadQuizInfoProps {
   quiz: QuizType[];
-  setQuiz: React.Dispatch<React.SetStateAction<QuizType[]>>;
   selected: number;
-  educationId: number;
+  educationId?: number;
+  setQuiz: React.Dispatch<React.SetStateAction<QuizType[]>>;
 }
 
 const CSAdminUploadQuizInfo = ({
