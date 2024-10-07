@@ -10,6 +10,7 @@ import {
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { media } from '@theme/media';
+import dayjs from 'dayjs';
 
 //
 //
@@ -36,7 +37,7 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
         <StyledLateIcon />
       )}
       <Stack gap="0.25rem">
-        <DateText>{attendance.sessionDate as unknown as string}</DateText>
+        <DateText>{dayjs(attendance.sessionDateTime).format('YYYY.MM.DD')}</DateText>
         <TitleText>
           {generationNumber}기 {attendance.sessionTitle}
         </TitleText>

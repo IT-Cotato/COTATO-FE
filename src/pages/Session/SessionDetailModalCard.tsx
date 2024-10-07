@@ -72,8 +72,8 @@ const SessionDetailModalCard = ({
       {
         icon: <CalendarIcon />,
         title: '일시',
-        content: session?.sessionDate
-          ? dayjs(session?.sessionDate).format('YYYY년 MM월 DD일')
+        content: session?.sessionDateTime
+          ? dayjs(session?.sessionDateTime).format('YYYY년 MM월 DD일')
           : '-',
       },
       { icon: <HomeIcon />, title: '장소', content: session?.placeName || '-' },
@@ -106,7 +106,14 @@ const SessionDetailModalCard = ({
         <p>
           {session?.title} <br /> COTATO {generationNumber || ''}기
         </p>
-        <p>{session?.description}</p>
+        <p>
+          {session?.description?.split('\n').map((line) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
+        </p>
       </TextDescription>
     );
   };
@@ -251,6 +258,11 @@ const TextDescription = styled.div`
   padding: 1.5rem 1.75rem;
   width: 100%;
   height: 14rem;
+  overflow: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   > p {
     color: ${({ theme }) => theme.colors.gray80_1};

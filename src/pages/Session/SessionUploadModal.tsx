@@ -4,8 +4,9 @@ import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
+import { ReactComponent as SearchIcon } from '@assets/search_icon.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
-import { SessionListImageInfo, SessionListInfo } from '@/typing/session';
+import { Place, SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
 import { produce } from 'immer';
 import {
@@ -17,6 +18,17 @@ import {
 import CotatoDatePicker from '@components/CotatoDatePicker';
 import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
+import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
+import {
+  CotatoLocalTime,
+  CotatoSessionContentsCsEducationEnum,
+  CotatoSessionContentsDevTalkEnum,
+  CotatoSessionContentsItIssueEnum,
+  CotatoSessionContentsNetworkingEnum,
+  CotatoSessionListResponse,
+} from 'cotato-openapi-clients';
+import CotatoTimePicker from '@components/CotatoTimePicker';
+import api from '@/api/api';
 
 //
 //
@@ -26,10 +38,10 @@ interface SessionUploadModalProps {
   open: boolean;
   headerText: string;
   handleClose: () => void;
-  handleUpload: (session: SessionListInfo) => void;
-  sessionInfo?: SessionListInfo | null;
+  handleUpload: (session: SessionUploadInfo) => void;
+  sessionInfo?: CotatoSessionListResponse | null;
   lastSessionNumber?: number;
-  requestImageAdd?: (image: SessionListImageInfo) => Promise<any>;
+  requestImageAdd?: (image: SessionListImageInfo, order: number) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => Promise<any>;
   requestImageRemove?: (image: SessionListImageInfo) => Promise<any>;
 }
@@ -39,25 +51,34 @@ interface InfoBoxProps {
   $bold?: boolean;
 }
 
+interface LocationInputBoxProps {
+  $width?: string;
+}
+
 //
 //
 //
 
-const INITIAL_SESSION_STATE: SessionListInfo = {
-  sessionId: 0,
-  sessionNumber: 0,
+const INITIAL_SESSION_STATE: SessionUploadInfo = {
   title: '',
   description: '',
-  sessionDate: undefined,
-  generationId: 0,
-  attendanceDeadLine: '',
-  lateDeadLine: '',
-  sessionContents: {
-    itIssue: SessionContentsItIssue.ON,
-    csEducation: SessionContentsCsEducation.ON,
-    networking: SessionContentsNetworking.OFF,
-    devTalk: SessionContentsDevTalk.OFF,
+  sessionDateTime: new Date(),
+  attendTime: {
+    attendanceDeadLine: {
+      hour: 19,
+      minute: 10,
+      second: 0,
+    },
+    lateDeadLine: {
+      hour: 19,
+      minute: 20,
+      second: 0,
+    },
   },
+  itIssue: CotatoSessionContentsItIssueEnum.Off,
+  csEducation: CotatoSessionContentsCsEducationEnum.On,
+  networking: CotatoSessionContentsNetworkingEnum.On,
+  devTalk: CotatoSessionContentsDevTalkEnum.Off,
   imageInfos: [],
 };
 
@@ -76,8 +97,76 @@ const SessionUploadModal = ({
   requestImageReorder,
   requestImageRemove,
 }: SessionUploadModalProps) => {
-  const [session, setSession] = useState<SessionListInfo>(INITIAL_SESSION_STATE);
+  const [session, setSession] = useState<SessionUploadInfo>(INITIAL_SESSION_STATE);
   const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [address, setAddress] = useState('');
+
+  /**
+   *
+   */
+  const fetchUpdateSession = async () => {
+    try {
+      const response = await api.get('/v2/api/attendances/info', {
+        params: {
+          sessionId: sessionInfo?.sessionId,
+        },
+      });
+
+      const updateSession: SessionUploadInfo = {
+        sessionId: sessionInfo?.sessionId || 0,
+        title: sessionInfo?.title || '',
+        description: sessionInfo?.description || '',
+        sessionDateTime: new Date(sessionInfo?.sessionDateTime || ''),
+        placeName: sessionInfo?.placeName || '',
+        location: {
+          latitude: response.data.location?.latitude,
+          longitude: response.data.location?.longitude,
+        },
+        attendTime: {
+          attendanceDeadLine: {
+            hour: response.data.attendanceDeadLine?.hour || 19,
+            minute: response.data.attendanceDeadLine?.minute || 10,
+            second: response.data.attendanceDeadLine?.second || 0,
+          },
+          lateDeadLine: {
+            hour: response.data.lateDeadLine?.hour || 19,
+            minute: response.data.lateDeadLine?.minute || 20,
+            second: response.data.lateDeadLine?.second || 0,
+          },
+        },
+        itIssue: sessionInfo?.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
+        csEducation:
+          sessionInfo?.sessionContents?.csEducation || CotatoSessionContentsCsEducationEnum.On,
+        networking:
+          sessionInfo?.sessionContents?.networking || CotatoSessionContentsNetworkingEnum.On,
+        devTalk: sessionInfo?.sessionContents?.devTalk || CotatoSessionContentsDevTalkEnum.Off,
+        imageInfos: sessionInfo?.imageInfos || [],
+      };
+
+      setSession(updateSession);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   *
+   */
+  const convertCotatoLocalTimeToDate = (localTime?: CotatoLocalTime): Date => {
+    const date = new Date();
+    date.setHours(localTime?.hour || 0);
+    date.setMinutes(localTime?.minute || 0);
+    date.setSeconds(localTime?.second || 0);
+    return date;
+  };
+
+  /**
+   *
+   */
+  const handleSearchLocationButtonClick = () => {
+    setIsLocationModalOpen(true);
+  };
 
   /**
    *
@@ -104,11 +193,38 @@ const SessionUploadModal = ({
   /**
    *
    */
+  const handleLocationChange = (place: Place) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.placeName = place.placeName;
+        draft.location = {
+          latitude: place.location.latitude,
+          longitude: place.location.longitude,
+        };
+      }),
+    );
+    setAddress(place.addressName || '');
+  };
+
+  /**
+   *
+   */
+  const handlePlaceNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSession(
+      produce(session, (draft) => {
+        draft.placeName = e.target.value;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
   const handleItIssueChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.itIssue =
-          session.sessionContents?.itIssue === SessionContentsItIssue.ON
+        draft.itIssue =
+          session.itIssue === SessionContentsItIssue.ON
             ? SessionContentsItIssue.OFF
             : SessionContentsItIssue.ON;
       }),
@@ -121,8 +237,8 @@ const SessionUploadModal = ({
   const handleCsEducationChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.csEducation =
-          session.sessionContents?.csEducation === SessionContentsCsEducation.ON
+        draft.csEducation =
+          session.csEducation === SessionContentsCsEducation.ON
             ? SessionContentsCsEducation.OFF
             : SessionContentsCsEducation.ON;
       }),
@@ -135,8 +251,8 @@ const SessionUploadModal = ({
   const handleNetworkingChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.networking =
-          session.sessionContents?.networking === SessionContentsNetworking.ON
+        draft.networking =
+          session.networking === SessionContentsNetworking.ON
             ? SessionContentsNetworking.OFF
             : SessionContentsNetworking.ON;
       }),
@@ -149,8 +265,8 @@ const SessionUploadModal = ({
   const handleDevTalkChange = () => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionContents!.devTalk =
-          session.sessionContents?.devTalk === SessionContentsDevTalk.ON
+        draft.devTalk =
+          session.devTalk === SessionContentsDevTalk.ON
             ? SessionContentsDevTalk.OFF
             : SessionContentsDevTalk.ON;
       }),
@@ -174,7 +290,7 @@ const SessionUploadModal = ({
   const handleSessionDateChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.sessionDate = date;
+        draft.sessionDateTime = new Date(date);
       }),
     );
   };
@@ -182,10 +298,22 @@ const SessionUploadModal = ({
   /**
    *
    */
-  const handleDeadlineChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAttendanceDeadlineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.lateDeadLine = e.target.value;
+        if (draft.attendTime?.attendanceDeadLine) {
+          draft.attendTime.attendanceDeadLine.hour = date.getHours();
+          draft.attendTime.attendanceDeadLine.minute = date.getMinutes();
+          draft.attendTime.attendanceDeadLine.second = date.getSeconds();
+        } else {
+          draft.attendTime = {
+            attendanceDeadLine: {
+              hour: date.getHours(),
+              minute: date.getMinutes(),
+              second: date.getSeconds(),
+            },
+          };
+        }
       }),
     );
   };
@@ -193,10 +321,22 @@ const SessionUploadModal = ({
   /**
    *
    */
-  const handleAttendanceDeadLineChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleLateDeadLineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.attendanceDeadLine = e.target.value;
+        if (draft.attendTime?.lateDeadLine) {
+          draft.attendTime.lateDeadLine.hour = date.getHours();
+          draft.attendTime.lateDeadLine.minute = date.getMinutes();
+          draft.attendTime.lateDeadLine.second = date.getSeconds();
+        } else {
+          draft.attendTime = {
+            lateDeadLine: {
+              hour: date.getHours(),
+              minute: date.getMinutes(),
+              second: date.getSeconds(),
+            },
+          };
+        }
       }),
     );
   };
@@ -234,28 +374,26 @@ const SessionUploadModal = ({
    *
    */
   const renderInfoInput = () => {
-    const { itIssue, csEducation, networking, devTalk } = session.sessionContents!;
-
     const getContentsInput = () => {
       const contentList = [
         {
           name: 'IT 이슈',
-          checked: itIssue === SessionContentsItIssue.ON,
+          checked: session.itIssue === CotatoSessionContentsItIssueEnum.On,
           hanldeChange: handleItIssueChange,
         },
         {
           name: 'CS 교육',
-          checked: csEducation === SessionContentsCsEducation.ON,
+          checked: session.csEducation === CotatoSessionContentsCsEducationEnum.On,
           hanldeChange: handleCsEducationChange,
         },
         {
           name: '네트워킹',
-          checked: networking === SessionContentsNetworking.ON,
+          checked: session.networking === CotatoSessionContentsNetworkingEnum.On,
           hanldeChange: handleNetworkingChange,
         },
         {
           name: '데브토크',
-          checked: devTalk === SessionContentsDevTalk.ON,
+          checked: session.devTalk === CotatoSessionContentsDevTalkEnum.On,
           hanldeChange: handleDevTalkChange,
         },
       ];
@@ -283,31 +421,50 @@ const SessionUploadModal = ({
         <InfoBox>
           <input
             placeholder="세션 날짜를 선택해 주세요."
-            value={session.sessionDate && dayjs(session.sessionDate).format('YYYY년 MM월 DD일')}
+            value={
+              session.sessionDateTime &&
+              dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일 HH시 mm분')
+            }
             readOnly={true}
           />
           <button type="button" onClick={() => setIsDayPickerOpen(true)}>
             <CalendarIcon />
           </button>
         </InfoBox>
-        <InfoBox>
-          <input value="장소 (아직 활성화 안됨)" readOnly={true} />
+        <InfoBox $bold={true}>
+          <div>세션 장소</div>
+          <div>
+            <LocationInputBox>
+              <input placeholder="장소 검색" value={address} readOnly={true} />
+              <button type="button" onClick={handleSearchLocationButtonClick}>
+                <SearchIcon />
+              </button>
+            </LocationInputBox>
+            <LocationInputBox $width="9rem">
+              <input
+                placeholder="장소명"
+                value={session.placeName}
+                readOnly={session.location === undefined}
+                onChange={handlePlaceNameChange}
+              />
+            </LocationInputBox>
+          </div>
         </InfoBox>
-        <InfoBox>
-          <input
-            placeholder="출석 인정 시간 (19:10:00 형식으로 정확히 입력하세요.)"
-            value={session.attendanceDeadLine || undefined}
-            onChange={handleAttendanceDeadLineChange}
-            disabled={session.attendanceDeadLine === undefined ? true : false}
-          />
-        </InfoBox>
-        <InfoBox>
-          <input
-            placeholder="지각 인정 시간 (19:20:00 형식으로 정확히 입력하세요.)"
-            value={session.lateDeadLine || undefined}
-            onChange={handleDeadlineChange}
-            disabled={session.lateDeadLine === undefined ? true : false}
-          />
+        <InfoBox $bold={true}>
+          <div>
+            출석 인정
+            <CotatoTimePicker
+              date={convertCotatoLocalTimeToDate(session.attendTime?.attendanceDeadLine)}
+              onDateChange={handleAttendanceDeadlineChange}
+            />
+          </div>
+          <div>
+            지각 인정
+            <CotatoTimePicker
+              date={convertCotatoLocalTimeToDate(session?.attendTime?.lateDeadLine)}
+              onDateChange={handleLateDeadLineChange}
+            />
+          </div>
         </InfoBox>
         <InfoBox>{getContentsInput()}</InfoBox>
         <InfoBox $height="8rem">
@@ -324,6 +481,20 @@ const SessionUploadModal = ({
   /**
    *
    */
+  const renderSearchLocationModal = () => {
+    if (isLocationModalOpen) {
+      return (
+        <SearchLocationModal
+          setIsSearchModalOpen={setIsLocationModalOpen}
+          onPlaceChange={handleLocationChange}
+        />
+      );
+    }
+  };
+
+  /**
+   *
+   */
   const renderUplaodButton = () => (
     <UploadButtonWrapper>
       <button onClick={() => handleUpload(session)}>업로드</button>
@@ -335,9 +506,23 @@ const SessionUploadModal = ({
    */
   useEffect(() => {
     if (sessionInfo) {
-      setSession(sessionInfo);
+      fetchUpdateSession();
     } else {
-      setSession(INITIAL_SESSION_STATE);
+      const getNextFiday = () => {
+        const today = new Date();
+        const day = today.getDay();
+        const diff = 5 - day;
+        const nextFriday = new Date(today);
+        nextFriday.setDate(today.getDate() + diff);
+        nextFriday.setHours(19, 0, 0, 0);
+        return nextFriday;
+      };
+
+      const initialSession = produce(INITIAL_SESSION_STATE, (draft) => {
+        draft.sessionDateTime = getNextFiday();
+      });
+
+      setSession(initialSession);
     }
 
     if (lastSessionNumber !== undefined) {
@@ -352,6 +537,7 @@ const SessionUploadModal = ({
   return (
     <Modal
       open={open}
+      onClose={handleClose}
       slotProps={{
         backdrop: {
           sx: {
@@ -369,10 +555,11 @@ const SessionUploadModal = ({
             {renderImageInput()}
             {renderInfoInput()}
             {renderUplaodButton()}
+            {renderSearchLocationModal()}
           </Wrapper>
           <CotatoDatePicker
             open={isDayPickerOpen}
-            date={session.sessionDate ? new Date(session.sessionDate) : undefined}
+            date={session.sessionDateTime}
             onDateChange={handleSessionDateChange}
             onClose={() => setIsDayPickerOpen(false)}
           />
@@ -450,6 +637,7 @@ const InfoBox = styled.div<InfoBoxProps>`
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 34rem;
   height: ${({ $height }) => $height || '3.2rem'};
   padding: ${({ theme }) => theme.size.lg} ${({ theme }) => theme.size.md};
@@ -483,6 +671,17 @@ const InfoBox = styled.div<InfoBoxProps>`
     resize: none;
   }
 
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: ${({ theme }) => theme.colors.gray100};
+    font-family: Pretendard;
+    font-size: ${({ theme }) => theme.fontSize.md};
+    font-weight: ${({ $bold }) => ($bold ? '600' : '300')};
+    line-height: 125%;
+  }
+
   > button {
     border: none;
     background: none;
@@ -496,6 +695,39 @@ const InfoBox = styled.div<InfoBoxProps>`
       width: 1.25rem;
       height: 1.25rem;
     }
+  }
+`;
+
+const LocationInputBox = styled.span<LocationInputBoxProps>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: ${({ $width }) => $width || '10rem'};
+  border-radius: 0.5rem;
+  border: 1px solid ${({ theme }) => theme.colors.gray60};
+  background: ${({ theme }) => theme.colors.common.white_const};
+
+  > input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: none;
+    font-family: Pretendard;
+    font-size: 0.875rem;
+
+    &::placeholder {
+      font-weight: 200;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  > button {
+    border: none;
+    background: none;
+    cursor: pointer;
   }
 `;
 
