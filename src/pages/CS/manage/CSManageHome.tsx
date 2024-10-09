@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import CSManageLayout from '@pages/CS/manage/CSManageLayout';
 import QuizContent from '@pages/CS/manage/QuizContent';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { IQuizAdmin } from '@/typing/db';
@@ -10,8 +10,7 @@ import api from '@/api/api';
 import { toast } from 'react-toastify';
 
 const CSManageHome = () => {
-  const [searchParams] = useSearchParams();
-  const educationId = searchParams.get('educationId');
+  const { educationId, generationId } = useParams();
   const navigate = useNavigate();
 
   const { data: quizData, mutate: quizMutate } = useSWR(
@@ -109,7 +108,7 @@ const CSManageHome = () => {
           }
         });
     }
-  }, [educationId, quizData]);
+  }, [educationId, quizData, educationStatus]);
 
   const submitWinner = useCallback(() => {
     api
@@ -124,8 +123,30 @@ const CSManageHome = () => {
   }, [educationId]);
 
   const onClickCheckAllScorer = useCallback(() => {
-    navigate(`allscorer?educationId=${educationId}`);
-  }, []);
+    navigate(`/cs/manage/generation/${generationId}/education/${educationId}/allscorer`);
+  }, [educationId]);
+
+  /**
+   *
+   */
+  const renderQuizContents = () => {
+    if (!educationId) {
+      return null;
+    }
+
+    return quizzes?.map((quiz) => (
+      <QuizContent
+        key={quiz.quizId}
+        quiz={quiz}
+        educationStatus={educationStatus?.status}
+        quizStatus={quiz.status}
+      />
+    ));
+  };
+
+  //
+  //
+  //
 
   return (
     <>
@@ -147,17 +168,7 @@ const CSManageHome = () => {
               전체 득점자 확인
             </Button>
           </ButtonWrapper>
-          <QuizContentsWrapper>
-            {quizzes?.map((quiz) => (
-              <QuizContent
-                key={quiz.quizId}
-                quiz={quiz}
-                educationId={educationId}
-                educationStatus={educationStatus?.status}
-                quizStatus={quiz.status}
-              />
-            ))}
-          </QuizContentsWrapper>
+          <QuizContentsWrapper>{renderQuizContents()}</QuizContentsWrapper>
         </ManageWrapper>
       </CSManageLayout>
     </>

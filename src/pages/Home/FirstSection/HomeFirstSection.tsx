@@ -107,7 +107,6 @@ const HomeSlogan = styled.div`
   width: 100%;
   min-height: 126px;
   margin-top: 0.5rem;
-  cursor: pointer;
   ${media.landscape`
     min-height: 100px;
     height: 100px;
