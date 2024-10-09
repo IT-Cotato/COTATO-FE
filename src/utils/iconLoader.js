@@ -1,7 +1,7 @@
 /**
  * load all icons from the pixel-icon-library
  * require.context has issue that use dynamic path, so separate the function
- *
+ * ref: https://github.com/webpack/webpack/issues/9300
  */
 
 const loadRegularSvgIcons = () => {
