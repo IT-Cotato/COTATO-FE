@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '@/api/api';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Tooltip } from 'react-tooltip';
 import { useGeneration } from '@/hooks/useGeneration';
@@ -9,8 +9,6 @@ import useUser from '@/hooks/useUser';
 
 const CSStart = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const search = location.search;
 
   const { user } = useUser();
   const { generationId, educationId } = useParams();
@@ -59,7 +57,7 @@ const CSStart = () => {
    *
    */
   const handleClickManageButton = () => {
-    navigate('/cs/manage' + search);
+    navigate(`/cs/manage/generation/${generationId}/education/${educationId}`);
   };
 
   /**
