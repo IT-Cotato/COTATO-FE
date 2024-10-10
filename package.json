@@ -14,6 +14,8 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-date-pickers": "^7.17.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
+    "@sentry/cli": "^2.37.0",
+    "@sentry/react": "^8.33.1",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -107,9 +109,10 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "craco build && yarn sentry:sourcemaps",
     "test": "craco test",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sookmyung-womens-university --project cotato-client build && sentry-cli sourcemaps upload --org sookmyung-womens-university --project cotato-client build"
   },
   "browserslist": {
     "production": [
