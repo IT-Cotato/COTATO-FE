@@ -1,13 +1,8 @@
-import { ThemeContext, ThemeProvider } from '@emotion/react';
-import { useTheme } from 'styled-components';
+import * as Sentry from '@sentry/react';
 
-//
-//
-//
-
-export const sdkConfig = {
+export const feedbackIntegration = Sentry.feedbackIntegration({
   // Additional SDK configuration goes in here, for example:
-  colorScheme: 'dark',
+  colorScheme: 'light',
   formTitle: 'Give Feedback',
   nameLabel: '성함',
   namePlaceholder: '',
@@ -19,6 +14,9 @@ export const sdkConfig = {
   removeScreenshotButtonLabel: '스크린샷 삭제',
   submitButtonLabel: '제출하기',
   cancelButtonLabel: '취소',
+  successMessage: '피드백이 성공적으로 제출되었습니다.',
+  successColor: '#37922C',
+  errorColor: '#DC4200',
   themeLight: {
     foreground: 'black',
     background: 'white',
@@ -29,4 +27,5 @@ export const sdkConfig = {
     background: '#242321',
     accentBackground: '#C63C00',
   },
-};
+  autoInject: false,
+});

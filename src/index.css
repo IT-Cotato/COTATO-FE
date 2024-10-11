@@ -31,8 +31,3 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-
-#sentry-feedback {
-  --font-family: 'Pretendard';
-  --inset: auto auto 0 0;
-}
