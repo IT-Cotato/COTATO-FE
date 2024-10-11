@@ -12,18 +12,8 @@ import AttendanceLocationTab from '@components/attendance/AttendanceModal/Attend
 //
 //
 
-type LocationType = {
-  lat: number;
-  lng: number;
-};
-
-//
-//
-//
-
 const AttendanceModal = () => {
   const [tabValue, setTabValue] = useState('time');
-  const [location, setLocation] = useState<LocationType>({ lat: 0, lng: 0 });
   const [locationName, setLocationName] = useState('');
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 

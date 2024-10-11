@@ -10,6 +10,7 @@ import {
   AttendResponseIsOpenedEnum,
 } from '@/enums/attend';
 import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
+import dayjs from 'dayjs';
 
 //
 //
@@ -83,7 +84,7 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
           {generationNumber}기 {attendance.sessionTitle}
         </StyledTypography>
         <StyledTypography variant="body2" fontSize="0.875rem" color={theme.colors.gray50}>
-          {attendance.sessionDateTime as unknown as string}
+          {dayjs(attendance.sessionDateTime).format('YYYY.MM.DD')}
         </StyledTypography>
       </Stack>
     );
