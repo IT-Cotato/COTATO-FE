@@ -7,6 +7,7 @@ import '@theme/font.css';
 import ReactModal from 'react-modal';
 import { BrowserRouter } from 'react-router-dom';
 import * as Sentry from '@sentry/react';
+import { sdkConfig } from './sentrySDKConfig';
 
 Sentry.init({
   dsn: `${process.env.REACT_APP_SENTRY_DSN}`,
@@ -14,6 +15,7 @@ Sentry.init({
     Sentry.browserTracingIntegration(),
     Sentry.browserProfilingIntegration(),
     Sentry.replayIntegration(),
+    Sentry.feedbackIntegration(sdkConfig),
   ],
   // Tracing
   tracesSampleRate: 1.0, //  Capture 100% of the transactions

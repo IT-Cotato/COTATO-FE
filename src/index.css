@@ -13,7 +13,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color:rgb(164, 172, 180);
+  background-color: rgb(164, 172, 180);
   border-radius: 10px;
 }
 *::-webkit-scrollbar-thumb:hover {
@@ -30,4 +30,9 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+#sentry-feedback {
+  --font-family: 'Pretendard';
+  --inset: auto auto 0 0;
 }
