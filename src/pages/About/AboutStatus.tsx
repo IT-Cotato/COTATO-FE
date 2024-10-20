@@ -12,7 +12,7 @@ import { media } from '@theme/media';
 //
 
 const AboutStatus = () => {
-  const { isLaptopOrSmaller, isTabletOrSmaller } = useBreakpoints();
+  const { isTabletOrSmaller } = useBreakpoints();
 
   return (
     <Wrapper>
@@ -21,7 +21,7 @@ const AboutStatus = () => {
       <MemberNumber />
       {!isTabletOrSmaller && (
         <LineWrapper>
-          <AboutLine width={isLaptopOrSmaller ? '48rem' : '62rem'} />
+          <AboutLine width="100%" />
         </LineWrapper>
       )}
     </Wrapper>
@@ -46,6 +46,16 @@ const Wrapper = styled.div`
   ${media.tablet`
   flex-direction: column;
   `}
+
+  > svg {
+    width: 13rem;
+    height: 13rem;
+
+    ${media.laptop`
+      width: 10rem;
+      height: 10rem;
+    `}
+  }
 `;
 
 const LineWrapper = styled.div`
@@ -54,6 +64,7 @@ const LineWrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: -1;
+  width: 120%;
 `;
 
 export default AboutStatus;
