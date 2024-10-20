@@ -1,18 +1,18 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as HeaderTag } from '@assets/header_tag.svg';
-import { ReactComponent as SpeachBubble } from '@assets/about_us_speach_bubble.svg';
 import { ReactComponent as LaptopCotato } from '@assets/character_laptop_laugh.svg';
 import { ReactComponent as CotaoLogo } from '@assets/cotato_logo.svg';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import CotatoTooltip from '@components/CotatoTooltip';
 
 //
 //
 //
 
 const AboutMain = () => {
-  const { isLandScapeOrSmaller } = useBreakpoints();
+  const { isLandScapeOrSmaller, isTabletOrSmaller } = useBreakpoints();
 
   return (
     <Wrapper>
@@ -21,10 +21,26 @@ const AboutMain = () => {
         <h1>About Us</h1>
       </Title>
       <MainContent>
-        <DescriptionBox>
-          <SpeachBubble />
-          <span>{`"연합 IT 동아리 성장하는 감자들이 모인 곳"`}</span>
-        </DescriptionBox>
+        <CotatoTooltip
+          arrow
+          open={true}
+          title={`"연합 IT 동아리 성장하는 감자들이 모인 곳"`}
+          fontSize={isTabletOrSmaller ? '1rem' : '1.5rem'}
+          padding={isTabletOrSmaller ? '0.5rem 1.25rem' : '0.75rem 1.5rem'}
+          borderWidth="2px"
+          placement="top"
+          PopperProps={{
+            disablePortal: true,
+            modifiers: [
+              {
+                name: 'flip',
+                enabled: false,
+              },
+            ],
+          }}
+        >
+          <div></div>
+        </CotatoTooltip>
         <StyledLogo />
         <StyledCharacter />
       </MainContent>
@@ -101,45 +117,14 @@ const MainContent = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-`;
-
-const DescriptionBox = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 30rem;
-  height: 5.875rem;
-  padding-top: 2.375rem;
-
-  > svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 0;
-  }
-
-  > span {
-    color: ${({ theme }) => theme.colors.gray90};
-    font-family: Ycomputer;
-    font-size: 1.5rem;
-    font-weight: 400;
-    z-index: 1;
-  }
-
-  ${media.tablet`
-    width: 20rem;
-    padding-top: 2.875rem;
-
-    > span {
-      font-size: 1rem;
-    }
-  `}
+  padding-top: 4rem;
+  z-index: 10;
 `;
 
 const StyledLogo = styled(CotaoLogo)`
   ${media.tablet`
     width: 18rem;
+    margin-top: -2rem;
   `}
 `;
 
@@ -157,7 +142,6 @@ const Description = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 4rem;
 
   > p {
     color: ${({ theme }) => theme.colors.common.black};
