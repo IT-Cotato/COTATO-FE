@@ -102,6 +102,7 @@ const CardContainer = styled.div`
 
   ${media.tablet`
     width: 26rem;
+    justify-content: center;
   `}
 
   ${media.landscape`
