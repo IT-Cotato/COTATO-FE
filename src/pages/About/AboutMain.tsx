@@ -164,7 +164,7 @@ const Description = styled.div`
     font-family: Ycomputer;
     font-size: 2rem;
     font-weight: 400;
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
   }
 
   ${media.laptop`
