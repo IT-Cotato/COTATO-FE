@@ -144,8 +144,8 @@ const CardContainer = styled.div`
 const ActivityCard = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding: 0.5rem 0.5rem 1.5rem;
+  gap: 2rem;
+  padding: 0.5rem 0.9rem 1.5rem;
   border: 2.5px solid ${({ theme }) => theme.colors.primary100_2};
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.colors.common.white_const};
@@ -181,13 +181,13 @@ const CardTitle = styled.span`
 `;
 
 const CardContent = styled.span`
-  width: 11rem;
+  width: 14rem;
   color: ${({ theme }) => theme.colors.gray70};
   font-family: Pretendard;
   font-size: 0.875rem;
 
   ${media.tablet`
-    width: 10rem;
+    width: 11rem;
     font-size: 0.75rem;
   `}
 `;
