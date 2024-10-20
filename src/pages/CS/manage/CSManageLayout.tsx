@@ -1,7 +1,8 @@
 import React, { ReactNode, useCallback } from 'react';
 import { styled } from 'styled-components';
-import { ReactComponent as ArrowBack } from '@assets/arrow_back.svg';
 import { useLocation, useMatch, useNavigate, useParams } from 'react-router-dom';
+import { IconButton } from '@mui/material';
+import CotatoIcon from '@components/CotatoIcon';
 
 interface Props {
   header: string;
@@ -25,7 +26,16 @@ const CSManageLayout = ({ header, children }: Props) => {
 
   return (
     <CSManageWrapper>
-      <BackButton width={24} height={24} onClick={handlePrevButton} />
+      <IconButton
+        style={{
+          position: 'absolute',
+          left: '4rem',
+          top: '3.5rem',
+        }}
+        onClick={handlePrevButton}
+      >
+        <CotatoIcon icon="angle-left-solid" size="2rem" color={(theme) => theme.colors.primary90} />
+      </IconButton>
       <CSManageHeader>
         <h3>{header}</h3>
       </CSManageHeader>
@@ -44,13 +54,6 @@ const CSManageWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   background: #eee;
-`;
-
-const BackButton = styled(ArrowBack)`
-  position: absolute;
-  left: 72px;
-  top: 64px;
-  cursor: pointer;
 `;
 
 const CSManageHeader = styled.div`
