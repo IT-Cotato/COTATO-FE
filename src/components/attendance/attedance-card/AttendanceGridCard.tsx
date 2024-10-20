@@ -8,9 +8,9 @@ import {
   AttendResponseAttendanceTypeEnum,
   AttendResponseIsOpenedEnum,
 } from '@/enums/attend';
-import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { media } from '@theme/media';
 import dayjs from 'dayjs';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -34,7 +34,10 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
   return (
     <Container onClick={() => onClick(attendance)}>
       {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
-        <StyledLateIcon />
+        <StyledLateIcon
+          icon="bell-exclaimation-solid"
+          color={(theme) => theme.colors.secondary80}
+        />
       )}
       <Stack gap="0.25rem">
         <DateText>{dayjs(attendance.sessionDateTime).format('YYYY.MM.DD')}</DateText>
@@ -78,7 +81,7 @@ const Container = styled.div`
   `}
 `;
 
-const StyledLateIcon = styled(LateIcon)`
+const StyledLateIcon = styled(CotatoIcon)`
   position: absolute;
   top: 0.625rem;
   right: 0.625rem;

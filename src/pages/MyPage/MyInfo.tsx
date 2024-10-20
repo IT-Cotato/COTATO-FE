@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
-import cotato from '@assets/cotato_icon.png';
 import { ReactComponent as ButtonIcon } from '@assets/button_icon.svg';
 import { Link } from 'react-router-dom';
 import fetcher from '@utils/fetcher';
@@ -12,6 +11,7 @@ import cotatoCharacterFront from '@assets/cotato_character_front.svg';
 import cotatoCharacterBack from '@assets/cotato_character_back.svg';
 import cotatoCharacterPM from '@assets/cotato_character_pm.svg';
 import cotatoCharacterDesign from '@assets/cotato_character_design.svg';
+import cotatoCharacter from '@assets/crown_character.svg';
 import useUser from '@/hooks/useUser';
 import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
 
@@ -32,7 +32,7 @@ const COTATO_CHARCTER_SVG_MAP: Partial<
   BE: { imgSrc: cotatoCharacterBack },
   PM: { imgSrc: cotatoCharacterPM },
   DESIGN: { imgSrc: cotatoCharacterDesign },
-  NONE: { imgSrc: cotato },
+  NONE: { imgSrc: cotatoCharacter },
 };
 
 //
@@ -68,7 +68,7 @@ const MyInfo = () => {
                   src={
                     COTATO_CHARCTER_SVG_MAP[
                       user?.position ?? CotatoMemberInfoResponsePositionEnum.None
-                    ]?.imgSrc ?? cotato
+                    ]?.imgSrc as string
                   }
                 />
               </Stack>

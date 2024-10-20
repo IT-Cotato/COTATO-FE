@@ -10,6 +10,7 @@ import styled, { useTheme } from 'styled-components';
 interface CotatoFloatingActionButtonItemProps {
   name: string;
   icon: React.ReactNode;
+  svgIcon?: React.ReactNode;
   selected?: boolean;
   disabled?: boolean;
   onClick: () => void;
@@ -28,6 +29,7 @@ const FAB_ITEM_MOBILE_SIZE = '3.2rem';
 
 const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemProps> = ({
   name,
+  svgIcon,
   icon,
   selected,
   disabled,
@@ -72,15 +74,19 @@ const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemPro
           onClick={handleClick}
         >
           <Box width="100%" height="1.75rem">
-            <SvgIcon
-              style={{
-                width: iconSize.width,
-                height: iconSize.height,
-                opacity: disabled ? 0.5 : 1,
-              }}
-            >
-              {icon}
-            </SvgIcon>
+            {svgIcon ? (
+              <SvgIcon
+                style={{
+                  width: iconSize.width,
+                  height: iconSize.height,
+                  opacity: disabled ? 0.5 : 1,
+                }}
+              >
+                {icon}
+              </SvgIcon>
+            ) : (
+              icon
+            )}
           </Box>
         </StyledFab>
       </div>
