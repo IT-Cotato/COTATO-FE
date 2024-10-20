@@ -46,7 +46,7 @@ const AboutStructureDiagram = () => {
     } else if (isLaptopOrSmaller) {
       return '7rem';
     }
-    return '9rem;';
+    return '7.5rem;';
   };
 
   return (
@@ -92,7 +92,7 @@ const CharacterWrapper = styled.div`
 `;
 
 const CharacterIcon = styled.img<{ $width?: string }>`
-  width: ${({ $width }) => $width || '8rem'};
+  width: ${({ $width }) => $width || '6.5rem'};
 
   ${media.laptop`
     width: ${({ $width }: { $width?: string }) => $width || '6rem'};
@@ -105,8 +105,8 @@ const CharacterIcon = styled.img<{ $width?: string }>`
 
 const CharacterName = styled.div<{ $background: string }>`
   display: flex;
-  padding: 0.5rem;
-  width: 12rem;
+  padding: 0.375rem;
+  width: 11rem;
   justify-content: center;
   align-items: center;
   border-radius: 3.5rem;
@@ -114,7 +114,7 @@ const CharacterName = styled.div<{ $background: string }>`
   color: ${({ theme }) => theme.colors.common.white};
   text-align: center;
   font-family: Ycomputer;
-  font-size: 1.875rem;
+  font-size: 1.75rem;
 
   ${media.laptop`
     width: 9rem;
@@ -131,7 +131,6 @@ const CharacterName = styled.div<{ $background: string }>`
 `;
 
 const DiagramLine = styled.img`
-  margin-top: 2rem;
   width: calc(100% - 12rem);
 
   ${media.laptop`
