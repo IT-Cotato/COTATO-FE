@@ -110,11 +110,11 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build && yarn sentry:sourcemaps",
+    "build": "craco build;; yarn sentry:sourcemaps",
     "test": "craco test",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "generate-icon-types": "node scripts/generateIconTypes.js",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org cotato --project cotato-client build && sentry-cli sourcemaps upload --org cotato --project cotato-client build"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org cotato --project cotato-client build && sentry-cli sourcemaps upload --org cotato --project cotato-client build || true"
   },
   "browserslist": {
     "production": [
