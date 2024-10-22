@@ -28,6 +28,9 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Install Sentry CLI
+        run: yarn global add @sentry/cli
+        
       - name: Build
         run: yarn build
 
