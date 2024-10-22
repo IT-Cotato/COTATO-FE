@@ -1,12 +1,12 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { ReactComponent as SpeachBubble } from '@assets/about_us_speach_bubble.svg';
 import project from '@assets/about_us_project.png';
 import study from '@assets/about_us_study.png';
 import itEvent from '@assets/about_us_it_event.png';
 import amusement from '@assets/about_us_amusement.png';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import CotatoTooltip from '@components/CotatoTooltip';
 
 //
 //
@@ -40,12 +40,26 @@ const AboutActivity = () => {
 
   return (
     <Wrapper>
-      {!isTabletOrSmaller && (
-        <DescriptionBox>
-          <SpeachBubble />
-          <span>감자들과 함께 다양한 활동을 할 수 있어요!</span>
-        </DescriptionBox>
-      )}
+      <CotatoTooltip
+        arrow
+        open={true}
+        title="감자들과 함께 다양한 활동을 할 수 있어요!"
+        fontSize={isTabletOrSmaller ? '1rem' : '1.5rem'}
+        padding={isTabletOrSmaller ? '0.5rem 1.25rem' : '0.75rem 1.5rem'}
+        borderWidth="2px"
+        placement="top"
+        PopperProps={{
+          disablePortal: true,
+          modifiers: [
+            {
+              name: 'flip',
+              enabled: false,
+            },
+          ],
+        }}
+      >
+        <div></div>
+      </CotatoTooltip>
       <CardContainer>
         {activityList.map((activity, index) => (
           <ActivityCard key={index}>
@@ -73,52 +87,6 @@ const Wrapper = styled.div`
   gap: 2rem;
 `;
 
-const DescriptionBox = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 55rem;
-  height: 7.625rem;
-  padding-top: 1.625rem;
-
-  > svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 0;
-  }
-
-  > span {
-    color: ${({ theme }) => theme.colors.gray100};
-    font-family: Ycomputer;
-    font-size: 2.25rem;
-    z-index: 1;
-
-    ${media.laptop`
-      font-size: 2rem;
-    `}
-
-    ${media.tablet`
-      font-size: 1.5rem;
-    `}
-  }
-
-  ${media.desktop`
-    width: 50rem;
-  `}
-
-  ${media.laptop`
-    width: 45rem;
-    padding-top: 1.875rem;
-  `}
-
-  ${media.tablet`
-    width: 30rem;
-    padding-top: 2.375rem;
-  `}
-`;
-
 const CardContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -134,6 +102,7 @@ const CardContainer = styled.div`
 
   ${media.tablet`
     width: 26rem;
+    justify-content: center;
   `}
 
   ${media.landscape`
@@ -144,8 +113,8 @@ const CardContainer = styled.div`
 const ActivityCard = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding: 0.5rem 0.5rem 1.5rem;
+  gap: 2rem;
+  padding: 0.5rem 0.9rem 1.5rem;
   border: 2.5px solid ${({ theme }) => theme.colors.primary100_2};
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.colors.common.white_const};
@@ -181,13 +150,13 @@ const CardTitle = styled.span`
 `;
 
 const CardContent = styled.span`
-  width: 11rem;
+  width: 14rem;
   color: ${({ theme }) => theme.colors.gray70};
   font-family: Pretendard;
   font-size: 0.875rem;
 
   ${media.tablet`
-    width: 10rem;
+    width: 11rem;
     font-size: 0.75rem;
   `}
 `;
