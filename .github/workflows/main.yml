@@ -28,11 +28,11 @@ jobs:
       - name: Set Environment Variables
         run: |
           if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
-            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env.production
-            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_SOCKET_URL }}" >> .env.production
+            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env
+            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_SOCKET_URL }}" >> .env
           elif [ "${GITHUB_REF}" == "refs/heads/release" ]; then
-            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_QA_BASE_URL }}" >> .env.qa
-            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_QA_SOCKET_URL }}" >> .env.qa
+            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_QA_BASE_URL }}" >> .env
+            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_QA_SOCKET_URL }}" >> .env
           fi
         env:
           REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
