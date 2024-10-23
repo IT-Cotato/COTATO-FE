@@ -37,10 +37,6 @@ const AttendanceReportSearch = () => {
   //
   //
   useEffect(() => {
-    // if (!debouncedSearchValue) {
-    //   updateSearchParams('');
-    // }
-
     updateSearchParams(debouncedSearchValue);
   }, [debouncedSearchValue]);
 
