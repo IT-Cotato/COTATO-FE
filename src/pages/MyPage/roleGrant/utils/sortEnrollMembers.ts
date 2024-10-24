@@ -10,7 +10,7 @@ const sortEnrollMembers = (members?: IEnrollMember[]): IEnrollMember[] | undefin
     if (left.generationNumber !== right.generationNumber) {
       return left.generationNumber - right.generationNumber;
     }
-    return left.memberName.localeCompare(right.memberName);
+    return left.name.localeCompare(right.name);
   });
   return members;
 };

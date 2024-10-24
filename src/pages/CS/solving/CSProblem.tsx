@@ -43,6 +43,7 @@ interface CSProblemProps {
   submitAllowed: boolean;
   problemId: number;
   showKingKing: boolean;
+  educationId?: number;
   setShowKingKing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -54,6 +55,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   quizId,
   submitAllowed,
   problemId,
+  educationId,
   showKingKing,
   setShowKingKing,
 }) => {
@@ -337,8 +339,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
       </QuizContainer>
       {showCorrect && <BgCorrect />}
       {showIncorrect && <BgIncorrect />}
-      {showKingKing && <BgKingKing quizId={quizId} />}
-      {returnToWaiting && <BgWaiting quizNum={(quizData?.number as number) + 1} />}
+      {showKingKing && educationId && <BgKingKing educationId={educationId} />}
+      {returnToWaiting && <BgWaiting />}
     </Wrapper>
   );
 };

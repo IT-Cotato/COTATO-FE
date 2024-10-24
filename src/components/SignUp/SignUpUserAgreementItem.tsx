@@ -5,17 +5,15 @@ import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import { ReactComponent as ArrowDown } from '@assets/pixel_arrow_down.svg';
 import { ReactComponent as ArrowUp } from '@assets/pixel_arrow_up.svg';
 import { produce, enableMapSet } from 'immer';
+import { CotatoPolicyInfoResponse, CotatoPolicyInfoResponseTypeEnum } from 'cotato-openapi-clients';
+import { marked } from 'marked';
+import { sanitize } from 'dompurify';
 
 //
 //
 //
 
-interface SignUpUserAgreementItemProps {
-  id: number;
-  name: string;
-  isRequired: boolean;
-  content: string;
-  fillColor: string;
+interface SignUpUserAgreementItemProps extends CotatoPolicyInfoResponse {
   isChecked: Map<number, boolean>;
   setIsChecked: React.Dispatch<React.SetStateAction<Map<number, boolean>>>;
 }
@@ -25,11 +23,10 @@ interface SignUpUserAgreementItemProps {
 //
 
 const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
-  id,
-  name,
-  isRequired,
+  policyId,
+  title,
   content,
-  fillColor,
+  type,
   isChecked,
   setIsChecked,
 }) => {
@@ -37,9 +34,14 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const necessaryOrOptional = isRequired ? '필수' : '선택';
+  const necessaryOrOptional = type === CotatoPolicyInfoResponseTypeEnum.Essential ? '필수' : '선택';
 
   enableMapSet();
+
+  // TODO: fix after type is fixed
+  if (!policyId || !title || !content || !type) {
+    return null;
+  }
 
   /**
    *
@@ -47,7 +49,7 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
   const handleCheck = () => {
     setIsChecked(
       produce(isChecked, (draft) => {
-        draft.set(id, !isChecked.get(id));
+        draft.set(policyId, !isChecked.get(policyId));
       }),
     );
   };
@@ -55,19 +57,12 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
   /**
    *
    */
-  const getCheckButtonColor = () => {
-    if (isChecked.get(id)) {
-      return theme.colors.sub3[60];
-    } else {
-      return fillColor;
-    }
-  };
-
-  /**
-   *
-   */
   const ArrowButton = () => {
-    return isOpen ? <ArrowUp fill={fillColor} /> : <ArrowDown fill={fillColor} />;
+    return isOpen ? (
+      <ArrowUp fill={theme.colors.gray80_2} />
+    ) : (
+      <ArrowDown fill={theme.colors.gray80_2} />
+    );
   };
 
   /**
@@ -78,9 +73,20 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
       return null;
     }
 
+    const parsedHtml = marked.parse(content) as string;
+
     return (
-      <Box sx={{ padding: '0.6rem 1.5rem' }}>
-        <ContentText>{content}</ContentText>
+      <Box sx={{ padding: '0.5rem 1.5rem' }}>
+        <div
+          style={{
+            fontSize: theme.fontSize.xs,
+            color: theme.colors.common.black,
+            lineHeight: '1rem',
+            wordBreak: 'keep-all',
+            whiteSpace: 'pre-wrap',
+          }}
+          dangerouslySetInnerHTML={{ __html: sanitize(parsedHtml) }}
+        />
       </Box>
     );
   };
@@ -89,9 +95,12 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
     <Wrapper>
       <ItemDiv>
         <CheckSection>
-          <CheckIcon fill={getCheckButtonColor()} onClick={handleCheck} />
+          <CheckIcon
+            fill={isChecked.get(policyId) ? theme.colors.sub3[60] : theme.colors.gray80_2}
+            onClick={handleCheck}
+          />
           <p>
-            {name} ({necessaryOrOptional})
+            {title} ({necessaryOrOptional})
           </p>
         </CheckSection>
         <ContentSection onClick={() => setIsOpen(!isOpen)}>
@@ -113,6 +122,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
+
+  * {
+    font-family: Pretendard !important;
+  }
 `;
 
 const ItemDiv = styled.div`
@@ -129,7 +142,7 @@ const CheckSection = styled.div`
   align-items: center;
   p {
     margin-left: 0.3rem;
-    color: ${({ theme }) => theme.colors.gray60};
+    color: ${({ theme }) => theme.colors.gray80_2};
     font-size: ${({ theme }) => theme.fontSize.sm};
     font-family: Pretendard;
   }
@@ -142,20 +155,10 @@ const ContentSection = styled.div`
   cursor: pointer;
   p {
     margin-right: 0.5rem;
-    color: ${({ theme }) => theme.colors.gray60};
+    color: ${({ theme }) => theme.colors.gray80_2};
     font-size: ${({ theme }) => theme.fontSize.sm};
     font-family: Pretendard;
   }
-`;
-
-const ContentText = styled.p`
-  margin: 0;
-  font-family: Pretendard;
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  color: ${({ theme }) => theme.colors.common.black};
-  line-height: 1rem;
-  word-break: keep-all;
-  white-space: pre-wrap;
 `;
 
 export default SignUpUserAgreementItem;

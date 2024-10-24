@@ -1,7 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import api from '@/api/api';
-import { CotatoSendEmailRequest } from 'cotato-openapi-clients';
+import {
+  CotatoJoinRequest,
+  CotatoJoinResponse,
+  CotatoPoliciesResponse,
+  CotatoSendEmailRequest,
+} from 'cotato-openapi-clients';
 import { CotatoThemeType } from '@theme/theme';
 import { media } from '@theme/media';
 import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
@@ -16,6 +21,8 @@ import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
 import SignUpSuccess from '@components/SignUp/SignUpSuccess';
 import CotatoPixelButton from '@components/CotatoPixelButton';
 import SignUpUserAgreement from '@components/SignUp/SignUpUserAgreement';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 //
 //
@@ -75,6 +82,11 @@ const SignUp = () => {
   );
 
   const theme = useTheme();
+
+  const { data: policiesData } = useSWR<CotatoPoliciesResponse>('/v2/api/policies', fetcher, {
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+  });
 
   /**
    *
@@ -239,15 +251,36 @@ const SignUp = () => {
    *
    */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (!policiesData?.policies) {
+      return;
+    }
+
+    if (
+      policiesData.policies.map((policy) => isChecked.get(policy.policyId ?? 0)).includes(false)
+    ) {
+      alert('이용 약관에 동의해주세요.');
+    }
+
     e.preventDefault();
     if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError && isCheckedAll) {
       api
-        .post('/v1/api/auth/join', {
+        .post<CotatoJoinResponse>('/v1/api/auth/join', {
           email: id,
           password: password,
           name: name,
           phoneNumber: tel,
-        })
+          policies: policiesData.policies.map((policy) => {
+            // TODO: remove if statement after api type is fixed
+            if (!policy.policyId) {
+              throw new (Error as any)('policyId is undefined');
+            }
+
+            return {
+              policyId: policy.policyId,
+              isChecked: isChecked.get(policy.policyId) ?? false,
+            };
+          }),
+        } as CotatoJoinRequest)
         .then(() => {
           setIsSuccess(true);
         })
@@ -415,7 +448,7 @@ const SignUp = () => {
     return (
       <UserAgreementDiv>
         <SignUpUserAgreement
-          agreementItems={AGREEMENT_ITEMS}
+          policies={policiesData?.policies}
           isCheckedAll={isCheckedAll}
           setIsCheckedAll={setIsCheckedAll}
           isChecked={isChecked}

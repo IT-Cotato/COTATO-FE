@@ -110,7 +110,7 @@ const Header = () => {
       <NavItem key={uuid()} to={'/mypage'}>
         <MemberNav>
           <MemberRoleIcon src={getMemberRoleIcon(user?.role)} />
-          {user?.memberName}
+          {user?.name}
         </MemberNav>
       </NavItem>
     );

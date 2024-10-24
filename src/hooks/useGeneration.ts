@@ -7,8 +7,13 @@ import useSWR from 'swr';
 //
 //
 
+interface UseGenerationParams {
+  generationId?: string;
+}
+
 interface UseGenerationReturn {
   currentGeneration: CotatoGenerationInfoResponse | undefined;
+  targetGeneration: CotatoGenerationInfoResponse | undefined;
   generations: CotatoGenerationInfoResponse[] | undefined;
   isGenerationLoading: boolean;
   isGenerationError: any;
@@ -18,27 +23,44 @@ interface UseGenerationReturn {
 //
 //
 
-export function useGeneration() {
+export function useGeneration({ generationId }: UseGenerationParams = {}): UseGenerationReturn {
   const _return = useRef<UseGenerationReturn>({} as UseGenerationReturn);
 
-  const { data, isLoading, error } = useSWR<CotatoGenerationInfoResponse[]>(
-    '/v1/api/generation',
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateIfStale: false,
-    },
-  );
+  const {
+    data: generationData,
+    isLoading: isGenerationLoading,
+    error: isGenerationError,
+  } = useSWR<CotatoGenerationInfoResponse[]>('/v1/api/generation', fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+  });
 
-  const currentGeneration = data?.at(-1);
+  const {
+    data: currentGenerationData,
+    isLoading: isCurrentGenerationLoading,
+    error: currentGenerationError,
+  } = useSWR<CotatoGenerationInfoResponse>('/v1/api/generation/current', fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+  });
 
-  _return.current = {
-    generations: data,
-    currentGeneration: currentGeneration,
-    isGenerationLoading: isLoading,
-    isGenerationError: error,
-  };
+  const currentGeneration = currentGenerationData;
+
+  const targetGeneration = generationId
+    ? generationData?.find((generation) => generation.generationId === Number(generationId))
+    : undefined;
+
+  //
+  //
+  //
+
+  _return.current.currentGeneration = currentGeneration;
+  _return.current.targetGeneration = targetGeneration;
+  _return.current.generations = generationData;
+  _return.current.isGenerationLoading = isGenerationLoading || isCurrentGenerationLoading;
+  _return.current.isGenerationError = isGenerationError || currentGenerationError;
 
   return _return.current;
 }

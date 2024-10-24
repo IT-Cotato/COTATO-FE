@@ -5,21 +5,37 @@ import mobile from '@assets/bg_waiting_mobile.svg';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import api from '@/api/api';
 import CSProblem from './CSProblem';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import BgWinner from './BgWinner';
+import {
+  ALLOW_SUBMIT_EVENT,
+  EXIT_EVENT,
+  handleWsMessage,
+  MessageType,
+  SHOW_KING_EVENT,
+  SHOW_PROBLEM_EVENT,
+  SHOW_WAITING_EVENT,
+  SHOW_WINNER_EVENT,
+} from '../admin/upload/utils/handleWsMessage';
+
+//
+//
+//
 
 interface WaitingProps {
   directToNext?: boolean;
 }
 
-type MessageType = {
-  status?: string | null;
-  start?: string | null;
-  quizId: number | null;
-  command: string;
-};
+//
+//
+//
 
 const CSQuiz: React.FC<WaitingProps> = () => {
+  const params = useParams();
+  const currentEducationId = params.educationId;
+
   const webSocket = React.useRef<WebSocket | undefined>(undefined);
 
   const [message, setMessage] = useState<MessageType>({
@@ -46,8 +62,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   });
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const educationId = { ...location.state };
 
   useEffect(() => {
     initializeWebSocket();
@@ -84,8 +98,8 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   // WebSocket 연결
   const connectWebSocket = () => {
     webSocket.current = new WebSocket(
-      `/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
-        educationId.educationId
+      `${process.env.REACT_APP_SOCKET_URL}/websocket/csquiz?Authorization=${localStorage.getItem('socketToken')}&educationId=${
+        currentEducationId
       }`,
     );
     webSocket.current.onopen = () => {
@@ -122,63 +136,66 @@ const CSQuiz: React.FC<WaitingProps> = () => {
         console.log(message);
         setProblemId(message.quizId); // 문제 번호 변경을 감지하여 리렌더링 시키기 위함
 
-        if (
-          message.status === null &&
-          message.start === null &&
-          message.quizId === null &&
-          message.command === 'show'
-        ) {
-          console.log('최초 접속- 대기 상태');
-          // 대기 화면 보여주기
-          setShowProblem(false);
-        } else if (
-          message.status === 'QUIZ_ON' &&
-          message.start === 'QUIZ_OFF' &&
-          message.quizId > 0 &&
-          message.command === 'show'
-        ) {
-          console.log('최초 접속- 문제 접근 허용 상태 / ADMIN- 문제 접근 허용 시작');
-          // 문제 보여주기, 전구 비활성화, 정답 제출 비허용
-          setShowProblem(true);
-          setAllowSubmit(false);
-        } else if (
-          message.status === 'QUIZ_ON' &&
-          message.start === 'QUIZ_ON' &&
-          message.quizId > 0 &&
-          message.command === 'show'
-        ) {
-          console.log('최초 접속- 정답 제출 허용 상태');
-          // 전구 활성화, 정답 제출 허용
-          setShowProblem(true);
-          setAllowSubmit(true);
-        } else if (message.quizId !== 0 && message.command === 'start') {
-          console.log('ADMIN- 정답 제출 허용 시작 ');
-          // 전구 활성화, 정답 제출 허용
-          setShowProblem(true);
-          setAllowSubmit(true);
-        } else if (message.command === 'exit') {
-          console.log('퀴즈 닫기');
-          navigate('/cs');
-        } else if (message.quizId > 0 && message.command === 'king') {
-          console.log('킹킹 문제 풀 사람 반환');
-          // 9번 문제 제출 -> 정답 여부 화면 띄웠다가 -> 대기화면 띄워주고 -
-          // > 메시지 받으면 킹킹 화면 띄우고 -> 몇 초 보여주고 대기화면 띄우기
-          // 9번 문제 다음 -> 대기화면 띄워주고 -> 메시지 받으면 킹킹 화면 띄우고 -
-          // > 몇 초 보여주고 다시 대기화면 띄우기
-          setShowKingKing(true);
-        } else if (message.quizId > 0 && message.command === 'winner') {
-          console.log('킹킹 문제 반환');
-          // 10번 문제 제출 -> 정답 여부 화면 띄웠다가 -> 다시 10번 문제로 -
-          // > 메시지 받으면 우승자 화면 띄우고 끝
-          setShowWinner(true);
-        } else {
-          console.log('exception error');
+        switch (handleWsMessage(message)) {
+          case SHOW_WAITING_EVENT:
+            setShowProblem(false);
+            break;
+
+          case SHOW_PROBLEM_EVENT:
+            setShowProblem(true);
+            setAllowSubmit(false);
+            break;
+
+          case ALLOW_SUBMIT_EVENT:
+            setShowProblem(true);
+            setAllowSubmit(true);
+            break;
+
+          case EXIT_EVENT:
+            navigate('/cs');
+            break;
+
+          case SHOW_KING_EVENT:
+            setShowKingKing(true);
+            break;
+
+          case SHOW_WINNER_EVENT:
+            setShowWinner(true);
+            break;
+
+          default:
+            toast.error(message);
+            break;
         }
       } catch (error) {
-        console.error('Failed to parse message:', event.data);
+        toast.error(`${error}`);
       }
     });
   };
+
+  /***
+   *
+   */
+  const renderToast = () => {
+    return (
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
+    );
+  };
+
+  //
+  //
+  //
 
   return (
     <Wrapper>
@@ -192,13 +209,18 @@ const CSQuiz: React.FC<WaitingProps> = () => {
             quizId={message.quizId}
             submitAllowed={allowSubmit}
             problemId={problemId}
+            educationId={
+              typeof currentEducationId === 'string'
+                ? Number(currentEducationId)
+                : currentEducationId
+            }
             showKingKing={showKingKing}
             setShowKingKing={setShowKingKing}
           />
         </div>
       )}
-      {/* {showKingKing && <BgKingKing quizId={message.quizId} />} */}
-      {showWinner && <BgWinner quizId={message.quizId} />}
+      {showWinner && <BgWinner />}
+      {renderToast()}
     </Wrapper>
   );
 };

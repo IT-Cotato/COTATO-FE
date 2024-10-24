@@ -5,7 +5,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import SessionUploadModalImageInputThumnail from '@pages/Session/SessionUploadModalImageInputThumnail';
 import { SessionListImageInfo } from '@/typing/session';
 import { ReactComponent as ImageCloseIcon } from '@assets/close_dotted.svg';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import imageSortByOrder from '@utils/imageSortByOrder';
 import { produce } from 'immer';
 import { CotatoSessionListImageInfoResponse } from 'cotato-openapi-clients';
@@ -17,7 +17,7 @@ import { CotatoSessionListImageInfoResponse } from 'cotato-openapi-clients';
 interface SessionUploadModalImageInputProps {
   imageList: SessionListImageInfo[];
   handleImageListChange: (imageList: SessionListImageInfo[]) => void;
-  requestImageAdd?: (image: SessionListImageInfo) => Promise<any>;
+  requestImageAdd?: (image: SessionListImageInfo, order: number) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => Promise<any>;
   requestImageRemove?: (image: SessionListImageInfo) => Promise<any>;
 }
@@ -101,7 +101,9 @@ const SessionUploadModalImageInput = ({
 
     // If requestImageAdd is provided, send request to server
     if (requestImageAdd) {
-      const requests: Promise<any>[] = addedImageList.map((image) => requestImageAdd(image));
+      const requests: Promise<any>[] = addedImageList.map((image, index) =>
+        requestImageAdd(image, sortedImageList.length + index),
+      );
 
       try {
         const responses = await Promise.all(requests);
@@ -329,12 +331,6 @@ const SessionUploadModalImageInput = ({
         {renderImageBox()}
         {renderImageDnd()}
       </ImageInputWrapper>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        pauseOnFocusLoss={false}
-        theme={localStorage.getItem('theme') || 'light'}
-      />
     </>
   );
 };

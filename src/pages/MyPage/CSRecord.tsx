@@ -1,35 +1,44 @@
+import React from 'react';
 import fetcher from '@utils/fetcher';
-import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import localeKr from '@/assets/locale/locale_kr.json';
+import useUser from '@/hooks/useUser';
+import { useGeneration } from '@/hooks/useGeneration';
+import GenerationDropBox from '@components/GenerationDropBox';
+import { useSearchParams } from 'react-router-dom';
+
+//
+//
+//
+
+const medalImgSrcs = [
+  'https://velog.velcdn.com/images/ea_st_ring/post/c6984138-964f-48e7-8c66-62c817ce2d76/image.svg',
+  'https://velog.velcdn.com/images/ea_st_ring/post/62560df6-8a97-478b-a483-f5ae79768c6e/image.svg',
+  'https://velog.velcdn.com/images/ea_st_ring/post/0bf409e2-36e8-4103-bc85-56a91072b21e/image.svg',
+  'https://velog.velcdn.com/images/ea_st_ring/post/5e6fc3c3-18af-4dc4-bdfa-98557c9b1d10/image.svg',
+  'https://velog.velcdn.com/images/ea_st_ring/post/80026402-2707-4ff9-9503-223c6fbb7396/image.svg',
+];
+
+//
+//
+//
 
 const CSRecord = () => {
-  const { data: user } = useSWR('/v1/api/mypage/info', fetcher);
-  const { data: generationData } = useSWR('/v1/api/generation', fetcher);
-  const [generationId, setGenerationId] = React.useState<number>();
-  const { data: hallOfFameData } = useSWR(
-    '/v1/api/mypage/hall-of-fame?generationId=' + generationId,
-    fetcher,
+  const { user } = useUser();
+  const [params] = useSearchParams();
+  const generationId = params.get('generationId');
+
+  const [selectedGenerationId, setSelectedGenerationId] = React.useState<string | undefined>(
+    generationId || undefined,
   );
 
-  const medalImgSrcs = [
-    'https://velog.velcdn.com/images/ea_st_ring/post/c6984138-964f-48e7-8c66-62c817ce2d76/image.svg',
-    'https://velog.velcdn.com/images/ea_st_ring/post/62560df6-8a97-478b-a483-f5ae79768c6e/image.svg',
-    'https://velog.velcdn.com/images/ea_st_ring/post/0bf409e2-36e8-4103-bc85-56a91072b21e/image.svg',
-    'https://velog.velcdn.com/images/ea_st_ring/post/5e6fc3c3-18af-4dc4-bdfa-98557c9b1d10/image.svg',
-    'https://velog.velcdn.com/images/ea_st_ring/post/80026402-2707-4ff9-9503-223c6fbb7396/image.svg',
-  ];
+  const { targetGeneration } = useGeneration({ generationId: selectedGenerationId });
 
-  //
-  //
-  //
-  useEffect(() => {
-    if (generationData) {
-      generationData.reverse();
-      setGenerationId(generationData[0].generationId);
-    }
-  }, [generationData]);
+  const { data: hallOfFameData } = useSWR(
+    '/v1/api/mypage/hall-of-fame?generationId=' + targetGeneration?.generationId,
+    fetcher,
+  );
 
   //
   //
@@ -38,33 +47,28 @@ const CSRecord = () => {
   return (
     <Wrapper>
       <Title>내가 풀어본 CS 문제풀이</Title>
-      <Subtitle>여기서 계정 정보를 관리하세요</Subtitle>
       <SelectGenerationDiv>
-        <select
-          value={generationId}
-          onChange={(e) => {
-            setGenerationId(parseInt(e.target.value));
+        <GenerationDropBox
+          handleGenerationChange={(generation) => {
+            setSelectedGenerationId(generation?.generationId?.toString());
           }}
-        >
-          {generationData?.map((generation: any) => (
-            <option key={generation.generationId} value={generation.generationId}>
-              {generation.generationNumber}기
-            </option>
-          ))}
-        </select>
+        />
+        {/* </select> */}
       </SelectGenerationDiv>
       <MyInfoBox>
         <InfoDiv>
           <BadgeDiv>
-            <Badge backgroundcolor="rgba(37, 156, 46, 0.52)">{user?.generationNumber}기</Badge>
+            <Badge backgroundcolor="rgba(37, 156, 46, 0.52)">
+              {targetGeneration?.generationNumber}기
+            </Badge>
             <Badge backgroundcolor="rgba(235, 83, 83, 0.51)">
-              {localeKr[(user?.memberPosition as keyof typeof localeKr) || 'NONE']}
+              {localeKr[(user?.position as keyof typeof localeKr) || 'NONE']}
             </Badge>
             <Badge backgroundcolor="#93C6FE">
-              {localeKr[(user?.memberRole as keyof typeof localeKr) || 'NONE']}
+              {localeKr[(user?.role as keyof typeof localeKr) || 'NONE']}
             </Badge>
           </BadgeDiv>
-          <h2>감자 {user?.memberName}님 반갑습니다.</h2>
+          <h2>감자 {user?.name}님 반갑습니다.</h2>
           <RecordDiv>
             <img
               src="https://velog.velcdn.com/images/ea_st_ring/post/bc09a715-202b-41ee-acee-1c3f22be4644/image.svg"
@@ -146,16 +150,6 @@ const Title = styled.h1`
   line-height: 160%; /* 44.8px */
   text-transform: capitalize;
   margin-bottom: 0;
-`;
-
-const Subtitle = styled.p`
-  width: 100%;
-  color: ${({ theme }) => theme.colors.gray80_1};
-  text-align: center;
-  font-family: NanumSquareRound;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
 `;
 
 const MyInfoBox = styled.div`

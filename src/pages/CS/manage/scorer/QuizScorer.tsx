@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CSManageLayout from '@pages/CS/manage/CSManageLayout';
 import { css, styled } from 'styled-components';
 import { IQuizAdmin, IQuizAdminScorer, IQuizAdminSubmit } from '@/typing/db';
@@ -10,12 +10,11 @@ import ToggleButton from '@components/ToggleButton';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
 import WaitPopup from '@pages/CS/manage/WaitPopup';
+import { CotatoRecordResponse, CotatoScorerResponse } from 'cotato-openapi-clients';
 
 const QuizScorer = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const quizId = searchParams.get('quizId');
-  const educationId = searchParams.get('educationId');
+  const { generationId, educationId, quizId } = useParams();
 
   const { data: educationStatus } = useSWR(
     `/v1/api/education/status?educationId=${educationId}`,
@@ -33,8 +32,8 @@ const QuizScorer = () => {
     refreshInterval: 1000,
   });
 
-  const [submits, setSubmits] = useState<IQuizAdminSubmit[]>();
-  const [scorer, setScorer] = useState<IQuizAdminScorer>();
+  const [submits, setSubmits] = useState<CotatoRecordResponse[]>();
+  const [scorer, setScorer] = useState<CotatoScorerResponse>();
   const [quizStatus, setQuizStatus] = useState('');
   const [quizStart, setQuizStart] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -133,7 +132,9 @@ const QuizScorer = () => {
       }
     });
 
-    navigate(`/cs/manage/quizscorer?educationId=${educationId}&quizId=${prevQuizId}`);
+    navigate(
+      `/cs/manage/generation/${generationId}/education/${educationId}/quiz/${prevQuizId}/quizscorer`,
+    );
   }, [quiz, quizList]);
 
   const handleNextQuizButton = useCallback(() => {
@@ -142,14 +143,16 @@ const QuizScorer = () => {
       return;
     }
 
-    let prevQuizId = 0;
+    let nextQuizId = 0;
     quizList?.quizzes.forEach((quizData: IQuizAdmin) => {
       if (quizData.quizNumber === Number(quiz?.quizNumber) + 1) {
-        prevQuizId = quizData.quizId;
+        nextQuizId = quizData.quizId;
       }
     });
 
-    navigate(`/cs/manage/quizscorer?educationId=${educationId}&quizId=${prevQuizId}`);
+    navigate(
+      `/cs/manage/generation/${generationId}/education/${educationId}/quiz/${nextQuizId}/quizscorer`,
+    );
   }, [quiz, quizList]);
 
   return (
@@ -167,7 +170,7 @@ const QuizScorer = () => {
                 {submits?.map((submit, index) => (
                   <SubmitContent key={index}>
                     <p>
-                      {submit.memberName}({submit.backFourNumber})
+                      {submit.name}({submit.backFourNumber})
                     </p>
                     <SubmitResult>
                       <p>
@@ -182,7 +185,7 @@ const QuizScorer = () => {
             <HalfContainer width="45%">
               <p>득점자</p>
               <ScorerBox>
-                <p>{scorer?.memberName ? `${scorer.memberName}(${scorer.backFourNumber})` : ''}</p>
+                <p>{scorer?.name ? `${scorer.name}(${scorer.backFourNumber})` : ''}</p>
               </ScorerBox>
               <p>문제 정답</p>
               <AnswerBox>

@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { IGeneration } from '@/typing/db';
 import fetcher from '@utils/fetcher';
 import { styled } from 'styled-components';
 import { ReactComponent as ArrowDown } from '@assets/arrow_dwon_thin.svg';
 import { ReactComponent as ArrowUp } from '@assets/arrow_up_thin.svg';
 import useSWR from 'swr';
 import generationSort from '@utils/generationSort';
+import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 
 interface Props {
   mode: string;
   width: string;
-  selectedGeneration?: IGeneration;
+  selectedGeneration?: CotatoGenerationInfoResponse;
   selectedPosition?: string;
-  onChangeGeneration?: (selectedGeneration: IGeneration) => void;
+  onChangeGeneration?: (selectedGeneration: CotatoGenerationInfoResponse) => void;
   onChangePosition?: (selectedPosition: string) => void;
 }
 
@@ -26,9 +26,12 @@ const RequestDropBox = ({
   onChangeGeneration,
   onChangePosition,
 }: Props) => {
-  const { data: generationData } = useSWR<IGeneration[]>('/v1/api/generation', fetcher);
+  const { data: generationData } = useSWR<CotatoGenerationInfoResponse[]>(
+    '/v1/api/generation',
+    fetcher,
+  );
 
-  const [generations, setGenerations] = useState<IGeneration[]>();
+  const [generations, setGenerations] = useState<CotatoGenerationInfoResponse[]>();
   const [isOpen, setIsOpen] = useState(false);
 
   const dropRef = useRef<HTMLDivElement>(null);
@@ -66,7 +69,7 @@ const RequestDropBox = ({
   }, [mode, selectedGeneration, selectedPosition]);
 
   const onClickGeneration = useCallback(
-    (generation: IGeneration) => {
+    (generation: CotatoGenerationInfoResponse) => {
       if (onChangeGeneration) onChangeGeneration(generation);
       setIsOpen(false);
     },

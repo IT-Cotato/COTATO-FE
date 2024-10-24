@@ -11,10 +11,10 @@ import CSAdminUploadQuizInfo from './CSAdminUploadQuizInfo';
 
 interface CSAdminUploadContentProps {
   quiz: QuizType[];
-  setQuiz: React.Dispatch<React.SetStateAction<QuizType[]>>;
   selected: number;
+  educationId?: number;
+  setQuiz: React.Dispatch<React.SetStateAction<QuizType[]>>;
   setSelected: React.Dispatch<React.SetStateAction<number>>;
-  educationId: number;
 }
 
 //

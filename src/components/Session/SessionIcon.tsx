@@ -87,7 +87,7 @@ const Circle = styled.div<CircleProps>`
   background: ${({ $background }) => $background};
 
   > svg {
-    > path {
+    path {
       fill: ${({ theme }) => theme.colors.common.white};
     }
   }

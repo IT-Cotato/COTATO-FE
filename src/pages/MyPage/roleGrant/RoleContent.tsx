@@ -118,7 +118,7 @@ const RoleContent = ({ mode, member, addOm, onChangeAddOm, onChangeRemoveOm }: P
             <SleepBlack onClick={onClickAddOm} />
           ))}
         <p>
-          {member.generationNumber}기 {member.memberName} {getMemberPositionStr()}
+          {member.generationNumber}기 {member.name} {getMemberPositionStr()}
         </p>
       </MemeberWrapper>
       {mode === 'active' ? (
