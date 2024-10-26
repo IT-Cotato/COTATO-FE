@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import idIcon from '@assets/login_id_icon.svg';
@@ -85,6 +85,10 @@ const Login = () => {
   const handleLoginSuccess = () => {
     setIsSuccess(true);
     setTimeout(() => {
+      if (window.location.pathname !== '/signin') {
+        return;
+      }
+
       navigate('/');
     }, DELAY_TIME);
   };
