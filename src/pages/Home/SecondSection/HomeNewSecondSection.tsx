@@ -16,21 +16,15 @@ import devtalkDark from '@assets/devtalk_dark.svg';
 import demodayLight from '@assets/demoday_light.svg';
 import demodayDark from '@assets/demoday_dark.svg';
 
-import { ReactComponent as ItIcon } from '@assets/it_icon.svg';
-import { ReactComponent as CsIcon } from '@assets/cs_icon.svg';
-import { ReactComponent as NetworkIcon } from '@assets/network_icon.svg';
-import { ReactComponent as HackathonIcon } from '@assets/hackathon_icon.svg';
-import { ReactComponent as DevtalkIcon } from '@assets/devtalk_icon.svg';
-import { ReactComponent as DemodayIcon } from '@assets/demoday_icon.svg';
-import { ReactComponent as SectionTwoTitle } from '@assets/home_section2_title.svg';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { media } from '@theme/media';
-import styles from './style.module.css';
-import { CotatoThemeType } from '@theme/theme';
+import { CotatoLightTheme, CotatoThemeType } from '@theme/theme';
 import { FreeMode } from 'swiper/modules';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import HomeNewSecondSectionMobileSwiper from './HomeNewSecondSectionMobileSwiper';
+import CotatoIcon from '@components/CotatoIcon';
+import { Stack } from '@mui/material';
 
 //
 //
@@ -65,13 +59,50 @@ export const CARD_INFOS = [
   },
 ];
 
+const StyledStack = styled(Stack)<{
+  bgColor: [keyof (typeof CotatoLightTheme)['colors'], string?] | undefined;
+}>`
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme, bgColor }) => {
+    if (!bgColor) return 'transparent'; // bgColor가 없을 경우 투명색
+
+    const [firstKey, secondKey] = bgColor;
+    // 첫 번째 키가 존재하고, 두 번째 키가 있을 경우
+    if (secondKey && typeof theme.colors[firstKey] === 'object') {
+      return (
+        theme.colors[firstKey][secondKey as keyof (typeof theme.colors)[typeof firstKey]] ||
+        'transparent'
+      );
+    }
+    // 첫 번째 키만 있을 경우
+    return theme.colors[firstKey] || 'transparent';
+  }};
+  border-radius: 50%;
+`;
+
 export const ICON_ASSETS = [
-  <ItIcon />,
-  <CsIcon />,
-  <NetworkIcon />,
-  <HackathonIcon />,
-  <DevtalkIcon />,
-  <DemodayIcon />,
+  <StyledStack bgColor={['primary100_2']}>
+    <CotatoIcon icon="globe" />
+  </StyledStack>,
+  <StyledStack bgColor={['secondary70']}>
+    <CotatoIcon icon="pencil" />
+  </StyledStack>,
+  <StyledStack bgColor={['sub1', '60']}>
+    <CotatoIcon icon="chart-network" />
+  </StyledStack>,
+  <StyledStack bgColor={['sub2', '60']}>
+    <CotatoIcon icon="trophy" />
+  </StyledStack>,
+  <StyledStack bgColor={['sub3', '60']}>
+    <CotatoIcon icon="comments" />
+  </StyledStack>,
+  <StyledStack bgColor={['sub1', '40']}>
+    <CotatoIcon icon="seedlings" />
+  </StyledStack>,
 ];
 
 //
@@ -79,7 +110,6 @@ export const ICON_ASSETS = [
 //
 
 const HomeNewSecondSection = () => {
-  const theme = useTheme();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
   const { DefaultTheme } = React.useContext(ThemeContext);
@@ -111,7 +141,7 @@ const HomeNewSecondSection = () => {
   return (
     <Wrapper>
       <Title>
-        <SectionTwoTitle fill={theme.colors.gray80_2} className={styles['section_two_title']} />
+        <h1>WHAT WE DO</h1>
         <p>코테이토의 활동을 소개할게요!</p>
       </Title>
       {isLandScapeOrSmaller ? <HomeNewSecondSectionMobileSwiper /> : renderDesktopSwiper()}
@@ -145,6 +175,11 @@ const Title = styled.div`
   img {
     width: 200px;
     height: 40px;
+  }
+  h1 {
+    font-size: 3rem;
+    margin: 0;
+    color: ${({ theme }) => theme.colors.gray80_2};
   }
   p {
     margin-top: 1rem;

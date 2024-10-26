@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { ReactComponent as ArrowDown } from '@assets/arrow_dwon_thin.svg';
-import { ReactComponent as ArrowUp } from '@assets/arrow_up_thin.svg';
+
 import { IRole } from '@/typing/db';
+import CotatoIcon from './CotatoIcon';
 
 interface Props {
   selectedRole?: IRole;
@@ -42,7 +42,11 @@ const RoleDropBox = ({ selectedRole, onChangeRole }: Props) => {
         onClick={() => setIsOpen(!isOpen)}
       >
         <p>{selectedRole ? selectedRole.name : '역할 선택'}</p>
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
+        <CotatoIcon
+          icon={isOpen ? 'angle-up' : 'angle-down'}
+          size="1rem"
+          color={selectedRole ? selectedRole.color : (theme) => theme.colors.common.black_const}
+        />
       </SelectMenu>
       {isOpen && (
         <SelectList color={selectedRole ? selectedRole.color : '#bebebe'}>
@@ -85,14 +89,6 @@ const SelectMenu = styled.div<{ color: string }>`
     font-size: 16px;
     font-weight: 400;
     margin-left: 4px;
-  }
-
-  > svg {
-    cursor: pointer;
-
-    path {
-      fill: ${(props) => (props.color === '#bebebe' ? '#7b7b7b' : props.color)};
-    }
   }
 `;
 

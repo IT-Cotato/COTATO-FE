@@ -1,7 +1,5 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
-import cotato from '@assets/cotato_icon.png';
-import { ReactComponent as ButtonIcon } from '@assets/button_icon.svg';
 import { Link } from 'react-router-dom';
 import fetcher from '@utils/fetcher';
 import useSWRImmutable from 'swr/immutable';
@@ -12,8 +10,10 @@ import cotatoCharacterFront from '@assets/cotato_character_front.svg';
 import cotatoCharacterBack from '@assets/cotato_character_back.svg';
 import cotatoCharacterPM from '@assets/cotato_character_pm.svg';
 import cotatoCharacterDesign from '@assets/cotato_character_design.svg';
+import cotatoCharacter from '@assets/crown_character.svg';
 import useUser from '@/hooks/useUser';
 import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -32,7 +32,7 @@ const COTATO_CHARCTER_SVG_MAP: Partial<
   BE: { imgSrc: cotatoCharacterBack },
   PM: { imgSrc: cotatoCharacterPM },
   DESIGN: { imgSrc: cotatoCharacterDesign },
-  NONE: { imgSrc: cotato },
+  NONE: { imgSrc: cotatoCharacter },
 };
 
 //
@@ -68,7 +68,7 @@ const MyInfo = () => {
                   src={
                     COTATO_CHARCTER_SVG_MAP[
                       user?.position ?? CotatoMemberInfoResponsePositionEnum.None
-                    ]?.imgSrc ?? cotato
+                    ]?.imgSrc as string
                   }
                 />
               </Stack>
@@ -118,7 +118,7 @@ const MyInfo = () => {
           <StyledLink to="cs-record">
             <ButtonContainer>
               <p>내가 풀어본 CS 문제풀이</p>
-              <ButtonIcon />
+              <CotatoIcon icon="angle-right-solid" size="2rem" />
             </ButtonContainer>
           </StyledLink>
         )}
@@ -126,7 +126,7 @@ const MyInfo = () => {
           <StyledLink to="request">
             <ButtonContainer>
               <p>신입 감자 가입요청 확인/승인 </p>
-              <ButtonIcon />
+              <CotatoIcon icon="angle-right-solid" size="2rem" />
             </ButtonContainer>
           </StyledLink>
         )}{' '}
@@ -134,7 +134,7 @@ const MyInfo = () => {
           <StyledLink to="role-grant">
             <ButtonContainer>
               <p>관리자 권한 설정 </p>
-              <ButtonIcon />
+              <CotatoIcon icon="angle-right-solid" size="2rem" />
             </ButtonContainer>
           </StyledLink>
         )}
@@ -142,7 +142,7 @@ const MyInfo = () => {
           <StyledLink to="setting">
             <ButtonContainer>
               <p>시스템 설정</p>
-              <ButtonIcon />
+              <CotatoIcon icon="angle-right-solid" size="2rem" />
             </ButtonContainer>
           </StyledLink>
         )}

@@ -1,7 +1,8 @@
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { media } from '@theme/media';
+import { CotatoDarkTheme } from '@theme/theme';
 import React from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled, { ThemeProvider, useTheme } from 'styled-components';
 
 //
 //
@@ -68,7 +69,7 @@ const HomeSecondSectionCard = ({
       <StyledCardContent>
         <Stack gap="1rem" padding="0rem 1.5rem 0.5rem 1.5rem">
           <Stack gap="0.5rem" direction="row">
-            {icon}
+            <ThemeProvider theme={CotatoDarkTheme}>{icon}</ThemeProvider>
             <Typography variant="h4" fontWeight="700" color={theme.colors.common.black}>
               {title}
             </Typography>

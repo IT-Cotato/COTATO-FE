@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as ArrowBack } from '@/assets/arrow_back.svg';
 import { useNavigate, useParams } from 'react-router-dom';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 interface CSAdminUploadLayoutProps {
   children: React.ReactNode;
@@ -23,14 +24,25 @@ const CSAdminUploadLayout: React.FC<CSAdminUploadLayoutProps> = ({
   return (
     <Wrapper>
       <TitleBox>
-        <BackButton
+        <IconButton
+          style={{
+            position: 'absolute',
+            left: '2rem',
+            top: '2rem',
+          }}
           onClick={() => {
             const confirm = window.confirm('저장하지 않고 나가면 변경사항이 사라질 수 있어요!');
             if (confirm) {
               navigate(`/cs/start/generation/${generationId}/education/${educationId}`);
             }
           }}
-        />
+        >
+          <CotatoIcon
+            icon="angle-left-solid"
+            size="2rem"
+            color={(theme) => theme.colors.primary90}
+          />
+        </IconButton>
         <h1>CS 문제업로드</h1>
         <p>{`${generationNumber}기 / ${educationNumber}차 세션`}</p>
       </TitleBox>
@@ -53,14 +65,6 @@ const Wrapper = styled.div`
     align-items: center;
     padding: 0;
   }
-`;
-
-const BackButton = styled(ArrowBack)`
-  width: 25px;
-  height: 25px;
-  align-self: center;
-  margin: 0px 0 0 0px;
-  cursor: pointer;
 `;
 
 const TitleBox = styled.div`

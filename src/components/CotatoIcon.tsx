@@ -2,16 +2,16 @@ import React, { ObjectHTMLAttributes } from 'react';
 import { regularIcons, solidIcons } from '../utils/iconLoader';
 import { RegularIconName } from '../types/regularIconNames';
 import { SolidIconName } from '../types/solidIconNames';
-import { useTheme } from 'styled-components';
+import { useTheme, DefaultTheme } from 'styled-components';
 
 //
 //
 //
 
-interface CotatoIconProps extends ObjectHTMLAttributes<HTMLObjectElement> {
+interface CotatoIconProps extends Omit<ObjectHTMLAttributes<HTMLObjectElement>, 'color'> {
   icon: RegularIconName | SolidIconName;
   size?: string;
-  color?: string;
+  color?: string | ((theme: DefaultTheme) => string);
 }
 
 //
@@ -28,8 +28,12 @@ const CotatoIcon: React.FC<CotatoIconProps> = ({ icon, color, size, ...rest }) =
   const icons = icon in solidIcons ? solidIcons : regularIcons;
   const Icon = icons[icon as keyof typeof icons];
 
+  // color가 함수일 경우 theme을 인자로 받아 처리
+  const resolvedColor =
+    typeof color === 'function' ? color(theme) : color || theme.colors.common.black;
+
   const defaultStyle = {
-    backgroundColor: color || theme.colors.common.black,
+    backgroundColor: resolvedColor,
     width: '24px',
     height: '24px',
   };
@@ -38,10 +42,6 @@ const CotatoIcon: React.FC<CotatoIconProps> = ({ icon, color, size, ...rest }) =
     return <div>X</div>;
   }
 
-  //
-  //
-  //
-
   return (
     <div
       {...rest}
@@ -49,7 +49,7 @@ const CotatoIcon: React.FC<CotatoIconProps> = ({ icon, color, size, ...rest }) =
         ...rest.style,
         width: size || defaultStyle.width,
         height: size || defaultStyle.height,
-        backgroundColor: color || theme.colors.common.black,
+        backgroundColor: resolvedColor,
         WebkitMaskImage: `url(${Icon})`,
         WebkitMaskRepeat: 'no-repeat',
         WebkitMaskPosition: 'center center',

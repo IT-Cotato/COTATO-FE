@@ -1,13 +1,12 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as SearchIcon } from '@assets/search.svg';
-import { ReactComponent as DeleteIcon } from '@assets/delete.svg';
-import PrevButton from '@assets/pixel_arrow_left.svg';
 import KakaoMap from '@/components/SearchLocation/SearchLocationKakaoMap';
 import SearchResultList from '@/components/SearchLocation/SearchLocationResultList';
 import { Box } from '@mui/system';
 import { media } from '@theme/media';
 import { Place } from '@/typing/session';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 //
 //
@@ -58,7 +57,13 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
     <Background>
       <Modal>
         <Header>
-          <img src={PrevButton} onClick={() => setIsSearchModalOpen(false)} />
+          <StyledIconButton onClick={() => setIsSearchModalOpen(false)}>
+            <CotatoIcon
+              icon="angle-left-solid"
+              size="1.5rem"
+              color={(theme) => theme.colors.primary80}
+            />
+          </StyledIconButton>
         </Header>
         <h3>세션 장소 검색</h3>
         <SearchBar>
@@ -68,9 +73,19 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="검색어를 입력하세요"
           />
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <SearchIcon onClick={handleSearch} />
-            <DeleteIcon />
+          <Box display="flex" flexDirection="row">
+            <CotatoIcon
+              icon="search"
+              size="1.25rem"
+              color={(theme) => theme.colors.gray90}
+              style={{
+                alignSelf: 'center',
+              }}
+              onClick={handleSearch}
+            />
+            <IconButton onClick={() => setKeyword('')}>
+              <CotatoIcon icon="times" size="1.25rem" color={(theme) => theme.colors.gray90} />
+            </IconButton>
           </Box>
         </SearchBar>
         <KakaoMap
@@ -136,16 +151,12 @@ const Header = styled.div`
   width: 100%;
   position: relative;
   margin-bottom: 1.6rem;
-  img {
-    width: 1.5rem;
-    height: 1.5rem;
-    position: absolute;
-    top: 0;
-    left: 0;
-    &:hover {
-      cursor: pointer;
-    }
-  }
+`;
+
+const StyledIconButton = styled(IconButton)`
+  position: absolute !important;
+  top: 0;
+  left: 0;
 `;
 
 const SearchBar = styled.div`

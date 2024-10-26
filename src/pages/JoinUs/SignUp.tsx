@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import api from '@/api/api';
 import {
   CotatoJoinRequest,
@@ -10,19 +10,14 @@ import {
 import { CotatoThemeType } from '@theme/theme';
 import { media } from '@theme/media';
 import { ReactComponent as ButtonText } from '@assets/sign_up_btn_text.svg';
-import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import WelcomeImg from '@assets/login_welcome_img.svg';
-import userIcon from '@assets/sign_up_user_icon.svg';
-import phoneIcon from '@assets/sign_up_phone_icon.svg';
-import pwIcon from '@assets/sign_up_pw_icon.svg';
-import eyesDefaultIcon from '@assets/sign_up_eyes_default_icon.svg';
-import eyesInvisibleIcon from '@assets/sign_up_eyes_invisible_icon.svg';
-import unvalidIcon from '@assets/sign_up_unvalid_icon.svg';
 import SignUpSuccess from '@components/SignUp/SignUpSuccess';
 import CotatoPixelButton from '@components/CotatoPixelButton';
 import SignUpUserAgreement from '@components/SignUp/SignUpUserAgreement';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 //
 //
@@ -80,8 +75,6 @@ const SignUp = () => {
   const [isChecked, setIsChecked] = useState<Map<number, boolean>>(
     new Map(AGREEMENT_ITEMS.map((item) => [item.id, false])),
   );
-
-  const theme = useTheme();
 
   const { data: policiesData } = useSWR<CotatoPoliciesResponse>('/v2/api/policies', fetcher, {
     revalidateOnFocus: false,
@@ -312,7 +305,11 @@ const SignUp = () => {
   const renderErrorMsg = (errorMsg: string) => {
     return (
       <Error>
-        <img src={unvalidIcon} alt="unvalid icon" />
+        <CotatoIcon
+          icon="times-circle"
+          size="1.25rem"
+          color={(theme) => theme.colors.secondary80}
+        />
         <span>{errorMsg}</span>
       </Error>
     );
@@ -325,11 +322,19 @@ const SignUp = () => {
     return (
       <ValidationSection>
         <ValidationDiv color={isPasswordLength}>
-          <CheckIcon fill={isPasswordLength ? theme.colors.sub3[60] : theme.colors.gray60} />
+          <CotatoIcon
+            icon="check-box-solid"
+            size="1.5rem"
+            color={(theme) => (isPasswordLength ? theme.colors.sub3[60] : theme.colors.gray60)}
+          />
           <span>8-16자 입력</span>
         </ValidationDiv>
         <ValidationDiv color={isPasswordRegex}>
-          <CheckIcon fill={isPasswordRegex ? theme.colors.sub3[60] : theme.colors.gray60} />
+          <CotatoIcon
+            icon="check-box-solid"
+            size="1.5rem"
+            color={(theme) => (isPasswordRegex ? theme.colors.sub3[60] : theme.colors.gray60)}
+          />
           <span>영문, 숫자, 특수문자 입력</span>
         </ValidationDiv>
       </ValidationSection>
@@ -345,7 +350,11 @@ const SignUp = () => {
         <Label>
           <span>이름</span>
           <InputDiv>
-            <Icon src={userIcon} alt="user icon" />
+            <StyledCotatoIcon
+              icon="user-solid"
+              size="1.5rem"
+              color={(theme) => theme.colors.gray30}
+            />
             <InputBox
               type="text"
               id="name"
@@ -359,7 +368,11 @@ const SignUp = () => {
         <Label>
           <span>아이디</span>
           <InputDiv>
-            <Icon src={userIcon} alt="user icon" />
+            <StyledCotatoIcon
+              icon="user-solid"
+              size="1.5rem"
+              color={(theme) => theme.colors.gray30}
+            />
             <InputBox
               type="text"
               id="id"
@@ -390,7 +403,14 @@ const SignUp = () => {
         <Label>
           <span>전화번호</span>
           <InputDiv>
-            <Icon src={phoneIcon} alt="phone icon" />
+            <CotatoIcon
+              icon="phone-ringing-low-solid"
+              style={{
+                marginRight: '0.6rem',
+              }}
+              size="1.5rem"
+              color={(theme) => theme.colors.gray30}
+            />
             <InputBox
               type="tel"
               id="tel"
@@ -405,7 +425,12 @@ const SignUp = () => {
         <Label>
           <span>비밀번호</span>
           <InputDiv>
-            <Icon src={pwIcon} alt="password icon" />
+            {/* <Icon src={pwIcon} alt="password icon" /> */}
+            <StyledCotatoIcon
+              icon="lock-solid"
+              size="1.5rem"
+              color={(theme) => theme.colors.gray30}
+            />
             <InputBox
               type={isPasswordVisible ? 'text' : 'password'}
               id="password"
@@ -414,18 +439,25 @@ const SignUp = () => {
               value={password}
               onChange={handlePasswordChange}
             />
-            <Eyes
-              src={isPasswordVisible ? eyesInvisibleIcon : eyesDefaultIcon}
-              alt="eyes icon"
-              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-            />
+            <IconButton onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+              <CotatoIcon
+                icon={isPasswordVisible ? 'eye-cross-solid' : 'eye-solid'}
+                color={(theme) => theme.colors.gray30}
+                size="1.5rem"
+              />
+            </IconButton>
           </InputDiv>
           <PasswordValidation />
         </Label>
         <Label>
           <span>비밀번호 확인</span>
           <InputDiv>
-            <Icon src={pwIcon} alt="password icon" />
+            {/* <Icon src={pwIcon} alt="password icon" /> */}
+            <StyledCotatoIcon
+              icon="lock-solid"
+              size="1.5rem"
+              color={(theme) => theme.colors.gray30}
+            />
             <InputBox
               type="password"
               id="passwordCheck"
@@ -575,11 +607,11 @@ const InputDiv = styled.div`
   position: relative;
 `;
 
-const Icon = styled.img`
-  padding-right: 0.6rem;
+const StyledCotatoIcon = styled(CotatoIcon)`
+  margin-right: 0.6rem;
 
   ${media.mobile`
-    padding-right: 0.4rem;
+    margin-right: 0.4rem;
   `}
 `;
 
@@ -622,11 +654,6 @@ const AuthButton = styled.button<{ disable: boolean }>`
     height: 2rem;
     padding: 0;
   `}
-`;
-
-const Eyes = styled.img`
-  position: absolute;
-  right: 0.75rem;
 `;
 
 const Error = styled.div`

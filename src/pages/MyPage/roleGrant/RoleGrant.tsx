@@ -7,6 +7,7 @@ import RoleContent from '@pages/MyPage/roleGrant/RoleContent';
 import useSWRImmutable from 'swr/immutable';
 import api from '@/api/api';
 import sortEnrollMember from '@pages/MyPage/roleGrant/utils/sortEnrollMembers';
+import { Stack } from '@mui/material';
 
 const RoleGrant = () => {
   const { data: activeListData, mutate: mutateActive } = useSWRImmutable<IEnrollMember[]>(
@@ -92,20 +93,22 @@ const RoleGrant = () => {
           </OmButton>
         )}
       </ButtonWrapper>
-      {listMode === 'active'
-        ? activeList?.map((member) => (
-            <RoleContent
-              key={member.memberId}
-              mode={listMode}
-              member={member}
-              addOm={addOm}
-              onChangeAddOm={onChangeAddOm}
-              onChangeRemoveOm={onChangeRemoveOm}
-            />
-          ))
-        : omList?.map((member) => (
-            <RoleContent key={member.memberId} mode={listMode} member={member} />
-          ))}
+      <Stack gap="0.5rem">
+        {listMode === 'active'
+          ? activeList?.map((member) => (
+              <RoleContent
+                key={member.memberId}
+                mode={listMode}
+                member={member}
+                addOm={addOm}
+                onChangeAddOm={onChangeAddOm}
+                onChangeRemoveOm={onChangeRemoveOm}
+              />
+            ))
+          : omList?.map((member) => (
+              <RoleContent key={member.memberId} mode={listMode} member={member} />
+            ))}
+      </Stack>
     </RoleApproveLayout>
   );
 };

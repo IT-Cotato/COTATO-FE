@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
-import { ReactComponent as ArrowDown } from '@assets/arrow_down_dotted.svg';
-import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import generationSort from '@utils/newGenerationSort';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGeneration } from '@/hooks/useGeneration';
+import CotatoIcon from './CotatoIcon';
 
 //
 //
@@ -22,6 +21,7 @@ interface GenerationDropBoxProps {
   color?: DropBoxColorEnum;
   width?: string;
   height?: string;
+  disableQueryParams?: boolean;
 }
 
 interface DropBoxProps {
@@ -51,8 +51,10 @@ const GenerationDropBox = ({
   color = DropBoxColorEnum.BLUE,
   width = '8rem',
   height = '3.2rem',
+  disableQueryParams = false,
 }: GenerationDropBoxProps) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { generations: rawGenerations, isGenerationLoading } = useGeneration();
@@ -87,6 +89,11 @@ const GenerationDropBox = ({
    *
    */
   const setGenerationSearchParam = (generation: CotatoGenerationInfoResponse) => {
+    if (disableQueryParams) {
+      navigate(`/cs/${generation.generationId}`);
+      return;
+    }
+
     if (generation?.generationId) {
       setSearchParams({ generationId: generation.generationId.toString() });
     }
@@ -128,7 +135,11 @@ const GenerationDropBox = ({
           {selectedGeneration?.generationNumber}
           {selectedGeneration && '기'}
         </SelectText>
-        {isDropBoxOpen ? <UpButton $fill={arrowColor} /> : <DownButton $fill={arrowColor} />}
+        {isDropBoxOpen ? (
+          <StyledCotatoIcon icon="angle-up-solid" color={arrowColor} />
+        ) : (
+          <StyledCotatoIcon icon="angle-down-solid" color={arrowColor} />
+        )}
       </DropBox>
     );
   };
@@ -152,7 +163,9 @@ const GenerationDropBox = ({
                 className={generation === selectedGeneration ? 'selected' : ''}
                 onClick={() => handleGenerationClick(generation)}
               >
-                {generation === selectedGeneration && <StyledCheckIcon />}
+                {generation === selectedGeneration && (
+                  <StyledCheckIcon icon="check-solid" color={(theme) => theme.colors.sub3[40]} />
+                )}
                 {generation.generationNumber}기
               </li>
             ))}
@@ -237,7 +250,7 @@ const SelectText = styled.span`
   font-size: ${({ theme }) => theme.size.lg};
 `;
 
-const DownButton = styled(ArrowDown)<{ $fill: string }>`
+const StyledCotatoIcon = styled(CotatoIcon)`
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -249,14 +262,6 @@ const DownButton = styled(ArrowDown)<{ $fill: string }>`
   }
 
   animation: fade-in ${FADE_DURATION}ms linear;
-
-  > path {
-    fill: ${({ $fill }) => $fill};
-  }
-`;
-
-const UpButton = styled(DownButton)`
-  transform: rotate(180deg);
 `;
 
 const DropDownList = styled.div`
@@ -309,7 +314,7 @@ const DropDownList = styled.div`
   }
 `;
 
-const StyledCheckIcon = styled(CheckIcon)`
+const StyledCheckIcon = styled(CotatoIcon)`
   position: absolute;
   left: 0.5rem;
   top: 0.75rem;

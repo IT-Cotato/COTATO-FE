@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as ClockIcon } from '@assets/attendance_clock.svg';
-import { ReactComponent as LocationPinIcon } from '@assets/attendance_location_pin.svg';
-import PrevButton from '@assets/pixel_arrow_left.svg';
 import { Tabs, Tab, Box } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 import AttendanceTimeTab from '@components/attendance/AttendanceModal/AttendanceModalTimeTab';
 import AttendanceLocationTab from '@components/attendance/AttendanceModal/AttendanceModalLocationTab';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -63,14 +61,28 @@ const AttendanceModal = () => {
           >
             <StyledTab
               value="time"
-              icon={<ClockIcon />}
+              icon={
+                <CotatoIcon
+                  icon="clock"
+                  color={(theme) =>
+                    tabValue === 'time' ? theme.colors.primary90 : theme.colors.gray50
+                  }
+                />
+              }
               iconPosition="start"
               label="시간"
               $isSelected={tabValue === 'time'}
             />
             <StyledTab
               value="location"
-              icon={<LocationPinIcon />}
+              icon={
+                <CotatoIcon
+                  icon="location-pin-solid"
+                  color={(theme) =>
+                    tabValue === 'location' ? theme.colors.primary90 : theme.colors.gray50
+                  }
+                />
+              }
               iconPosition="start"
               label="위치 등록"
               $isSelected={tabValue === 'location'}
@@ -87,7 +99,6 @@ const AttendanceModal = () => {
     <Background>
       <Modal>
         <Header>
-          <img src={PrevButton} />
           <h3>9기 4주차 세션</h3>
         </Header>
         {renderTabs()}

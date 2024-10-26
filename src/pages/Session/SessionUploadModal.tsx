@@ -2,9 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
-import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
-import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
-import { ReactComponent as SearchIcon } from '@assets/search_icon.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
 import { Place, SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
@@ -29,6 +26,8 @@ import {
 } from 'cotato-openapi-clients';
 import CotatoTimePicker from '@components/CotatoTimePicker';
 import api from '@/api/api';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 //
 //
@@ -414,11 +413,11 @@ const SessionUploadModal = ({
       <InfoInputWrapper>
         <TitleBox $bold={true}>
           <input value={session.title} onChange={handleTitleChange} />
-          <button type="button">
-            <PencilIcon />
-          </button>
+          <IconButton>
+            <CotatoIcon icon="pencil-solid" color={(theme) => theme.colors.gray60} />
+          </IconButton>
         </TitleBox>
-        <InfoBox>
+        <InfoBox onClick={() => setIsDayPickerOpen(true)}>
           <input
             placeholder="세션 날짜를 선택해 주세요."
             value={
@@ -426,18 +425,19 @@ const SessionUploadModal = ({
               dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일 HH시 mm분')
             }
             readOnly={true}
+            style={{ cursor: 'pointer' }}
           />
-          <button type="button" onClick={() => setIsDayPickerOpen(true)}>
-            <CalendarIcon />
-          </button>
+          <IconButton>
+            <CotatoIcon icon="calender-solid" color={(theme) => theme.colors.gray60} />
+          </IconButton>
         </InfoBox>
         <InfoBox $bold={true}>
           <div>세션 장소</div>
           <div>
-            <LocationInputBox>
+            <LocationInputBox onClick={handleSearchLocationButtonClick}>
               <input placeholder="장소 검색" value={address} readOnly={true} />
-              <button type="button" onClick={handleSearchLocationButtonClick}>
-                <SearchIcon />
+              <button type="button">
+                <CotatoIcon icon="search" size="1.25rem" color={(theme) => theme.colors.gray60} />
               </button>
             </LocationInputBox>
             <LocationInputBox $width="9rem">
