@@ -3,6 +3,7 @@ import fetcher from '@utils/fetcher';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import { styled } from 'styled-components';
+import { CardContent } from '@mui/material';
 
 interface Props {
   headerText: string;
@@ -96,20 +97,20 @@ export const Button = styled.button<ButtonProps>`
   }
 `;
 
-export const Box = styled.div`
+export const Box = styled(CardContent)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 28px 36px;
+  padding: 0.25rem;
+  border-radius: 0.875rem;
+  border: ${({ theme }) => `1px solid ${theme.colors.gray90}`};
   box-sizing: border-box;
-  margin: 20px 0;
-  border-radius: 16px;
-  background: #f3f7ff;
+  background-color: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.05);
 
   > p {
-    color: #202020;
+    color: ${({ theme }) => theme.colors.common.black};
     text-align: center;
     font-family: NanumSquareRound;
     font-size: 20px;

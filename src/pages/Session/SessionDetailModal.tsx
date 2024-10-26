@@ -7,7 +7,7 @@ import SessionDetailModalCard from '@pages/Session/SessionDetailModalCard';
 import SessionDetailModalImage from '@pages/Session/SessionDetailModalImage';
 import SessionArrowButton from '@components/Session/SessionArrowButton';
 import potato_ready from '@assets/potato_ready.svg';
-import { ReactComponent as ArrowNext } from '@assets/arrow_right_dotted.svg';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -116,7 +116,11 @@ const SessionDetailModal = ({
     return (
       <>
         <MobileCloseButton type="button" onClick={handleClose}>
-          <ArrowLeftIcon />
+          <CotatoIcon
+            icon="angle-left-solid"
+            size="1.5rem"
+            color={(theme) => theme.colors.common.white}
+          />
         </MobileCloseButton>
         <SessionDetailModalImage imageList={getImageList()} />
         <SessionDetailModalCard session={session} handleClose={handleClose} />
@@ -205,16 +209,6 @@ const MobileCloseButton = styled.button`
   background: none;
   cursor: pointer;
   z-index: 10;
-`;
-
-const ArrowLeftIcon = styled(ArrowNext)`
-  transform: rotate(180deg);
-  width: 1.5rem;
-  height: 1.5rem;
-
-  > path {
-    fill: ${({ theme }) => theme.colors.common.white_const};
-  }
 `;
 
 export default SessionDetailModal;

@@ -7,7 +7,8 @@ import { ReactComponent as CotatoCharacterPM } from '@assets/cotato_character_pm
 import { ReactComponent as CotatoCharacterDesign } from '@assets/cotato_character_design.svg';
 import { device, media } from '@theme/media';
 import CotatoTooltip from '@components/CotatoTooltip';
-import { ReactComponent as ArrowUp } from '@assets/arrow_up.svg';
+import CotatoIcon from '@components/CotatoIcon';
+// import { ReactComponent as ArrowUp } from '@assets/arrow_up.svg';
 
 //
 //
@@ -198,13 +199,14 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
         position="absolute"
         bottom="5.5rem"
       >
-        <ArrowUp
-          onClick={handleBackToFirstSlide}
+        <CotatoIcon
+          icon="angle-up-solid"
           style={{
             cursor: 'pointer',
             width: '2rem',
             height: '2rem',
           }}
+          onClick={handleBackToFirstSlide}
         />
       </StyledBox>
     );

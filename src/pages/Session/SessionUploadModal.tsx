@@ -2,9 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
-// import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
-// import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
-import { ReactComponent as SearchIcon } from '@assets/search_icon.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
 import { Place, SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
@@ -440,7 +437,7 @@ const SessionUploadModal = ({
             <LocationInputBox onClick={handleSearchLocationButtonClick}>
               <input placeholder="장소 검색" value={address} readOnly={true} />
               <button type="button">
-                <SearchIcon />
+                <CotatoIcon icon="search" size="1.25rem" color={(theme) => theme.colors.gray60} />
               </button>
             </LocationInputBox>
             <LocationInputBox $width="9rem">

@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Box } from '@mui/material';
-import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
-import { ReactComponent as ArrowDown } from '@assets/pixel_arrow_down.svg';
-import { ReactComponent as ArrowUp } from '@assets/pixel_arrow_up.svg';
 import { produce, enableMapSet } from 'immer';
 import { CotatoPolicyInfoResponse, CotatoPolicyInfoResponseTypeEnum } from 'cotato-openapi-clients';
 import { marked } from 'marked';
 import { sanitize } from 'dompurify';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -58,10 +56,11 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
    *
    */
   const ArrowButton = () => {
-    return isOpen ? (
-      <ArrowUp fill={theme.colors.gray80_2} />
-    ) : (
-      <ArrowDown fill={theme.colors.gray80_2} />
+    return (
+      <CotatoIcon
+        icon={isOpen ? 'angle-up-solid' : 'angle-down-solid'}
+        color={(theme) => theme.colors.gray80_2}
+      />
     );
   };
 
@@ -95,8 +94,10 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
     <Wrapper>
       <ItemDiv>
         <CheckSection>
-          <CheckIcon
-            fill={isChecked.get(policyId) ? theme.colors.sub3[60] : theme.colors.gray80_2}
+          <CotatoIcon
+            style={{ cursor: 'pointer' }}
+            icon="check-box-solid"
+            color={isChecked.get(policyId) ? theme.colors.sub3[60] : theme.colors.gray80_2}
             onClick={handleCheck}
           />
           <p>

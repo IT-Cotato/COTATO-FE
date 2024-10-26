@@ -9,9 +9,11 @@ const assetFiles = glob.sync('src/assets/**/*.*');
 // 각 파일이 사용되는지 소스 코드에서 검색
 assetFiles.forEach((file) => {
   const fileName = path.basename(file);
+  const regex = new RegExp(`\\b${fileName}\\b`);
+
   const isUsed = glob.sync(`src/**/*.*`).some((sourceFile) => {
     const content = fs.readFileSync(sourceFile, 'utf8');
-    return content.includes(fileName);
+    return regex.test(content);
   });
 
   if (!isUsed) {

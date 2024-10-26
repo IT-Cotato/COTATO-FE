@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { IApplyMember, IEnrollMember } from '@/typing/db';
 import styled from 'styled-components';
-import { ReactComponent as CloseIcon } from '@assets/close_icon.svg';
-import { ReactComponent as ApproveIcon } from '@assets/approve_icon.svg';
-import { ReactComponent as RejectIcon } from '@assets/reject_icon.svg';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import api from '@/api/api';
 import useSWRImmutable from 'swr/immutable';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 interface Props {
   mode: string;
@@ -101,9 +100,35 @@ const RequestPopup = ({ mode, member, generation, position, isOpen, setIsOpen }:
   return (
     <Overlay>
       <PopupWrapper>
-        <CloseButton width="36px" height="36px" fill="#BBBBBB" onClick={() => setIsOpen(false)} />
+        <IconButton
+          sx={{
+            position: 'absolute',
+            top: '24px',
+            right: '32px',
+          }}
+          onClick={() => setIsOpen(false)}
+        >
+          <CotatoIcon
+            icon="times-solid"
+            size="36px"
+            color={(theme) => theme.colors.gray70}
+            onClick={() => setIsOpen(false)}
+          />
+        </IconButton>
         <InformWrapper>
-          {mode === 'reject' ? <RejectIcon /> : <ApproveIcon />}
+          {mode === 'reject' ? (
+            <CotatoIcon
+              icon="times-circle-solid"
+              size="3rem"
+              color={(theme) => theme.colors.common.black_const}
+            />
+          ) : (
+            <CotatoIcon
+              icon="check-solid"
+              color={(theme) => theme.colors.common.black_const}
+              size="2rem"
+            />
+          )}
           <p>
             {member.name}님의 가입을 {mode === 'reject' ? '거절' : '승인'} 하시겠습니까?
           </p>
@@ -141,13 +166,6 @@ const PopupWrapper = styled.div`
   background: #fff;
   border-radius: 20px;
   box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.1);
-`;
-
-const CloseButton = styled(CloseIcon)`
-  position: absolute;
-  top: 24px;
-  right: 32px;
-  cursor: pointer;
 `;
 
 const InformWrapper = styled.div`
