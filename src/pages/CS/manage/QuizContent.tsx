@@ -8,6 +8,7 @@ import fetcher from '@utils/fetcher';
 import api from '@/api/api';
 import WaitPopup from '@pages/CS/manage/WaitPopup';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { IconButton } from '@mui/material';
 import CotatoIcon from '@components/CotatoIcon';
 

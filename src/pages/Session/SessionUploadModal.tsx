@@ -15,6 +15,7 @@ import {
 import CotatoDatePicker from '@components/CotatoDatePicker';
 import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
 import {
   CotatoLocalTime,

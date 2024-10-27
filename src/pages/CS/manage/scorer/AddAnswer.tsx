@@ -6,6 +6,7 @@ import useSWR from 'swr';
 import { IQuizAdminScorer } from '@/typing/db';
 import fetcher from '@utils/fetcher';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   quizId?: string;
