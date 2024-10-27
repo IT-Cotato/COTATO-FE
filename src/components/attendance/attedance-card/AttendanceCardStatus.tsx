@@ -126,57 +126,14 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({
     }
   };
 
-  /**
-   *
-   */
-  const getSpeachBubbleColor = () => {
-    if (isOpened === AttendResponseIsOpenedEnum.Before) {
-      return theme.colors.gray40;
-    } else if (isOpened === AttendResponseIsOpenedEnum.Open && attendanceResult === null) {
-      return theme.colors.primary80;
-    }
-    return theme.colors.gray10;
-  };
-
-  const getTextColor = () => {
-    if (isOpened === AttendResponseIsOpenedEnum.Before) {
-      return theme.colors.common.white_const;
-    } else if (isOpened === AttendResponseIsOpenedEnum.Open && attendanceResult === null) {
-      return theme.colors.common.white_const;
-    }
-    return theme.colors.common.black_const;
-  };
-
-  const getStatusText = () => {
-    if (isOpened === AttendResponseIsOpenedEnum.Before) {
-      return '출석예정';
-    } else if (isOpened === AttendResponseIsOpenedEnum.Open && attendanceResult === null) {
-      return '출석중';
-    } else if (attendanceResult === AttendResponseAttendanceResultEnum.Absent) {
-      return '결석';
-    }
-    return '출석';
-  };
-
-  const getAttendanceIcon = () => {
-    if (attendanceResult === AttendResponseAttendanceResultEnum.Absent) {
-      return <AbsentIcon />;
-    } else if (attendanceResult === null) {
-      return null;
-    } else if (attendanceType === AttendResponseAttendanceTypeEnum.Online) {
-      return <OnlineIcon />;
-    } else if (attendanceType === AttendResponseAttendanceTypeEnum.Offline) {
-      return <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />;
-    }
-    return null;
-  };
+  const { backgroundColor, icon, textColor, text } = getStatusStyle();
 
   return (
     <Wrapper>
-      <StyledSpeachBubble $color={getSpeachBubbleColor()} />
-      <StatusContainer $textColor={getTextColor()}>
-        <span>{getStatusText()}</span>
-        {getAttendanceIcon()}
+      <StyledSpeachBubble $color={backgroundColor} />
+      <StatusContainer $textColor={textColor}>
+        <span>{text}</span>
+        {icon}
       </StatusContainer>
     </Wrapper>
   );
