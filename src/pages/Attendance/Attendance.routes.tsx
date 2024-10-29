@@ -10,6 +10,7 @@ const AsyncAttendanceAttend = React.lazy(() => import('./Attend/AttendanceAttend
 const AsyncAttendanceList = React.lazy(() => import('./List/AttendanceList'));
 const AsyncAttendanceReport = React.lazy(() => import('./Report/AttendanceReport'));
 const AsyncAttendanceResult = React.lazy(() => import('./Attend/AttendanceAttendResult'));
+const AsyncAttendanceReportAll = React.lazy(() => import('./Report/AttendanceReportAll'));
 
 //
 //
@@ -33,7 +34,7 @@ const AttendanceRoutes = () => {
           element={<AsyncAttendanceResult />}
         />
         <Route path="/report/generation/:generationId" element={<AsyncAttendanceReport />} />
-        <Route path="/report/generation/:generationId/all" element={<AsyncAttendanceAttend />} />
+        <Route path="/report/generation/:generationId/all" element={<AsyncAttendanceReportAll />} />
         <Route path="/" element={<AttendanceRedirect />} />
       </Routes>
     </Suspense>
