@@ -1,40 +1,11 @@
 import React from 'react';
-import CotatoIcon from '@components/CotatoIcon';
+
 import { Stack, Typography } from '@mui/material';
-import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
-import { ReactComponent as AbsentIcon } from '@assets/attendance_absent_icon.svg';
+
 import styled from 'styled-components';
 import { useAttendanceReportFilter } from '../hooks/useAttendanceReportFilter';
-
-//
-//
-//
-
-const STATUS_BUTTONS = [
-  {
-    status: 'offline',
-    icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
-    text: '대면',
-  },
-
-  {
-    status: 'online',
-    icon: <OnlineIcon />,
-    text: '비대면',
-  },
-
-  {
-    status: 'late',
-    icon: <CotatoIcon icon="bell-exclaimation-solid" color={(theme) => theme.colors.secondary80} />,
-    text: '지각',
-  },
-
-  {
-    status: 'absent',
-    icon: <AbsentIcon />,
-    text: '결석',
-  },
-];
+import { useMatch } from 'react-router-dom';
+import { STATUS_ASSETS } from '../constants';
 
 //
 //
@@ -52,20 +23,28 @@ const AttendanceReportSubFilterActions = () => {
   };
 
   //
+  const match = useMatch('/attendance/report/generation/:generationId/all');
+
+  //
+  const disabled = match ? true : false;
+
+  //
   //
   //
   return (
     <Stack direction="row" width="100%" height="3rem" gap="1rem">
-      {STATUS_BUTTONS.map(({ status, icon, text }) => (
+      {STATUS_ASSETS.map(({ status, icon, text }) => (
         <StyledButton
           key={status}
+          disabled={disabled}
+          $disabled={disabled}
           $selected={checkIsStatusSelected(status)}
           onClick={() => {
             toggleStatus(status);
           }}
         >
           {icon}
-          <StyledTypography>{text}</StyledTypography>
+          <StyledTypography $disabled={disabled}>{text}</StyledTypography>
         </StyledButton>
       ))}
     </Stack>
@@ -78,7 +57,7 @@ export default AttendanceReportSubFilterActions;
 //
 //
 
-const StyledButton = styled.button<{ $selected?: boolean }>`
+const StyledButton = styled.button<{ $selected?: boolean; $disabled?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,14 +69,24 @@ const StyledButton = styled.button<{ $selected?: boolean }>`
   border-radius: 0.5rem;
   background-color: ${({ theme, $selected }) =>
     $selected ? theme.colors.primary80 : theme.colors.gray10};
-  cursor: pointer;
+
+  // disabled
+  background-color: ${({ theme, $disabled }) => $disabled && theme.colors.gray30};
 
   &:hover {
     transition: background-color 0.3s;
     ${({ theme, $selected }) => !$selected && `background-color: ${theme.colors.gray20};`}
+
+    // disabled
+    ${({ theme, $disabled }) => $disabled && `background-color: ${theme.colors.gray30};`}
   }
+
+  opacity: ${({ $disabled }) => ($disabled ? 0.8 : 1)};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
 `;
 
-const StyledTypography = styled(Typography)`
+const StyledTypography = styled(Typography)<{ $disabled?: boolean }>`
   color: ${({ theme }) => theme.colors.common.black_const};
+  color: ${({ theme, $disabled }) =>
+    $disabled ? theme.colors.gray10 : theme.colors.common.black_const};
 `;
