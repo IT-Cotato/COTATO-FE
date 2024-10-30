@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Container } from '@mui/system';
+import { Container, Stack } from '@mui/system';
 import AttendanceReportSubFilters from './AttendanceReportSubFilters';
+import AttendanceReportTable from './AttendanceReportTable';
 
 //
 //
@@ -20,8 +21,10 @@ const AttendanceReport = () => {
     >
       {/* <AttendanceReportHeader /> */}
       {/* <AttendanceReportHeaderActions /> */}
-      <AttendanceReportSubFilters />
-      {/* <AttendanceReportTable /> */}
+      <Stack gap="0.5rem">
+        <AttendanceReportSubFilters />
+        <AttendanceReportTable />
+      </Stack>
     </Container>
   );
 };
