@@ -12,6 +12,8 @@ import FindID from '@pages/Login/FindID';
 import FindPWProcess from '@pages/Login/FindPWProcess';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
+import 'react-toastify/dist/ReactToastify.css';
+
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
@@ -21,6 +23,7 @@ import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
 import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 import CSRoutes from '@pages/CS/CSRoutes';
+import { ToastContainer } from 'react-toastify';
 import { About } from '@pages/About';
 
 function App() {
@@ -48,6 +51,7 @@ function App() {
     <div className="App">
       <CotatoThemeProvider>
         <GlobalStyle />
+        <ToastContainer position="bottom-right" autoClose={3000} />
         <Header />
         <AgreementConfirmDialog />
         <GlobalBackgroundSvgComponent />
