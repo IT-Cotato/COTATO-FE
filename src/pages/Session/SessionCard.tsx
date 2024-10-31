@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import ready_image from '@assets/potato_ready.svg';
 import Skeleton from '@mui/material/Skeleton';
 import {
@@ -10,6 +9,7 @@ import {
 } from 'cotato-openapi-clients';
 import SessionIcon from '@components/Session/SessionIcon';
 import SessionContents from '@components/Session/SessionContents';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -52,7 +52,11 @@ const SessionCard = ({ session, isActive, handleSessionClick }: SessionCardProps
 
     const getHeaderElement = () => (
       <>
-        <SessionIcon Icon={<HeartIcon />} size="lg" isActive={isActive} />
+        <SessionIcon
+          Icon={<CotatoIcon icon="heart-solid" color={(theme) => theme.colors.common.white} />}
+          size="lg"
+          isActive={isActive}
+        />
         <h3>{session?.title}</h3>
       </>
     );

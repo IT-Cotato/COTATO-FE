@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as ClockIcon } from '@assets/attendance_clock.svg';
-import { ReactComponent as LocationPinIcon } from '@assets/attendance_location_pin.svg';
-import PrevButton from '@assets/pixel_arrow_left.svg';
 import { Tabs, Tab, Box } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 import { media } from '@theme/media';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -47,17 +45,31 @@ const AttendanceModificationModal = () => {
           >
             <StyledTab
               value="time"
-              icon={<ClockIcon />}
+              $isSelected={tabValue === 'time'}
+              icon={
+                <CotatoIcon
+                  icon="clock"
+                  color={(theme) =>
+                    tabValue === 'time' ? theme.colors.primary90 : theme.colors.gray50
+                  }
+                />
+              }
               iconPosition="start"
               label="시간"
-              $isSelected={tabValue === 'time'}
             />
             <StyledTab
               value="location"
-              icon={<LocationPinIcon />}
+              $isSelected={tabValue === 'location'}
+              icon={
+                <CotatoIcon
+                  icon="location-pin-solid"
+                  color={(theme) =>
+                    tabValue === 'location' ? theme.colors.primary90 : theme.colors.gray50
+                  }
+                />
+              }
               iconPosition="start"
               label="위치 등록"
-              $isSelected={tabValue === 'location'}
             />
           </Tabs>
         </Box>
@@ -71,7 +83,6 @@ const AttendanceModificationModal = () => {
     <Background>
       <Modal>
         <Header>
-          <img src={PrevButton} />
           <h3>9기 4주차 세션</h3>
         </Header>
         {renderTabs()}
@@ -135,17 +146,13 @@ const Header = styled.div`
   }
 `;
 
-const StyledTab = styled(Tab)<{ $isSelected: boolean }>`
+const StyledTab = styled(Tab)<{ $isSelected?: boolean }>`
   height: 3.5rem;
   border-bottom: ${({ $isSelected, theme }) =>
     $isSelected ? `3px solid ${theme.colors.primary90}` : 'none'} !important;
   color: ${({ $isSelected, theme }) =>
     $isSelected ? theme.colors.primary90 : theme.colors.gray50} !important;
   padding: 0 !important;
-  svg {
-    fill: ${({ $isSelected, theme }) =>
-      $isSelected ? theme.colors.primary90 : theme.colors.gray50};
-  }
 `;
 
 const StyledTabPanel = styled(TabPanel)`

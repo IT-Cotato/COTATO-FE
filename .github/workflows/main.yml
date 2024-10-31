@@ -25,6 +25,25 @@ jobs:
       - name: Check Node v
         run: node -v
 
+      - name: Set Environment Variables
+        run: |
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env
+            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_SOCKET_URL }}" >> .env
+            echo "REACT_APP_SENTRY_DSN=${{ secrets.REACT_APP_SENTRY_DSN }}" >> .env
+            echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
+          elif [ "${GITHUB_REF}" == "refs/heads/release" ]; then
+            echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_QA_BASE_URL }}" >> .env
+            echo "REACT_APP_SOCKET_URL=${{ secrets.REACT_APP_QA_SOCKET_URL }}" >> .env
+            echo "REACT_APP_SENTRY_DSN=${{ secrets.REACT_APP_SENTRY_DSN }}" >> .env
+            echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
+          fi
+        env:
+          REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+          REACT_APP_SOCKET_URL: ${{ secrets.REACT_APP_SOCKET_URL }}
+          REACT_APP_QA_BASE_URL: ${{ secrets.REACT_APP_QA_BASE_URL }}
+          REACT_APP_QA_SOCKET_URL: ${{ secrets.REACT_APP_QA_SOCKET_URL }}
+
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 

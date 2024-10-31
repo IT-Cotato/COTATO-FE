@@ -3,20 +3,12 @@ import { NAV_LIST_TYPE } from './Header';
 import styled from 'styled-components';
 import Divider from '@mui/material/Divider';
 import { Link, List, ListItem, ListItemButton, Tooltip } from '@mui/material';
-import { ReactComponent as MenuHome } from '@/assets/menu_home.svg';
-import { ReactComponent as MenuAbout } from '@/assets/menu_about_us.svg';
-import { ReactComponent as MenuProject } from '@/assets/menu_project.svg';
-import { ReactComponent as MenuSession } from '@/assets/menu_session.svg';
-import { ReactComponent as MenuCSQuiz } from '@/assets/menu_cs_quiz.svg';
-import { ReactComponent as MenuFAQ } from '@/assets/menu_faq.svg';
-import { ReactComponent as ThemeDark } from '@/assets/theme_dark_icon.svg';
-import { ReactComponent as ThemeLight } from '@/assets/theme_light_icon.svg';
 import CotatoToggleSwitch from './CotatoToggleSwitch';
-import LoginIconSvgComponent from './LoginIconSvgComponent';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import fetchUserData from '@utils/fetchUserData';
 import { getMemberRoleIcon } from '@utils/getMemberRoleIcon';
+import CotatoIcon from './CotatoIcon';
 
 //
 //
@@ -33,12 +25,12 @@ interface MobileSideMenuDrawerProps {
 //
 
 const MENU_ICON_MAP = {
-  Home: MenuHome,
-  'About us': MenuAbout,
-  Project: MenuProject,
-  Session: MenuSession,
-  'CS Quiz': MenuCSQuiz,
-  FAQ: MenuFAQ,
+  Home: <CotatoIcon icon="home-solid" color={(theme) => theme.colors.primary100_2} />,
+  'About us': <CotatoIcon icon="quote-left-solid" color={(theme) => theme.colors.secondary70} />,
+  Project: <CotatoIcon icon="folder-solid" color={(theme) => theme.colors.sub1[60]} />,
+  Session: <CotatoIcon icon="heart-solid" color={(theme) => theme.colors.sub3[60]} />,
+  'CS Quiz': <CotatoIcon icon="pencil-ruler-solid" color={(theme) => theme.colors.sub1[40]} />,
+  FAQ: <CotatoIcon icon="question-solid" color={(theme) => theme.colors.sub2[60]} />,
 };
 
 //
@@ -105,7 +97,7 @@ const MobileSideMenuDrawer: React.FC<MobileSideMenuDrawerProps> = ({ navList, op
             gap: '0.5rem',
           }}
         >
-          <LoginIconSvgComponent />
+          <CotatoIcon icon="heart" color={(theme) => theme.colors.common.black} />
           <StyledLinkTypography>로그인</StyledLinkTypography>
         </ListItem>
       </Link>
@@ -127,7 +119,7 @@ const MobileSideMenuDrawer: React.FC<MobileSideMenuDrawerProps> = ({ navList, op
                     gap: '0.5rem',
                   }}
                 >
-                  {React.createElement(MENU_ICON_MAP[navItem.name])}
+                  {MENU_ICON_MAP[navItem.name]}
                   <StyledLinkTypography>{navItem.name}</StyledLinkTypography>
                 </ListItem>
               </Link>
@@ -143,9 +135,17 @@ const MobileSideMenuDrawer: React.FC<MobileSideMenuDrawerProps> = ({ navList, op
         <StyledSwitchDiv>
           <Tooltip arrow title="실험적 기능으로 아직 완벽하지 않을 수 있습니다." placement="top">
             {DefaultTheme === COTATO_LIGHT_THEME ? (
-              <ThemeLight width={24} />
+              <CotatoIcon
+                icon="sun-solid"
+                color={(theme) => theme.colors.primary100}
+                size="1.5rem"
+              />
             ) : (
-              <ThemeDark width={24} />
+              <CotatoIcon
+                icon="star-crescent-solid"
+                color={(theme) => theme.colors.gray30}
+                size="1.5rem"
+              />
             )}
           </Tooltip>
 

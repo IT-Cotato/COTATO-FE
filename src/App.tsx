@@ -12,7 +12,6 @@ import FindID from '@pages/Login/FindID';
 import FindPWProcess from '@pages/Login/FindPWProcess';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
-
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
@@ -22,6 +21,7 @@ import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
 import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 import CSRoutes from '@pages/CS/CSRoutes';
+import { About } from '@pages/About';
 
 function App() {
   const location = useLocation();
@@ -54,9 +54,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/about" element={<ReadyState />} />
           <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSRoutes />} />
+          <Route path="/about" element={<About />} />
           <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/findid" element={<FindID />} />

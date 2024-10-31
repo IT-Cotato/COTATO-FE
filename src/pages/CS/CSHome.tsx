@@ -1,9 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 import CSContent from '@pages/CS/CSContent';
-import { ReactComponent as SettingIcon } from '@assets/setting_icon.svg';
-import { ReactComponent as AddIcon } from '@assets/add_icon.svg';
-import GenerationSelect from '@components/GenerationSelect';
 import CSModal from '@pages/CS/CSModal';
 import { IEducation } from '@/typing/db';
 import api from '@/api/api';
@@ -11,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { useGeneration } from '@/hooks/useGeneration';
 import useUser from '@/hooks/useUser';
+import GenerationDropBox from '@components/GenerationDropBox';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 const CSHome = () => {
   const { currentGeneration } = useGeneration();
@@ -72,20 +72,19 @@ const CSHome = () => {
         <CSWrapper>
           <CSHeader>CS 문제풀이</CSHeader>
           <CSSetting>
-            <GenerationSelect
-              onChangeGeneration={onChangeGeneration}
-              selectedGeneration={selectedGeneration}
-            />
+            <GenerationDropBox disableQueryParams handleGenerationChange={onChangeGeneration} />
             {(user?.role === 'ADMIN' || user?.role === 'EDUCATION') && (
               <ButtonWrapper>
-                <AddIcon onClick={onClickAddButton} />
+                <IconButton onClick={onClickAddButton}>
+                  <CotatoIcon icon="plus" color={(theme) => theme.colors.sub2[40]} />
+                </IconButton>
               </ButtonWrapper>
             )}
           </CSSetting>
           <CSContentsContainer education={educations?.length.toString()}>
             {educations?.length === 0 ? (
               <CSReady>
-                <SettingIcon />
+                <CotatoIcon icon="cog-solid" size="4rem" color={(theme) => theme.colors.gray40} />
                 <p>CS 문제풀이 준비중입니다.</p>
               </CSReady>
             ) : (

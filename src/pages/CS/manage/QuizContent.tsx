@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { css, styled } from 'styled-components';
 import ToggleButton from '@components/ToggleButton';
-import { ReactComponent as ArrowBack } from '@assets/arrow_back.svg';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { IQuizAdmin } from '@/typing/db';
 import useSWR from 'swr';
@@ -9,6 +8,8 @@ import fetcher from '@utils/fetcher';
 import api from '@/api/api';
 import WaitPopup from '@pages/CS/manage/WaitPopup';
 import { ToastContainer, toast } from 'react-toastify';
+import { IconButton } from '@mui/material';
+import CotatoIcon from '@components/CotatoIcon';
 
 interface Props {
   quiz: IQuizAdmin;
@@ -99,7 +100,13 @@ const QuizContent = ({ quiz, educationStatus, quizStatus }: Props) => {
           <QuizNumber>문제 {quiz.quizNumber}</QuizNumber>
           <QuestionWrapper>
             <p>{quiz.question}</p>
-            <FrontButton width={20} height={20} onClick={onClickQuestionButton} />
+            <IconButton onClick={onClickQuestionButton}>
+              <CotatoIcon
+                icon="angle-right-solid"
+                size="1.5rem"
+                color={(theme) => theme.colors.primary90}
+              />
+            </IconButton>
           </QuestionWrapper>
         </TitleWrapper>
         <ToggleWrapper>
@@ -167,12 +174,6 @@ const QuestionWrapper = styled.div`
     ${fontStyle}
     font-size: 20px;
   }
-`;
-
-const FrontButton = styled(ArrowBack)`
-  transform: scaleX(-1);
-  margin-right: 24px;
-  cursor: pointer;
 `;
 
 const ToggleWrapper = styled.div`

@@ -1,6 +1,6 @@
 import React from 'react';
+import CotatoIcon from '@components/CotatoIcon';
 import { styled } from 'styled-components';
-import { ReactComponent as ArrowRightIcon } from '@assets/arrow_right_dotted.svg';
 
 //
 //
@@ -18,7 +18,11 @@ interface SessionArrowButtonProps {
 const SessionArrowButton = ({ direction, onClick }: SessionArrowButtonProps) => {
   return (
     <ArrowButton onClick={onClick}>
-      {direction === 'prev' ? <PrevIcon /> : <NextIcon />}
+      {direction === 'prev' ? (
+        <CotatoIcon icon="angle-left-solid" color={(theme) => theme.colors.common.black_const} />
+      ) : (
+        <CotatoIcon icon="angle-right-solid" color={(theme) => theme.colors.common.black_const} />
+      )}
     </ArrowButton>
   );
 };
@@ -40,21 +44,7 @@ const ArrowButton = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.colors.primary100};
-
-    > svg > path {
-      fill: ${({ theme }) => theme.colors.common.white_const};
-    }
   }
-`;
-
-const NextIcon = styled(ArrowRightIcon)`
-  > path {
-    fill: ${({ theme }) => theme.colors.common.black_const};
-  }
-`;
-
-const PrevIcon = styled(NextIcon)`
-  transform: rotate(180deg);
 `;
 
 export default SessionArrowButton;

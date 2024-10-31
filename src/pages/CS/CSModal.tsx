@@ -1,12 +1,13 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import ReactModal from 'react-modal';
-import { ReactComponent as CloseIcon } from '@assets/close_icon.svg';
 import TextBox from '@components/TextBox';
 import { ICsOnSession, IEducation } from '@/typing/db';
 import SessionSelect from '@components/SessionSelect';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 interface Props {
   isOpen: boolean;
@@ -99,7 +100,9 @@ const CSModal = ({
     >
       <ModalWrapper>
         <ModalCloseButton>
-          <CloseIcon width="57" height="56" fill="#686868" onClick={onCloseModal} />
+          <IconButton onClick={onCloseModal}>
+            <CotatoIcon icon="times-solid" size="32px" color={(theme) => theme.colors.gray40} />
+          </IconButton>
         </ModalCloseButton>
         <Header>
           <h3>{!educatoin ? '교육 추가' : '교육 수정'}</h3>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { ReactComponent as KaKaoTalkIcon } from '@/assets/kakaotalk.svg';
 import { ReactComponent as AttendanceIcon } from '@/assets/attendance_icon.svg';
-import { ReactComponent as SearchIcon } from '@/assets/fab_search_icon.svg';
 import { ReactComponent as ReportIcon } from '@/assets/report_icon.svg';
 import { useNavigate } from 'react-router-dom';
 import CotatoFloatingActionButton from '@components/CotatoFloatingActionButton/CotatoFloatingActionButton';
@@ -9,6 +8,7 @@ import CotatoFloatingActionButtonItem from '@components/CotatoFloatingActionButt
 import fetchUserData from '@utils/fetchUserData';
 import { MemberRole } from '@/enums';
 import { feedbackIntegration } from '@/sentryFeedbackIntegtation';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -69,7 +69,12 @@ const CotatoGlobalFab = () => {
   //
   //
   return (
-    <CotatoFloatingActionButton icon={<SearchIcon width="100%" height="100%" />} name="바로가기">
+    <CotatoFloatingActionButton
+      icon={
+        <CotatoIcon icon="search" size="100%" color={(theme) => theme.colors.common.white_const} />
+      }
+      name="바로가기"
+    >
       {Object.entries(fabList).map(([key, value]) => (
         <CotatoFloatingActionButtonItem
           key={key}

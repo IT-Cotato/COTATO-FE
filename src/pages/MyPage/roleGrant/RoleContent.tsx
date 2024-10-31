@@ -1,13 +1,12 @@
-import { IEnrollMember, IRole } from '@/typing/db';
 import React, { useCallback, useEffect, useState } from 'react';
+import { IEnrollMember, IRole } from '@/typing/db';
 import { Box } from '../RoleApproveLayout';
 import RoleDropBox from '@components/RoleDropBox';
 import { styled } from 'styled-components';
-import { ReactComponent as SleepBlack } from '@assets/sleep_black.svg';
-import { ReactComponent as SleepAcitve } from '@assets/sleep_active.svg';
 import api from '@/api/api';
 import fetcher from '@utils/fetcher';
 import useSWRImmutable from 'swr/immutable';
+import { Checkbox } from '@mui/material';
 
 interface Props {
   mode: string;
@@ -111,12 +110,12 @@ const RoleContent = ({ mode, member, addOm, onChangeAddOm, onChangeRemoveOm }: P
   return (
     <Box>
       <MemeberWrapper>
-        {mode === 'active' &&
-          (addOm?.includes(member) ? (
-            <SleepAcitve onClick={onClickRemoveOm} />
-          ) : (
-            <SleepBlack onClick={onClickAddOm} />
-          ))}
+        {mode === 'active' ? (
+          <StyledCheckbox
+            checked={addOm?.includes(member)}
+            onChange={addOm?.includes(member) ? onClickRemoveOm : onClickAddOm}
+          />
+        ) : null}
         <p>
           {member.generationNumber}기 {member.name} {getMemberPositionStr()}
         </p>
@@ -144,7 +143,7 @@ const MemeberWrapper = styled.div`
   }
 
   > p {
-    color: #202020;
+    color: ${({ theme }) => theme.colors.common.black};
     text-align: center;
     font-family: NanumSquareRound;
     font-size: 20px;
@@ -173,4 +172,8 @@ const RecoveryMemberButton = styled.button`
     line-height: 160%;
     text-transform: capitalize;
   }
+`;
+
+const StyledCheckbox = styled(Checkbox)`
+  color: ${({ theme }) => theme.colors.sub2[20]} !important;
 `;

@@ -1,9 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
-import idIcon from '@assets/login_id_icon.svg';
-import passwordIcon from '@assets/login_pw_icon.svg';
-import line from '@assets/login_line.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '@/api/api';
 import useSWR from 'swr';
@@ -13,6 +10,8 @@ import { CotatoThemeType } from '@theme/theme';
 import LoginSuccess from '@components/LoginSuccess';
 import CotatoPixelButton from '@components/CotatoPixelButton';
 import { ReactComponent as ButtonText } from '@assets/login_btn_text.svg';
+import CotatoIcon from '@components/CotatoIcon';
+import { Divider } from '@mui/material';
 
 //
 //
@@ -21,7 +20,7 @@ import { ReactComponent as ButtonText } from '@assets/login_btn_text.svg';
 const DELAY_TIME = 3000;
 
 //
-//
+// keyboard sori wang jota ... T.T
 //
 
 const Login = () => {
@@ -85,6 +84,10 @@ const Login = () => {
   const handleLoginSuccess = () => {
     setIsSuccess(true);
     setTimeout(() => {
+      if (window.location.pathname !== '/signin') {
+        return;
+      }
+
       navigate('/');
     }, DELAY_TIME);
   };
@@ -99,11 +102,11 @@ const Login = () => {
         <Form onSubmit={handleSubmit}>
           <InputContainer>
             <InputBox>
-              <img src={idIcon} />
+              <CotatoIcon icon="user-solid" size="1.25rem" color={(theme) => theme.colors.gray30} />
               <input type="text" id="id" name="id" placeholder="아이디" onChange={handleIdChange} />
             </InputBox>
             <InputBox>
-              <img src={passwordIcon} />
+              <CotatoIcon icon="lock-solid" size="1.25rem" color={(theme) => theme.colors.gray30} />
               <input
                 type="password"
                 id="password"
@@ -127,9 +130,9 @@ const Login = () => {
       <>
         <LinkContainer>
           <StyledLink to="/findid">아이디 찾기</StyledLink>
-          <img src={line} />
+          <StyledDivider orientation="vertical" />
           <StyledLink to="/findpw">비밀번호 찾기</StyledLink>
-          <img src={line} />
+          <StyledDivider orientation="vertical" />
           <StyledLink to="/joinus">회원가입</StyledLink>
         </LinkContainer>
       </>
@@ -211,6 +214,7 @@ const InputContainer = styled.div`
 const InputBox = styled.div`
   width: 600px;
   height: 52px;
+  gap: 0.5rem;
   border-radius: 0.5rem;
   border: 2px solid ${({ theme }) => theme.colors.primary90};
   background: ${({ theme }) => theme.colors.common.white};
@@ -233,11 +237,6 @@ const InputBox = styled.div`
     color: ${({ theme }) => theme.colors.gray60};
     font-size: ${({ theme }) => theme.fontSize.xs};
   }
-  img {
-    width: 16px;
-    height: 16px;
-    margin-right: 0.8rem;
-  }
 
   ${media.landscape`
     width: 350px;
@@ -252,7 +251,9 @@ const LinkContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 25rem;
+  max-width: 26rem;
+  width: 100%;
+  gap: 1rem;
   height: fit-content;
   padding: 0.6rem 1.25rem;
   border-radius: 0.5rem;
@@ -273,11 +274,18 @@ const LinkContainer = styled.div`
 const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.colors.gray60};
   text-align: center;
+  width: 100%;
   text-decoration: none;
+  word-break: keep-all;
   font-size: ${({ theme }) => theme.fontSize.md};
   ${media.mobile`
     font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
   `}
+`;
+
+const StyledDivider = styled(Divider)`
+  background-color: ${({ theme }) => theme.colors.gray70};
+  width: 2px;
 `;
 
 export default Login;

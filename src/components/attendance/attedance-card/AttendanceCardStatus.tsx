@@ -4,9 +4,9 @@ import { styled, useTheme } from 'styled-components';
 import { AttendResponseIsOpenedEnum } from '@/enums/attend/AttendResponseIsOpenedEnum';
 import { AttendResponseAttendanceTypeEnum } from '@/enums/attend/AttendResponseAttendanceTypeEnum';
 import { AttendResponseAttendanceResultEnum } from '@/enums/attend/AttendResponseAttendanceResultEnum';
-import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
-import { ReactComponent as OfflineIcon } from '@assets/attendance_offline_icon.svg';
+import { ReactComponent as AbsentIcon } from '@assets/attendance_absent_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -60,13 +60,13 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({
 
   const getAttendanceIcon = () => {
     if (attendanceResult === AttendResponseAttendanceResultEnum.Absent) {
-      return <AbsetIcon />;
+      return <AbsentIcon />;
     } else if (attendanceResult === null) {
       return null;
     } else if (attendanceType === AttendResponseAttendanceTypeEnum.Online) {
       return <OnlineIcon />;
     } else if (attendanceType === AttendResponseAttendanceTypeEnum.Offline) {
-      return <OfflineIcon />;
+      return <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />;
     }
     return null;
   };
