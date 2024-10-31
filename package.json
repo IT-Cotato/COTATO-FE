@@ -110,7 +110,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build; yarn sentry:sourcemaps",
+    "build": "craco build && yarn sentry:sourcemaps || true",
     "test": "craco test",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "generate-icon-types": "node scripts/generateIconTypes.js",
