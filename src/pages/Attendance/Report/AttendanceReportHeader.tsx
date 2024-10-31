@@ -4,7 +4,7 @@ import { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSession } from '@/hooks/useSession';
 import CotatoIcon from '@components/CotatoIcon';
 
@@ -16,11 +16,19 @@ const AttendanceReportHeader = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const { generations, currentGeneration } = useGeneration();
-  const { sessions } = useSession({ generationId: currentGeneration?.generationId });
+  const { generationId } = useParams();
+  const { sessionId } = useParams();
+
+  const { generations, currentGeneration, targetGeneration } = useGeneration({
+    generationId: generationId,
+  });
+  const { sessions, targetSession } = useSession({
+    generationId: currentGeneration?.generationId,
+    sessionId: Number(sessionId),
+  });
 
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
-    navigate(`/attendance/report/generation/${generations.generationId}`);
+    navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
   };
 
   const handleSessionChange = (session: CotatoSessionListResponse) => {
@@ -56,10 +64,20 @@ const AttendanceReportHeader = () => {
       <Stack direction="row" justifyContent="space-between">
         <Stack direction="row" spacing="1rem">
           {generations && (
-            <CotatoDropBox list={generations} onChange={handleGenerationChange} color="yellow" />
+            <CotatoDropBox
+              list={generations}
+              onChange={handleGenerationChange}
+              defaultItemId={targetGeneration?.generationId}
+              color="yellow"
+            />
           )}
           {sessions && (
-            <CotatoDropBox list={sessions} onChange={handleSessionChange} color="yellow" />
+            <CotatoDropBox
+              list={sessions}
+              onChange={handleSessionChange}
+              defaultItemId={targetSession?.sessionId}
+              color="yellow"
+            />
           )}
         </Stack>
         <Stack direction="column-reverse">

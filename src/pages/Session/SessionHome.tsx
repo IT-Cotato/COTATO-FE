@@ -310,6 +310,7 @@ const SessionHome = () => {
           <CotatoDropBox
             list={generations}
             onChange={handleGenerationChange}
+            defaultItemId={selectedGeneration?.generationId}
             color="blue"
             width={isTabletOrSmaller ? '7.2rem' : '8rem'}
             height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
