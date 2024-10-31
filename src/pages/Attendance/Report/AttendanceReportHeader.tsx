@@ -19,11 +19,11 @@ const AttendanceReportHeader = () => {
   const { generationId } = useParams();
   const { sessionId } = useParams();
 
-  const { generations, currentGeneration, targetGeneration } = useGeneration({
+  const { generations, targetGeneration } = useGeneration({
     generationId: generationId,
   });
   const { sessions, targetSession } = useSession({
-    generationId: currentGeneration?.generationId,
+    generationId: Number(generationId),
     sessionId: Number(sessionId),
   });
 
