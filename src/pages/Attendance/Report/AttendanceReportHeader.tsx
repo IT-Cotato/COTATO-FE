@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
@@ -27,6 +27,10 @@ const AttendanceReportHeader = () => {
     sessionId: Number(sessionId),
   });
 
+  const handlePreviousClick = () => {
+    navigate('/attendance');
+  };
+
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
     navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
   };
@@ -49,7 +53,12 @@ const AttendanceReportHeader = () => {
         border: '4px solid blue',
       }}
     >
-      <Box>
+      <Box sx={{ position: 'relative' }}>
+        <StyledIcon
+          icon="chevron-down-solid"
+          color={theme.colors.primary90}
+          onClick={handlePreviousClick}
+        />
         <Typography
           align="center"
           color={theme.colors.common.black}
@@ -110,3 +119,18 @@ const AttendanceReportHeader = () => {
 };
 
 export default AttendanceReportHeader;
+
+//
+//
+//
+
+const StyledIcon = styled(CotatoIcon)`
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateX(-50%);
+  rotate: 90deg;
+  width: 2rem !important;
+  height: 2rem !important;
+  cursor: pointer;
+`;
