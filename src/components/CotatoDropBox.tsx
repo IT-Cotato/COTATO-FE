@@ -9,9 +9,11 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
+type T = CotatoGenerationInfoResponse;
+
 interface CotatoDropBoxProps {
-  list: CotatoGenerationInfoResponse[];
-  onChange: (generation: CotatoGenerationInfoResponse) => void;
+  list: T[];
+  onChange: (generation: T) => void;
   reversed?: boolean;
   color?: string;
   width?: string;
@@ -53,8 +55,8 @@ const CotatoDropBox = ({
   const theme = useTheme();
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
-  const [dropBoxList, setDropBoxList] = useState<CotatoGenerationInfoResponse[]>([]);
-  const [selectedItem, setSelecedItem] = useState<CotatoGenerationInfoResponse | null>();
+  const [dropBoxList, setDropBoxList] = useState<T[]>([]);
+  const [selectedItem, setSelecedItem] = useState<T | null>();
 
   const dropBoxRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +90,7 @@ const CotatoDropBox = ({
   /**
    *
    */
-  const handleItemClick = (generation: CotatoGenerationInfoResponse) => {
+  const handleItemClick = (generation: T) => {
     handleDropDownChange();
     setSelecedItem(generation);
     onChange(generation);
