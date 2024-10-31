@@ -16,6 +16,7 @@ interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   list: T[];
   onChange: (item: T) => void;
   reversed?: boolean;
+  defaultItem?: T;
   color?: string;
   width?: string;
   height?: string;
@@ -49,6 +50,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   list,
   onChange,
   reversed = true,
+  defaultItem,
   color = 'blue',
   width = '8rem',
   height = '3.2rem',
@@ -211,10 +213,10 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
     if (reversed) {
       const reversedList = [...newList].reverse();
       setDropBoxList(reversedList);
-      setSelecedItem(reversedList[0]);
+      setSelecedItem(defaultItem ?? reversedList[0]);
     } else {
       setDropBoxList(newList);
-      setSelecedItem(newList[0]);
+      setSelecedItem(defaultItem ?? newList[0]);
     }
   }, [list]);
 
