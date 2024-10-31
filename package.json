@@ -114,7 +114,7 @@
     "test": "craco test",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "generate-icon-types": "node scripts/generateIconTypes.js",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org cotato --project cotato-client build && sentry-cli sourcemaps upload --org cotato --project cotato-client build || true"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org cotato-fe --project cotato build && sentry-cli sourcemaps upload --org cotato-fe --project cotato build || true"
   },
   "browserslist": {
     "production": [
