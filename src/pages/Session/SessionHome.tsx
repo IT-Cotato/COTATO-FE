@@ -23,13 +23,15 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
 //
 
 const SessionHome = () => {
+  const { currentGeneration, generations } = useGeneration();
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
 
   const { data: sessionList, mutate: mutateSessionList } = useSWR<CotatoSessionListResponse[]>(
@@ -46,6 +48,7 @@ const SessionHome = () => {
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   /**
@@ -83,6 +86,7 @@ const SessionHome = () => {
    */
   const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
     setSelectedGeneration(generation);
+    setSearchParams({ generationId: generation.generationId!.toString() });
   };
 
   /**
@@ -203,7 +207,6 @@ const SessionHome = () => {
    *
    */
   const handleSessionUpdate = (session: SessionUploadInfo) => {
-    console.log(session);
     if (!session.sessionId) {
       return;
     }
@@ -376,6 +379,26 @@ const SessionHome = () => {
       </StyledSwiper>
     );
   };
+
+  /**
+   * set generationId from url
+   */
+  useEffect(() => {
+    if (!currentGeneration || !generations) {
+      return;
+    }
+
+    const generationId = searchParams.get('generationId');
+
+    if (generationId) {
+      setSelectedGeneration(
+        generations?.find((generation) => generation.generationId === Number(generationId)),
+      );
+    } else {
+      setSearchParams({ generationId: currentGeneration!.generationId!.toString() });
+      setSelectedGeneration(currentGeneration);
+    }
+  }, [currentGeneration, generations]);
 
   /**
    *
