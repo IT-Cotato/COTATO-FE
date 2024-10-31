@@ -9,9 +9,9 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
-type T = CotatoGenerationInfoResponse;
+type CotatoDropBoxType = CotatoGenerationInfoResponse;
 
-interface CotatoDropBoxProps {
+interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   list: T[];
   onChange: (generation: T) => void;
   reversed?: boolean;
@@ -44,14 +44,14 @@ const FADE_DURATION = 300;
  * @param width drop box width (default: 8rem)
  * @param height drop box height (default: 3.2rem)
  */
-const CotatoDropBox = ({
+const CotatoDropBox = <T extends CotatoDropBoxType>({
   list,
   onChange,
   reversed = true,
   color = 'blue',
   width = '8rem',
   height = '3.2rem',
-}: CotatoDropBoxProps) => {
+}: CotatoDropBoxProps<T>) => {
   const theme = useTheme();
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
@@ -61,6 +61,15 @@ const CotatoDropBox = ({
   const dropBoxRef = useRef<HTMLDivElement>(null);
 
   const isInProduction = process.env.NODE_ENV === 'production';
+
+  /**
+   *
+   */
+  const isTypeGeneration = (
+    generation: CotatoGenerationInfoResponse,
+  ): generation is CotatoGenerationInfoResponse => {
+    return (generation as CotatoGenerationInfoResponse).generationId !== undefined;
+  };
 
   /**
    * get drop box style of color
@@ -159,13 +168,18 @@ const CotatoDropBox = ({
    *
    */
   useEffect(() => {
+    let newList = [...list];
+    if (isInProduction && isTypeGeneration(list[0])) {
+      newList = newList.filter((generation) => generation.generationNumber! >= 8);
+    }
+
     if (reversed) {
-      const reversedList = [...list].reverse();
+      const reversedList = [...newList].reverse();
       setDropBoxList(reversedList);
       setSelecedItem(reversedList[0]);
     } else {
-      setDropBoxList(list);
-      setSelecedItem(list[0]);
+      setDropBoxList(newList);
+      setSelecedItem(newList[0]);
     }
   }, [list]);
 
