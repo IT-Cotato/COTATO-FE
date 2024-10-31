@@ -8,7 +8,7 @@ import { useBreakpoints } from '@/hooks/useBreakpoints';
 import AttedanceTableLayout from './components/AttedanceTableLayout';
 import { getCurrentStatistic } from '../utils/util';
 import AttendanceStatusDropdown from './components/AttendanceStatusDropdown';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 //
 //
@@ -30,13 +30,22 @@ const AttendanceReportTable = () => {
   //
   const { currentGeneration } = useGeneration();
 
+  const { generationId } = useParams();
+  const { sessionId } = useParams();
+
   // TODO: need to get the latest session by params
   const { sessions } = useSession({ generationId: currentGeneration?.generationId });
 
   //
+  // const { currentAttendance } = useGetAttendances({
+  //   sessionId: sessions?.at(-1)?.sessionId,
+  //   generationId: currentGeneration?.generationId,
+  // });
+
+  //
   const { currentAttendance } = useGetAttendances({
-    sessionId: sessions?.at(-1)?.sessionId,
-    generationId: currentGeneration?.generationId,
+    sessionId: Number(sessionId),
+    generationId: Number(generationId),
   });
 
   //
