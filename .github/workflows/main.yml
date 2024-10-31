@@ -38,8 +38,8 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: |
-          sentry-cli sourcemaps inject --org cotato --project cotato-client build
-          sentry-cli sourcemaps upload --org cotato --project cotato-client build
+          sentry-cli sourcemaps inject --org cotato-fe --project cotato build
+          sentry-cli sourcemaps upload --org cotato-fe --project cotato build
 
       - name: Save Build Artifacts
         uses: actions/upload-artifact@v3
