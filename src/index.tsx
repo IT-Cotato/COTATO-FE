@@ -20,7 +20,11 @@ Sentry.init({
   // Tracing
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ['localhost', /^https:\/\/qa\.beta\.cotato\.kr/, /^https:\/\/www\.cotato\.kr/],
+  tracePropagationTargets: [
+    'localhost',
+    /^https:\/\/qa\.beta\.cotato\.kr/,
+    /^https:\/\/www\.cotato\.kr/,
+  ],
   // Set profilesSampleRate to 1.0 to profile every transaction.
   // Since profilesSampleRate is relative to tracesSampleRate,
   // the final profiling rate can be computed as tracesSampleRate * profilesSampleRate
