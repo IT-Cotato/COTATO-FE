@@ -27,6 +27,7 @@ const medalImgSrcs = [
 const CSRecord = () => {
   const { user } = useUser();
   const [params] = useSearchParams();
+  const { generations } = useGeneration();
   const generationId = params.get('generationId');
 
   const [selectedGenerationId, setSelectedGenerationId] = React.useState<string | undefined>(
@@ -48,11 +49,14 @@ const CSRecord = () => {
     <Wrapper>
       <Title>내가 풀어본 CS 문제풀이</Title>
       <SelectGenerationDiv>
-        <CotatoDropBox
-          handleGenerationChange={(generation) => {
-            setSelectedGenerationId(generation?.generationId?.toString());
-          }}
-        />
+        {generations && (
+          <CotatoDropBox
+            list={generations}
+            onChange={(generation) => {
+              setSelectedGenerationId(generation?.generationId?.toString());
+            }}
+          />
+        )}
         {/* </select> */}
       </SelectGenerationDiv>
       <MyInfoBox>

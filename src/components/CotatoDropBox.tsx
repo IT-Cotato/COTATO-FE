@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
-import generationSort from '@utils/newGenerationSort';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
-import { useGeneration } from '@/hooks/useGeneration';
 import CotatoIcon from './CotatoIcon';
 
 //
@@ -12,11 +10,9 @@ import CotatoIcon from './CotatoIcon';
 //
 
 interface CotatoDropBoxProps {
-  /**
-   * generation change event
-   * @param generation selected generation
-   */
-  handleGenerationChange: (generation: CotatoGenerationInfoResponse) => void;
+  list: CotatoGenerationInfoResponse[];
+  onChange: (generation: CotatoGenerationInfoResponse) => void;
+  reversed?: boolean;
   color?: string;
   width?: string;
   height?: string;
@@ -38,29 +34,29 @@ const FADE_DURATION = 300;
 //
 
 /**
- * generation drop box component
- * @param handleGenerationChange generation change event
+ * cotato drop box component
+ * @param list drop box list
+ * @param onChange list value change event
+ * @param reversed drop box list reversed (default: true)
  * @param color drop box color (default: blue)
  * @param width drop box width (default: 8rem)
  * @param height drop box height (default: 3.2rem)
  */
 const CotatoDropBox = ({
-  handleGenerationChange,
+  list,
+  onChange,
+  reversed = true,
   color = 'blue',
   width = '8rem',
   height = '3.2rem',
 }: CotatoDropBoxProps) => {
   const theme = useTheme();
 
-  const { generations: rawGenerations, isGenerationLoading } = useGeneration();
-
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
-  const [generations, setGenerations] = useState<CotatoGenerationInfoResponse[]>([]);
-  const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse | null>(
-    null,
-  );
+  const [dropBoxList, setDropBoxList] = useState<CotatoGenerationInfoResponse[]>([]);
+  const [selectedItem, setSelecedItem] = useState<CotatoGenerationInfoResponse | null>();
 
-  const generationDropBoxRef = useRef<HTMLDivElement>(null);
+  const dropBoxRef = useRef<HTMLDivElement>(null);
 
   const isInProduction = process.env.NODE_ENV === 'production';
 
@@ -92,17 +88,10 @@ const CotatoDropBox = ({
   /**
    *
    */
-  const handleGenerationSelect = (generation: CotatoGenerationInfoResponse) => {
-    setSelectedGeneration(generation);
-    handleGenerationChange(generation);
-  };
-
-  /**
-   *
-   */
-  const handleGenerationClick = (generation: CotatoGenerationInfoResponse) => {
+  const handleItemClick = (generation: CotatoGenerationInfoResponse) => {
     handleDropDownChange();
-    handleGenerationSelect(generation);
+    setSelecedItem(generation);
+    onChange(generation);
   };
 
   /**
@@ -114,8 +103,8 @@ const CotatoDropBox = ({
     return (
       <DropBox onClick={handleDropDownChange} $height={height} $background={background}>
         <SelectText>
-          {selectedGeneration?.generationNumber}
-          {selectedGeneration && '기'}
+          {selectedItem?.generationNumber}
+          {selectedItem && '기'}
         </SelectText>
         {isDropBoxOpen ? (
           <StyledCotatoIcon icon="angle-up-solid" color={arrowColor} />
@@ -133,7 +122,17 @@ const CotatoDropBox = ({
     return (
       <DropDownList className={isDropBoxOpen ? 'fade-in' : 'fade-out'}>
         <ul>
-          {generations
+          {dropBoxList.map((item) => (
+            <li
+              key={item.generationId}
+              className={item === selectedItem ? 'selected' : ''}
+              onClick={() => handleItemClick(item)}
+            >
+              {item === selectedItem && <StyledCheckIcon />}
+              {item.generationNumber}기
+            </li>
+          ))}
+          {/* {generations
             .filter(
               (generation) =>
                 !isInProduction ||
@@ -148,7 +147,7 @@ const CotatoDropBox = ({
                 {generation === selectedGeneration && <StyledCheckIcon />}
                 {generation.generationNumber}기
               </li>
-            ))}
+            ))} */}
         </ul>
       </DropDownList>
     );
@@ -158,34 +157,44 @@ const CotatoDropBox = ({
    *
    */
   useEffect(() => {
-    window.addEventListener('mousedown', (e) => {
-      if (
-        generationDropBoxRef.current &&
-        !generationDropBoxRef.current.contains(e.target as Node) &&
-        isDropBoxOpen
-      ) {
-        handleDropDownChange();
-      }
-    });
-    return () => window.removeEventListener('mousedown', () => {});
-  }, [generationDropBoxRef, isDropBoxOpen]);
+    if (reversed) {
+      const reversedList = [...list].reverse();
+      setDropBoxList(reversedList);
+      setSelecedItem(reversedList[0]);
+    } else {
+      setDropBoxList(list);
+      setSelecedItem(list[0]);
+    }
+  }, [list]);
 
   /**
    *
    */
   useEffect(() => {
-    if (!rawGenerations || isGenerationLoading) {
-      return;
-    }
+    window.addEventListener('mousedown', (e) => {
+      if (dropBoxRef.current && !dropBoxRef.current.contains(e.target as Node) && isDropBoxOpen) {
+        handleDropDownChange();
+      }
+    });
+    return () => window.removeEventListener('mousedown', () => {});
+  }, [dropBoxRef, isDropBoxOpen]);
 
-    const sortedGenerations = generationSort(rawGenerations);
-    setGenerations(sortedGenerations);
+  // /**
+  //  *
+  //  */
+  // useEffect(() => {
+  //   if (!rawGenerations || isGenerationLoading) {
+  //     return;
+  //   }
 
-    handleGenerationSelect(sortedGenerations[0]);
-  }, [rawGenerations, isGenerationLoading]);
+  //   const sortedGenerations = generationSort(rawGenerations);
+  //   setGenerations(sortedGenerations);
+
+  //   handleGenerationSelect(sortedGenerations[0]);
+  // }, [rawGenerations, isGenerationLoading]);
 
   return (
-    <Wrapper ref={generationDropBoxRef} $width={width}>
+    <Wrapper ref={dropBoxRef} $width={width}>
       {renderDropBox()}
       {renderDropDownList()}
     </Wrapper>
