@@ -1,19 +1,11 @@
-import {
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableCellProps,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Stack, Table, TableBody, TableRow } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import { STATUS_ASSETS } from '../constants';
 import { useAttendancesRecords } from '../hooks/useAttendancesRecords';
-import styled from 'styled-components';
+
+import AttedanceTableLayout from './components/AttedanceTableLayout';
 
 //
 //
@@ -51,18 +43,18 @@ const AttendanceReportAllTable = () => {
    */
   const renderTableHead = () => {
     return (
-      <StyledTableHead>
+      <AttedanceTableLayout.TableHead>
         <TableRow>
           {TABLE_HEAD.map((head) => (
-            <StyledTableCell key={head.status}>
+            <AttedanceTableLayout.TableHeadTableCell key={head.status}>
               <Stack direction="row" gap="0.25rem" alignItems="center" justifyContent="center">
                 {head.icon}
                 {head.text}
               </Stack>
-            </StyledTableCell>
+            </AttedanceTableLayout.TableHeadTableCell>
           ))}
         </TableRow>
-      </StyledTableHead>
+      </AttedanceTableLayout.TableHead>
     );
   };
 
@@ -73,13 +65,27 @@ const AttendanceReportAllTable = () => {
     return (
       <TableBody>
         {currentRecords?.map((record) => (
-          <StyledTableRow key={record.memberInfo?.memberId}>
-            <StyledTableCell>{record.memberInfo?.name}</StyledTableCell>
-            <StyledTableCell>{record.statistic?.online}</StyledTableCell>
-            <StyledTableCell>{record.statistic?.offline}</StyledTableCell>
-            <StyledTableCell>{record.statistic?.late}</StyledTableCell>
-            <StyledTableCell>{record.statistic?.absent}</StyledTableCell>
-          </StyledTableRow>
+          <AttedanceTableLayout.TableRow key={record.memberInfo?.memberId}>
+            <AttedanceTableLayout.TableCell>
+              {record.memberInfo?.name}
+            </AttedanceTableLayout.TableCell>
+
+            <AttedanceTableLayout.TableCell>
+              {record.statistic?.online}
+            </AttedanceTableLayout.TableCell>
+
+            <AttedanceTableLayout.TableCell>
+              {record.statistic?.offline}
+            </AttedanceTableLayout.TableCell>
+
+            <AttedanceTableLayout.TableCell>
+              {record.statistic?.late}
+            </AttedanceTableLayout.TableCell>
+
+            <AttedanceTableLayout.TableCell>
+              {record.statistic?.absent}
+            </AttedanceTableLayout.TableCell>
+          </AttedanceTableLayout.TableRow>
         ))}
       </TableBody>
     );
@@ -102,45 +108,13 @@ const AttendanceReportAllTable = () => {
   //
 
   return (
-    <StyledTableContainer>
+    <AttedanceTableLayout.TableContainer>
       <Table>
         {renderTableHead()}
         {renderTableBody()}
       </Table>
-    </StyledTableContainer>
+    </AttedanceTableLayout.TableContainer>
   );
 };
 
 export default AttendanceReportAllTable;
-
-//
-//
-//
-
-const StyledTableContainer = styled(TableContainer)`
-  border: 1px solid ${({ theme }) => theme.colors.primary60};
-`;
-
-const StyledTableHead = styled(TableHead)`
-  background-color: ${({ theme }) => theme.colors.pastelTone.yellow[100]};
-`;
-
-const StyledTableRow = styled(TableRow)`
-  background-color: ${({ theme }) => theme.colors.common.white_const};
-`;
-
-/**
- *
- */
-const CenterAlignedTableCell: React.FC<TableCellProps> = ({ children, ...props }) => {
-  return (
-    <TableCell {...props} align="center">
-      {children}
-    </TableCell>
-  );
-};
-
-const StyledTableCell = styled(CenterAlignedTableCell)`
-  width: 20%;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.primary60} !important;
-`;
