@@ -13,7 +13,7 @@ type CotatoDropBoxType = CotatoGenerationInfoResponse;
 
 interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   list: T[];
-  onChange: (generation: T) => void;
+  onChange: (item: T) => void;
   reversed?: boolean;
   color?: string;
   width?: string;
@@ -56,7 +56,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
   const [dropBoxList, setDropBoxList] = useState<T[]>([]);
-  const [selectedItem, setSelecedItem] = useState<T | null>();
+  const [selectedItem, setSelecedItem] = useState<T | null>(null);
 
   const dropBoxRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +69,21 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
     generation: CotatoGenerationInfoResponse,
   ): generation is CotatoGenerationInfoResponse => {
     return (generation as CotatoGenerationInfoResponse).generationId !== undefined;
+  };
+
+  /**
+   *
+   */
+  const StringFormatter = (item: T | null) => {
+    if (!item) {
+      return '';
+    }
+
+    if (isTypeGeneration(item)) {
+      return `${item.generationNumber}기`;
+    }
+
+    return '';
   };
 
   /**
@@ -113,10 +128,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     return (
       <DropBox onClick={handleDropDownChange} $height={height} $background={background}>
-        <SelectText>
-          {selectedItem?.generationNumber}
-          {selectedItem && '기'}
-        </SelectText>
+        <SelectText>{StringFormatter(selectedItem)}</SelectText>
         {isDropBoxOpen ? (
           <StyledCotatoIcon icon="angle-up-solid" color={arrowColor} />
         ) : (
@@ -133,14 +145,14 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
     return (
       <DropDownList className={isDropBoxOpen ? 'fade-in' : 'fade-out'}>
         <ul>
-          {dropBoxList.map((item) => (
+          {dropBoxList.map((item, index) => (
             <li
-              key={item.generationId}
+              key={index}
               className={item === selectedItem ? 'selected' : ''}
               onClick={() => handleItemClick(item)}
             >
               {item === selectedItem && <StyledCheckIcon />}
-              {item.generationNumber}기
+              {StringFormatter(item)}
             </li>
           ))}
           {/* {generations
