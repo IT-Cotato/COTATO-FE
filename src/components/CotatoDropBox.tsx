@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
-import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
 import CotatoIcon from './CotatoIcon';
@@ -10,7 +10,7 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
-type CotatoDropBoxType = CotatoGenerationInfoResponse;
+type CotatoDropBoxType = CotatoGenerationInfoResponse | CotatoSessionListResponse;
 
 interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   list: T[];
@@ -69,7 +69,16 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   const isTypeGeneration = (
     generation: CotatoGenerationInfoResponse,
   ): generation is CotatoGenerationInfoResponse => {
-    return (generation as CotatoGenerationInfoResponse).generationId !== undefined;
+    return (generation as CotatoGenerationInfoResponse).generationNumber !== undefined;
+  };
+
+  /**
+   *
+   */
+  const isTypeSession = (
+    session: CotatoSessionListResponse,
+  ): session is CotatoSessionListResponse => {
+    return (session as CotatoSessionListResponse).sessionNumber !== undefined;
   };
 
   /**
@@ -82,6 +91,10 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     if (isTypeGeneration(item)) {
       return `${item.generationNumber}기`;
+    }
+
+    if (isTypeSession(item)) {
+      return `${item.title}`;
     }
 
     return '';
@@ -190,7 +203,9 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   useEffect(() => {
     let newList = [...list];
     if (isInProduction && isTypeGeneration(list[0])) {
-      newList = newList.filter((generation) => generation.generationNumber! >= 8);
+      newList = newList.filter(
+        (generation: CotatoGenerationInfoResponse) => generation.generationNumber! >= 8,
+      );
     }
 
     if (reversed) {
