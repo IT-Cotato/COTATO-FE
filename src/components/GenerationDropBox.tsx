@@ -3,7 +3,6 @@ import { styled, useTheme } from 'styled-components';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import generationSort from '@utils/newGenerationSort';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
-import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import { useSearchParams } from 'react-router-dom';
 import { useGeneration } from '@/hooks/useGeneration';
@@ -19,7 +18,7 @@ interface GenerationDropBoxProps {
    * @param generation selected generation
    */
   handleGenerationChange: (generation: CotatoGenerationInfoResponse) => void;
-  color?: DropBoxColorEnum;
+  color?: string;
   width?: string;
   height?: string;
 }
@@ -48,7 +47,7 @@ const FADE_DURATION = 300;
  */
 const GenerationDropBox = ({
   handleGenerationChange,
-  color = DropBoxColorEnum.BLUE,
+  color = 'blue',
   width = '8rem',
   height = '3.2rem',
 }: GenerationDropBoxProps) => {
@@ -70,17 +69,19 @@ const GenerationDropBox = ({
   /**
    * get drop box style of color
    * @returns drop box style { background: url of drop box background, arrowColor: color code of arrow button}
-   * @throws invalid color type
    */
   const getDropBoxStyle = () => {
-    if (color === DropBoxColorEnum.BLUE) {
+    if (color === 'blue') {
       return {
         background: `url(${drop_box_background_blue})`,
         arrowColor: theme.colors.sub2[80],
       };
     }
 
-    throw new TypeError('invalid color type');
+    return {
+      background: `url(${drop_box_background_blue})`,
+      arrowColor: theme.colors.sub2[80],
+    };
   };
 
   /**

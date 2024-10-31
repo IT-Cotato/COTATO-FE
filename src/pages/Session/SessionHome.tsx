@@ -13,7 +13,6 @@ import {
 } from 'cotato-openapi-clients';
 import GenerationDropBox from '@components/GenerationDropBox';
 import { useMediaQuery } from '@mui/material';
-import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper/modules';
@@ -305,7 +304,7 @@ const SessionHome = () => {
     return (
       <SettingTab>
         <GenerationDropBox
-          color={DropBoxColorEnum.BLUE}
+          color="blue"
           handleGenerationChange={handleGenerationChange}
           width={isTabletOrSmaller ? '7.2rem' : '8rem'}
           height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
