@@ -93,6 +93,7 @@ const AttendanceReportHeader = () => {
         <Stack direction="column-reverse">
           <Button
             disableElevation
+            disabled
             variant="contained"
             onClick={handleExportExcelClick}
             startIcon={
