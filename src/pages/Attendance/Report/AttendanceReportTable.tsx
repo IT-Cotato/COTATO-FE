@@ -9,6 +9,7 @@ import AttedanceTableLayout from './components/AttedanceTableLayout';
 import { getCurrentStatistic } from '../utils/util';
 import AttendanceStatusDropdown from './components/AttendanceStatusDropdown';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
 //
 //
@@ -113,7 +114,7 @@ const AttendanceReportTable = () => {
     if (isMobileOrSmaller) {
       return currentRecords?.map((record) => (
         <>
-          <AttedanceTableLayout.TableRow key={record.memberInfo?.memberId}>
+          <AttedanceTableLayout.TableRow key={uuid()}>
             <AttedanceTableLayout.TableCell>
               {record.memberInfo?.name}
             </AttedanceTableLayout.TableCell>
@@ -134,7 +135,7 @@ const AttendanceReportTable = () => {
       const secondRecord = currentRecords?.[i * 2 + 1];
 
       return (
-        <AttedanceTableLayout.TableRow key={firstRecord?.memberInfo?.memberId}>
+        <AttedanceTableLayout.TableRow key={uuid()}>
           <AttedanceTableLayout.TableCell>
             {firstRecord?.memberInfo?.name}
           </AttedanceTableLayout.TableCell>
