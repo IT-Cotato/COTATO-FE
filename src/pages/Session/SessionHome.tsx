@@ -11,7 +11,7 @@ import {
   CotatoLocalTime,
   CotatoSessionListResponse,
 } from 'cotato-openapi-clients';
-import GenerationDropBox from '@components/GenerationDropBox';
+import CotatoDropBox from '@components/CotatoDropBox';
 import { useMediaQuery } from '@mui/material';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -306,7 +306,7 @@ const SessionHome = () => {
   const renderSettingTab = () => {
     return (
       <SettingTab>
-        <GenerationDropBox
+        <CotatoDropBox
           color="blue"
           handleGenerationChange={handleGenerationChange}
           width={isTabletOrSmaller ? '7.2rem' : '8rem'}

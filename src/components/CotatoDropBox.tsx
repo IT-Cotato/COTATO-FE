@@ -11,7 +11,7 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
-interface GenerationDropBoxProps {
+interface CotatoDropBoxProps {
   /**
    * generation change event
    * @param generation selected generation
@@ -44,12 +44,12 @@ const FADE_DURATION = 300;
  * @param width drop box width (default: 8rem)
  * @param height drop box height (default: 3.2rem)
  */
-const GenerationDropBox = ({
+const CotatoDropBox = ({
   handleGenerationChange,
   color = 'blue',
   width = '8rem',
   height = '3.2rem',
-}: GenerationDropBoxProps) => {
+}: CotatoDropBoxProps) => {
   const theme = useTheme();
 
   const { generations: rawGenerations, isGenerationLoading } = useGeneration();
@@ -292,4 +292,4 @@ const StyledCheckIcon = styled(CheckIcon)`
   top: 0.75rem;
 `;
 
-export default GenerationDropBox;
+export default CotatoDropBox;

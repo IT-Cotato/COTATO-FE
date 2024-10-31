@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import localeKr from '@/assets/locale/locale_kr.json';
 import useUser from '@/hooks/useUser';
 import { useGeneration } from '@/hooks/useGeneration';
-import GenerationDropBox from '@components/GenerationDropBox';
+import CotatoDropBox from '@components/CotatoDropBox';
 import { useSearchParams } from 'react-router-dom';
 
 //
@@ -48,7 +48,7 @@ const CSRecord = () => {
     <Wrapper>
       <Title>내가 풀어본 CS 문제풀이</Title>
       <SelectGenerationDiv>
-        <GenerationDropBox
+        <CotatoDropBox
           handleGenerationChange={(generation) => {
             setSelectedGenerationId(generation?.generationId?.toString());
           }}
