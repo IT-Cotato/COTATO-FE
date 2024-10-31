@@ -3,8 +3,9 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
-import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import { useNavigate } from 'react-router-dom';
+import { useSession } from '@/hooks/useSession';
 
 //
 //
@@ -12,11 +13,17 @@ import { useNavigate } from 'react-router-dom';
 
 const AttendanceReportHeader = () => {
   const theme = useTheme();
-  const { generations } = useGeneration();
   const navigate = useNavigate();
+
+  const { generations, currentGeneration } = useGeneration();
+  const { sessions } = useSession({ generationId: currentGeneration?.generationId });
 
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
     navigate(`/attendance/report/generation/${generations.generationId}`);
+  };
+
+  const handleSessionChange = (session: CotatoSessionListResponse) => {
+    alert(session.title);
   };
 
   return (
@@ -46,7 +53,9 @@ const AttendanceReportHeader = () => {
           {generations && (
             <CotatoDropBox list={generations} onChange={handleGenerationChange} color="yellow" />
           )}
-          <div>세션 선택</div>
+          {sessions && (
+            <CotatoDropBox list={sessions} onChange={handleSessionChange} color="yellow" />
+          )}
         </Stack>
         <Box>엑셀</Box>
       </Stack>
