@@ -7,6 +7,7 @@ import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSession } from '@/hooks/useSession';
 import CotatoIcon from '@components/CotatoIcon';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
@@ -15,6 +16,7 @@ import CotatoIcon from '@components/CotatoIcon';
 const AttendanceReportHeader = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { isLandScapeOrSmaller } = useBreakpoints();
 
   const { generationId } = useParams();
   const { sessionId } = useParams();
@@ -70,7 +72,7 @@ const AttendanceReportHeader = () => {
           출석부 확인하기
         </Typography>
       </Box>
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-between" gap="1rem">
         <Stack direction="row" spacing="1rem">
           {generations && (
             <CotatoDropBox
@@ -109,7 +111,7 @@ const AttendanceReportHeader = () => {
                 fontSize: '1rem',
               }}
             >
-              엑셀로 내보내기
+              {!isLandScapeOrSmaller && '엑셀로 내보내기'}
             </Typography>
           </Button>
         </Stack>
