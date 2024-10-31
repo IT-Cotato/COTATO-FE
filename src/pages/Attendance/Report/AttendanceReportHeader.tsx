@@ -32,7 +32,7 @@ const AttendanceReportHeader = () => {
   };
 
   const handleSessionChange = (session: CotatoSessionListResponse) => {
-    alert(session.title);
+    navigate(`/attendance/report/generation/${generationId}/session/${session.sessionId}`);
   };
 
   const handleExportExcelClick = () => {
