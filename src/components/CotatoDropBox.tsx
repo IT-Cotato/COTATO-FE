@@ -178,22 +178,6 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
               {StringFormatter(item)}
             </li>
           ))}
-          {/* {generations
-            .filter(
-              (generation) =>
-                !isInProduction ||
-                (generation?.generationNumber && generation.generationNumber >= 8),
-            )
-            .map((generation) => (
-              <li
-                key={generation.generationId}
-                className={generation === selectedGeneration ? 'selected' : ''}
-                onClick={() => handleGenerationClick(generation)}
-              >
-                {generation === selectedGeneration && <StyledCheckIcon />}
-                {generation.generationNumber}기
-              </li>
-            ))} */}
         </ul>
       </DropDownList>
     );
@@ -246,20 +230,6 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
     });
     return () => window.removeEventListener('mousedown', () => {});
   }, [dropBoxRef, isDropBoxOpen]);
-
-  // /**
-  //  *
-  //  */
-  // useEffect(() => {
-  //   if (!rawGenerations || isGenerationLoading) {
-  //     return;
-  //   }
-
-  //   const sortedGenerations = generationSort(rawGenerations);
-  //   setGenerations(sortedGenerations);
-
-  //   handleGenerationSelect(sortedGenerations[0]);
-  // }, [rawGenerations, isGenerationLoading]);
 
   return (
     <Wrapper ref={dropBoxRef} $width={width}>
