@@ -1,9 +1,9 @@
-import { useGeneration } from '@/hooks/useGeneration';
+// import { useGeneration } from '@/hooks/useGeneration';
 import useGetAttendances from '@/hooks/useGetAttendances';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useAttendancesAttendanceIdRecordsGet } from '../hooks/useAttendancesAttendanceIdRecordsGet';
-import { useSession } from '@/hooks/useSession';
+// import { useSession } from '@/hooks/useSession';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import AttedanceTableLayout from './components/AttedanceTableLayout';
 import { getCurrentStatistic } from '../utils/util';
@@ -28,13 +28,13 @@ const AttendanceReportTable = () => {
   const search = searchParams.get('search') || '';
 
   //
-  const { currentGeneration } = useGeneration();
+  // const { currentGeneration } = useGeneration();
 
   const { generationId } = useParams();
   const { sessionId } = useParams();
 
   // TODO: need to get the latest session by params
-  const { sessions } = useSession({ generationId: currentGeneration?.generationId });
+  // const { sessions } = useSession({ generationId: currentGeneration?.generationId });
 
   //
   // const { currentAttendance } = useGetAttendances({

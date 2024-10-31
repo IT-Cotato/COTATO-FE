@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
-import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
@@ -175,7 +174,9 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
               className={item === selectedItem ? 'selected' : ''}
               onClick={() => handleItemClick(item)}
             >
-              {item === selectedItem && <StyledCheckIcon />}
+              {item === selectedItem && (
+                <StyledCheckIcon icon="check" color={theme.colors.sub3[40]} />
+              )}
               {StringFormatter(item)}
             </li>
           ))}

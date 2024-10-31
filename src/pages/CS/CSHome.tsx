@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import CSContent from '@pages/CS/CSContent';
-import { ReactComponent as SettingIcon } from '@assets/setting_icon.svg';
-import { ReactComponent as AddIcon } from '@assets/add_icon.svg';
 import CotatoDropBox from '@components/CotatoDropBox';
 import CSModal from '@pages/CS/CSModal';
 import { IEducation } from '@/typing/db';
@@ -11,7 +9,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { useGeneration } from '@/hooks/useGeneration';
 import useUser from '@/hooks/useUser';
-import GenerationDropBox from '@components/GenerationDropBox';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
 
