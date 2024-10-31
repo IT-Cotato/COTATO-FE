@@ -86,6 +86,7 @@ const AttendanceReportHeader = () => {
               list={sessions}
               onChange={handleSessionChange}
               defaultItemId={targetSession?.sessionId}
+              width="12rem"
               color="yellow"
             />
           )}

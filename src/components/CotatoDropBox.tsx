@@ -4,6 +4,7 @@ import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
+import drop_box_background_yellow_lg from '@assets/drop_box_background_yellow_lg.svg';
 import CotatoIcon from './CotatoIcon';
 
 //
@@ -116,7 +117,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     if (color === 'yellow') {
       return {
-        background: `url(${drop_box_background_yellow})`,
+        background: `url(${width === '12rem' ? drop_box_background_yellow_lg : drop_box_background_yellow})`,
         arrowColor: theme.colors.primary40,
       };
     }
@@ -267,6 +268,9 @@ const SelectText = styled.span`
   font-family: Ycomputer;
   color: ${({ theme }) => theme.colors.gray100};
   font-size: ${({ theme }) => theme.size.lg};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StyledCotatoIcon = styled(CotatoIcon)`
@@ -325,6 +329,9 @@ const DropDownList = styled.div`
       font-family: Ycomputer;
       font-size: ${({ theme }) => theme.size.lg};
       line-height: 3rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &.selected {
         background-color: ${({ theme }) => theme.colors.gray10};
