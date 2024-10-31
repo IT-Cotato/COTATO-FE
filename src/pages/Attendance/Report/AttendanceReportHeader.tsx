@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '@/hooks/useSession';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -24,6 +25,10 @@ const AttendanceReportHeader = () => {
 
   const handleSessionChange = (session: CotatoSessionListResponse) => {
     alert(session.title);
+  };
+
+  const handleExportExcelClick = () => {
+    alert('출시 예정입니다 :)');
   };
 
   return (
@@ -57,7 +62,30 @@ const AttendanceReportHeader = () => {
             <CotatoDropBox list={sessions} onChange={handleSessionChange} color="yellow" />
           )}
         </Stack>
-        <Box>엑셀</Box>
+        <Stack direction="column-reverse">
+          <Button
+            disableElevation
+            variant="contained"
+            onClick={handleExportExcelClick}
+            startIcon={
+              <CotatoIcon icon="upload-alt-solid" color={theme.colors.common.black_const} />
+            }
+            sx={{
+              backgroundColor: theme.colors.primary80,
+              borderRadius: '0.325rem',
+            }}
+          >
+            <Typography
+              color={theme.colors.common.black_const}
+              sx={{
+                fontFamily: 'Ycomputer',
+                fontSize: '1rem',
+              }}
+            >
+              엑셀로 내보내기
+            </Typography>
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
   );
