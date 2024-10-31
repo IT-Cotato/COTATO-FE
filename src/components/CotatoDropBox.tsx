@@ -63,7 +63,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
   const dropBoxRef = useRef<HTMLDivElement>(null);
 
-  const isInProduction = process.env.NODE_ENV === 'production';
+  // const isInProduction = process.env.NODE_ENV === 'production';
 
   /**
    *
@@ -188,11 +188,11 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
    */
   useEffect(() => {
     let newList = [...list];
-    if (isInProduction && isTypeGeneration(list[0])) {
-      newList = newList.filter(
-        (generation: CotatoGenerationInfoResponse) => generation.generationNumber! >= 8,
-      );
-    }
+    // if (isInProduction && isTypeGeneration(list[0])) {
+    //   newList = newList.filter(
+    //     (generation: CotatoGenerationInfoResponse) => generation.generationNumber! >= 8,
+    //   );
+    // }
 
     if (reversed) {
       newList = [...newList].reverse();
