@@ -3,6 +3,7 @@ import { styled, useTheme } from 'styled-components';
 import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
+import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
 import CotatoIcon from './CotatoIcon';
 
 //
@@ -95,6 +96,13 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
       return {
         background: `url(${drop_box_background_blue})`,
         arrowColor: theme.colors.sub2[80],
+      };
+    }
+
+    if (color === 'yellow') {
+      return {
+        background: `url(${drop_box_background_yellow})`,
+        arrowColor: theme.colors.primary40,
       };
     }
 
