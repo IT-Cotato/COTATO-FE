@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Container, Stack } from '@mui/system';
 import AttendanceReportSubFilters from './AttendanceReportSubFilters';
+import AttendanceReportHeader from './AttendanceReportHeader';
 import AttendanceReportTable from './AttendanceReportTable';
 
 //
@@ -19,7 +20,7 @@ const AttendanceReport = () => {
         height: '100%',
       }}
     >
-      {/* <AttendanceReportHeader /> */}
+      <AttendanceReportHeader />
       {/* <AttendanceReportHeaderActions /> */}
       <Stack gap="0.5rem">
         <AttendanceReportSubFilters />
