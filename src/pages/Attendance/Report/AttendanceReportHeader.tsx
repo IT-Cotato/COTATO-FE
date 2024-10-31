@@ -49,10 +49,9 @@ const AttendanceReportHeader = () => {
     <Stack
       direction="column"
       spacing="3rem"
-      padding="2rem 0"
+      padding="2.5rem 0"
       sx={{
         width: '100%',
-        border: '4px solid blue',
       }}
     >
       <Box sx={{ position: 'relative' }}>
