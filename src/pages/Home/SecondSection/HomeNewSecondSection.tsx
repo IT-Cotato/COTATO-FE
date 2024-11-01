@@ -16,10 +16,8 @@ import devtalkDark from '@assets/devtalk_dark.svg';
 import demodayLight from '@assets/demoday_light.svg';
 import demodayDark from '@assets/demoday_dark.svg';
 
-import { ReactComponent as SectionTwoTitle } from '@assets/home_section2_title.svg';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import { media } from '@theme/media';
-import styles from './style.module.css';
 import { CotatoLightTheme, CotatoThemeType } from '@theme/theme';
 import { FreeMode } from 'swiper/modules';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
@@ -112,7 +110,6 @@ export const ICON_ASSETS = [
 //
 
 const HomeNewSecondSection = () => {
-  const theme = useTheme();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
   const { DefaultTheme } = React.useContext(ThemeContext);
@@ -144,7 +141,7 @@ const HomeNewSecondSection = () => {
   return (
     <Wrapper>
       <Title>
-        <SectionTwoTitle fill={theme.colors.gray80_2} className={styles['section_two_title']} />
+        <h1>WHAT WE DO</h1>
         <p>코테이토의 활동을 소개할게요!</p>
       </Title>
       {isLandScapeOrSmaller ? <HomeNewSecondSectionMobileSwiper /> : renderDesktopSwiper()}
@@ -178,6 +175,11 @@ const Title = styled.div`
   img {
     width: 200px;
     height: 40px;
+  }
+  h1 {
+    font-size: 3rem;
+    margin: 0;
+    color: ${({ theme }) => theme.colors.gray80_2};
   }
   p {
     margin-top: 1rem;

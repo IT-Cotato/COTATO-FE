@@ -11,6 +11,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { useGeneration } from '@/hooks/useGeneration';
 import useUser from '@/hooks/useUser';
+import GenerationDropBox from '@components/GenerationDropBox';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 const CSHome = () => {
   const { generationId } = useParams();
@@ -88,14 +91,16 @@ const CSHome = () => {
             {generations && <CotatoDropBox list={generations} onChange={onChangeGeneration} />}
             {(user?.role === 'ADMIN' || user?.role === 'EDUCATION') && (
               <ButtonWrapper>
-                <AddIcon onClick={onClickAddButton} />
+                <IconButton onClick={onClickAddButton}>
+                  <CotatoIcon icon="plus" color={(theme) => theme.colors.sub2[40]} />
+                </IconButton>
               </ButtonWrapper>
             )}
           </CSSetting>
           <CSContentsContainer education={educations?.length.toString()}>
             {educations?.length === 0 ? (
               <CSReady>
-                <SettingIcon />
+                <CotatoIcon icon="cog-solid" size="4rem" color={(theme) => theme.colors.gray40} />
                 <p>CS 문제풀이 준비중입니다.</p>
               </CSReady>
             ) : (

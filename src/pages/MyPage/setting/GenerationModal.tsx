@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import ReactModal, { Styles } from 'react-modal';
 import { styled } from 'styled-components';
-import { ReactComponent as CloseIcon } from '@assets/close_icon.svg';
 import TextBox from '@components/TextBox';
 import { ReactComponent as CalendarIcon } from '@assets/calendar_icon.svg';
 import GenerationDayPicker from '@pages/MyPage/setting/GenerationDayPicker';
 import dayjs from 'dayjs';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
+import { IconButton } from '@mui/material';
+import CotatoIcon from '@components/CotatoIcon';
 
 interface Props {
   modalOpen: boolean;
@@ -86,7 +87,12 @@ const GenerationModal = ({ modalOpen, setModalOpen }: Props) => {
     >
       <ModalWrapper>
         <ModalCloseButton>
-          <CloseIcon width="36" height="36" fill="#BBBBBB" onClick={() => setModalOpen(false)} />
+          <CotatoIcon
+            icon="times-solid"
+            size="36px"
+            color={(theme) => theme.colors.gray40}
+            onClick={() => setModalOpen(false)}
+          />
         </ModalCloseButton>
         <ModalHeader>
           <h3>기수 추가</h3>
@@ -158,7 +164,7 @@ const ModalWrapper = styled.div`
   width: 100%;
 `;
 
-const ModalCloseButton = styled.div`
+const ModalCloseButton = styled(IconButton)`
   position: absolute;
   top: 8px;
   right: 8px;

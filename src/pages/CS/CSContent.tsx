@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { styled, css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as ModifyIcon } from '@assets/modify_icon.svg';
 import background from '@assets/cs_content_background.svg';
 import { IEducation } from '@/typing/db';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 interface Props {
   education: IEducation;
@@ -16,7 +17,6 @@ interface Props {
 
 const CSContent = ({ education, handleModifyButton, generation }: Props) => {
   const { data: user } = useSWR('/v1/api/member/info', fetcher);
-  const [isHover, setIsHover] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,23 +24,23 @@ const CSContent = ({ education, handleModifyButton, generation }: Props) => {
     navigate(`/cs/start/generation/${generation?.generationId}/education/${education.educationId}`);
   }, [generation?.generationId, education.educationNumber]);
 
-  const onClickModifyButton = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
+  const onClickModifyButton = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     handleModifyButton(education);
   }, []);
 
   return (
-    <Content
-      onClick={onclickContent}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-    >
+    <Content onClick={onclickContent}>
       <ContentWeek>{`${education.educationNumber}차시 문제`}</ContentWeek>
       <ContentTitle>{education.subject}</ContentTitle>
-      {user?.role === 'ADMIN' && isHover && (
-        <HoverContent>
-          <ModifyIcon onClick={onClickModifyButton} />
-        </HoverContent>
+      {user?.role === 'ADMIN' && (
+        <StyledIconButton
+          onClick={(e) => {
+            onClickModifyButton(e);
+          }}
+        >
+          <CotatoIcon icon="pen-solid" color={(theme) => theme.colors.sub2[40]} />
+        </StyledIconButton>
       )}
     </Content>
   );
@@ -98,30 +98,14 @@ const ContentTitle = styled.p`
   }
 `;
 
-const HoverContent = styled.div`
-  position: absolute;
-  inset: 0;
-  width: 240px;
-  height: 240px;
-  border-radius: 10px;
+const StyledIconButton = styled(IconButton)`
+  position: absolute !important;
   background: transparent;
-  opacity: 0.8;
-
-  > svg {
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
-    cursor: pointer;
-    fill: #477feb;
-  }
+  bottom: 1rem;
+  right: 1rem;
 
   @media screen and (max-width: 768px) {
-    width: 220px;
-    height: 220px;
-
-    > svg {
-      bottom: 12px;
-      right: 12px;
-    }
+    bottom: 12px;
+    right: 12px;
   }
 `;

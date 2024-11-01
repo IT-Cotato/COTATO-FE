@@ -21,6 +21,7 @@ interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   color?: string;
   width?: string;
   height?: string;
+  disableQueryParams?: boolean;
 }
 
 interface DropBoxProps {
@@ -57,6 +58,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   height = '3.2rem',
 }: CotatoDropBoxProps<T>) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
   const [dropBoxList, setDropBoxList] = useState<T[]>([]);
@@ -340,7 +342,7 @@ const DropDownList = styled.div`
   }
 `;
 
-const StyledCheckIcon = styled(CheckIcon)`
+const StyledCheckIcon = styled(CotatoIcon)`
   position: absolute;
   left: 0.5rem;
   top: 0.75rem;
