@@ -67,8 +67,9 @@ const AttendanceList = () => {
    *
    */
   const handleClickReport = () => {
-    const currentMonth = new Date().getMonth() + 1;
-    navigate(`/attendance/report/${generationId}/month/${currentMonth}`);
+    navigate(
+      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}`,
+    );
   };
 
   /**

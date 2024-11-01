@@ -1,19 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import CSContent from '@pages/CS/CSContent';
+import CotatoDropBox from '@components/CotatoDropBox';
 import CSModal from '@pages/CS/CSModal';
 import { IEducation } from '@/typing/db';
 import api from '@/api/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { useGeneration } from '@/hooks/useGeneration';
 import useUser from '@/hooks/useUser';
-import GenerationDropBox from '@components/GenerationDropBox';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
 
 const CSHome = () => {
-  const { currentGeneration } = useGeneration();
+  const { generationId } = useParams();
+  const { generations } = useGeneration();
   const { user } = useUser();
 
   const [educations, setEducations] = useState<undefined | IEducation[]>();
@@ -21,7 +22,7 @@ const CSHome = () => {
   const [modifyEducation, setModifyEducation] = useState<undefined | IEducation>();
   const [selectedGeneration, setSelectedGeneration] = useState<
     undefined | CotatoGenerationInfoResponse
-  >(currentGeneration);
+  >();
 
   const navigate = useNavigate();
 
@@ -66,13 +67,25 @@ const CSHome = () => {
     setIsCSModalOpen(false);
   }, []);
 
+  useEffect(() => {
+    if (!generationId || !generations) {
+      return;
+    }
+
+    const generation = generations?.find(
+      (generation) => generation.generationId === Number(generationId),
+    );
+    setSelectedGeneration(generation);
+    fetchEducations(Number(generationId));
+  }, [generations, generationId]);
+
   return (
     <>
       <FlexBox>
         <CSWrapper>
           <CSHeader>CS 문제풀이</CSHeader>
           <CSSetting>
-            <GenerationDropBox disableQueryParams handleGenerationChange={onChangeGeneration} />
+            {generations && <CotatoDropBox list={generations} onChange={onChangeGeneration} />}
             {(user?.role === 'ADMIN' || user?.role === 'EDUCATION') && (
               <ButtonWrapper>
                 <IconButton onClick={onClickAddButton}>
