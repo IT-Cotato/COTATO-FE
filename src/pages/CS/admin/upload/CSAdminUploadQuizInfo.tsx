@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { trackPromise } from 'react-promise-tracker';
 import { LoadingIndicator } from '../../../../components/LoadingIndicator';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import fetchUserData from '@utils/fetchUserData';
 import { MultipleQuiz, QuizType, ShortQuiz } from './CSAdminUploadSlides';
 import { produce } from 'immer';
