@@ -9,7 +9,6 @@ import AddAnswer from '@pages/CS/manage/scorer/AddAnswer';
 import ToggleButton from '@components/ToggleButton';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import WaitPopup from '@pages/CS/manage/WaitPopup';
 import { CotatoRecordResponse, CotatoScorerResponse } from 'cotato-openapi-clients';
 

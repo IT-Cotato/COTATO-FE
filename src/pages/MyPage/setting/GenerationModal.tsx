@@ -7,7 +7,6 @@ import GenerationDayPicker from '@pages/MyPage/setting/GenerationDayPicker';
 import dayjs from 'dayjs';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { IconButton } from '@mui/material';
 import CotatoIcon from '@components/CotatoIcon';
 

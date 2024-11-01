@@ -6,7 +6,6 @@ import { ICsOnSession, IEducation } from '@/typing/db';
 import SessionSelect from '@components/SessionSelect';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
 
