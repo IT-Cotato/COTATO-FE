@@ -29,18 +29,30 @@ const AttendanceReportHeader = () => {
     sessionId: Number(sessionId),
   });
 
+  /**
+   *
+   */
   const handlePreviousClick = () => {
     navigate('/attendance');
   };
 
+  /**
+   *
+   */
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
     navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
   };
 
+  /**
+   *
+   */
   const handleSessionChange = (session: CotatoSessionListResponse) => {
     navigate(`/attendance/report/generation/${generationId}/session/${session.sessionId}`);
   };
 
+  /**
+   *
+   */
   const handleExportExcelClick = () => {
     alert('출시 예정입니다 :)');
   };
