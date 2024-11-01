@@ -294,7 +294,7 @@ const GridViewWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
   padding: 2rem 10rem;
 
   ${media.laptop`
