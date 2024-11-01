@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
-import { ReactComponent as CheckIcon } from '@assets/check_icon_dotted.svg';
 import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
@@ -58,7 +57,6 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   height = '3.2rem',
 }: CotatoDropBoxProps<T>) => {
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const [isDropBoxOpen, setIsDropBoxOpen] = useState(false);
   const [dropBoxList, setDropBoxList] = useState<T[]>([]);
@@ -177,7 +175,9 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
               className={item === selectedItem ? 'selected' : ''}
               onClick={() => handleItemClick(item)}
             >
-              {item === selectedItem && <StyledCheckIcon />}
+              {item === selectedItem && (
+                <StyledCheckIcon icon="check-solid" color={theme.colors.sub3[40]} />
+              )}
               {StringFormatter(item)}
             </li>
           ))}
@@ -191,11 +191,6 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
    */
   useEffect(() => {
     let newList = [...list];
-    // if (isInProduction && isTypeGeneration(list[0])) {
-    //   newList = newList.filter(
-    //     (generation: CotatoGenerationInfoResponse) => generation.generationNumber! >= 8,
-    //   );
-    // }
 
     if (reversed) {
       newList = [...newList].reverse();
