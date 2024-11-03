@@ -25,8 +25,11 @@ import { About } from '@pages/About';
 
 function App() {
   //
+  const location = useLocation();
+  const isInHome = location.pathname === '/';
+
+  //
   const isInAttendanceList = useMatch('/attendance/list/generation/:generationId');
-  const isInHome = useMatch('/');
 
   //
   //
