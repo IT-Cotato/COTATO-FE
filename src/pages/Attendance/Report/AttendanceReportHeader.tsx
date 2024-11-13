@@ -18,8 +18,7 @@ const AttendanceReportHeader = () => {
   const navigate = useNavigate();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
-  const { generationId } = useParams();
-  const { sessionId } = useParams();
+  const { generationId, sessionId } = useParams();
 
   const { generations, targetGeneration } = useGeneration({
     generationId: generationId,
