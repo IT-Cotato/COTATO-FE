@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useMatch } from 'react-router-dom';
 import Header from '@components/Header';
 import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
@@ -12,7 +12,6 @@ import FindID from '@pages/Login/FindID';
 import FindPWProcess from '@pages/Login/FindPWProcess';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
-import 'react-toastify/dist/ReactToastify.css';
 
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
@@ -23,12 +22,17 @@ import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
 import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 import CSRoutes from '@pages/CS/CSRoutes';
-import { ToastContainer } from 'react-toastify';
 import { About } from '@pages/About';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
+  //
   const location = useLocation();
   const isInHome = location.pathname === '/';
+
+  //
+  const isInAttendanceList = useMatch('/attendance/list/generation/:generationId');
 
   //
   //
@@ -40,8 +44,6 @@ function App() {
       document.body.style.overflow = 'auto';
     }
   }, [isInHome]);
-
-  const isAttendance = useLocation().pathname.includes('/attendance');
 
   //
   //
@@ -72,7 +74,7 @@ function App() {
           <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
-        {isAttendance ? <AttendanceFab /> : <CotatoGlobalFab />}
+        {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>
   );

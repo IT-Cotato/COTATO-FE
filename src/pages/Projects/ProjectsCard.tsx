@@ -4,6 +4,8 @@ import { CotatoProjectSummaryResponse } from 'cotato-openapi-clients';
 import { ReactComponent as Github } from '@assets/github.svg';
 import { ReactComponent as Behance } from '@assets/behance.svg';
 import styled, { useTheme } from 'styled-components';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
+import CotatoTooltip from '@components/CotatoTooltip';
 
 //
 //
@@ -28,6 +30,7 @@ const ProjectsCard = ({
   onClick,
 }: ProjectsCardProps) => {
   const theme = useTheme();
+  const { isLaptopOrSmaller, isTabletOrSmaller } = useBreakpoints();
 
   /**
    *
@@ -45,10 +48,27 @@ const ProjectsCard = ({
    */
   const renderInfo = () => {
     return (
-      <>
-        <Title>{name}</Title>
-        <Introduction>{generationNumber}기</Introduction>
-      </>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        fontFamily="Pretendard"
+        gap="0.5rem"
+      >
+        <Typography
+          variant={isTabletOrSmaller ? 'h6' : isLaptopOrSmaller ? 'h5' : 'h4'}
+          color={theme.colors.common.black_const}
+          fontWeight="700"
+        >
+          {name}
+        </Typography>
+        <Typography
+          variant={isTabletOrSmaller ? 'body1' : isLaptopOrSmaller ? 'h6' : 'h5'}
+          fontWeight="700"
+        >
+          {generationNumber}기
+        </Typography>
+      </Stack>
     );
   };
 
@@ -64,6 +84,44 @@ const ProjectsCard = ({
     );
   };
 
+  /**
+   *
+   */
+  const renderImage = () => {
+    return (
+      <Box height="15rem" width="100%">
+        <img
+          src={logoUrl ?? ''}
+          alt={name}
+          width="100%"
+          height="100%"
+          style={{ borderTopLeftRadius: '0.625rem', borderTopRightRadius: '0.625rem' }}
+        />
+      </Box>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderIntroduction = () => {
+    return (
+      <CotatoTooltip title={introduction} placement="top" arrow>
+        <Typography
+          noWrap
+          variant={isTabletOrSmaller ? 'body2' : isLaptopOrSmaller ? 'body2' : 'body1'}
+          color={theme.colors.common.black_const}
+          padding="0"
+          sx={{
+            fontFamily: 'Pretendard',
+          }}
+        >
+          {introduction}
+        </Typography>
+      </CotatoTooltip>
+    );
+  };
+
   //
   //
   //
@@ -71,42 +129,17 @@ const ProjectsCard = ({
     <StyledStack
       id={projectId?.toString()}
       justifyContent="center"
-      padding="0.25rem 1.5rem 1.5rem"
-      gap="2rem"
+      width="100%"
+      gap="0.75rem"
       bgcolor={theme.colors.common.real_white}
       borderRadius="0.625rem"
       onClick={handleClick}
     >
-      <Box
-        component="img"
-        src={logoUrl ?? ''}
-        alt={name}
-        width="15rem"
-        height="15rem"
-        borderRadius="0.625rem"
-        sx={{
-          objectFit: 'contain',
-        }}
-      />
-      <Stack>
-        <Stack gap="0.5rem">
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            fontFamily="Pretendard"
-          >
-            {renderInfo()}
-          </Stack>
-          <Typography
-            fontSize="1rem"
-            color={theme.colors.common.black_const}
-            width="15rem"
-            maxWidth="15rem"
-            height="3rem"
-          >
-            {introduction}
-          </Typography>
+      {renderImage()}
+      <Stack padding="0.25rem 1.5rem 1.5rem">
+        <Stack gap="1.5rem">
+          {renderInfo()}
+          {renderIntroduction()}
         </Stack>
         <Stack direction="row" gap="0.5rem" minWidth="2.25rem" minHeight="2.25rem" marginTop="1rem">
           {renderLogo()}
@@ -125,19 +158,4 @@ const StyledStack = styled(Stack)`
     transform: translateY(-0.5rem);
   }
   box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
-`;
-
-const Title = styled.h3`
-  margin: 0;
-  font-size: 2.5rem;
-  font-family: Pretendard;
-  color: ${({ theme }) => theme.colors.common.black_const};
-`;
-
-const Introduction = styled.p`
-  margin: 0;
-  font-size: 1.5rem;
-  font-family: Pretendard;
-
-  color: ${({ theme }) => theme.colors.common.black_const};
 `;

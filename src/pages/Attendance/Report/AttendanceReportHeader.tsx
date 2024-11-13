@@ -29,18 +29,30 @@ const AttendanceReportHeader = () => {
     sessionId: Number(sessionId),
   });
 
+  /**
+   *
+   */
   const handlePreviousClick = () => {
     navigate('/attendance');
   };
 
+  /**
+   *
+   */
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
     navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
   };
 
+  /**
+   *
+   */
   const handleSessionChange = (session: CotatoSessionListResponse) => {
     navigate(`/attendance/report/generation/${generationId}/session/${session.sessionId}`);
   };
 
+  /**
+   *
+   */
   const handleExportExcelClick = () => {
     alert('출시 예정입니다 :)');
   };
@@ -86,6 +98,7 @@ const AttendanceReportHeader = () => {
               list={sessions}
               onChange={handleSessionChange}
               defaultItemId={targetSession?.sessionId}
+              width="12rem"
               color="yellow"
             />
           )}
@@ -93,6 +106,7 @@ const AttendanceReportHeader = () => {
         <Stack direction="column-reverse">
           <Button
             disableElevation
+            disabled
             variant="contained"
             onClick={handleExportExcelClick}
             startIcon={
