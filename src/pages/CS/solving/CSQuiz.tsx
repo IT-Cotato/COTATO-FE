@@ -132,7 +132,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       try {
         const message = JSON.parse(event.data);
         setMessage(message);
-        console.log(message);
         setProblemId(message.quizId); // 문제 번호 변경을 감지하여 리렌더링 시키기 위함
 
         switch (handleWsMessage(message)) {
