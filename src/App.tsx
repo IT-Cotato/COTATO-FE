@@ -14,7 +14,6 @@ import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
 
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
-import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
 import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
 import Projects from '@pages/Projects/Projects';
@@ -25,6 +24,7 @@ import CSRoutes from '@pages/CS/CSRoutes';
 import { About } from '@pages/About';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import Background from '@components/Background';
 
 function App() {
   //
@@ -54,9 +54,10 @@ function App() {
       <CotatoThemeProvider>
         <GlobalStyle />
         <ToastContainer position="bottom-right" autoClose={3000} />
+        <Background />
+
         <Header />
         <AgreementConfirmDialog />
-        <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
@@ -74,6 +75,7 @@ function App() {
           <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
+
         {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>
