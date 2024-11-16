@@ -2,7 +2,10 @@ import React from 'react';
 import CotatoIcon from '@components/CotatoIcon';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import { ReactComponent as AbsentIcon } from '@assets/attendance_absent_icon.svg';
-import { CotatoAttendanceStatistic } from 'cotato-openapi-clients';
+import {
+  CotatoAttendanceRecordResponseResultEnum,
+  CotatoAttendanceStatistic,
+} from 'cotato-openapi-clients';
 
 export const STATUS_ASSETS = [
   {
@@ -37,12 +40,19 @@ export const ATTENDANCE_ASSETS_ICON_MAP: Record<keyof CotatoAttendanceStatistic,
   absent: STATUS_ASSETS[3].icon,
 };
 
-export const ATTENDANCE_ASSETS_TEXT_MAP: Record<keyof CotatoAttendanceStatistic, string> = {
+export const ATTENDANCE_ASSETS_TEXT_MAP: Record<
+  keyof CotatoAttendanceStatistic & keyof CotatoAttendanceRecordResponseResultEnum,
+  string
+> = {
   offline: STATUS_ASSETS[0].text,
   online: STATUS_ASSETS[1].text,
   late: STATUS_ASSETS[2].text,
   absent: STATUS_ASSETS[3].text,
-};
+  OFFLINE: STATUS_ASSETS[0].text,
+  ONLINE: STATUS_ASSETS[1].text,
+  LATE: STATUS_ASSETS[2].text,
+  ABSENT: STATUS_ASSETS[3].text,
+} as const;
 
 export const ATTENDANCE_ASSETS_MAP: Record<
   keyof CotatoAttendanceStatistic,
