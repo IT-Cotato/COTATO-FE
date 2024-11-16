@@ -69,13 +69,11 @@ const Header = () => {
       ))}
       {renderProfile()}
       <StyledSwitchDiv>
-        <Tooltip arrow title="실험적 기능으로 아직 완벽하지 않을 수 있습니다." placement="top">
-          {DefaultTheme === COTATO_LIGHT_THEME ? (
-            <CotatoIcon icon="sun-solid" color={(theme) => theme.colors.primary100} size="1.5rem" />
-          ) : (
-            <CotatoIcon icon="star-crescent-solid" size="1.5rem" />
-          )}
-        </Tooltip>
+        {DefaultTheme === COTATO_LIGHT_THEME ? (
+          <CotatoIcon icon="sun-solid" color={(theme) => theme.colors.primary100} size="1.5rem" />
+        ) : (
+          <CotatoIcon icon="star-crescent-solid" size="1.5rem" />
+        )}
 
         <CotatoThemeToggleSwitch
           checked={DefaultTheme === COTATO_LIGHT_THEME}
@@ -167,6 +165,7 @@ const HeaderWrapper = styled.header`
   width: 100%;
   padding: 0.5rem 6rem;
   align-items: center;
+  justify-content: space-between;
   background: ${({ theme }) => theme.colors.common.white};
   position: fixed;
   top: 0;
@@ -188,9 +187,10 @@ const LogoLink = styled(NavLink)`
 const NavContainer = styled.div`
   display: flex;
   align-self: stretch;
-  width: 70%;
+  width: 100%;
   height: 3.5rem;
-  justify-content: space-around;
+  padding: 0 6rem;
+  justify-content: space-evenly;
   margin: auto;
   align-items: center;
   gap: 2rem;
@@ -240,7 +240,7 @@ const StyledSwitchDiv = styled.div`
   justify-content: flex-start;
   gap: 0.5rem;
   align-items: center;
-  width: 100%;
+  width: fit-content;
 
   > label {
     margin-bottom: 0.5rem;
