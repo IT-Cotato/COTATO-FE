@@ -50,6 +50,7 @@ export default ProjectsLink;
 
 const StyledLink = styled(Link)`
   width: auto;
+  max-width: 8rem;
   height: 2rem;
   padding: 0.5rem 0.75rem;
   display: flex;

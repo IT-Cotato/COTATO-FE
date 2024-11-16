@@ -95,7 +95,11 @@ const ProjectsCard = ({
           alt={name}
           width="100%"
           height="100%"
-          style={{ borderTopLeftRadius: '0.625rem', borderTopRightRadius: '0.625rem' }}
+          style={{
+            borderTopLeftRadius: '0.625rem',
+            borderTopRightRadius: '0.625rem',
+            objectFit: 'cover',
+          }}
         />
       </Box>
     );
