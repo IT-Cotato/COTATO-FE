@@ -20,7 +20,6 @@ import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
 import {
-  CotatoLocalTime,
   CotatoSessionContentsCsEducationEnum,
   CotatoSessionContentsDevTalkEnum,
   CotatoSessionContentsItIssueEnum,
@@ -29,6 +28,7 @@ import {
 } from 'cotato-openapi-clients';
 import CotatoTimePicker from '@components/CotatoTimePicker';
 import api from '@/api/api';
+import LocalTime from '@/typing/LocalTime';
 
 //
 //
@@ -64,16 +64,8 @@ const INITIAL_SESSION_STATE: SessionUploadInfo = {
   description: '',
   sessionDateTime: new Date(),
   attendTime: {
-    attendanceDeadLine: {
-      hour: 19,
-      minute: 10,
-      second: 0,
-    },
-    lateDeadLine: {
-      hour: 19,
-      minute: 20,
-      second: 0,
-    },
+    attendanceDeadLine: new LocalTime('19:10:00'),
+    lateDeadLine: new LocalTime('19:20:00'),
   },
   itIssue: CotatoSessionContentsItIssueEnum.Off,
   csEducation: CotatoSessionContentsCsEducationEnum.On,
@@ -107,7 +99,7 @@ const SessionUploadModal = ({
    */
   const fetchUpdateSession = async () => {
     try {
-      const response = await api.get('/v2/api/attendances/info', {
+      const { data: attendancesInfo } = await api.get('/v2/api/attendances/info', {
         params: {
           sessionId: sessionInfo?.sessionId,
         },
@@ -119,21 +111,10 @@ const SessionUploadModal = ({
         description: sessionInfo?.description || '',
         sessionDateTime: new Date(sessionInfo?.sessionDateTime || ''),
         placeName: sessionInfo?.placeName || '',
-        location: {
-          latitude: response.data.location?.latitude,
-          longitude: response.data.location?.longitude,
-        },
+        location: attendancesInfo.location,
         attendTime: {
-          attendanceDeadLine: {
-            hour: response.data.attendanceDeadLine?.hour || 19,
-            minute: response.data.attendanceDeadLine?.minute || 10,
-            second: response.data.attendanceDeadLine?.second || 0,
-          },
-          lateDeadLine: {
-            hour: response.data.lateDeadLine?.hour || 19,
-            minute: response.data.lateDeadLine?.minute || 20,
-            second: response.data.lateDeadLine?.second || 0,
-          },
+          attendanceDeadLine: new LocalTime(attendancesInfo.attendanceDeadLine),
+          lateDeadLine: new LocalTime(attendancesInfo.lateDeadLine),
         },
         itIssue: sessionInfo?.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
         csEducation:
@@ -148,17 +129,6 @@ const SessionUploadModal = ({
     } catch (error) {
       console.error(error);
     }
-  };
-
-  /**
-   *
-   */
-  const convertCotatoLocalTimeToDate = (localTime?: CotatoLocalTime): Date => {
-    const date = new Date();
-    date.setHours(localTime?.hour || 0);
-    date.setMinutes(localTime?.minute || 0);
-    date.setSeconds(localTime?.second || 0);
-    return date;
   };
 
   /**
@@ -301,19 +271,7 @@ const SessionUploadModal = ({
   const handleAttendanceDeadlineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        if (draft.attendTime?.attendanceDeadLine) {
-          draft.attendTime.attendanceDeadLine.hour = date.getHours();
-          draft.attendTime.attendanceDeadLine.minute = date.getMinutes();
-          draft.attendTime.attendanceDeadLine.second = date.getSeconds();
-        } else {
-          draft.attendTime = {
-            attendanceDeadLine: {
-              hour: date.getHours(),
-              minute: date.getMinutes(),
-              second: date.getSeconds(),
-            },
-          };
-        }
+        draft.attendTime!.attendanceDeadLine = new LocalTime(date);
       }),
     );
   };
@@ -324,19 +282,7 @@ const SessionUploadModal = ({
   const handleLateDeadLineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        if (draft.attendTime?.lateDeadLine) {
-          draft.attendTime.lateDeadLine.hour = date.getHours();
-          draft.attendTime.lateDeadLine.minute = date.getMinutes();
-          draft.attendTime.lateDeadLine.second = date.getSeconds();
-        } else {
-          draft.attendTime = {
-            lateDeadLine: {
-              hour: date.getHours(),
-              minute: date.getMinutes(),
-              second: date.getSeconds(),
-            },
-          };
-        }
+        draft.attendTime!.lateDeadLine = new LocalTime(date);
       }),
     );
   };
@@ -454,14 +400,14 @@ const SessionUploadModal = ({
           <div>
             출석 인정
             <CotatoTimePicker
-              date={convertCotatoLocalTimeToDate(session.attendTime?.attendanceDeadLine)}
+              date={(session.attendTime?.attendanceDeadLine as LocalTime).toDate()}
               onDateChange={handleAttendanceDeadlineChange}
             />
           </div>
           <div>
             지각 인정
             <CotatoTimePicker
-              date={convertCotatoLocalTimeToDate(session?.attendTime?.lateDeadLine)}
+              date={(session.attendTime?.lateDeadLine as LocalTime).toDate()}
               onDateChange={handleLateDeadLineChange}
             />
           </div>
