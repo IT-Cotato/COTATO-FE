@@ -10,11 +10,11 @@ export default class LocalTime implements CotatoLocalTime {
   nano: number;
 
   /**
-   * @param {string} [timeString] - "HH:MM:SS" 형식의 시간 문자열 (옵션)
+   * @param {string | Date} [input] - "HH:MM:SS" 형식의 시간 문자열 또는 Date 객체 (옵션)
    */
-  constructor(timeString?: string) {
-    if (timeString) {
-      const [hour, minute, second] = timeString.split(':').map(Number);
+  constructor(input?: string | Date) {
+    if (typeof input === 'string') {
+      const [hour, minute, second] = input.split(':').map(Number);
 
       if (
         isNaN(hour) ||
@@ -33,6 +33,10 @@ export default class LocalTime implements CotatoLocalTime {
       this.hour = hour;
       this.minute = minute;
       this.second = second;
+    } else if (input instanceof Date) {
+      this.hour = input.getHours();
+      this.minute = input.getMinutes();
+      this.second = input.getSeconds();
     } else {
       const now = new Date();
 
