@@ -45,13 +45,31 @@ export default class LocalTime implements CotatoLocalTime {
   }
 
   /**
+   *
    * @returns {string}
    */
-  getTimeString() {
+  getTimeString(): string {
     const numToString = (num: number) => {
       return num.toString().padStart(2, '0');
     };
 
     return `${numToString(this.hour)}:${numToString(this.minute)}:${numToString(this.second)}`;
+  }
+
+  /**
+   *
+   * @returns {Date}
+   */
+  getDate(): Date {
+    const now = new Date();
+
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      this.hour,
+      this.minute,
+      this.second,
+    );
   }
 }
