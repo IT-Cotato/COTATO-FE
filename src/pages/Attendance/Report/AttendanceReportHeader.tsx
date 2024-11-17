@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
@@ -20,12 +20,14 @@ const AttendanceReportHeader = () => {
 
   const { generationId, sessionId } = useParams();
 
-  const { generations, targetGeneration } = useGeneration({
-    generationId: generationId,
+  const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
+  const [selectedSessionId, setSelectedSessionId] = useState<number>(Number(sessionId));
+
+  const { generations } = useGeneration({
+    generationId: selectedGenerationId.toString(),
   });
-  const { sessions, targetSession } = useSession({
-    generationId: Number(generationId),
-    sessionId: Number(sessionId),
+  const { sessions } = useSession({
+    generationId: selectedGenerationId,
   });
 
   /**
@@ -40,6 +42,13 @@ const AttendanceReportHeader = () => {
    */
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
     navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
+
+    /**
+     * TODO: 기수 수정 로직 변경
+     * 1. 기수 변경시 새로운 세션을 불러옴
+     * 2. 세션 리스트에서 가장 최근 세션을 선택
+     * 3. generatoin id, session id를 url에 반영
+     */
   };
 
   /**
@@ -88,7 +97,7 @@ const AttendanceReportHeader = () => {
             <CotatoDropBox
               list={generations}
               onChange={handleGenerationChange}
-              defaultItemId={targetGeneration?.generationId}
+              defaultItemId={selectedGenerationId}
               color="yellow"
             />
           )}
@@ -96,7 +105,7 @@ const AttendanceReportHeader = () => {
             <CotatoDropBox
               list={sessions}
               onChange={handleSessionChange}
-              defaultItemId={targetSession?.sessionId}
+              defaultItemId={selectedSessionId}
               width="12rem"
               color="yellow"
             />
