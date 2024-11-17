@@ -4,10 +4,10 @@ import React, { useEffect } from 'react';
 import { useAttendancesAttendanceIdRecordsGet } from '../hooks/useAttendancesAttendanceIdRecordsGet';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import AttedanceTableLayout from './components/AttedanceTableLayout';
-import { getCurrentStatistic } from '../utils/util';
 import AttendanceStatusDropdown from './components/AttendanceStatusDropdown';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
+import { ATTENDANCE_ASSETS_TEXT_MAP } from '../constants';
 
 //
 //
@@ -108,7 +108,11 @@ const AttendanceReportTable = () => {
             </AttedanceTableLayout.TableCell>
             <AttedanceTableLayout.TableCell>
               <AttendanceStatusDropdown
-                status={getCurrentStatistic(record)}
+                status={
+                  ATTENDANCE_ASSETS_TEXT_MAP[
+                    record.result as keyof typeof ATTENDANCE_ASSETS_TEXT_MAP
+                  ]
+                }
                 memberId={record?.memberInfo?.memberId}
                 attendanceId={attendanceId}
               />
@@ -129,7 +133,7 @@ const AttendanceReportTable = () => {
           </AttedanceTableLayout.TableCell>
           <AttedanceTableLayout.TableCell>
             <AttendanceStatusDropdown
-              status={getCurrentStatistic(firstRecord)}
+              status={firstRecord.result}
               memberId={firstRecord?.memberInfo?.memberId}
               attendanceId={attendanceId}
             />
@@ -141,7 +145,7 @@ const AttendanceReportTable = () => {
               </AttedanceTableLayout.TableCell>
               <AttedanceTableLayout.TableCell>
                 <AttendanceStatusDropdown
-                  status={getCurrentStatistic(secondRecord)}
+                  status={secondRecord.result}
                   memberId={secondRecord?.memberInfo?.memberId}
                   attendanceId={attendanceId}
                 />
@@ -179,9 +183,7 @@ const AttendanceReportTable = () => {
     // filter records by status
     if (status.length) {
       filteredRecords = filteredRecords?.filter((record) =>
-        status.some((status) =>
-          getCurrentStatistic(record).toLowerCase().includes(status.toLowerCase()),
-        ),
+        status.some((status) => record.result?.toLowerCase().includes(status.toLowerCase())),
       );
 
       setCurrentRecords(filteredRecords);
