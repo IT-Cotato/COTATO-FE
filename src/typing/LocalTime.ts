@@ -52,7 +52,7 @@ export default class LocalTime implements CotatoLocalTime {
    *
    * @returns {string}
    */
-  getTimeString(): string {
+  toTimeString(): string {
     const numToString = (num: number) => {
       return num.toString().padStart(2, '0');
     };
@@ -64,7 +64,7 @@ export default class LocalTime implements CotatoLocalTime {
    *
    * @returns {Date}
    */
-  getDate(): Date {
+  toDate(): Date {
     const now = new Date();
 
     return new Date(
