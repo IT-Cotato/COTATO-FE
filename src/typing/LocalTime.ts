@@ -10,7 +10,7 @@ export default class LocalTime implements CotatoLocalTime {
   nano: number;
 
   /**
-   * @param {string | Date} [input] - "HH:MM:SS" 형식의 시간 문자열 또는 Date 객체 (옵션)
+   * @param {string | Date} [input] - "HH:MM:SS" format string or Date object (optional)
    */
   constructor(input?: string | Date) {
     if (typeof input === 'string') {
