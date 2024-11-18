@@ -219,13 +219,7 @@ const AttendanceList = () => {
   React.useEffect(() => {
     if (attendanceResponse?.memberAttendResponses) {
       const newMemberAttendaceResponse = [...attendanceResponse.memberAttendResponses];
-      newMemberAttendaceResponse.sort((a, b) => {
-        if (a.sessionId && b.sessionId) {
-          return a.sessionId - b.sessionId;
-        }
-
-        return 0;
-      });
+      newMemberAttendaceResponse.sort((a, b) => (a.sessionDateTime! < b.sessionDateTime! ? -1 : 1));
       setAttendanceList(newMemberAttendaceResponse);
     }
   }, [attendanceResponse]);
