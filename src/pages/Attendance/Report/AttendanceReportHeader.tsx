@@ -27,7 +27,7 @@ const AttendanceReportHeader = () => {
     generationId: selectedGenerationId.toString(),
   });
 
-  const { attendances } = useGetAttendances({
+  const { attendances, isAttendanceLoading } = useGetAttendances({
     generationId: selectedGenerationId,
   });
 
@@ -67,6 +67,7 @@ const AttendanceReportHeader = () => {
    */
   useEffect(() => {
     if (
+      isAttendanceLoading ||
       attendances?.attendances?.find(
         (attendance) => attendance.attendanceId === selectedAttendanceId,
       )
@@ -79,7 +80,7 @@ const AttendanceReportHeader = () => {
     navigate(
       `/attendance/report/generation/${selectedGenerationId}/session/${latestAttendance?.sessionId ?? 0}/attendance/${latestAttendance?.attendanceId ?? 0}`,
     );
-  }, [attendances]);
+  }, [attendances, isAttendanceLoading]);
 
   return (
     <Stack
