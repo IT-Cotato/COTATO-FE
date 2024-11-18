@@ -3,13 +3,8 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
-import {
-  CotatoAttendanceResponse,
-  CotatoGenerationInfoResponse,
-  CotatoSessionListResponse,
-} from 'cotato-openapi-clients';
+import { CotatoAttendanceResponse, CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSession } from '@/hooks/useSession';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import useGetAttendances from '@/hooks/useGetAttendances';
@@ -23,10 +18,9 @@ const AttendanceReportHeader = () => {
   const navigate = useNavigate();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
-  const { generationId, sessionId, attendanceId } = useParams();
+  const { generationId, attendanceId } = useParams();
 
   const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
-  const [selectedSessionId, setSelectedSessionId] = useState<number>(Number(sessionId));
   const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
 
   const { generations } = useGeneration({
@@ -55,7 +49,6 @@ const AttendanceReportHeader = () => {
    *
    */
   const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
-    setSelectedSessionId(attendance.sessionId!);
     setSelectedAttendanceId(attendance.attendanceId!);
     navigate(
       `/attendance/report/generation/${selectedGenerationId}/session/${attendance.sessionId}/attendance/${attendance.attendanceId}`,
@@ -82,7 +75,6 @@ const AttendanceReportHeader = () => {
     }
 
     const latestAttendance = attendances?.attendances?.at(-1);
-    setSelectedSessionId(latestAttendance?.sessionId ?? 0);
     setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
     navigate(
       `/attendance/report/generation/${selectedGenerationId}/session/${latestAttendance?.sessionId ?? 0}/attendance/${latestAttendance?.attendanceId ?? 0}`,
