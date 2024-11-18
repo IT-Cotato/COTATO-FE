@@ -32,9 +32,7 @@ const AttendanceReportHeader = () => {
   const { generations } = useGeneration({
     generationId: selectedGenerationId.toString(),
   });
-  // const { sessions } = useSession({
-  //   generationId: selectedGenerationId,
-  // });
+
   const { attendances } = useGetAttendances({
     generationId: selectedGenerationId,
   });
@@ -50,15 +48,7 @@ const AttendanceReportHeader = () => {
    *
    */
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
-    // navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
     setSelectedGenerationId(generations.generationId!);
-
-    /**
-     * TODO: 기수 수정 로직 변경
-     * 1. 기수 변경시 새로운 세션을 불러옴
-     * 2. 세션 리스트에서 가장 최근 세션을 선택
-     * 3. generatoin id, session id를 url에 반영
-     */
   };
 
   /**
