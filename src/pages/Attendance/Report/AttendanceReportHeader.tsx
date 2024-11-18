@@ -3,11 +3,16 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
-import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
+import {
+  CotatoAttendanceResponse,
+  CotatoGenerationInfoResponse,
+  CotatoSessionListResponse,
+} from 'cotato-openapi-clients';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSession } from '@/hooks/useSession';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import useGetAttendances from '@/hooks/useGetAttendances';
 
 //
 //
@@ -18,15 +23,19 @@ const AttendanceReportHeader = () => {
   const navigate = useNavigate();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
-  const { generationId, sessionId } = useParams();
+  const { generationId, sessionId, attendanceId } = useParams();
 
   const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
   const [selectedSessionId, setSelectedSessionId] = useState<number>(Number(sessionId));
+  const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
 
   const { generations } = useGeneration({
     generationId: selectedGenerationId.toString(),
   });
-  const { sessions } = useSession({
+  // const { sessions } = useSession({
+  //   generationId: selectedGenerationId,
+  // });
+  const { attendances } = useGetAttendances({
     generationId: selectedGenerationId,
   });
 
@@ -54,8 +63,12 @@ const AttendanceReportHeader = () => {
   /**
    *
    */
-  const handleSessionChange = (session: CotatoSessionListResponse) => {
-    navigate(`/attendance/report/generation/${generationId}/session/${session.sessionId}`);
+  const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
+    setSelectedSessionId(attendance.sessionId!);
+    setSelectedAttendanceId(attendance.attendanceId!);
+    navigate(
+      `/attendance/report/generation/${selectedGenerationId}/session/${attendance.sessionId}/attendance/${attendance.attendanceId}`,
+    );
   };
 
   /**
@@ -101,11 +114,11 @@ const AttendanceReportHeader = () => {
               color="yellow"
             />
           )}
-          {sessions && (
+          {attendances?.attendances && (
             <CotatoDropBox
-              list={sessions}
-              onChange={handleSessionChange}
-              defaultItemId={selectedSessionId}
+              list={attendances.attendances}
+              onChange={handleAttendanceChange}
+              defaultItemId={selectedAttendanceId}
               width="12rem"
               color="yellow"
             />
