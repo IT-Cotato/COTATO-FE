@@ -66,12 +66,11 @@ const AttendanceReportHeader = () => {
    *
    */
   useEffect(() => {
-    if (
-      isAttendanceLoading ||
-      attendances?.attendances?.find(
-        (attendance) => attendance.attendanceId === selectedAttendanceId,
-      )
-    ) {
+    const selectedAttendance = attendances?.attendances?.find(
+      (attendance) => attendance.attendanceId === selectedAttendanceId,
+    );
+
+    if (isAttendanceLoading || selectedAttendance) {
       return;
     }
 
