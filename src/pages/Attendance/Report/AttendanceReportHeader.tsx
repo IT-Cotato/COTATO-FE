@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
@@ -50,7 +50,8 @@ const AttendanceReportHeader = () => {
    *
    */
   const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
-    navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
+    // navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
+    setSelectedGenerationId(generations.generationId!);
 
     /**
      * TODO: 기수 수정 로직 변경
@@ -77,6 +78,26 @@ const AttendanceReportHeader = () => {
   const handleExportExcelClick = () => {
     alert('출시 예정입니다 :)');
   };
+
+  /**
+   *
+   */
+  useEffect(() => {
+    if (
+      attendances?.attendances?.find(
+        (attendance) => attendance.attendanceId === selectedAttendanceId,
+      )
+    ) {
+      return;
+    }
+
+    const latestAttendance = attendances?.attendances?.at(-1);
+    setSelectedSessionId(latestAttendance?.sessionId ?? 0);
+    setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
+    navigate(
+      `/attendance/report/generation/${selectedGenerationId}/session/${latestAttendance?.sessionId ?? 0}/attendance/${latestAttendance?.attendanceId ?? 0}`,
+    );
+  }, [attendances]);
 
   return (
     <Stack
