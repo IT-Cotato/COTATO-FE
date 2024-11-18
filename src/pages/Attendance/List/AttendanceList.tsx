@@ -68,7 +68,7 @@ const AttendanceList = () => {
    */
   const handleClickReport = () => {
     navigate(
-      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}`,
+      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}/attendance/${attendanceList.at(-1)?.attendanceId}`,
     );
   };
 
