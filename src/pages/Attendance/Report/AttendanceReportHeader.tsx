@@ -41,8 +41,8 @@ const AttendanceReportHeader = () => {
   /**
    *
    */
-  const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
-    setSelectedGenerationId(generations.generationId!);
+  const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
+    setSelectedGenerationId(generation.generationId!);
   };
 
   /**
