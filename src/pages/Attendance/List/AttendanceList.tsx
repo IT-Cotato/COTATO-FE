@@ -24,6 +24,7 @@ import {
 import useUser from '@/hooks/useUser';
 import { MemberRole } from '@/enums';
 import CotatoIcon from '@components/CotatoIcon';
+import useAttendanceReportNavigate from '../hooks/useAttendanceReportNavigate';
 
 //
 //
@@ -32,6 +33,7 @@ import CotatoIcon from '@components/CotatoIcon';
 const AttendanceList = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const attendanceReportNavigate = useAttendanceReportNavigate();
   const { generationId } = useParams();
   const { currentGeneration } = useGeneration();
   const { user } = useUser();
@@ -67,8 +69,10 @@ const AttendanceList = () => {
    *
    */
   const handleClickReport = () => {
-    navigate(
-      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}/attendance/${attendanceList.at(-1)?.attendanceId}`,
+    attendanceReportNavigate(
+      generationId ?? 0,
+      attendanceList.at(-1)?.sessionId || 0,
+      attendanceList.at(-1)?.attendanceId || 0,
     );
   };
 
