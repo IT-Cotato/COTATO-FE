@@ -5,14 +5,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { useAttendancesAttendanceIdRecordsGet } from '@pages/Attendance/hooks/useAttendancesAttendanceIdRecordsGet';
+import { CotatoAttendanceRecordResponseResultEnum } from 'cotato-openapi-clients';
 
 //
 //
 //
 
 interface AttendanceStatusDropdownProps {
-  status: string;
   attendanceId?: number;
+  status?: CotatoAttendanceRecordResponseResultEnum;
   memberId?: number;
 }
 
@@ -59,7 +60,7 @@ const AttendanceStatusDropdown: React.FC<AttendanceStatusDropdownProps> = ({
   return (
     <StyledTextField
       select
-      defaultValue={status}
+      defaultValue={status?.toLowerCase()}
       sx={{
         '& fieldset': { border: 'unset' },
       }}
