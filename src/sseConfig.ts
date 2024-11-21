@@ -26,11 +26,6 @@ export const sseConfig = (setIsAttendanceOpen: SetAttendanceState): void => {
   const EventSource = EventSourcePolyfill || NativeEventSource;
   const sse = new EventSource(url, options) as EventSource;
 
-  sse.addEventListener('attendance', (e: MessageEvent) => {
-    const connectData = e.data;
-    console.log('SSE connected: ', connectData);
-  });
-
   sse.addEventListener('AttendanceStatus', (e: MessageEvent) => {
     const receivedData = e.data;
     console.log('attendance status: ', receivedData);
