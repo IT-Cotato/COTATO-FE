@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import useGetAttendances from '@/hooks/useGetAttendances';
-import useAttendanceReportNavigate from '../hooks/useAttendanceReportNavigate';
+import { getAttendanceReportPath } from '../utils/util';
 
 //
 //
@@ -16,7 +16,6 @@ import useAttendanceReportNavigate from '../hooks/useAttendanceReportNavigate';
 
 const AttendanceReportHeader = () => {
   const theme = useTheme();
-  const attendanceReportNavigate = useAttendanceReportNavigate();
   const navigate = useNavigate();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
@@ -52,7 +51,13 @@ const AttendanceReportHeader = () => {
    */
   const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
     setSelectedAttendanceId(attendance.attendanceId!);
-    attendanceReportNavigate(selectedGenerationId, attendance.sessionId!, attendance.attendanceId!);
+    navigate(
+      getAttendanceReportPath({
+        generationId: selectedGenerationId,
+        sessionId: attendance.sessionId!,
+        attendanceId: attendance.attendanceId!,
+      }),
+    );
   };
 
   /**
@@ -76,10 +81,12 @@ const AttendanceReportHeader = () => {
 
     const latestAttendance = attendances?.attendances?.at(-1);
     setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
-    attendanceReportNavigate(
-      selectedGenerationId,
-      latestAttendance?.sessionId ?? 0,
-      latestAttendance?.attendanceId ?? 0,
+    navigate(
+      getAttendanceReportPath({
+        generationId: selectedGenerationId,
+        sessionId: latestAttendance?.sessionId,
+        attendanceId: latestAttendance?.attendanceId,
+      }),
     );
   }, [attendances, isAttendanceLoading]);
 

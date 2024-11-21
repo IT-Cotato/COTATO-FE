@@ -24,7 +24,7 @@ import {
 import useUser from '@/hooks/useUser';
 import { MemberRole } from '@/enums';
 import CotatoIcon from '@components/CotatoIcon';
-import useAttendanceReportNavigate from '../hooks/useAttendanceReportNavigate';
+import { getAttendanceReportPath } from '../utils/util';
 
 //
 //
@@ -33,7 +33,7 @@ import useAttendanceReportNavigate from '../hooks/useAttendanceReportNavigate';
 const AttendanceList = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const attendanceReportNavigate = useAttendanceReportNavigate();
+
   const { generationId } = useParams();
   const { currentGeneration } = useGeneration();
   const { user } = useUser();
@@ -69,10 +69,13 @@ const AttendanceList = () => {
    *
    */
   const handleClickReport = () => {
-    attendanceReportNavigate(
-      generationId ?? 0,
-      attendanceList.at(-1)?.sessionId || 0,
-      attendanceList.at(-1)?.attendanceId || 0,
+    navigate(
+      getAttendanceReportPath({
+        keepSearchParam: false,
+        generationId: generationId,
+        sessionId: attendanceList.at(-1)?.sessionId,
+        attendanceId: attendanceList.at(-1)?.attendanceId,
+      }),
     );
   };
 
