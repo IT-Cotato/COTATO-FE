@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useMatch } from 'react-router-dom';
 import Header from '@components/Header';
 import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
@@ -27,8 +27,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
+  //
   const location = useLocation();
   const isInHome = location.pathname === '/';
+
+  //
+  const isInAttendanceList = useMatch('/attendance/list/generation/:generationId');
 
   //
   //
@@ -40,8 +44,6 @@ function App() {
       document.body.style.overflow = 'auto';
     }
   }, [isInHome]);
-
-  const isAttendance = useLocation().pathname.includes('/attendance');
 
   //
   //
@@ -72,7 +74,7 @@ function App() {
           <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
-        {isAttendance ? <AttendanceFab /> : <CotatoGlobalFab />}
+        {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>
   );
