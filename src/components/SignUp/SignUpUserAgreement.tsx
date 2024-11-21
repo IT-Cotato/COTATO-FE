@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Divider, Stack } from '@mui/material';
-import { ReactComponent as CheckIcon } from '@assets/sign_up_check_icon.svg';
 import SignUpUserAgreementItem from '@components/SignUp/SignUpUserAgreementItem';
 
 import { produce } from 'immer';
 import { CotatoPolicyInfoResponse } from 'cotato-openapi-clients';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -64,8 +64,10 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
   const renderEntireAgreement = () => {
     return (
       <TotalDiv>
-        <CheckIcon
-          fill={isCheckedAll ? theme.colors.sub3[60] : theme.colors.gray80_2}
+        <CotatoIcon
+          icon="check-box-solid"
+          size="1.5rem"
+          color={(theme) => (isCheckedAll ? theme.colors.sub3[60] : theme.colors.gray60)}
           onClick={handleEntireClick}
         />
         <p>이용약관 전체 동의</p>

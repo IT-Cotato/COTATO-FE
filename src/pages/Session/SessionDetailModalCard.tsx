@@ -2,17 +2,14 @@ import React from 'react';
 import { CotatoSessionContents, CotatoSessionListResponse } from 'cotato-openapi-clients';
 import { styled } from 'styled-components';
 import SessionIcon from '@components/Session/SessionIcon';
-import { ReactComponent as HeartIcon } from '@assets/heart_icon_dotted.svg';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
-import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
-import { ReactComponent as HomeIcon } from '@assets/home_icon_dotted.svg';
-import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
 import SessionContents from '@components/Session/SessionContents';
 import { device, media } from '@theme/media';
-import { useMediaQuery } from '@mui/material';
+import { IconButton, Stack, useMediaQuery } from '@mui/material';
 import fetchUserData from '@utils/fetchUserData';
 import { useGeneration } from '@/hooks/useGeneration';
 import dayjs from 'dayjs';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -43,22 +40,38 @@ const SessionDetailModalCard = ({
   const renderCardHeader = () => {
     return (
       <DetailCardHeader>
-        <SessionIcon Icon={<HeartIcon />} size={isTabletOrSmaller ? 'md' : 'lg'} />
+        <SessionIcon
+          Icon={<CotatoIcon icon="heart-solid" color={(theme) => theme.colors.common.white} />}
+          size={isTabletOrSmaller ? 'md' : 'lg'}
+        />
         <h3>{session?.title}</h3>
         {!isTabletOrSmaller && (
-          <>
+          <Stack direction="row" alignItems="center">
             {useData?.role === 'ADMIN' && (
-              <UpdateButton
-                type="button"
-                onClick={() => handleClickUpdateSession && handleClickUpdateSession(session)}
+              <IconButton
+                onClick={() => {
+                  if (typeof handleClickUpdateSession !== 'function') {
+                    return;
+                  }
+                  handleClickUpdateSession(session);
+                }}
               >
-                <PencilIcon />
-              </UpdateButton>
+                <CotatoIcon
+                  icon="pencil-solid"
+                  color={(theme) => theme.colors.sub2[401]}
+                  size="1.875rem"
+                />
+              </IconButton>
             )}
-            <CloseButton type="button" onClick={handleClose}>
-              <CloseIcon />
-            </CloseButton>
-          </>
+            <IconButton onClick={handleClose}>
+              <CloseIcon
+                style={{
+                  width: '2.25rem',
+                  height: '2.25rem',
+                }}
+              />
+            </IconButton>
+          </Stack>
         )}
       </DetailCardHeader>
     );
@@ -70,13 +83,17 @@ const SessionDetailModalCard = ({
   const renderCardInfo = () => {
     const infoList = [
       {
-        icon: <CalendarIcon />,
+        icon: <CotatoIcon icon="calender-solid" color={(theme) => theme.colors.common.white} />,
         title: '일시',
         content: session?.sessionDateTime
           ? dayjs(session?.sessionDateTime).format('YYYY년 MM월 DD일')
           : '-',
       },
-      { icon: <HomeIcon />, title: '장소', content: session?.placeName || '-' },
+      {
+        icon: <CotatoIcon icon="home-solid" color={(theme) => theme.colors.common.white} />,
+        title: '장소',
+        content: session?.placeName || '-',
+      },
     ];
 
     return (
@@ -198,32 +215,6 @@ const DetailCardHeader = styled.div`
         font-size: ${({ theme }: { theme: any }) => theme.fontSize.xl};
       }
     `}
-`;
-
-const CloseButton = styled.button`
-  border: none;
-  background: none;
-  cursor: pointer;
-
-  > svg {
-    width: 2.25rem;
-    height: 2.25rem;
-  }
-`;
-
-const UpdateButton = styled.button`
-  border: none;
-  background: none;
-  cursor: pointer;
-
-  > svg {
-    width: 1.75rem;
-    height: 1.75rem;
-
-    > path {
-      fill: ${({ theme }) => theme.colors.sub2[401]};
-    }
-  }
 `;
 
 const InfoWrapper = styled.div`

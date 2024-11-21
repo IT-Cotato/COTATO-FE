@@ -17,7 +17,7 @@ import {
   CotatoCharacterImageMapType,
   convertCotatoCharcterImage,
 } from '@utils/convertCotatoCharcterImage';
-import { ReactComponent as ExpandIcon } from '@assets/expand_icon.svg';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -57,7 +57,11 @@ const FAQAccordion: React.FC<FAQAccordionProps> = ({
       <StyledAccordionSummary
         expandIcon={
           <IconButton>
-            <ExpandIcon />
+            <CotatoIcon
+              icon="chevron-down-solid"
+              color={(theme) => theme.colors.gray60}
+              size="1.125rem"
+            />
           </IconButton>
         }
         onClick={handleAccordionClick}

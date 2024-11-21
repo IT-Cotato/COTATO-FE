@@ -1,16 +1,14 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { media } from '@theme/media';
 import fetchUserData from '@utils/fetchUserData';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
-import crown from '@assets/crown.svg';
 import crownCharacter from '@assets/crown_character.svg';
-import warning from '@assets/warning.svg';
-import ArrowBack from '@/assets/arrow_back.svg';
 import onlineCharacter from '@assets/online_character.svg';
 import failCharacter from '@assets/fail_character.svg';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -122,13 +120,60 @@ const AttendanceAttendResultLayout: React.FC<AttendanceAttendResultLayoutProps> 
   const getIcon = () => {
     switch (status) {
       case 'PRESENT':
-        return crown;
+        return (
+          <Box
+            width="5rem"
+            height="5rem"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <CotatoIcon
+              icon="crown-solid"
+              color={(theme) => theme.colors.primary80}
+              size="5rem"
+              style={{ position: 'absolute' }}
+            />
+            <p
+              style={{
+                zIndex: 1,
+                color: theme.colors.gray100,
+                marginTop: '2.5rem',
+                fontSize: theme.fontSize.lg,
+                fontFamily: 'YComputer',
+              }}
+            >
+              출석
+            </p>
+          </Box>
+        );
+
       case 'LATE':
-        return warning;
+        return (
+          <CotatoIcon
+            icon="exclamation-triangle-solid"
+            color={(theme) => theme.colors.secondary80}
+            size="5rem"
+          />
+        );
+
       case 'ABSENT':
-        return warning;
+        return (
+          <CotatoIcon
+            icon="exclamation-triangle-solid"
+            color={(theme) => theme.colors.secondary80}
+            size="5rem"
+          />
+        );
+
       default:
-        return warning;
+        return (
+          <CotatoIcon
+            icon="exclamation-triangle-solid"
+            color={(theme) => theme.colors.secondary80}
+            size="5rem"
+          />
+        );
     }
   };
 
@@ -191,21 +236,16 @@ const AttendanceAttendResultLayout: React.FC<AttendanceAttendResultLayoutProps> 
     }
 
     return (
-      <Box
-        component="img"
-        width="0.625rem"
-        height="1rem"
-        src={ArrowBack}
-        alt="ArrowBack"
-        justifyContent="flex-start"
-        position="absolute"
-        left="2rem"
-        top="2rem"
-        sx={{
-          cursor: 'pointer',
-        }}
+      <IconButton
         onClick={() => navigate(-1)}
-      />
+        style={{
+          position: 'absolute',
+          left: '2rem',
+          top: '2rem',
+        }}
+      >
+        <CotatoIcon icon="angle-left-solid" size="2rem" color={(theme) => theme.colors.primary90} />
+      </IconButton>
     );
   };
 
@@ -215,7 +255,7 @@ const AttendanceAttendResultLayout: React.FC<AttendanceAttendResultLayoutProps> 
   const renderCharacter = () => {
     return (
       <>
-        <Box component="img" src={getIcon()} alt="icon" width="5rem" height="5rem" />
+        {getIcon()}
         <Box component="img" src={getCharacter()} alt="character" width="10rem" height="10rem" />
       </>
     );

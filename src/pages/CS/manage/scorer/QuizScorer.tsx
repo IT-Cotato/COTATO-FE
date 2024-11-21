@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CSManageLayout from '@pages/CS/manage/CSManageLayout';
 import { css, styled } from 'styled-components';
 import { IQuizAdmin, IQuizAdminScorer, IQuizAdminSubmit } from '@/typing/db';
@@ -14,9 +14,7 @@ import { CotatoRecordResponse, CotatoScorerResponse } from 'cotato-openapi-clien
 
 const QuizScorer = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const quizId = searchParams.get('quizId');
-  const educationId = searchParams.get('educationId');
+  const { generationId, educationId, quizId } = useParams();
 
   const { data: educationStatus } = useSWR(
     `/v1/api/education/status?educationId=${educationId}`,
@@ -134,7 +132,9 @@ const QuizScorer = () => {
       }
     });
 
-    navigate(`/cs/manage/quizscorer?educationId=${educationId}&quizId=${prevQuizId}`);
+    navigate(
+      `/cs/manage/generation/${generationId}/education/${educationId}/quiz/${prevQuizId}/quizscorer`,
+    );
   }, [quiz, quizList]);
 
   const handleNextQuizButton = useCallback(() => {
@@ -143,14 +143,16 @@ const QuizScorer = () => {
       return;
     }
 
-    let prevQuizId = 0;
+    let nextQuizId = 0;
     quizList?.quizzes.forEach((quizData: IQuizAdmin) => {
       if (quizData.quizNumber === Number(quiz?.quizNumber) + 1) {
-        prevQuizId = quizData.quizId;
+        nextQuizId = quizData.quizId;
       }
     });
 
-    navigate(`/cs/manage/quizscorer?educationId=${educationId}&quizId=${prevQuizId}`);
+    navigate(
+      `/cs/manage/generation/${generationId}/education/${educationId}/quiz/${nextQuizId}/quizscorer`,
+    );
   }, [quiz, quizList]);
 
   return (

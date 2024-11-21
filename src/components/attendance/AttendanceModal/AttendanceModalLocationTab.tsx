@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import styled, { useTheme } from 'styled-components';
-import { ReactComponent as LocationIcon } from '@assets/attendance_location_pin_stroke.svg';
-import { ReactComponent as SearchIcon } from '@assets/search.svg';
+import styled from 'styled-components';
 import { Box } from '@mui/material';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -26,8 +25,6 @@ const AttendanceModalLocationTab: React.FC<AttendanceModalLocationTabProps> = ({
   setLocationName,
   locationName,
 }) => {
-  const theme = useTheme();
-
   /**
    *
    */
@@ -53,10 +50,10 @@ const AttendanceModalLocationTab: React.FC<AttendanceModalLocationTabProps> = ({
     <div>
       <InputBox onClick={() => setIsSearchModalOpen(true)}>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <LocationIcon />
+          <CotatoIcon icon="location-pin" size="1.5rem" color={(theme) => theme.colors.primary90} />
           <p>주소</p>
         </Box>
-        <SearchIcon fill={theme.colors.primary90} />
+        <CotatoIcon icon="search" color={(theme) => theme.colors.primary90} />
       </InputBox>
       {renderSearchModal()}
     </div>

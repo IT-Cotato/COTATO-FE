@@ -8,7 +8,7 @@ import fetcher from '@utils/fetcher';
 import { ToastContainer, toast } from 'react-toastify';
 
 interface Props {
-  quizId: string | null;
+  quizId?: string;
   quizType?: string;
 }
 

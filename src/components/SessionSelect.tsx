@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { ReactComponent as ArrowUp } from '@assets/arrow_up.svg';
-import { ReactComponent as ArrowDown } from '@assets/arrow_down.svg';
+
 import useSWRImmutable from 'swr/immutable';
 import fetcher from '@utils/fetcher';
 import { ICsOnSession, IEducation } from '@/typing/db';
+import CotatoIcon from './CotatoIcon';
 
 interface Props {
   selectetdSession?: ICsOnSession;
@@ -64,7 +64,12 @@ const SessionSelect = ({
             ? getSessionWeekStr(selectetdSession.sessionNumber)
             : '세션 주차를 선택하세요'}
         </p>
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
+        {/* {isOpen ? <ArrowUp /> : <ArrowDown />} */}
+        <CotatoIcon
+          icon={isOpen ? 'angle-up' : 'angle-down'}
+          color={(theme) => theme.colors.gray90}
+          style={{ marginRight: '20px' }}
+        />
         {isOpen && (
           <SessoinList>
             <ul>

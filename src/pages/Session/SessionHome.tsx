@@ -6,14 +6,9 @@ import fetcherWithParams from '@utils/fetcherWithParams';
 import { SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import api from '@/api/api';
 import SessionUploadModal from '@pages/Session/SessionUploadModal';
-import {
-  CotatoGenerationInfoResponse,
-  CotatoLocalTime,
-  CotatoSessionListResponse,
-} from 'cotato-openapi-clients';
-import GenerationDropBox from '@components/GenerationDropBox';
+import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
+import CotatoDropBox from '@components/CotatoDropBox';
 import { useMediaQuery } from '@mui/material';
-import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper/modules';
@@ -24,13 +19,15 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
 //
 
 const SessionHome = () => {
+  const { currentGeneration, generations } = useGeneration();
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
 
   const { data: sessionList, mutate: mutateSessionList } = useSWR<CotatoSessionListResponse[]>(
@@ -47,33 +44,17 @@ const SessionHome = () => {
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   /**
    *
    */
-  const getDeadLineString = (deadLine?: CotatoLocalTime) => {
-    if (!deadLine) {
-      return '00:00:00';
+  const getDateString = (date?: Date) => {
+    if (!date) {
+      return '';
     }
 
-    const numToString = (num?: number) => {
-      if (!num) {
-        return '00';
-      }
-
-      return num.toString().padStart(2, '0');
-    };
-
-    return `${numToString(deadLine.hour)}:${numToString(deadLine.minute)}:${numToString(
-      deadLine.second,
-    )}`;
-  };
-
-  /**
-   *
-   */
-  const getDateString = (date: Date) => {
     const dateISO = new Date(date);
     dateISO.setHours(dateISO.getHours() + 9);
     return dateISO.toISOString().substring(0, 19);
@@ -84,6 +65,7 @@ const SessionHome = () => {
    */
   const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
     setSelectedGeneration(generation);
+    setSearchParams({ generationId: generation.generationId!.toString() });
   };
 
   /**
@@ -182,8 +164,8 @@ const SessionHome = () => {
     formData.append('networking', session.networking);
     formData.append('devTalk', session.devTalk);
 
-    formData.append('attendanceDeadLine', getDeadLineString(session.attendTime.attendanceDeadLine));
-    formData.append('lateDeadLine', getDeadLineString(session.attendTime.lateDeadLine));
+    formData.append('attendanceDeadLine', getDateString(session.attendTime.attendanceDeadLine));
+    formData.append('lateDeadLine', getDateString(session.attendTime.lateDeadLine));
 
     session.imageInfos.forEach((imageInfo) => {
       if (imageInfo.imageFile) {
@@ -204,7 +186,6 @@ const SessionHome = () => {
    *
    */
   const handleSessionUpdate = (session: SessionUploadInfo) => {
-    console.log(session);
     if (!session.sessionId) {
       return;
     }
@@ -217,8 +198,8 @@ const SessionHome = () => {
       placeName: session.placeName,
       location: session.location,
       attendTime: {
-        attendanceDeadLine: getDeadLineString(session?.attendTime?.attendanceDeadLine),
-        lateDeadLine: getDeadLineString(session?.attendTime?.lateDeadLine),
+        attendanceDeadLine: getDateString(session?.attendTime?.attendanceDeadLine),
+        lateDeadLine: getDateString(session?.attendTime?.lateDeadLine),
       },
       itIssue: session.itIssue,
       csEducation: session.csEducation,
@@ -304,12 +285,16 @@ const SessionHome = () => {
   const renderSettingTab = () => {
     return (
       <SettingTab>
-        <GenerationDropBox
-          color={DropBoxColorEnum.BLUE}
-          handleGenerationChange={handleGenerationChange}
-          width={isTabletOrSmaller ? '7.2rem' : '8rem'}
-          height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
-        />
+        {generations && (
+          <CotatoDropBox
+            list={generations}
+            onChange={handleGenerationChange}
+            defaultItemId={selectedGeneration?.generationId}
+            color="blue"
+            width={isTabletOrSmaller ? '7.2rem' : '8rem'}
+            height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
+          />
+        )}
         {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
           <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
         )}
@@ -377,6 +362,26 @@ const SessionHome = () => {
       </StyledSwiper>
     );
   };
+
+  /**
+   * set generationId from url
+   */
+  useEffect(() => {
+    if (!currentGeneration || !generations) {
+      return;
+    }
+
+    const generationId = searchParams.get('generationId');
+
+    if (generationId) {
+      setSelectedGeneration(
+        generations?.find((generation) => generation.generationId === Number(generationId)),
+      );
+    } else {
+      setSearchParams({ generationId: currentGeneration!.generationId!.toString() });
+      setSelectedGeneration(currentGeneration);
+    }
+  }, [currentGeneration, generations]);
 
   /**
    *

@@ -1,13 +1,20 @@
 import { useGeneration } from '@/hooks/useGeneration';
 import { useSession } from '@/hooks/useSession';
-import { Box, CircularProgress, Container, Stack, Tooltip, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Container,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import onlineCharacter from '@/assets/online_character.svg';
 import offlineTwoCharacter from '@/assets/offline_two_character.svg';
-import ArrowBack from '@/assets/arrow_back.svg';
-import Check from '@/assets/check.svg';
+
 import styled, { useTheme } from 'styled-components';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
@@ -16,6 +23,7 @@ import api from '@/api/api';
 import { CotatoAttendResponse } from 'cotato-openapi-clients';
 import useGetAttendances from '@/hooks/useGetAttendances';
 import { LoadingIndicator } from '@components/LoadingIndicator';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -172,20 +180,15 @@ const AttendanceAttend: React.FC = () => {
     }
 
     return (
-      <Box
-        component="img"
-        width="0.625rem"
-        height="1rem"
-        src={ArrowBack}
-        alt="ArrowBack"
-        justifyContent="flex-start"
-        position="absolute"
-        left="2rem"
-        sx={{
-          cursor: 'pointer',
+      <IconButton
+        style={{
+          position: 'absolute',
+          left: '2rem',
         }}
         onClick={() => navigate(-1)}
-      />
+      >
+        <CotatoIcon icon="angle-left-solid" size="2rem" color={(theme) => theme.colors.primary90} />
+      </IconButton>
     );
   };
 
@@ -222,13 +225,15 @@ const AttendanceAttend: React.FC = () => {
             $isSelected={attendanceType === key}
             onClick={() => handleAttendanceClick(key as keyof typeof AttendanceStatusEnum)}
           >
-            <Box
-              component={attendanceType === key ? 'img' : 'div'}
-              src={attendanceType === key ? Check : ''}
-              alt="Check"
-              width={isMobileOrSmaller ? '1rem' : '2rem'}
-              height={isMobileOrSmaller ? '1rem' : '2rem'}
-            />
+            {attendanceType === key ? (
+              <CotatoIcon
+                icon="check-circle-solid"
+                color={(theme) => theme.colors.sub3[40]}
+                size={isMobileOrSmaller ? '1rem' : '2rem'}
+              />
+            ) : (
+              <Box height={isMobileOrSmaller ? '1rem' : '2rem'} />
+            )}
             <Box
               component="img"
               src={key === 'ONLINE' ? onlineCharacter : offlineTwoCharacter}

@@ -2,9 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import Modal from '@mui/material/Modal';
 import { styled } from 'styled-components';
 import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
-import { ReactComponent as PencilIcon } from '@assets/pencil.svg';
-import { ReactComponent as CalendarIcon } from '@assets/calendar_icon_dotted.svg';
-import { ReactComponent as SearchIcon } from '@assets/search_icon.svg';
 import SessionUploadModalImageInput from '@pages/Session/SessionUploadModalImageInput';
 import { Place, SessionListImageInfo, SessionUploadInfo } from '@/typing/session';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
@@ -20,7 +17,6 @@ import dayjs from 'dayjs';
 import { ToastContainer } from 'react-toastify';
 import SearchLocationModal from '@components/SearchLocation/SearchLocationModal';
 import {
-  CotatoLocalTime,
   CotatoSessionContentsCsEducationEnum,
   CotatoSessionContentsDevTalkEnum,
   CotatoSessionContentsItIssueEnum,
@@ -29,6 +25,8 @@ import {
 } from 'cotato-openapi-clients';
 import CotatoTimePicker from '@components/CotatoTimePicker';
 import api from '@/api/api';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 //
 //
@@ -64,16 +62,8 @@ const INITIAL_SESSION_STATE: SessionUploadInfo = {
   description: '',
   sessionDateTime: new Date(),
   attendTime: {
-    attendanceDeadLine: {
-      hour: 19,
-      minute: 10,
-      second: 0,
-    },
-    lateDeadLine: {
-      hour: 19,
-      minute: 20,
-      second: 0,
-    },
+    attendanceDeadLine: new Date(),
+    lateDeadLine: new Date(),
   },
   itIssue: CotatoSessionContentsItIssueEnum.Off,
   csEducation: CotatoSessionContentsCsEducationEnum.On,
@@ -107,7 +97,7 @@ const SessionUploadModal = ({
    */
   const fetchUpdateSession = async () => {
     try {
-      const response = await api.get('/v2/api/attendances/info', {
+      const { data: attendancesInfo } = await api.get('/v2/api/attendances/info', {
         params: {
           sessionId: sessionInfo?.sessionId,
         },
@@ -119,21 +109,10 @@ const SessionUploadModal = ({
         description: sessionInfo?.description || '',
         sessionDateTime: new Date(sessionInfo?.sessionDateTime || ''),
         placeName: sessionInfo?.placeName || '',
-        location: {
-          latitude: response.data.location?.latitude,
-          longitude: response.data.location?.longitude,
-        },
+        location: attendancesInfo.location,
         attendTime: {
-          attendanceDeadLine: {
-            hour: response.data.attendanceDeadLine?.hour || 19,
-            minute: response.data.attendanceDeadLine?.minute || 10,
-            second: response.data.attendanceDeadLine?.second || 0,
-          },
-          lateDeadLine: {
-            hour: response.data.lateDeadLine?.hour || 19,
-            minute: response.data.lateDeadLine?.minute || 20,
-            second: response.data.lateDeadLine?.second || 0,
-          },
+          attendanceDeadLine: attendancesInfo.attendanceDeadLine,
+          lateDeadLine: attendancesInfo.lateDeadLine,
         },
         itIssue: sessionInfo?.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
         csEducation:
@@ -148,17 +127,6 @@ const SessionUploadModal = ({
     } catch (error) {
       console.error(error);
     }
-  };
-
-  /**
-   *
-   */
-  const convertCotatoLocalTimeToDate = (localTime?: CotatoLocalTime): Date => {
-    const date = new Date();
-    date.setHours(localTime?.hour || 0);
-    date.setMinutes(localTime?.minute || 0);
-    date.setSeconds(localTime?.second || 0);
-    return date;
   };
 
   /**
@@ -301,19 +269,7 @@ const SessionUploadModal = ({
   const handleAttendanceDeadlineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        if (draft.attendTime?.attendanceDeadLine) {
-          draft.attendTime.attendanceDeadLine.hour = date.getHours();
-          draft.attendTime.attendanceDeadLine.minute = date.getMinutes();
-          draft.attendTime.attendanceDeadLine.second = date.getSeconds();
-        } else {
-          draft.attendTime = {
-            attendanceDeadLine: {
-              hour: date.getHours(),
-              minute: date.getMinutes(),
-              second: date.getSeconds(),
-            },
-          };
-        }
+        draft.attendTime!.attendanceDeadLine = date;
       }),
     );
   };
@@ -324,19 +280,7 @@ const SessionUploadModal = ({
   const handleLateDeadLineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        if (draft.attendTime?.lateDeadLine) {
-          draft.attendTime.lateDeadLine.hour = date.getHours();
-          draft.attendTime.lateDeadLine.minute = date.getMinutes();
-          draft.attendTime.lateDeadLine.second = date.getSeconds();
-        } else {
-          draft.attendTime = {
-            lateDeadLine: {
-              hour: date.getHours(),
-              minute: date.getMinutes(),
-              second: date.getSeconds(),
-            },
-          };
-        }
+        draft.attendTime!.lateDeadLine = date;
       }),
     );
   };
@@ -414,11 +358,11 @@ const SessionUploadModal = ({
       <InfoInputWrapper>
         <TitleBox $bold={true}>
           <input value={session.title} onChange={handleTitleChange} />
-          <button type="button">
-            <PencilIcon />
-          </button>
+          <IconButton>
+            <CotatoIcon icon="pencil-solid" color={(theme) => theme.colors.gray60} />
+          </IconButton>
         </TitleBox>
-        <InfoBox>
+        <InfoBox onClick={() => setIsDayPickerOpen(true)}>
           <input
             placeholder="세션 날짜를 선택해 주세요."
             value={
@@ -426,18 +370,19 @@ const SessionUploadModal = ({
               dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일 HH시 mm분')
             }
             readOnly={true}
+            style={{ cursor: 'pointer' }}
           />
-          <button type="button" onClick={() => setIsDayPickerOpen(true)}>
-            <CalendarIcon />
-          </button>
+          <IconButton>
+            <CotatoIcon icon="calender-solid" color={(theme) => theme.colors.gray60} />
+          </IconButton>
         </InfoBox>
         <InfoBox $bold={true}>
           <div>세션 장소</div>
           <div>
-            <LocationInputBox>
+            <LocationInputBox onClick={handleSearchLocationButtonClick}>
               <input placeholder="장소 검색" value={address} readOnly={true} />
-              <button type="button" onClick={handleSearchLocationButtonClick}>
-                <SearchIcon />
+              <button type="button">
+                <CotatoIcon icon="search" size="1.25rem" color={(theme) => theme.colors.gray60} />
               </button>
             </LocationInputBox>
             <LocationInputBox $width="9rem">
@@ -454,14 +399,14 @@ const SessionUploadModal = ({
           <div>
             출석 인정
             <CotatoTimePicker
-              date={convertCotatoLocalTimeToDate(session.attendTime?.attendanceDeadLine)}
+              date={session.attendTime?.attendanceDeadLine ?? new Date()}
               onDateChange={handleAttendanceDeadlineChange}
             />
           </div>
           <div>
             지각 인정
             <CotatoTimePicker
-              date={convertCotatoLocalTimeToDate(session?.attendTime?.lateDeadLine)}
+              date={session.attendTime?.lateDeadLine ?? new Date()}
               onDateChange={handleLateDeadLineChange}
             />
           </div>
@@ -508,18 +453,22 @@ const SessionUploadModal = ({
     if (sessionInfo) {
       fetchUpdateSession();
     } else {
-      const getNextFiday = () => {
+      const getNextFidayDate = (hour: number, minute: number) => {
         const today = new Date();
         const day = today.getDay();
         const diff = 5 - day;
         const nextFriday = new Date(today);
         nextFriday.setDate(today.getDate() + diff);
-        nextFriday.setHours(19, 0, 0, 0);
+        nextFriday.setHours(hour, minute, 0, 0);
         return nextFriday;
       };
 
       const initialSession = produce(INITIAL_SESSION_STATE, (draft) => {
-        draft.sessionDateTime = getNextFiday();
+        draft.sessionDateTime = getNextFidayDate(19, 0);
+        draft.attendTime = {
+          attendanceDeadLine: getNextFidayDate(19, 10),
+          lateDeadLine: getNextFidayDate(19, 20),
+        };
       });
 
       setSession(initialSession);

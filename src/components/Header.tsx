@@ -10,12 +10,11 @@ import { device, media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MobileSideMenuDrawerButton from './MobileSideMenuDrawerButton';
-import { ReactComponent as ThemeDark } from '@/assets/theme_dark_icon.svg';
-import { ReactComponent as ThemeLight } from '@/assets/theme_light_icon.svg';
 import { Box, CircularProgress, Tooltip } from '@mui/material';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
+import CotatoIcon from './CotatoIcon';
 
 //
 //
@@ -72,9 +71,9 @@ const Header = () => {
       <StyledSwitchDiv>
         <Tooltip arrow title="실험적 기능으로 아직 완벽하지 않을 수 있습니다." placement="top">
           {DefaultTheme === COTATO_LIGHT_THEME ? (
-            <ThemeLight width="1.5rem" />
+            <CotatoIcon icon="sun-solid" color={(theme) => theme.colors.primary100} size="1.5rem" />
           ) : (
-            <ThemeDark width="1.5rem" />
+            <CotatoIcon icon="star-crescent-solid" size="1.5rem" />
           )}
         </Tooltip>
 

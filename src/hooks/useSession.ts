@@ -10,10 +10,12 @@ import useSWR from 'swr';
 
 interface UseSessionProps {
   generationId?: number;
+  sessionId?: number;
 }
 
 interface UseSessionReturn {
   sessions: CotatoSessionListResponse[] | undefined;
+  targetSession: CotatoSessionListResponse | undefined;
   isSessionLoading: boolean;
   isSessionError: any;
 }
@@ -22,7 +24,7 @@ interface UseSessionReturn {
 //
 //
 
-export function useSession({ generationId }: UseSessionProps) {
+export function useSession({ generationId, sessionId }: UseSessionProps) {
   const _return = useRef<UseSessionReturn>({} as UseSessionReturn);
 
   const { data, isLoading, error } = useSWR<CotatoSessionListResponse[]>(
@@ -35,8 +37,11 @@ export function useSession({ generationId }: UseSessionProps) {
     },
   );
 
+  _return.current.targetSession = data?.find((session) => session.sessionId === sessionId);
+
   _return.current = {
     sessions: data || [],
+    targetSession: _return.current.targetSession,
     isSessionLoading: isLoading,
     isSessionError: error,
   };
