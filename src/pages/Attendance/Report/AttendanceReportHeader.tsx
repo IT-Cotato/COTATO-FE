@@ -4,7 +4,7 @@ import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import { CotatoAttendanceResponse, CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useMatch, useNavigate, useParams } from 'react-router-dom';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import useGetAttendances from '@/hooks/useGetAttendances';
@@ -14,21 +14,31 @@ import { getAttendanceReportPath } from '../utils/util';
 //
 //
 
+const REPORT_ALL_ID = 0;
+
+//
+//
+//
+
 const AttendanceReportHeader = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const isReportAllMatch = useMatch('/attendance/report/generation/:generationId/all');
   const { isLandScapeOrSmaller } = useBreakpoints();
 
   const { generationId, attendanceId } = useParams();
 
   const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
   const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
+  const [attendanceListWithAll, setAttendanceListWithAll] = useState<CotatoAttendanceResponse[]>(
+    [],
+  );
 
   const { generations } = useGeneration({
     generationId: selectedGenerationId.toString(),
   });
 
-  const { attendances, isAttendanceLoading } = useGetAttendances({
+  const { attendances } = useGetAttendances({
     generationId: selectedGenerationId,
   });
 
@@ -51,13 +61,17 @@ const AttendanceReportHeader = () => {
    */
   const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
     setSelectedAttendanceId(attendance.attendanceId!);
-    navigate(
-      getAttendanceReportPath({
-        generationId: selectedGenerationId,
-        sessionId: attendance.sessionId!,
-        attendanceId: attendance.attendanceId!,
-      }),
-    );
+    if (attendance.attendanceId !== REPORT_ALL_ID) {
+      navigate(
+        getAttendanceReportPath({
+          generationId: selectedGenerationId,
+          sessionId: attendance.sessionId!,
+          attendanceId: attendance.attendanceId!,
+        }),
+      );
+    } else {
+      navigate(`/attendance/report/generation/${selectedGenerationId}/all`);
+    }
   };
 
   /**
@@ -71,24 +85,36 @@ const AttendanceReportHeader = () => {
    *
    */
   useEffect(() => {
+    if (!attendances?.attendances) {
+      return;
+    }
+
+    const newAttendaceList: CotatoAttendanceResponse[] = [...attendances.attendances];
+    newAttendaceList.push({
+      attendanceId: REPORT_ALL_ID,
+      sessionId: REPORT_ALL_ID,
+      sessionTitle: '전체',
+    });
+    setAttendanceListWithAll(newAttendaceList);
+
     const selectedAttendance = attendances?.attendances?.find(
       (attendance) => attendance.attendanceId === selectedAttendanceId,
     );
 
-    if (isAttendanceLoading || selectedAttendance) {
-      return;
+    if (isReportAllMatch) {
+      setSelectedAttendanceId(REPORT_ALL_ID);
+    } else if (!selectedAttendance) {
+      const latestAttendance = attendances?.attendances?.at(-1);
+      setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
+      navigate(
+        getAttendanceReportPath({
+          generationId: selectedGenerationId,
+          sessionId: latestAttendance?.sessionId,
+          attendanceId: latestAttendance?.attendanceId,
+        }),
+      );
     }
-
-    const latestAttendance = attendances?.attendances?.at(-1);
-    setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
-    navigate(
-      getAttendanceReportPath({
-        generationId: selectedGenerationId,
-        sessionId: latestAttendance?.sessionId,
-        attendanceId: latestAttendance?.attendanceId,
-      }),
-    );
-  }, [attendances, isAttendanceLoading]);
+  }, [attendances]);
 
   return (
     <Stack
@@ -126,9 +152,9 @@ const AttendanceReportHeader = () => {
               color="yellow"
             />
           )}
-          {attendances?.attendances && (
+          {attendanceListWithAll && (
             <CotatoDropBox
-              list={attendances.attendances}
+              list={attendanceListWithAll}
               onChange={handleAttendanceChange}
               defaultItemId={selectedAttendanceId}
               width="12rem"
