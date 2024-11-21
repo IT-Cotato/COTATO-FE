@@ -14,6 +14,12 @@ import { getAttendanceReportPath } from '../utils/util';
 //
 //
 
+const REPORT_ALL_ID = 0;
+
+//
+//
+//
+
 const AttendanceReportHeader = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -31,7 +37,7 @@ const AttendanceReportHeader = () => {
     generationId: selectedGenerationId.toString(),
   });
 
-  const { attendances, isAttendanceLoading } = useGetAttendances({
+  const { attendances } = useGetAttendances({
     generationId: selectedGenerationId,
   });
 
@@ -93,6 +99,14 @@ const AttendanceReportHeader = () => {
         }),
       );
     }
+
+    const newAttendaceList: CotatoAttendanceResponse[] = [...attendances.attendances];
+    newAttendaceList.push({
+      attendanceId: REPORT_ALL_ID,
+      sessionId: REPORT_ALL_ID,
+      sessionTitle: '전체',
+    });
+    setAttendanceListWithAll(newAttendaceList);
   }, [attendances]);
 
   return (
@@ -131,9 +145,9 @@ const AttendanceReportHeader = () => {
               color="yellow"
             />
           )}
-          {attendances?.attendances && (
+          {attendanceListWithAll && (
             <CotatoDropBox
-              list={attendances.attendances}
+              list={attendanceListWithAll}
               onChange={handleAttendanceChange}
               defaultItemId={selectedAttendanceId}
               width="12rem"
