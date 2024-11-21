@@ -6,6 +6,11 @@ import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 
 type SetAttendanceState = React.Dispatch<React.SetStateAction<boolean>>;
 
+interface AttendanceStatus {
+  attendanceId: number;
+  openStatus: string;
+}
+
 //
 //
 //
@@ -26,14 +31,21 @@ export const sseConfig = (setIsAttendanceOpen: SetAttendanceState): void => {
   const EventSource = EventSourcePolyfill || NativeEventSource;
   const sse = new EventSource(url, options) as EventSource;
 
+  /**
+   *
+   */
+  const handleAttendanceOpen = (attendanceStatus: AttendanceStatus) => {
+    if (attendanceStatus.openStatus === 'OPEN') {
+      setIsAttendanceOpen(true);
+    }
+  };
+
   sse.addEventListener('AttendanceStatus', (e: MessageEvent) => {
     const receivedData = e.data;
     console.log('attendance status: ', receivedData);
     const attendanceStatus = JSON.parse(receivedData);
 
-    if (attendanceStatus.openStatus === 'OPEN') {
-      setIsAttendanceOpen(true);
-    }
+    handleAttendanceOpen(attendanceStatus);
   });
 
   sse.onerror = (err) => {
