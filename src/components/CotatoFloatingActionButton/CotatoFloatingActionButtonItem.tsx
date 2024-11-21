@@ -1,6 +1,6 @@
 import { Box, Fab, SvgIcon, Tooltip, useMediaQuery } from '@mui/material';
 import { device } from '@theme/media';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 
 //
@@ -8,8 +8,10 @@ import styled, { useTheme } from 'styled-components';
 //
 
 interface CotatoFloatingActionButtonItemProps {
+  ref?: React.Ref<HTMLButtonElement> | undefined;
   name: string;
   icon: React.ReactNode;
+  svgIcon?: React.ReactNode;
   selected?: boolean;
   disabled?: boolean;
   onClick: () => void;
@@ -26,13 +28,10 @@ const FAB_ITEM_MOBILE_SIZE = '3.2rem';
 //
 //
 
-const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemProps> = ({
-  name,
-  icon,
-  selected,
-  disabled,
-  onClick,
-}) => {
+const CotatoFloatingActionButtonItem = forwardRef<
+  HTMLButtonElement,
+  CotatoFloatingActionButtonItemProps
+>(({ name, svgIcon, icon, selected, disabled, onClick }, ref) => {
   const theme = useTheme();
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
 
@@ -66,27 +65,34 @@ const CotatoFloatingActionButtonItem: React.FC<CotatoFloatingActionButtonItemPro
         <StyledFab
           isMobileOrSmaller={isMobileOrSmaller}
           disabled={disabled}
+          ref={ref}
           sx={{
             backgroundColor: selected ? theme.colors.primary90 : theme.colors.gray40,
           }}
           onClick={handleClick}
         >
           <Box width="100%" height="1.75rem">
-            <SvgIcon
-              style={{
-                width: iconSize.width,
-                height: iconSize.height,
-                opacity: disabled ? 0.5 : 1,
-              }}
-            >
-              {icon}
-            </SvgIcon>
+            {svgIcon ? (
+              <SvgIcon
+                style={{
+                  width: iconSize.width,
+                  height: iconSize.height,
+                  opacity: disabled ? 0.5 : 1,
+                }}
+              >
+                {icon}
+              </SvgIcon>
+            ) : (
+              icon
+            )}
           </Box>
         </StyledFab>
       </div>
     </Tooltip>
   );
-};
+});
+
+CotatoFloatingActionButtonItem.displayName = 'CotatoFloatingActionButtonItem';
 
 export default CotatoFloatingActionButtonItem;
 

@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import bigger from '@assets/expand.svg';
-import smaller from '@assets/compress.svg';
 import lightBulb from '@assets/light.svg';
 import light from '@assets/light_on.svg';
 import bubble1 from '@assets/bubble_1.svg';
@@ -16,6 +14,8 @@ import BgWaiting from './BgWaiting';
 import BgKingKing from './BgKingKing';
 import { CotatoReplyRequest } from 'cotato-openapi-clients';
 import fetchUserData from '@utils/fetchUserData';
+import CotatoIcon from '@components/CotatoIcon';
+import { IconButton } from '@mui/material';
 
 //
 //
@@ -277,10 +277,9 @@ const CSProblem: React.FC<CSProblemProps> = ({
           <ImageContainer bigger={biggerImg}>
             <Image src={quizData?.image} alt={`문제${quizData?.number}의 이미지`} />
             {window.innerWidth > 392 && (
-              <ResizeIcon
-                src={biggerImg ? smaller : bigger}
-                onClick={() => setBiggerImg(!biggerImg)}
-              />
+              <ResizeIcon onClick={() => setBiggerImg(!biggerImg)}>
+                <CotatoIcon size="20px" icon={biggerImg ? 'minus-solid' : 'expand-solid'} />
+              </ResizeIcon>
             )}
           </ImageContainer>
         )}
@@ -556,11 +555,10 @@ const Image = styled.img`
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
 `;
 
-const ResizeIcon = styled.img`
-  position: absolute;
+const ResizeIcon = styled(IconButton)`
+  position: absolute !important;
   right: 18px;
   bottom: 18px;
-  width: 20px;
 `;
 
 interface PosProps {

@@ -10,6 +10,7 @@ interface StyledTooltipProps {
   fontFamiliy?: string;
   fontSize?: string;
   padding?: string;
+  borderWidth?: string;
 }
 
 interface CotatoTooltipProps extends StyledTooltipProps, TooltipProps {}
@@ -20,20 +21,21 @@ interface CotatoTooltipProps extends StyledTooltipProps, TooltipProps {}
 
 const StyledTooltip = styled(({ className, ...props }: CotatoTooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
-))<{ fontFamily: string; fontSize: string; padding: string }>(
-  ({ theme, fontFamily, fontSize, padding }) => ({
+))<{ fontFamily: string; fontSize: string; padding: string; borderWidth: string }>(
+  ({ theme, fontFamily, fontSize, padding, borderWidth }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
       backgroundColor: theme.colors.common.white,
-      border: `1px solid ${theme.colors.common.black}`,
+      border: `${borderWidth} solid ${theme.colors.common.black}`,
       color: theme.colors.common.black,
       fontSize: `${fontSize}`,
       padding: `${padding}`,
       fontFamily: `${fontFamily}`,
+      maxWidth: 'none',
     },
     [`& .${tooltipClasses.arrow}`]: {
       color: theme.colors.common.white,
       '&:before': {
-        border: `1px solid ${theme.colors.common.black}`,
+        border: `${borderWidth} solid ${theme.colors.common.black}`,
       },
     },
   }),
@@ -48,10 +50,17 @@ const CotatoTooltip: React.FC<CotatoTooltipProps> = ({
   fontFamiliy = 'YComputer',
   fontSize = '1rem',
   padding = '0.2rem 1rem',
+  borderWidth = '1px',
   ...props
 }) => {
   return (
-    <StyledTooltip {...props} fontFamily={fontFamiliy} fontSize={fontSize} padding={padding}>
+    <StyledTooltip
+      {...props}
+      fontFamily={fontFamiliy}
+      fontSize={fontSize}
+      padding={padding}
+      borderWidth={borderWidth}
+    >
       {children}
     </StyledTooltip>
   );

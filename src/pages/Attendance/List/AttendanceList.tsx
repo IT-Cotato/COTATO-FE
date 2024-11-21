@@ -13,9 +13,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { AttendanceGridCard, AttendanceListCard } from '@components/attendance/attedance-card';
 import { media } from '@theme/media';
 import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
-import { ReactComponent as OfflineIcon } from '@assets/attendance_offline_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
-import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import { Divider, Stack } from '@mui/material';
 import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
 import { useGeneration } from '@/hooks/useGeneration';
@@ -25,6 +23,7 @@ import {
 } from '@/zustand-stores/useAttendanceListLayoutStore';
 import useUser from '@/hooks/useUser';
 import { MemberRole } from '@/enums';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -68,8 +67,9 @@ const AttendanceList = () => {
    *
    */
   const handleClickReport = () => {
-    const currentMonth = new Date().getMonth() + 1;
-    navigate(`/attendance/report/${generationId}/month/${currentMonth}`);
+    navigate(
+      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}`,
+    );
   };
 
   /**
@@ -147,10 +147,18 @@ const AttendanceList = () => {
     }
 
     const descriptionList = [
-      { icon: <OfflineIcon />, text: '대면' },
+      {
+        icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
+        text: '대면',
+      },
       { icon: <OnlineIcon />, text: '비대면' },
       { icon: <AbsetIcon />, text: '결석' },
-      { icon: <LateIcon />, text: '지각' },
+      {
+        icon: (
+          <CotatoIcon icon="bell-exclaimation-solid" color={(theme) => theme.colors.secondary80} />
+        ),
+        text: '지각',
+      },
     ];
 
     return (
@@ -287,7 +295,7 @@ const GridViewWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
   padding: 2rem 10rem;
 
   ${media.laptop`

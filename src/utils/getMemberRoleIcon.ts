@@ -24,6 +24,8 @@ export const getMemberRoleIcon = (role?: memberRoleType['role']) => {
       return OldMemberIcon;
     case 'MEMBER':
       return MemberIcon;
+    case 'OPERATION':
+      return AdminIcon;
     case 'EDUCATION':
       return AdminIcon;
     case 'ADMIN':

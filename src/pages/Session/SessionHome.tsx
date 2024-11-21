@@ -11,9 +11,8 @@ import {
   CotatoLocalTime,
   CotatoSessionListResponse,
 } from 'cotato-openapi-clients';
-import GenerationDropBox from '@components/GenerationDropBox';
+import CotatoDropBox from '@components/CotatoDropBox';
 import { useMediaQuery } from '@mui/material';
-import { DropBoxColorEnum } from '@/enums/DropBoxColor';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper/modules';
@@ -24,13 +23,15 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
 //
 
 const SessionHome = () => {
+  const { currentGeneration, generations } = useGeneration();
   const [selectedGeneration, setSelectedGeneration] = useState<CotatoGenerationInfoResponse>();
 
   const { data: sessionList, mutate: mutateSessionList } = useSWR<CotatoSessionListResponse[]>(
@@ -47,6 +48,7 @@ const SessionHome = () => {
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
 
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   /**
@@ -84,6 +86,7 @@ const SessionHome = () => {
    */
   const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
     setSelectedGeneration(generation);
+    setSearchParams({ generationId: generation.generationId!.toString() });
   };
 
   /**
@@ -204,7 +207,6 @@ const SessionHome = () => {
    *
    */
   const handleSessionUpdate = (session: SessionUploadInfo) => {
-    console.log(session);
     if (!session.sessionId) {
       return;
     }
@@ -304,12 +306,16 @@ const SessionHome = () => {
   const renderSettingTab = () => {
     return (
       <SettingTab>
-        <GenerationDropBox
-          color={DropBoxColorEnum.BLUE}
-          handleGenerationChange={handleGenerationChange}
-          width={isTabletOrSmaller ? '7.2rem' : '8rem'}
-          height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
-        />
+        {generations && (
+          <CotatoDropBox
+            list={generations}
+            onChange={handleGenerationChange}
+            defaultItemId={selectedGeneration?.generationId}
+            color="blue"
+            width={isTabletOrSmaller ? '7.2rem' : '8rem'}
+            height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
+          />
+        )}
         {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
           <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
         )}
@@ -377,6 +383,26 @@ const SessionHome = () => {
       </StyledSwiper>
     );
   };
+
+  /**
+   * set generationId from url
+   */
+  useEffect(() => {
+    if (!currentGeneration || !generations) {
+      return;
+    }
+
+    const generationId = searchParams.get('generationId');
+
+    if (generationId) {
+      setSelectedGeneration(
+        generations?.find((generation) => generation.generationId === Number(generationId)),
+      );
+    } else {
+      setSearchParams({ generationId: currentGeneration!.generationId!.toString() });
+      setSelectedGeneration(currentGeneration);
+    }
+  }, [currentGeneration, generations]);
 
   /**
    *

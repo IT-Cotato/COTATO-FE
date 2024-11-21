@@ -4,9 +4,9 @@ import { styled, useTheme } from 'styled-components';
 import { AttendResponseIsOpenedEnum } from '@/enums/attend/AttendResponseIsOpenedEnum';
 import { AttendResponseAttendanceTypeEnum } from '@/enums/attend/AttendResponseAttendanceTypeEnum';
 import { AttendResponseAttendanceResultEnum } from '@/enums/attend/AttendResponseAttendanceResultEnum';
-import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
-import { ReactComponent as OfflineIcon } from '@assets/attendance_offline_icon.svg';
+import { ReactComponent as AbsentIcon } from '@assets/attendance_absent_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -16,6 +16,16 @@ interface AttendaceStatusProps {
   isOpened?: AttendResponseIsOpenedEnum;
   attendanceType: AttendResponseAttendanceTypeEnum | null;
   attendanceResult?: AttendResponseAttendanceResultEnum | null;
+}
+
+enum AttendanceStatus {
+  Before,
+  Open,
+  PresentOffline,
+  PresentOnline,
+  LateOffline,
+  LateOnline,
+  Absent,
 }
 
 //
@@ -29,54 +39,101 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({
 }) => {
   const theme = useTheme();
 
-  const getSpeachBubbleColor = () => {
+  /**
+   *
+   */
+  const getAttendanceStatus = () => {
     if (isOpened === AttendResponseIsOpenedEnum.Before) {
-      return theme.colors.gray40;
+      return AttendanceStatus.Before;
     } else if (isOpened === AttendResponseIsOpenedEnum.Open && attendanceResult === null) {
-      return theme.colors.primary80;
+      return AttendanceStatus.Open;
+    } else if (
+      attendanceResult === AttendResponseAttendanceResultEnum.Present &&
+      attendanceType === AttendResponseAttendanceTypeEnum.Offline
+    ) {
+      return AttendanceStatus.PresentOffline;
+    } else if (
+      attendanceResult === AttendResponseAttendanceResultEnum.Present &&
+      attendanceType === AttendResponseAttendanceTypeEnum.Online
+    ) {
+      return AttendanceStatus.PresentOnline;
+    } else if (
+      attendanceResult === AttendResponseAttendanceResultEnum.Late &&
+      attendanceType === AttendResponseAttendanceTypeEnum.Offline
+    ) {
+      return AttendanceStatus.LateOffline;
+    } else if (
+      attendanceResult === AttendResponseAttendanceResultEnum.Late &&
+      attendanceType === AttendResponseAttendanceTypeEnum.Online
+    ) {
+      return AttendanceStatus.LateOnline;
     }
-    return theme.colors.gray10;
+
+    return AttendanceStatus.Absent;
   };
 
-  const getTextColor = () => {
-    if (isOpened === AttendResponseIsOpenedEnum.Before) {
-      return theme.colors.common.white_const;
-    } else if (isOpened === AttendResponseIsOpenedEnum.Open && attendanceResult === null) {
-      return theme.colors.common.white_const;
+  const getStatusStyle = () => {
+    switch (getAttendanceStatus()) {
+      case AttendanceStatus.Before:
+        return {
+          backgroundColor: theme.colors.gray40,
+          icon: null,
+          textColor: theme.colors.common.white_const,
+          text: '출석예정',
+        };
+      case AttendanceStatus.Open:
+        return {
+          backgroundColor: theme.colors.primary80,
+          icon: null,
+          textColor: theme.colors.common.white_const,
+          text: '출석중',
+        };
+      case AttendanceStatus.PresentOffline:
+        return {
+          backgroundColor: theme.colors.gray10,
+          icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
+          textColor: theme.colors.common.black_const,
+          text: '출석',
+        };
+      case AttendanceStatus.PresentOnline:
+        return {
+          backgroundColor: theme.colors.gray10,
+          icon: <OnlineIcon />,
+          textColor: theme.colors.common.black_const,
+          text: '출석',
+        };
+      case AttendanceStatus.LateOffline:
+        return {
+          backgroundColor: theme.colors.gray10,
+          icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
+          textColor: theme.colors.common.black_const,
+          text: '출석',
+        };
+      case AttendanceStatus.LateOnline:
+        return {
+          backgroundColor: theme.colors.gray10,
+          icon: <OnlineIcon />,
+          textColor: theme.colors.common.black_const,
+          text: '출석',
+        };
+      case AttendanceStatus.Absent:
+        return {
+          backgroundColor: theme.colors.gray10,
+          icon: <AbsentIcon />,
+          textColor: theme.colors.common.black_const,
+          text: '결석',
+        };
     }
-    return theme.colors.common.black_const;
   };
 
-  const getStatusText = () => {
-    if (isOpened === AttendResponseIsOpenedEnum.Before) {
-      return '출석예정';
-    } else if (isOpened === AttendResponseIsOpenedEnum.Open && attendanceResult === null) {
-      return '출석중';
-    } else if (attendanceResult === AttendResponseAttendanceResultEnum.Absent) {
-      return '결석';
-    }
-    return '출석';
-  };
-
-  const getAttendanceIcon = () => {
-    if (attendanceResult === AttendResponseAttendanceResultEnum.Absent) {
-      return <AbsetIcon />;
-    } else if (attendanceResult === null) {
-      return null;
-    } else if (attendanceType === AttendResponseAttendanceTypeEnum.Online) {
-      return <OnlineIcon />;
-    } else if (attendanceType === AttendResponseAttendanceTypeEnum.Offline) {
-      return <OfflineIcon />;
-    }
-    return null;
-  };
+  const { backgroundColor, icon, textColor, text } = getStatusStyle();
 
   return (
     <Wrapper>
-      <StyledSpeachBubble $color={getSpeachBubbleColor()} />
-      <StatusContainer $textColor={getTextColor()}>
-        <span>{getStatusText()}</span>
-        {getAttendanceIcon()}
+      <StyledSpeachBubble $color={backgroundColor} />
+      <StatusContainer $textColor={textColor}>
+        <span>{text}</span>
+        {icon}
       </StatusContainer>
     </Wrapper>
   );

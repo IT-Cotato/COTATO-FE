@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useMatch } from 'react-router-dom';
 import Header from '@components/Header';
 import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
@@ -22,10 +22,17 @@ import AttendanceRoutes from '@pages/Attendance/Attendance.routes';
 import { AttendanceFab } from '@components/attendance/attendance-fab';
 import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 import CSRoutes from '@pages/CS/CSRoutes';
+import { About } from '@pages/About';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
+  //
   const location = useLocation();
   const isInHome = location.pathname === '/';
+
+  //
+  const isInAttendanceList = useMatch('/attendance/list/generation/:generationId');
 
   //
   //
@@ -38,8 +45,6 @@ function App() {
     }
   }, [isInHome]);
 
-  const isAttendance = useLocation().pathname.includes('/attendance');
-
   //
   //
   //
@@ -48,15 +53,16 @@ function App() {
     <div className="App">
       <CotatoThemeProvider>
         <GlobalStyle />
+        <ToastContainer position="bottom-right" autoClose={3000} />
         <Header />
         <AgreementConfirmDialog />
         <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/about" element={<ReadyState />} />
           <Route path="/attendance/*" element={<AttendanceRoutes />} />
           <Route path="/cs/*" element={<CSRoutes />} />
+          <Route path="/about" element={<About />} />
           <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/findid" element={<FindID />} />
@@ -68,7 +74,7 @@ function App() {
           <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
-        {isAttendance ? <AttendanceFab /> : <CotatoGlobalFab />}
+        {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>
   );

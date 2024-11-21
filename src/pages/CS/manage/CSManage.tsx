@@ -17,9 +17,15 @@ const CSManage = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<CSManageHome />} />
-      <Route path="/quizscorer" element={<QuizScorer />} />
-      <Route path="/allscorer" element={<AllScorer />} />
+      <Route path="/generation/:generationId/education/:educationId" element={<CSManageHome />} />
+      <Route
+        path="/generation/:generationId/education/:educationId/quiz/:quizId/quizscorer"
+        element={<QuizScorer />}
+      />
+      <Route
+        path="/generation/:generationId/education/:educationId/allscorer"
+        element={<AllScorer />}
+      />
     </Routes>
   );
 };

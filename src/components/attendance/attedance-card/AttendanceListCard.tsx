@@ -9,8 +9,8 @@ import {
   AttendResponseAttendanceTypeEnum,
   AttendResponseIsOpenedEnum,
 } from '@/enums/attend';
-import { ReactComponent as LateIcon } from '@assets/attendance_late_icon.svg';
 import dayjs from 'dayjs';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -106,7 +106,10 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
       >
         <ImageBox>
           {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
-            <StyledLateIcon />
+            <StyledLateIcon
+              icon="bell-exclaimation-solid"
+              color={(theme) => theme.colors.secondary80}
+            />
           )}
           <CharacterEyeClose style={{ width: '100%', height: '100%' }} />
         </ImageBox>
@@ -160,7 +163,7 @@ const ImageBox = styled(Box)`
   padding: 3rem;
 `;
 
-const StyledLateIcon = styled(LateIcon)`
+const StyledLateIcon = styled(CotatoIcon)`
   position: absolute;
   top: 1rem;
   right: 1rem;

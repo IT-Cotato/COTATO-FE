@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import fetcher from '@utils/fetcher';
 import { styled } from 'styled-components';
-import { ReactComponent as ArrowDown } from '@assets/arrow_dwon_thin.svg';
-import { ReactComponent as ArrowUp } from '@assets/arrow_up_thin.svg';
 import useSWR from 'swr';
 import generationSort from '@utils/generationSort';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import CotatoIcon from './CotatoIcon';
 
 interface Props {
   mode: string;
@@ -88,7 +87,11 @@ const RequestDropBox = ({
     <SelectWrapper ref={dropRef}>
       <SelectMenu width={width} onClick={() => setIsOpen(!isOpen)}>
         <p>{getSelectedValue()}</p>
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
+        <CotatoIcon
+          icon={isOpen ? 'angle-up' : 'angle-down'}
+          size="1rem"
+          color={(theme) => theme.colors.gray90}
+        />
       </SelectMenu>
       {isOpen && (
         <SelectList>
