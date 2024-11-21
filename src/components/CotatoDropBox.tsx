@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
-import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
+import {
+  CotatoAttendanceResponse,
+  CotatoGenerationInfoResponse,
+  CotatoSessionListResponse,
+} from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
 import drop_box_background_yellow_lg from '@assets/drop_box_background_yellow_lg.svg';
@@ -10,7 +14,10 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
-type CotatoDropBoxType = CotatoGenerationInfoResponse | CotatoSessionListResponse;
+type CotatoDropBoxType =
+  | CotatoGenerationInfoResponse
+  | CotatoSessionListResponse
+  | CotatoAttendanceResponse;
 
 interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   list: T[];
@@ -69,19 +76,22 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   /**
    *
    */
-  const isTypeGeneration = (
-    generation: CotatoGenerationInfoResponse,
-  ): generation is CotatoGenerationInfoResponse => {
-    return (generation as CotatoGenerationInfoResponse).generationNumber !== undefined;
+  const isTypeGeneration = (item: CotatoDropBoxType): item is CotatoGenerationInfoResponse => {
+    return (item as CotatoGenerationInfoResponse).generationNumber !== undefined;
   };
 
   /**
    *
    */
-  const isTypeSession = (
-    session: CotatoSessionListResponse,
-  ): session is CotatoSessionListResponse => {
-    return (session as CotatoSessionListResponse).sessionNumber !== undefined;
+  const isTypeSession = (item: CotatoDropBoxType): item is CotatoSessionListResponse => {
+    return (item as CotatoSessionListResponse).sessionNumber !== undefined;
+  };
+
+  /**
+   *
+   */
+  const isTypeAttendance = (item: CotatoDropBoxType): item is CotatoAttendanceResponse => {
+    return (item as CotatoAttendanceResponse).attendanceId !== undefined;
   };
 
   /**
@@ -98,6 +108,10 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     if (isTypeSession(item)) {
       return `${item.title}`;
+    }
+
+    if (isTypeAttendance(item)) {
+      return `${item.sessionTitle}`;
     }
 
     return '';
@@ -206,6 +220,10 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
         if (isTypeSession(item)) {
           return item.sessionId === defaultItemId;
+        }
+
+        if (isTypeAttendance(item)) {
+          return item.attendanceId === defaultItemId;
         }
 
         return false;

@@ -1,4 +1,3 @@
-import { AttendResponseAttendanceTypeEnum } from '@/enums/attend';
 import { CotatoAttendResponseStatusEnum } from 'cotato-openapi-clients';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -84,9 +83,7 @@ export const useAttendanceReportFilter = () => {
   /**
    *
    */
-  const toggleStatus = (
-    status: Omit<CotatoAttendResponseStatusEnum, 'PRESENT'> | AttendResponseAttendanceTypeEnum,
-  ) => {
+  const toggleStatus = (status: Omit<CotatoAttendResponseStatusEnum, 'PRESENT'>) => {
     const currentStatus = searchParams.getAll('status');
 
     if (currentStatus?.includes(status as string)) {

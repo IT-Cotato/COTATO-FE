@@ -5,6 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import {
+  CotatoAttendanceRecordResponseResultEnum,
+  CotatoAttendanceResponseOpenStatusEnum,
   CotatoMemberAttendanceRecordsResponse,
   CotatoMemberAttendResponse,
 } from 'cotato-openapi-clients';
@@ -15,7 +17,6 @@ import { media } from '@theme/media';
 import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import { Divider, Stack } from '@mui/material';
-import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
 import { useGeneration } from '@/hooks/useGeneration';
 import {
   AttendanceListLayoutType,
@@ -24,6 +25,7 @@ import {
 import useUser from '@/hooks/useUser';
 import { MemberRole } from '@/enums';
 import CotatoIcon from '@components/CotatoIcon';
+import { getAttendanceReportPath } from '../utils/util';
 
 //
 //
@@ -32,6 +34,7 @@ import CotatoIcon from '@components/CotatoIcon';
 const AttendanceList = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+
   const { generationId } = useParams();
   const { currentGeneration } = useGeneration();
   const { user } = useUser();
@@ -51,7 +54,7 @@ const AttendanceList = () => {
    *
    */
   const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
-    if (attendance.isOpened === AttendResponseIsOpenedEnum.Open) {
+    if (attendance.isOpened === CotatoAttendanceResponseOpenStatusEnum.Open) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
     }
   };
@@ -68,7 +71,12 @@ const AttendanceList = () => {
    */
   const handleClickReport = () => {
     navigate(
-      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}`,
+      getAttendanceReportPath({
+        keepSearchParam: false,
+        generationId: generationId,
+        sessionId: attendanceList.at(-1)?.sessionId,
+        attendanceId: attendanceList.at(-1)?.attendanceId,
+      }),
     );
   };
 
@@ -90,8 +98,10 @@ const AttendanceList = () => {
       theme.colors.pastelTone.pink[100],
     ];
 
-    const getCardBackgroundColor = (attendanceResult: AttendResponseAttendanceResultEnum) => {
-      if (attendanceResult === 'ABSENT') {
+    const getCardBackgroundColor = (
+      attendanceResult?: CotatoAttendanceRecordResponseResultEnum,
+    ) => {
+      if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Absent) {
         return theme.colors.pastelTone.blue[100];
       }
 
@@ -112,9 +122,7 @@ const AttendanceList = () => {
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
               attendance={attendance}
-              backgroundColor={getCardBackgroundColor(
-                attendance.attendanceResult as AttendResponseAttendanceResultEnum,
-              )}
+              backgroundColor={getCardBackgroundColor(attendance.attendanceResult)}
               generationNumber={currentGeneration?.generationNumber || 0}
               onClick={handleCardClick}
             />
@@ -219,13 +227,7 @@ const AttendanceList = () => {
   React.useEffect(() => {
     if (attendanceResponse?.memberAttendResponses) {
       const newMemberAttendaceResponse = [...attendanceResponse.memberAttendResponses];
-      newMemberAttendaceResponse.sort((a, b) => {
-        if (a.sessionId && b.sessionId) {
-          return a.sessionId - b.sessionId;
-        }
-
-        return 0;
-      });
+      newMemberAttendaceResponse.sort((a, b) => (a.sessionDateTime! < b.sessionDateTime! ? -1 : 1));
       setAttendanceList(newMemberAttendaceResponse);
     }
   }, [attendanceResponse]);

@@ -1,4 +1,4 @@
-import fetcherWithParams from '@utils/fetcherWithParams';
+import fetcher from '@utils/fetcher';
 import { CotatoAttendanceResponse, CotatoAttendancesResponse } from 'cotato-openapi-clients';
 import React from 'react';
 import useSWR from 'swr';
@@ -27,8 +27,8 @@ const useGetAttendances = ({ sessionId, generationId }: UseGetAttendancesProps) 
   const _return = React.useRef<UseGetAttendancesReturn>({} as UseGetAttendancesReturn);
 
   const { data, isLoading, error } = useSWR<CotatoAttendancesResponse>(
-    `/v2/api/attendances`,
-    (url: string) => fetcherWithParams(url, { generationId: generationId }),
+    `/v2/api/attendances?generationId=${generationId}`,
+    fetcher,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
