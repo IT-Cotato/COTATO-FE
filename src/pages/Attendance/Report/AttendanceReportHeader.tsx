@@ -60,13 +60,17 @@ const AttendanceReportHeader = () => {
    */
   const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
     setSelectedAttendanceId(attendance.attendanceId!);
-    navigate(
-      getAttendanceReportPath({
-        generationId: selectedGenerationId,
-        sessionId: attendance.sessionId!,
-        attendanceId: attendance.attendanceId!,
-      }),
-    );
+    if (attendance.attendanceId !== REPORT_ALL_ID) {
+      navigate(
+        getAttendanceReportPath({
+          generationId: selectedGenerationId,
+          sessionId: attendance.sessionId!,
+          attendanceId: attendance.attendanceId!,
+        }),
+      );
+    } else {
+      navigate(`/attendance/report/generation/${selectedGenerationId}/all`);
+    }
   };
 
   /**
