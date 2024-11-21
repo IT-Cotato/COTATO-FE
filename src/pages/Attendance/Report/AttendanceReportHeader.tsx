@@ -23,6 +23,9 @@ const AttendanceReportHeader = () => {
 
   const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
   const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
+  const [attendanceListWithAll, setAttendanceListWithAll] = useState<CotatoAttendanceResponse[]>(
+    [],
+  );
 
   const { generations } = useGeneration({
     generationId: selectedGenerationId.toString(),
@@ -71,24 +74,26 @@ const AttendanceReportHeader = () => {
    *
    */
   useEffect(() => {
+    if (!attendances?.attendances) {
+      return;
+    }
+
     const selectedAttendance = attendances?.attendances?.find(
       (attendance) => attendance.attendanceId === selectedAttendanceId,
     );
 
-    if (isAttendanceLoading || selectedAttendance) {
-      return;
+    if (!selectedAttendance) {
+      const latestAttendance = attendances?.attendances?.at(-1);
+      setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
+      navigate(
+        getAttendanceReportPath({
+          generationId: selectedGenerationId,
+          sessionId: latestAttendance?.sessionId,
+          attendanceId: latestAttendance?.attendanceId,
+        }),
+      );
     }
-
-    const latestAttendance = attendances?.attendances?.at(-1);
-    setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
-    navigate(
-      getAttendanceReportPath({
-        generationId: selectedGenerationId,
-        sessionId: latestAttendance?.sessionId,
-        attendanceId: latestAttendance?.attendanceId,
-      }),
-    );
-  }, [attendances, isAttendanceLoading]);
+  }, [attendances]);
 
   return (
     <Stack
