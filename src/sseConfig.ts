@@ -40,14 +40,19 @@ export const sseConfig = (setIsAttendanceOpen: SetAttendanceState): void => {
     }
   };
 
+  /**
+   *
+   */
   sse.addEventListener('AttendanceStatus', (e: MessageEvent) => {
     const receivedData = e.data;
-    console.log('attendance status: ', receivedData);
     const attendanceStatus = JSON.parse(receivedData);
 
     handleAttendanceOpen(attendanceStatus);
   });
 
+  /**
+   *
+   */
   sse.onerror = (err) => {
     console.error('SSE Error:', err);
   };
