@@ -4,7 +4,7 @@ import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import { CotatoAttendanceResponse, CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useMatch, useNavigate, useParams } from 'react-router-dom';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import useGetAttendances from '@/hooks/useGetAttendances';
@@ -23,6 +23,7 @@ const REPORT_ALL_ID = 0;
 const AttendanceReportHeader = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const isReportAllMatch = useMatch('/attendance/report/generation/:generationId/all');
   const { isLandScapeOrSmaller } = useBreakpoints();
 
   const { generationId, attendanceId } = useParams();
@@ -88,11 +89,21 @@ const AttendanceReportHeader = () => {
       return;
     }
 
+    const newAttendaceList: CotatoAttendanceResponse[] = [...attendances.attendances];
+    newAttendaceList.push({
+      attendanceId: REPORT_ALL_ID,
+      sessionId: REPORT_ALL_ID,
+      sessionTitle: '전체',
+    });
+    setAttendanceListWithAll(newAttendaceList);
+
     const selectedAttendance = attendances?.attendances?.find(
       (attendance) => attendance.attendanceId === selectedAttendanceId,
     );
 
-    if (!selectedAttendance) {
+    if (isReportAllMatch) {
+      setSelectedAttendanceId(REPORT_ALL_ID);
+    } else if (!selectedAttendance) {
       const latestAttendance = attendances?.attendances?.at(-1);
       setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
       navigate(
@@ -103,14 +114,6 @@ const AttendanceReportHeader = () => {
         }),
       );
     }
-
-    const newAttendaceList: CotatoAttendanceResponse[] = [...attendances.attendances];
-    newAttendaceList.push({
-      attendanceId: REPORT_ALL_ID,
-      sessionId: REPORT_ALL_ID,
-      sessionTitle: '전체',
-    });
-    setAttendanceListWithAll(newAttendaceList);
   }, [attendances]);
 
   return (
