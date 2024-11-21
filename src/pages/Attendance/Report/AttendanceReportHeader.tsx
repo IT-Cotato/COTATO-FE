@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
-import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
+import { CotatoAttendanceResponse, CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSession } from '@/hooks/useSession';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import useGetAttendances from '@/hooks/useGetAttendances';
+import { getAttendanceReportPath } from '../utils/util';
 
 //
 //
@@ -18,15 +19,17 @@ const AttendanceReportHeader = () => {
   const navigate = useNavigate();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
-  const { generationId } = useParams();
-  const { sessionId } = useParams();
+  const { generationId, attendanceId } = useParams();
 
-  const { generations, targetGeneration } = useGeneration({
-    generationId: generationId,
+  const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
+  const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
+
+  const { generations } = useGeneration({
+    generationId: selectedGenerationId.toString(),
   });
-  const { sessions, targetSession } = useSession({
-    generationId: Number(generationId),
-    sessionId: Number(sessionId),
+
+  const { attendances, isAttendanceLoading } = useGetAttendances({
+    generationId: selectedGenerationId,
   });
 
   /**
@@ -39,15 +42,22 @@ const AttendanceReportHeader = () => {
   /**
    *
    */
-  const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
-    navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
+  const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
+    setSelectedGenerationId(generation.generationId!);
   };
 
   /**
    *
    */
-  const handleSessionChange = (session: CotatoSessionListResponse) => {
-    navigate(`/attendance/report/generation/${generationId}/session/${session.sessionId}`);
+  const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
+    setSelectedAttendanceId(attendance.attendanceId!);
+    navigate(
+      getAttendanceReportPath({
+        generationId: selectedGenerationId,
+        sessionId: attendance.sessionId!,
+        attendanceId: attendance.attendanceId!,
+      }),
+    );
   };
 
   /**
@@ -56,6 +66,29 @@ const AttendanceReportHeader = () => {
   const handleExportExcelClick = () => {
     alert('출시 예정입니다 :)');
   };
+
+  /**
+   *
+   */
+  useEffect(() => {
+    const selectedAttendance = attendances?.attendances?.find(
+      (attendance) => attendance.attendanceId === selectedAttendanceId,
+    );
+
+    if (isAttendanceLoading || selectedAttendance) {
+      return;
+    }
+
+    const latestAttendance = attendances?.attendances?.at(-1);
+    setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
+    navigate(
+      getAttendanceReportPath({
+        generationId: selectedGenerationId,
+        sessionId: latestAttendance?.sessionId,
+        attendanceId: latestAttendance?.attendanceId,
+      }),
+    );
+  }, [attendances, isAttendanceLoading]);
 
   return (
     <Stack
@@ -89,15 +122,15 @@ const AttendanceReportHeader = () => {
             <CotatoDropBox
               list={generations}
               onChange={handleGenerationChange}
-              defaultItemId={targetGeneration?.generationId}
+              defaultItemId={selectedGenerationId}
               color="yellow"
             />
           )}
-          {sessions && (
+          {attendances?.attendances && (
             <CotatoDropBox
-              list={sessions}
-              onChange={handleSessionChange}
-              defaultItemId={targetSession?.sessionId}
+              list={attendances.attendances}
+              onChange={handleAttendanceChange}
+              defaultItemId={selectedAttendanceId}
               width="12rem"
               color="yellow"
             />

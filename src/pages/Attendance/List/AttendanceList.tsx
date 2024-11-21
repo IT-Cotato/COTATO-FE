@@ -24,6 +24,7 @@ import {
 import useUser from '@/hooks/useUser';
 import { MemberRole } from '@/enums';
 import CotatoIcon from '@components/CotatoIcon';
+import { getAttendanceReportPath } from '../utils/util';
 
 //
 //
@@ -32,6 +33,7 @@ import CotatoIcon from '@components/CotatoIcon';
 const AttendanceList = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+
   const { generationId } = useParams();
   const { currentGeneration } = useGeneration();
   const { user } = useUser();
@@ -68,7 +70,12 @@ const AttendanceList = () => {
    */
   const handleClickReport = () => {
     navigate(
-      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}`,
+      getAttendanceReportPath({
+        keepSearchParam: false,
+        generationId: generationId,
+        sessionId: attendanceList.at(-1)?.sessionId,
+        attendanceId: attendanceList.at(-1)?.attendanceId,
+      }),
     );
   };
 
@@ -219,13 +226,7 @@ const AttendanceList = () => {
   React.useEffect(() => {
     if (attendanceResponse?.memberAttendResponses) {
       const newMemberAttendaceResponse = [...attendanceResponse.memberAttendResponses];
-      newMemberAttendaceResponse.sort((a, b) => {
-        if (a.sessionId && b.sessionId) {
-          return a.sessionId - b.sessionId;
-        }
-
-        return 0;
-      });
+      newMemberAttendaceResponse.sort((a, b) => (a.sessionDateTime! < b.sessionDateTime! ? -1 : 1));
       setAttendanceList(newMemberAttendaceResponse);
     }
   }, [attendanceResponse]);
