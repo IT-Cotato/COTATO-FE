@@ -1,21 +1,21 @@
 import React from 'react';
 import { ReactComponent as SpeachBubble } from '@assets/speach_bubble.svg';
 import { styled, useTheme } from 'styled-components';
-import { AttendResponseIsOpenedEnum } from '@/enums/attend/AttendResponseIsOpenedEnum';
-import { AttendResponseAttendanceTypeEnum } from '@/enums/attend/AttendResponseAttendanceTypeEnum';
-import { AttendResponseAttendanceResultEnum } from '@/enums/attend/AttendResponseAttendanceResultEnum';
 import { ReactComponent as AbsentIcon } from '@assets/attendance_absent_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import CotatoIcon from '@components/CotatoIcon';
+import {
+  CotatoAttendanceResponseOpenStatusEnum,
+  CotatoAttendanceRecordResponseResultEnum,
+} from 'cotato-openapi-clients';
 
 //
 //
 //
 
 interface AttendaceStatusProps {
-  isOpened?: AttendResponseIsOpenedEnum;
-  attendanceType: AttendResponseAttendanceTypeEnum | null;
-  attendanceResult?: AttendResponseAttendanceResultEnum | null;
+  isOpened?: CotatoAttendanceResponseOpenStatusEnum;
+  attendanceResult?: CotatoAttendanceRecordResponseResultEnum | null;
 }
 
 enum AttendanceStatus {
@@ -32,41 +32,27 @@ enum AttendanceStatus {
 //
 //
 
-const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({
-  isOpened,
-  attendanceType,
-  attendanceResult,
-}) => {
+const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ isOpened, attendanceResult }) => {
   const theme = useTheme();
 
   /**
    *
    */
   const getAttendanceStatus = () => {
-    if (isOpened === AttendResponseIsOpenedEnum.Before) {
+    // if (isOpened === AttendResponseIsOpenedEnum.Before) {
+    if (isOpened === CotatoAttendanceResponseOpenStatusEnum.Before) {
       return AttendanceStatus.Before;
-    } else if (isOpened === AttendResponseIsOpenedEnum.Open && attendanceResult === null) {
+    } else if (
+      isOpened === CotatoAttendanceResponseOpenStatusEnum.Open &&
+      attendanceResult === null
+    ) {
       return AttendanceStatus.Open;
-    } else if (
-      attendanceResult === AttendResponseAttendanceResultEnum.Present &&
-      attendanceType === AttendResponseAttendanceTypeEnum.Offline
-    ) {
+    } else if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Offline) {
       return AttendanceStatus.PresentOffline;
-    } else if (
-      attendanceResult === AttendResponseAttendanceResultEnum.Present &&
-      attendanceType === AttendResponseAttendanceTypeEnum.Online
-    ) {
+    } else if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Online) {
       return AttendanceStatus.PresentOnline;
-    } else if (
-      attendanceResult === AttendResponseAttendanceResultEnum.Late &&
-      attendanceType === AttendResponseAttendanceTypeEnum.Offline
-    ) {
+    } else if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Late) {
       return AttendanceStatus.LateOffline;
-    } else if (
-      attendanceResult === AttendResponseAttendanceResultEnum.Late &&
-      attendanceType === AttendResponseAttendanceTypeEnum.Online
-    ) {
-      return AttendanceStatus.LateOnline;
     }
 
     return AttendanceStatus.Absent;
@@ -106,13 +92,6 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({
         return {
           backgroundColor: theme.colors.gray10,
           icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
-          textColor: theme.colors.common.black_const,
-          text: '출석',
-        };
-      case AttendanceStatus.LateOnline:
-        return {
-          backgroundColor: theme.colors.gray10,
-          icon: <OnlineIcon />,
           textColor: theme.colors.common.black_const,
           text: '출석',
         };

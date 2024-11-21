@@ -5,6 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import {
+  CotatoAttendanceRecordResponseResultEnum,
+  CotatoAttendanceResponseOpenStatusEnum,
   CotatoMemberAttendanceRecordsResponse,
   CotatoMemberAttendResponse,
 } from 'cotato-openapi-clients';
@@ -15,7 +17,6 @@ import { media } from '@theme/media';
 import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import { Divider, Stack } from '@mui/material';
-import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
 import { useGeneration } from '@/hooks/useGeneration';
 import {
   AttendanceListLayoutType,
@@ -53,7 +54,7 @@ const AttendanceList = () => {
    *
    */
   const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
-    if (attendance.isOpened === AttendResponseIsOpenedEnum.Open) {
+    if (attendance.isOpened === CotatoAttendanceResponseOpenStatusEnum.Open) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
     }
   };
@@ -97,8 +98,10 @@ const AttendanceList = () => {
       theme.colors.pastelTone.pink[100],
     ];
 
-    const getCardBackgroundColor = (attendanceResult: AttendResponseAttendanceResultEnum) => {
-      if (attendanceResult === 'ABSENT') {
+    const getCardBackgroundColor = (
+      attendanceResult?: CotatoAttendanceRecordResponseResultEnum,
+    ) => {
+      if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Absent) {
         return theme.colors.pastelTone.blue[100];
       }
 
@@ -119,9 +122,7 @@ const AttendanceList = () => {
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
               attendance={attendance}
-              backgroundColor={getCardBackgroundColor(
-                attendance.attendanceResult as AttendResponseAttendanceResultEnum,
-              )}
+              backgroundColor={getCardBackgroundColor(attendance.attendanceResult)}
               generationNumber={currentGeneration?.generationNumber || 0}
               onClick={handleCardClick}
             />

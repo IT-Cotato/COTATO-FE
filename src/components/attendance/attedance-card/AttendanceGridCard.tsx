@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CotatoMemberAttendResponse } from 'cotato-openapi-clients';
+import {
+  CotatoAttendanceRecordResponseResultEnum,
+  CotatoMemberAttendResponse,
+} from 'cotato-openapi-clients';
 import { Stack } from '@mui/material';
 import AttendanceCardStatus from '@components/attendance/attedance-card/AttendanceCardStatus';
-import {
-  AttendResponseAttendanceResultEnum,
-  AttendResponseAttendanceTypeEnum,
-  AttendResponseIsOpenedEnum,
-} from '@/enums/attend';
 import { media } from '@theme/media';
 import dayjs from 'dayjs';
 import CotatoIcon from '@components/CotatoIcon';
@@ -33,7 +31,7 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
 }) => {
   return (
     <Container onClick={() => onClick(attendance)}>
-      {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
+      {attendance.attendanceResult === CotatoAttendanceRecordResponseResultEnum.Late && (
         <StyledLateIcon
           icon="bell-exclaimation-solid"
           color={(theme) => theme.colors.secondary80}
@@ -46,9 +44,8 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
         </TitleText>
       </Stack>
       <AttendanceCardStatus
-        isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
-        attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
-        attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
+        isOpened={attendance.isOpened}
+        attendanceResult={attendance.attendanceResult}
       />
     </Container>
   );
