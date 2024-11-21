@@ -3,12 +3,10 @@ import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as CharacterEyeClose } from '@/assets/character_eye_close.svg';
 import AttendanceCardStatus from '@components/attendance/attedance-card/AttendanceCardStatus';
-import { CotatoMemberAttendResponse } from 'cotato-openapi-clients';
 import {
-  AttendResponseAttendanceResultEnum,
-  AttendResponseAttendanceTypeEnum,
-  AttendResponseIsOpenedEnum,
-} from '@/enums/attend';
+  CotatoAttendanceRecordResponseResultEnum,
+  CotatoMemberAttendResponse,
+} from 'cotato-openapi-clients';
 import dayjs from 'dayjs';
 import CotatoIcon from '@components/CotatoIcon';
 
@@ -105,7 +103,7 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
         boxShadow={`1px 1px 10px 0px ${getBoxColor().imageBoxShaodwColor}`}
       >
         <ImageBox>
-          {attendance.attendanceResult === AttendResponseAttendanceResultEnum.Late && (
+          {attendance.attendanceResult === CotatoAttendanceRecordResponseResultEnum.Late && (
             <StyledLateIcon
               icon="bell-exclaimation-solid"
               color={(theme) => theme.colors.secondary80}
@@ -118,9 +116,8 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
         <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
           {renderAttendanceInfo()}
           <AttendanceCardStatus
-            isOpened={attendance.isOpened as AttendResponseIsOpenedEnum}
-            attendanceType={attendance.attendanceType as AttendResponseAttendanceTypeEnum}
-            attendanceResult={attendance.attendanceResult as AttendResponseAttendanceResultEnum}
+            isOpened={attendance.isOpened}
+            attendanceResult={attendance.attendanceResult}
           />
         </Stack>
       </Box>
