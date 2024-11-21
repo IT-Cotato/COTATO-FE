@@ -441,11 +441,11 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: auto;
   position: relative;
   padding-bottom: 60px;
-  overflow: auto;
   overflow-x: hidden;
+  overflow-y: visible;
 `;
 
 const ProgressContainer = styled.div`
