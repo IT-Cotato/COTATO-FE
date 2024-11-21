@@ -25,7 +25,6 @@ import {
 } from 'cotato-openapi-clients';
 import CotatoTimePicker from '@components/CotatoTimePicker';
 import api from '@/api/api';
-import LocalTime from '@/typing/LocalTime';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
 
@@ -63,8 +62,8 @@ const INITIAL_SESSION_STATE: SessionUploadInfo = {
   description: '',
   sessionDateTime: new Date(),
   attendTime: {
-    attendanceDeadLine: new LocalTime('19:10:00'),
-    lateDeadLine: new LocalTime('19:20:00'),
+    attendanceDeadLine: new Date(),
+    lateDeadLine: new Date(),
   },
   itIssue: CotatoSessionContentsItIssueEnum.Off,
   csEducation: CotatoSessionContentsCsEducationEnum.On,
@@ -112,8 +111,8 @@ const SessionUploadModal = ({
         placeName: sessionInfo?.placeName || '',
         location: attendancesInfo.location,
         attendTime: {
-          attendanceDeadLine: new LocalTime(attendancesInfo.attendanceDeadLine),
-          lateDeadLine: new LocalTime(attendancesInfo.lateDeadLine),
+          attendanceDeadLine: attendancesInfo.attendanceDeadLine,
+          lateDeadLine: attendancesInfo.lateDeadLine,
         },
         itIssue: sessionInfo?.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
         csEducation:
@@ -270,7 +269,7 @@ const SessionUploadModal = ({
   const handleAttendanceDeadlineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.attendTime!.attendanceDeadLine = new LocalTime(date);
+        draft.attendTime!.attendanceDeadLine = date;
       }),
     );
   };
@@ -281,7 +280,7 @@ const SessionUploadModal = ({
   const handleLateDeadLineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
-        draft.attendTime!.lateDeadLine = new LocalTime(date);
+        draft.attendTime!.lateDeadLine = date;
       }),
     );
   };
@@ -400,14 +399,14 @@ const SessionUploadModal = ({
           <div>
             출석 인정
             <CotatoTimePicker
-              date={(session.attendTime?.attendanceDeadLine as LocalTime).toDate()}
+              date={session.attendTime?.attendanceDeadLine ?? new Date()}
               onDateChange={handleAttendanceDeadlineChange}
             />
           </div>
           <div>
             지각 인정
             <CotatoTimePicker
-              date={(session.attendTime?.lateDeadLine as LocalTime).toDate()}
+              date={session.attendTime?.lateDeadLine ?? new Date()}
               onDateChange={handleLateDeadLineChange}
             />
           </div>
@@ -454,18 +453,22 @@ const SessionUploadModal = ({
     if (sessionInfo) {
       fetchUpdateSession();
     } else {
-      const getNextFiday = () => {
+      const getNextFidayDate = (hour: number, minute: number) => {
         const today = new Date();
         const day = today.getDay();
         const diff = 5 - day;
         const nextFriday = new Date(today);
         nextFriday.setDate(today.getDate() + diff);
-        nextFriday.setHours(19, 0, 0, 0);
+        nextFriday.setHours(hour, minute, 0, 0);
         return nextFriday;
       };
 
       const initialSession = produce(INITIAL_SESSION_STATE, (draft) => {
-        draft.sessionDateTime = getNextFiday();
+        draft.sessionDateTime = getNextFidayDate(19, 0);
+        draft.attendTime = {
+          attendanceDeadLine: getNextFidayDate(19, 10),
+          lateDeadLine: getNextFidayDate(19, 20),
+        };
       });
 
       setSession(initialSession);
