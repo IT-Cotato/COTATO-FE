@@ -55,8 +55,6 @@ const AttendanceAttend: React.FC = () => {
   const { currentGeneration, isGenerationLoading } = useGeneration();
   const { latitude, longitude, error: geoLocationError } = useGeolocation(geolocationOptions);
 
-  console.log('latitude', latitude, 'longitude', longitude);
-
   const { sessions, isSessionLoading } = useSession({
     generationId: currentGeneration?.generationId,
   });
