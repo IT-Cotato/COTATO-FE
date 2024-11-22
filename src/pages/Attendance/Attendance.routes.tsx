@@ -34,7 +34,7 @@ const AttendanceRoutes = () => {
           element={<AsyncAttendanceResult />}
         />
         <Route
-          path="/report/generation/:generationId/session/:sessionId"
+          path="/report/generation/:generationId/session/:sessionId/attendance/:attendanceId"
           element={<AsyncAttendanceReport />}
         />
         <Route path="/report/generation/:generationId/all" element={<AsyncAttendanceReportAll />} />

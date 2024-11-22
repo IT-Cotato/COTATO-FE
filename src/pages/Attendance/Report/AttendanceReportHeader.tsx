@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
-import { CotatoGenerationInfoResponse, CotatoSessionListResponse } from 'cotato-openapi-clients';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useSession } from '@/hooks/useSession';
+import { CotatoAttendanceResponse, CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import { useMatch, useNavigate, useParams } from 'react-router-dom';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import useGetAttendances from '@/hooks/useGetAttendances';
+import { getAttendanceReportPath } from '../utils/util';
+
+//
+//
+//
+
+const REPORT_ALL_ID = 0;
 
 //
 //
@@ -16,17 +23,23 @@ import { useBreakpoints } from '@/hooks/useBreakpoints';
 const AttendanceReportHeader = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const isReportAllMatch = useMatch('/attendance/report/generation/:generationId/all');
   const { isLandScapeOrSmaller } = useBreakpoints();
 
-  const { generationId } = useParams();
-  const { sessionId } = useParams();
+  const { generationId, attendanceId } = useParams();
 
-  const { generations, targetGeneration } = useGeneration({
-    generationId: generationId,
+  const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
+  const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
+  const [attendanceListWithAll, setAttendanceListWithAll] = useState<CotatoAttendanceResponse[]>(
+    [],
+  );
+
+  const { generations } = useGeneration({
+    generationId: selectedGenerationId.toString(),
   });
-  const { sessions, targetSession } = useSession({
-    generationId: Number(generationId),
-    sessionId: Number(sessionId),
+
+  const { attendances } = useGetAttendances({
+    generationId: selectedGenerationId,
   });
 
   /**
@@ -39,15 +52,26 @@ const AttendanceReportHeader = () => {
   /**
    *
    */
-  const handleGenerationChange = (generations: CotatoGenerationInfoResponse) => {
-    navigate(`/attendance/report/generation/${generations.generationId}/session/${sessionId}`);
+  const handleGenerationChange = (generation: CotatoGenerationInfoResponse) => {
+    setSelectedGenerationId(generation.generationId!);
   };
 
   /**
    *
    */
-  const handleSessionChange = (session: CotatoSessionListResponse) => {
-    navigate(`/attendance/report/generation/${generationId}/session/${session.sessionId}`);
+  const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
+    setSelectedAttendanceId(attendance.attendanceId!);
+    if (attendance.attendanceId !== REPORT_ALL_ID) {
+      navigate(
+        getAttendanceReportPath({
+          generationId: selectedGenerationId,
+          sessionId: attendance.sessionId!,
+          attendanceId: attendance.attendanceId!,
+        }),
+      );
+    } else {
+      navigate(`/attendance/report/generation/${selectedGenerationId}/all`);
+    }
   };
 
   /**
@@ -56,6 +80,41 @@ const AttendanceReportHeader = () => {
   const handleExportExcelClick = () => {
     alert('출시 예정입니다 :)');
   };
+
+  /**
+   *
+   */
+  useEffect(() => {
+    if (!attendances?.attendances) {
+      return;
+    }
+
+    const newAttendaceList: CotatoAttendanceResponse[] = [...attendances.attendances];
+    newAttendaceList.push({
+      attendanceId: REPORT_ALL_ID,
+      sessionId: REPORT_ALL_ID,
+      sessionTitle: '전체',
+    });
+    setAttendanceListWithAll(newAttendaceList);
+
+    const selectedAttendance = attendances?.attendances?.find(
+      (attendance) => attendance.attendanceId === selectedAttendanceId,
+    );
+
+    if (isReportAllMatch) {
+      setSelectedAttendanceId(REPORT_ALL_ID);
+    } else if (!selectedAttendance) {
+      const latestAttendance = attendances?.attendances?.at(-1);
+      setSelectedAttendanceId(latestAttendance?.attendanceId ?? 0);
+      navigate(
+        getAttendanceReportPath({
+          generationId: selectedGenerationId,
+          sessionId: latestAttendance?.sessionId,
+          attendanceId: latestAttendance?.attendanceId,
+        }),
+      );
+    }
+  }, [attendances]);
 
   return (
     <Stack
@@ -89,15 +148,15 @@ const AttendanceReportHeader = () => {
             <CotatoDropBox
               list={generations}
               onChange={handleGenerationChange}
-              defaultItemId={targetGeneration?.generationId}
+              defaultItemId={selectedGenerationId}
               color="yellow"
             />
           )}
-          {sessions && (
+          {attendanceListWithAll && (
             <CotatoDropBox
-              list={sessions}
-              onChange={handleSessionChange}
-              defaultItemId={targetSession?.sessionId}
+              list={attendanceListWithAll}
+              onChange={handleAttendanceChange}
+              defaultItemId={selectedAttendanceId}
               width="12rem"
               color="yellow"
             />
