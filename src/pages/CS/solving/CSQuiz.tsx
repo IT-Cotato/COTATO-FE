@@ -132,7 +132,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       try {
         const message = JSON.parse(event.data);
         setMessage(message);
-        console.log(message);
         setProblemId(message.quizId); // 문제 번호 변경을 감지하여 리렌더링 시키기 위함
 
         switch (handleWsMessage(message)) {
@@ -198,10 +197,12 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   return (
     <Wrapper>
-      <Waiting>
-        <Timer style={{ width: '68px' }} />
-        <div>곧 문제가 시작됩니다. &nbsp;잠시만 기다려주세요!</div>
-      </Waiting>
+      {!showProblem && (
+        <Waiting>
+          <Timer style={{ width: '68px' }} />
+          <div>곧 문제가 시작됩니다. &nbsp;잠시만 기다려주세요!</div>
+        </Waiting>
+      )}
       {showProblem && (
         <div className="problem">
           <CSProblem
@@ -231,18 +232,16 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: auto;
   overflow: hidden;
   position: relative;
   .problem {
+    display: flex;
+    width: 100%;
     background-color: #fff;
     background-size: cover;
-    position: absolute;
-    height: 100vh;
-    overflow: hidden;
-    top: 0;
-    right: 0;
-    left: 0;
+    height: auto;
+    overflow: visible;
     z-index: 100;
   }
 `;

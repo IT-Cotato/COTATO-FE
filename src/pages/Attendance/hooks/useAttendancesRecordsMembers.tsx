@@ -1,9 +1,6 @@
 import { useRef } from 'react';
 import fetcherWithParams from '@utils/fetcherWithParams';
-import {
-  CotatoAttendanceRecordResponse,
-  CotatoMemberAttendanceRecordsResponse,
-} from 'cotato-openapi-clients';
+import { CotatoMemberAttendanceRecordsResponse } from 'cotato-openapi-clients';
 import useSWR from 'swr';
 
 //

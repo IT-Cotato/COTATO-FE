@@ -6,11 +6,14 @@ import {
   CotatoProjectImageInfoResponseProjectImageTypeEnum,
 } from 'cotato-openapi-clients';
 import { ReactComponent as LinkIcon } from '@assets/link.svg';
-
+import { ReactComponent as BehanceLightIcon } from '@assets/behance_light.svg';
+import { ReactComponent as GithubLightIcon } from '@assets/github_light.svg';
 import styled, { useTheme } from 'styled-components';
 import useSWR from 'swr';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+
+import ProjectsLink from './ProjectsServiceLink';
 
 //
 //
@@ -32,7 +35,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
   }
 
   const theme = useTheme();
-  const { isMobileOrSmaller, isTabletOrSmaller, isLandScapeOrSmaller } = useBreakpoints();
+  const { isLandScapeOrSmaller } = useBreakpoints();
   const { data: project } = useSWR<CotatoProjectDetailResponse>(
     `/v2/api/projects/${projectId}`,
     fetcher,
@@ -62,7 +65,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
    */
   const renderLeftPart = () => {
     return (
-      <>
+      <Stack gap="2rem" justifyContent="space-between">
         <Stack>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Title>{project?.name}</Title>
@@ -70,30 +73,28 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
           </Stack>
           <Introduction>{project?.introduction}</Introduction>
         </Stack>
-        {project?.projectUrl ? (
-          <Box
-            display="flex"
-            alignItems="center"
-            bgcolor={theme.colors.gray20}
-            width={isLandScapeOrSmaller ? '3.25rem' : '4.5rem'}
-            height={isLandScapeOrSmaller ? '1.5rem' : '2rem'}
-            padding={isLandScapeOrSmaller ? '0.25rem' : '0.5rem'}
-            borderRadius="0.25rem"
-            gap="0.5rem"
-            sx={{
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              window.open(project?.projectUrl, '_blank');
-            }}
-          >
-            <LinkIcon width={isLandScapeOrSmaller ? '0.75rem' : '1rem'} />
-            <Typography fontSize={isLandScapeOrSmaller ? '0.7rem' : '1rem'}>링크</Typography>
-          </Box>
-        ) : (
-          <Box height="2rem" />
-        )}
-      </>
+        <Stack direction={isLandScapeOrSmaller ? 'column' : 'row'} gap="0.5rem" width="auto">
+          <ProjectsLink
+            link={project?.projectUrl}
+            logo={<LinkIcon />}
+            name="링크"
+            color={theme.colors.common.black_const}
+            bgColor={theme.colors.gray20}
+          />
+          <ProjectsLink
+            link={project?.githubUrl}
+            logo={<GithubLightIcon />}
+            name="GitHub"
+            bgColor={theme.colors.common.black_const}
+          />
+          <ProjectsLink
+            link={project?.behanceUrl}
+            logo={<BehanceLightIcon />}
+            name="Behance"
+            bgColor={theme.colors.sub2[60]}
+          />
+        </Stack>
+      </Stack>
     );
   };
 
@@ -101,50 +102,50 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
    *
    */
   const renderRightPart = () => {
-    return Object.entries(memberPositionMap).map(([position, title]) => {
-      if (!project?.memberInfos) {
-        return null;
-      }
+    return (
+      <Stack
+        gap={isLandScapeOrSmaller ? '0rem' : '1rem'}
+        alignSelf={isLandScapeOrSmaller ? 'flex-end' : 'center'}
+      >
+        {Object.entries(memberPositionMap).map(([position, title]) => {
+          if (!project?.memberInfos) {
+            return null;
+          }
 
-      const members = project?.memberInfos.filter((member) => member.position === position);
+          const members = project?.memberInfos.filter((member) => member.position === position);
 
-      return (
-        <Stack
-          key={position}
-          direction="row"
-          justifyContent={isLandScapeOrSmaller ? 'auto' : 'space-between'}
-          alignItems={isLandScapeOrSmaller ? 'flex-end' : 'center'}
-          height="100%"
-          gap="1rem"
-        >
-          <Typography
-            fontSize={isMobileOrSmaller ? '0.75rem' : isLandScapeOrSmaller ? '0.8rem' : '1rem'}
-            fontWeight={700}
-          >
-            {title}
-          </Typography>
-          <Stack minWidth="6.5rem">
-            <Box
-              display="flex"
-              width="100%"
-              justifyContent="flex-end"
-              gap={isLandScapeOrSmaller ? '0.25rem' : '0.5rem'}
+          return (
+            <Stack
+              key={position}
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              height="100%"
+              gap="0.75rem"
             >
-              {members?.map((member) => (
-                <Typography
-                  key={member.memberId}
-                  fontWeight={700}
-                  flexWrap="wrap"
-                  fontSize={isLandScapeOrSmaller ? '0.7rem' : isTabletOrSmaller ? '0.8rem' : '1rem'}
+              <Typography variant="body1" fontWeight={700}>
+                {title}
+              </Typography>
+              <Stack minWidth="5rem">
+                <Box
+                  display="flex"
+                  width="100%"
+                  height="100%"
+                  justifyContent="flex-end"
+                  gap={isLandScapeOrSmaller ? '0.25rem' : '0.5rem'}
                 >
-                  {member.name}
-                </Typography>
-              ))}
-            </Box>
-          </Stack>
-        </Stack>
-      );
-    });
+                  {members?.map((member) => (
+                    <Typography key={member.memberId} variant="body2" fontWeight={700}>
+                      {member.name}
+                    </Typography>
+                  ))}
+                </Box>
+              </Stack>
+            </Stack>
+          );
+        })}
+      </Stack>
+    );
   };
 
   //
@@ -158,7 +159,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             display="flex"
             alignItems="flex-start"
             width="100%"
-            maxHeight="34rem"
+            maxHeight="35rem"
             sx={{
               objectFit: 'cover',
               objectPosition: 'top',
@@ -168,35 +169,18 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             alt="thumbnail"
           />
         )}
-        <Box
-          height={isLandScapeOrSmaller ? '12rem' : '15rem'}
-          padding={
-            isLandScapeOrSmaller
-              ? '1.8rem 1.5rem 0 1.5rem'
-              : isTabletOrSmaller
-                ? '2rem 1.8rem'
-                : '3rem 3.5rem'
-          }
-        >
-          <Stack direction="row" justifyContent="space-between">
-            <Stack
-              width={isLandScapeOrSmaller ? '8rem' : isTabletOrSmaller ? '10rem' : '18rem'}
-              gap="2rem"
-            >
-              {renderLeftPart()}
-            </Stack>
-
-            <Stack
-              width="fit-content"
-              gap={isLandScapeOrSmaller ? '0rem' : '1rem'}
-              height="fit-content"
-              alignSelf={isLandScapeOrSmaller ? 'flex-end' : 'center'}
-            >
-              {renderRightPart()}
-            </Stack>
+        <Box padding={isLandScapeOrSmaller ? '1rem' : '2rem'}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            flexWrap="wrap"
+            gap={isLandScapeOrSmaller ? '1rem' : '2rem'}
+          >
+            {renderLeftPart()}
+            {renderRightPart()}
           </Stack>
         </Box>
-        <Stack>
+        <Stack marginTop="1rem">
           {details?.map((detail) => (
             <Box
               key={detail.imageId}
@@ -267,6 +251,6 @@ const Introduction = styled.p`
         `}
 
   ${media.mobile`
-            font-size: 0.6rem;
+            font-size: 0.8rem;
         `}
 `;
