@@ -15,10 +15,10 @@ interface CotatoPanelProps {
   textImgSrc: string;
 }
 
-//
-//
-//
-
+/**
+ * @param {SizeStateType} size panel size - short, default, long
+ * @param {string} textImgSrc panel text image source
+ */
 const CotatoPanel: React.FC<CotatoPanelProps> = ({ size, textImgSrc }) => {
   /**
    *
