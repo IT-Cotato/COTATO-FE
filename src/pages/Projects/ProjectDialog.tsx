@@ -65,7 +65,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
    */
   const renderLeftPart = () => {
     return (
-      <Stack gap="2rem">
+      <Stack gap="2rem" justifyContent="space-between">
         <Stack>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Title>{project?.name}</Title>
@@ -73,7 +73,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
           </Stack>
           <Introduction>{project?.introduction}</Introduction>
         </Stack>
-        <Stack direction="row" gap="0.5rem" width="auto" flexWrap="wrap">
+        <Stack direction={isLandScapeOrSmaller ? 'column' : 'row'} gap="0.5rem" width="auto">
           <ProjectsLink
             link={project?.projectUrl}
             logo={<LinkIcon />}
@@ -121,7 +121,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
               justifyContent="space-between"
               alignItems="center"
               height="100%"
-              gap="1rem"
+              gap="0.75rem"
             >
               <Typography variant="body1" fontWeight={700}>
                 {title}
@@ -169,8 +169,13 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             alt="thumbnail"
           />
         )}
-        <Box padding="2rem">
-          <Stack direction="row" justifyContent="space-between" flexWrap="wrap" gap="2rem">
+        <Box padding={isLandScapeOrSmaller ? '1rem' : '2rem'}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            flexWrap="wrap"
+            gap={isLandScapeOrSmaller ? '1rem' : '2rem'}
+          >
             {renderLeftPart()}
             {renderRightPart()}
           </Stack>
@@ -246,6 +251,6 @@ const Introduction = styled.p`
         `}
 
   ${media.mobile`
-            font-size: 0.6rem;
+            font-size: 0.8rem;
         `}
 `;

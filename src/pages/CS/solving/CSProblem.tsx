@@ -189,11 +189,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     // 다음 문제로 이동
     // 아직 다음 문제 안열렸으면 대기 상태로
     if (submitAllowed) {
-      if ((quizData?.number as number) === 10) {
-        setReturnToWaiting(false);
-      } else {
-        setReturnToWaiting(true);
-      }
+      setReturnToWaiting(true);
     }
   };
 
@@ -339,7 +335,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
       {showCorrect && <BgCorrect />}
       {showIncorrect && <BgIncorrect />}
       {showKingKing && educationId && <BgKingKing educationId={educationId} />}
-      {returnToWaiting && <BgWaiting />}
+      {returnToWaiting && <BgWaiting problemNumber={quizData?.number} />}
     </Wrapper>
   );
 };

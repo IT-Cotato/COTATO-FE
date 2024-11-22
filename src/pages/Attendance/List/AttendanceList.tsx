@@ -256,6 +256,7 @@ const Wrapper = styled.div`
   justify-content: center;
   width: 100%;
   min-height: calc(100vh - ${HEADER_HEIGHT});
+  overflow-x: hidden;
 
   ${media.mobile`
     min-height: 100vh;

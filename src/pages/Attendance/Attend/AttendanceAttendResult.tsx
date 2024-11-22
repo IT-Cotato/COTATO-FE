@@ -15,6 +15,8 @@ const AttendanceAttendResult = () => {
   const convertStatusToEnum = (status?: string) => {
     switch (status) {
       case 'present':
+      case 'offline':
+      case 'online':
         return 'PRESENT';
 
       case 'late':
