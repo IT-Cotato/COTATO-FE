@@ -71,11 +71,11 @@ const AttendanceReportAllTable = () => {
             </AttedanceTableLayout.TableCell>
 
             <AttedanceTableLayout.TableCell>
-              {record.statistic?.online}
+              {record.statistic?.offline}
             </AttedanceTableLayout.TableCell>
 
             <AttedanceTableLayout.TableCell>
-              {record.statistic?.offline}
+              {record.statistic?.online}
             </AttedanceTableLayout.TableCell>
 
             <AttedanceTableLayout.TableCell>
