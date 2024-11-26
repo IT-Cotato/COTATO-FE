@@ -57,7 +57,13 @@ const AttendanceFab = () => {
   //
   return (
     <CotatoFloatingActionButton
-      icon={<CotatoIcon icon="expand-solid" size="100%" />}
+      icon={
+        <CotatoIcon
+          icon="expand-solid"
+          size="100%"
+          color={(theme) => theme.colors.common.white_const}
+        />
+      }
       name="레이아웃"
     >
       {Object.entries(fabList).map(([key, value]) => (

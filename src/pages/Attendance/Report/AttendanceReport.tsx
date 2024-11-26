@@ -18,6 +18,7 @@ const AttendanceReport = () => {
     <Container
       sx={{
         height: '100%',
+        padding: '2rem',
       }}
     >
       <AttendanceReportHeader />
