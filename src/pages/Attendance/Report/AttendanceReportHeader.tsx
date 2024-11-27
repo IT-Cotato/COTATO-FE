@@ -146,18 +146,20 @@ const AttendanceReportHeader = () => {
         <Stack direction="row" spacing="1rem">
           <CotatoDropBox
             list={generations}
-            onChange={handleGenerationChange}
             defaultItem={targetGeneration}
             color="yellow"
+            onChange={handleGenerationChange}
+            title={(generation) => generation?.generationNumber + '기'}
           />
           <CotatoDropBox
             list={attendanceListWithAll}
-            onChange={handleAttendanceChange}
             defaultItem={attendanceListWithAll.find(
               (attendance) => attendance.attendanceId === selectedAttendanceId,
             )}
             width="12rem"
             color="yellow"
+            onChange={handleAttendanceChange}
+            title={(attendance) => attendance?.sessionTitle}
           />
         </Stack>
         <Stack direction="column-reverse">

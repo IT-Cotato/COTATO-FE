@@ -287,11 +287,12 @@ const SessionHome = () => {
       <SettingTab>
         <CotatoDropBox
           list={generations}
-          onChange={handleGenerationChange}
           defaultItem={selectedGeneration}
           color="blue"
           width={isTabletOrSmaller ? '7.2rem' : '8rem'}
           height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
+          onChange={handleGenerationChange}
+          title={(generation) => generation?.generationNumber + '기'}
         />
         {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
           <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />

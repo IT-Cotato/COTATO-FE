@@ -27,6 +27,7 @@ interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   width?: string;
   height?: string;
   onChange: (item: T) => void;
+  title: (item: T | null) => string | undefined;
 }
 
 interface DropBoxProps {
@@ -55,12 +56,13 @@ const FADE_DURATION = 300;
  */
 const CotatoDropBox = <T extends CotatoDropBoxType>({
   list,
-  onChange,
   reversed = true,
   defaultItem,
   color = 'blue',
   width = '8rem',
   height = '3.2rem',
+  onChange,
+  title,
 }: CotatoDropBoxProps<T>) => {
   const theme = useTheme();
 
@@ -71,50 +73,6 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   const dropBoxRef = useRef<HTMLDivElement>(null);
 
   // const isInProduction = process.env.NODE_ENV === 'production';
-
-  /**
-   *
-   */
-  const isTypeGeneration = (item: CotatoDropBoxType): item is CotatoGenerationInfoResponse => {
-    return (item as CotatoGenerationInfoResponse).generationNumber !== undefined;
-  };
-
-  /**
-   *
-   */
-  const isTypeSession = (item: CotatoDropBoxType): item is CotatoSessionListResponse => {
-    return (item as CotatoSessionListResponse).sessionNumber !== undefined;
-  };
-
-  /**
-   *
-   */
-  const isTypeAttendance = (item: CotatoDropBoxType): item is CotatoAttendanceResponse => {
-    return (item as CotatoAttendanceResponse).attendanceId !== undefined;
-  };
-
-  /**
-   *
-   */
-  const StringFormatter = (item: T | null) => {
-    if (!item) {
-      return '';
-    }
-
-    if (isTypeGeneration(item)) {
-      return `${item.generationNumber}기`;
-    }
-
-    if (isTypeSession(item)) {
-      return `${item.title}`;
-    }
-
-    if (isTypeAttendance(item)) {
-      return `${item.sessionTitle}`;
-    }
-
-    return '';
-  };
 
   /**
    * get drop box style of color
@@ -165,7 +123,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     return (
       <DropBox onClick={handleDropDownChange} $height={height} $background={background}>
-        <SelectText>{StringFormatter(selectedItem)}</SelectText>
+        <SelectText>{title(selectedItem)}</SelectText>
         {isDropBoxOpen ? (
           <StyledCotatoIcon icon="angle-up-solid" color={arrowColor} />
         ) : (
@@ -191,7 +149,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
               {item === selectedItem && (
                 <StyledCheckIcon icon="check-solid" color={theme.colors.sub3[40]} />
               )}
-              {StringFormatter(item)}
+              {title(item)}
             </li>
           ))}
         </ul>

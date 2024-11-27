@@ -54,6 +54,7 @@ const CSRecord = () => {
           onChange={(generation) => {
             setSelectedGenerationId(generation?.generationId?.toString());
           }}
+          title={(generation) => generation?.generationNumber + '기'}
         />
         {/* </select> */}
       </SelectGenerationDiv>
