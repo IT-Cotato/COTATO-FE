@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { useGetPolicies } from '@/hooks/useGetPolicies';
 import { marked } from 'marked';
 import styled, { useTheme } from 'styled-components';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { produce } from 'immer';
 import { LoadingButton } from '@mui/lab';
 import { logout } from '@utils/logout';
@@ -215,7 +215,7 @@ const AgreementConfirmDialog = () => {
               border: `1px solid ${theme.colors.gray80_2}`,
               padding: '0.5rem 1.5rem',
             }}
-            dangerouslySetInnerHTML={{ __html: sanitize(parsedHtml) }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(parsedHtml) }}
           />
           {renderCheckBox(policy.policyId)}
         </Stack>

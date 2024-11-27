@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Routes, Route, useLocation, useMatch } from 'react-router-dom';
 import Header from '@components/Header';
@@ -24,9 +24,12 @@ import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 import CSRoutes from '@pages/CS/CSRoutes';
 import { About } from '@pages/About';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import { sseConfig } from './sseConfig';
 
 function App() {
+  const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);
+
   //
   const location = useLocation();
   const isInHome = location.pathname === '/';
@@ -37,7 +40,7 @@ function App() {
   //
   //
   //
-  React.useEffect(() => {
+  useEffect(() => {
     if (isInHome) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -48,12 +51,19 @@ function App() {
   //
   //
   //
+  useEffect(() => {
+    sseConfig(setIsAttendanceOpen);
+
+    if (isAttendanceOpen) {
+      toast.info('현재 출석이 진행 중이에요!');
+    }
+  });
 
   return (
     <div className="App">
       <CotatoThemeProvider>
         <GlobalStyle />
-        <ToastContainer position="bottom-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={3000} />
         <Header />
         <AgreementConfirmDialog />
         <GlobalBackgroundSvgComponent />
