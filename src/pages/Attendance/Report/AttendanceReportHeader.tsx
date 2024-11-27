@@ -34,7 +34,7 @@ const AttendanceReportHeader = () => {
     [],
   );
 
-  const { generations } = useGeneration({
+  const { generations, targetGeneration } = useGeneration({
     generationId: selectedGenerationId.toString(),
   });
 
@@ -148,7 +148,7 @@ const AttendanceReportHeader = () => {
             <CotatoDropBox
               list={generations}
               onChange={handleGenerationChange}
-              defaultItemId={selectedGenerationId}
+              defaultItem={targetGeneration}
               color="yellow"
             />
           )}
@@ -156,7 +156,9 @@ const AttendanceReportHeader = () => {
             <CotatoDropBox
               list={attendanceListWithAll}
               onChange={handleAttendanceChange}
-              defaultItemId={selectedAttendanceId}
+              defaultItem={attendanceListWithAll.find(
+                (attendance) => attendance.attendanceId === selectedAttendanceId,
+              )}
               width="12rem"
               color="yellow"
             />
