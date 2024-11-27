@@ -85,7 +85,7 @@ const CSHome = () => {
         <CSWrapper>
           <CSHeader>CS 문제풀이</CSHeader>
           <CSSetting>
-            {generations && <CotatoDropBox list={generations} onChange={onChangeGeneration} />}
+            <CotatoDropBox list={generations} onChange={onChangeGeneration} />
             {(user?.role === 'ADMIN' || user?.role === 'EDUCATION') && (
               <ButtonWrapper>
                 <IconButton onClick={onClickAddButton}>

@@ -285,16 +285,14 @@ const SessionHome = () => {
   const renderSettingTab = () => {
     return (
       <SettingTab>
-        {generations && (
-          <CotatoDropBox
-            list={generations}
-            onChange={handleGenerationChange}
-            defaultItem={selectedGeneration}
-            color="blue"
-            width={isTabletOrSmaller ? '7.2rem' : '8rem'}
-            height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
-          />
-        )}
+        <CotatoDropBox
+          list={generations}
+          onChange={handleGenerationChange}
+          defaultItem={selectedGeneration}
+          color="blue"
+          width={isTabletOrSmaller ? '7.2rem' : '8rem'}
+          height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
+        />
         {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
           <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
         )}

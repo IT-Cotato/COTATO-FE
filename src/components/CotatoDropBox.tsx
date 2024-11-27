@@ -21,7 +21,7 @@ type CotatoDropBoxType =
 
 interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   reversed?: boolean;
-  list: T[];
+  list?: T[];
   defaultItem?: T;
   color?: string;
   width?: string;
@@ -198,6 +198,10 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
       </DropDownList>
     );
   };
+
+  if (!list) {
+    return null;
+  }
 
   /**
    *
