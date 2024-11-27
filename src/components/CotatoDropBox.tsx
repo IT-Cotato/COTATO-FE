@@ -212,9 +212,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
     setDropBoxList(newList);
 
     if (defaultItem) {
-      const foundItem = newList.find(
-        (item) => JSON.stringify(item) === JSON.stringify(defaultItem),
-      );
+      const foundItem = newList.find((item) => item === defaultItem);
 
       setSelecedItem(foundItem ?? newList[0]);
     } else {
