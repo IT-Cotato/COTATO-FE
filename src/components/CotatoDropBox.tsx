@@ -20,14 +20,13 @@ type CotatoDropBoxType =
   | CotatoAttendanceResponse;
 
 interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
-  list: T[];
-  onChange: (item: T) => void;
   reversed?: boolean;
+  list: T[];
   defaultItemId?: number;
   color?: string;
   width?: string;
   height?: string;
-  disableQueryParams?: boolean;
+  onChange: (item: T) => void;
 }
 
 interface DropBoxProps {
