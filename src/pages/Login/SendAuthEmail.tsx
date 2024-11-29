@@ -66,8 +66,73 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({
   /**
    *
    */
+  const handleError = (code: string) => {
+    switch (code) {
+      case 'A-001' || 'A-002':
+        alert('올바르지 않은 이메일 형식입니다.');
+        break;
+      case 'A-201':
+        alert('존재하지 않는 이메일입니다.');
+        break;
+      default:
+        alert('입력하신 이메일로 인증 메일을 보내는데 실패했습니다.');
+        break;
+    }
+  };
+
+  /**
+   *
+   */
+  const checkInputValidation = () => {
+    if (email === '') {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+
+    if (!isEmail) {
+      alert('이메일이 올바르게 입력되었는지 확인해주세요.');
+      return;
+    }
+
+    return true;
+  };
+
+  /**
+   *
+   */
+  const sendEmail = () => {
+    if (!checkInputValidation()) {
+      return;
+    }
+
+    api
+      .post('/v1/api/auth/verification', emailData, {
+        params: {
+          type: 'find-password',
+        },
+      })
+      .then(() => {
+        goToNextStep();
+      })
+      .catch((err) => {
+        handleError(err.response.data.code);
+      });
+  };
+
+  /**
+   *
+   */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    sendEmail();
+  };
+
+  /**
+   *
+   */
   const renderInputError = () => {
-    if (isEmail) {
+    if (isEmail || !errorMsg) {
       return;
     }
 
@@ -112,7 +177,13 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({
     <Wrapper>
       <CotatoPanel size="long" textImgSrc={panelText} />
       {renderInputField()}
-      <CotatoButton width="base" height="long" color="black" text="버튼" />
+      <CotatoButton
+        width="base"
+        height="long"
+        color="black"
+        text="버튼"
+        handleClick={handleSubmit}
+      />
     </Wrapper>
   );
 };
