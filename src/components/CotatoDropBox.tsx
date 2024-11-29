@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
-import {
-  CotatoAttendanceResponse,
-  CotatoGenerationInfoResponse,
-  CotatoSessionListResponse,
-} from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
 import drop_box_background_yellow_lg from '@assets/drop_box_background_yellow_lg.svg';
@@ -14,12 +9,7 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
-type CotatoDropBoxType =
-  | CotatoGenerationInfoResponse
-  | CotatoSessionListResponse
-  | CotatoAttendanceResponse;
-
-interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
+interface CotatoDropBoxProps<T> {
   reversed?: boolean;
   list?: T[];
   defaultItem?: T;
@@ -54,7 +44,7 @@ const FADE_DURATION = 300;
  * @param width drop box width (default: 8rem)
  * @param height drop box height (default: 3.2rem)
  */
-const CotatoDropBox = <T extends CotatoDropBoxType>({
+const CotatoDropBox = <T,>({
   list,
   reversed = true,
   defaultItem,
@@ -123,7 +113,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     return (
       <DropBox onClick={handleDropDownChange} $height={height} $background={background}>
-        <SelectText>{title(selectedItem)}</SelectText>
+        <SelectText>{selectedItem && title(selectedItem)}</SelectText>
         {isDropBoxOpen ? (
           <StyledCotatoIcon icon="angle-up-solid" color={arrowColor} />
         ) : (
@@ -157,14 +147,14 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
     );
   };
 
-  if (!list) {
-    return null;
-  }
-
   /**
    *
    */
   useEffect(() => {
+    if (!list || list.length === 0) {
+      return;
+    }
+
     let newList = [...list];
 
     if (reversed) {
