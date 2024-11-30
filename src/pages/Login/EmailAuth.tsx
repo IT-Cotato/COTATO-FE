@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CotatoPanel from '@components/CotatoPanel';
 import panelText from '@assets/find_password_sending_email_panel_text.svg';
 import CotatoButton from '@components/CotatoButton';
+import api from '@/api/api';
 
 //
 //
@@ -62,6 +63,90 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
 
     if (idx < input.length - 1) {
       inputRef.current[idx + 1]?.focus();
+    }
+  };
+
+  /**
+   *
+   */
+  const checkInputValidation = () => {
+    if (input.some((el) => el === null)) {
+      alert('인증 코드를 입력해주세요.');
+      return;
+    }
+
+    return true;
+  };
+
+  /**
+   *
+   */
+  const initializeInput = () => {
+    inputRef.current.forEach((el: HTMLInputElement | null) => {
+      if (el !== null) {
+        el.value = '';
+      }
+    });
+    setInput(Array(CODE_LENGTH).fill(null));
+  };
+
+  /**
+   *
+   */
+  const handleError = (code: string) => {
+    switch (code) {
+      case 'A-101':
+        alert('인증 코드가 일치하지 않습니다.');
+        break;
+      case 'A-102':
+        alert('인증 코드가 만료되었습니다. 새로운 인증 코드를 발급해주세요.');
+        break;
+      default:
+        alert('인증에 실패했습니다. 다시 시도해주세요.');
+        break;
+    }
+  };
+
+  /**
+   *
+   */
+  const handleAuthCode = () => {
+    if (!checkInputValidation()) {
+      return;
+    }
+
+    const result = api
+      .get('/v1/api/auth/verification', {
+        params: {
+          email: email,
+          code: input.join(''),
+          type: 'find-password',
+        },
+      })
+      .then((res) => {
+        alert('인증이 완료되었습니다.');
+        localStorage.setItem('token_reset_password', res.data.accessToken);
+        goToNextStep();
+      })
+      .catch((err) => {
+        handleError(err.response.data.code);
+        initializeInput();
+
+        return false;
+      });
+
+    return result;
+  };
+
+  /**
+   *
+   */
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const isAuthorized = await handleAuthCode();
+    if (isAuthorized) {
+      goToNextStep();
     }
   };
 
@@ -130,7 +215,13 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
       {renderGuideMessage()}
       {renderInputField()}
       {renderInfoMessage()}
-      <CotatoButton width="base" height="base" color="black" text="버튼" />
+      <CotatoButton
+        width="base"
+        height="base"
+        color="black"
+        text="버튼"
+        handleClick={handleSubmit}
+      />
     </Wrapper>
   );
 };
