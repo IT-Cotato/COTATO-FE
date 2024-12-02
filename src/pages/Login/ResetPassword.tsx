@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CotatoPanel from '@components/CotatoPanel';
 import panelText from '@assets/find_password_reset_password_panel_text.svg';
 import CotatoIcon from '@components/CotatoIcon';
 import CotatoButton from '@components/CotatoButton';
 import { Box } from '@mui/material';
+import api from '@/api/api';
+import { useNavigate } from 'react-router-dom';
 
 //
 //
@@ -49,6 +51,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
   const [isPasswordRegex, setIsPasswordRegex] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  const navigate = useNavigate();
+
   /**
    *
    */
@@ -58,9 +62,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
 
     setIsPasswordLength(PASSWORD_LENGTH.test(input));
     setIsPasswordRegex(PASSWORD_REGEX.test(input));
-    if (isPasswordLength && isPasswordRegex) {
-      setIsPassword(true);
-    }
+
+    setIsPassword(isPasswordLength && isPasswordRegex);
   };
 
   /**
@@ -70,7 +73,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
     const input = e.target.value;
     setPasswordCheck(input);
 
-    if (password !== passwordCheck) {
+    if (password !== input) {
       setMismatchError(true);
       setErrorMsg('비밀번호가 일치하지 않습니다.');
     } else {
@@ -82,7 +85,58 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
   /**
    *
    */
-  const handleSubmit = () => {};
+  const handleError = (code: string) => {
+    switch (code) {
+      case 'A-002':
+        alert('올바르지 않은 비밀번호 형식입니다.');
+        break;
+      case 'M-301':
+        alert('이전에 사용한 적 없는 비밀번호를 사용해주세요.');
+        break;
+      default:
+        alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+        break;
+    }
+  };
+
+  /**
+   *
+   */
+  const updatePassword = () => {
+    api
+      .patch(
+        '/v1/api/member/update/password',
+        {
+          password: password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token_reset_password')}`,
+          },
+        },
+      )
+      .then(() => {
+        alert('비밀번호 변경이 완료되었습니다.');
+        localStorage.removeItem('token_reset_password');
+        navigate('/signin');
+      })
+      .catch((err) => {
+        handleError(err.response.data.code);
+      });
+  };
+
+  /**
+   *
+   */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isPassword && !mismatchError) {
+      updatePassword();
+    } else {
+      alert('입력값을 확인해주세요.');
+    }
+  };
 
   /**
    *
