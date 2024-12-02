@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import CotatoPanel from '@components/CotatoPanel';
 import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import CotatoButton from '@components/CotatoButton';
 import CotatoIcon from '@components/CotatoIcon';
 import panelText from '@assets/find_password_sending_email_panel_text.svg';
@@ -13,10 +14,6 @@ import api from '@/api/api';
 
 interface SendAuthEmailProps {
   goToNextStep: () => void;
-  isEmail: boolean;
-  setIsEmail: React.Dispatch<React.SetStateAction<boolean>>;
-  isPassword: boolean;
-  isPasswordCheck: boolean;
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -32,15 +29,8 @@ const EMAIL_REGEX =
 //
 //
 
-const SendAuthEmail: React.FC<SendAuthEmailProps> = ({
-  goToNextStep,
-  isEmail,
-  setIsEmail,
-  isPassword,
-  isPasswordCheck,
-  email,
-  setEmail,
-}) => {
+const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setEmail }) => {
+  const [isEmail, setIsEmail] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const emailData = {
@@ -68,7 +58,7 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({
    */
   const handleError = (code: string) => {
     switch (code) {
-      case 'A-001' || 'A-002':
+      case 'A-001':
         alert('올바르지 않은 이메일 형식입니다.');
         break;
       case 'A-201':
@@ -153,7 +143,7 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({
    */
   const renderInputField = () => {
     return (
-      <Box sx={{ width: '32rem', marginTop: '5rem' }}>
+      <Box sx={{ width: '32rem', marginTop: '5rem', marginBottom: '2.25rem' }}>
         <Label>
           <p>이메일 입력</p>
         </Label>

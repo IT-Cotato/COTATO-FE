@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CotatoPanel from '@components/CotatoPanel';
 import panelText from '@assets/find_password_reset_password_panel_text.svg';
@@ -12,21 +12,6 @@ import { useNavigate } from 'react-router-dom';
 //
 //
 
-interface ResetPasswordProps {
-  isPassword: boolean;
-  setIsPassword: React.Dispatch<React.SetStateAction<boolean>>;
-  isPasswordCheck: boolean;
-  setIsPasswordCheck: React.Dispatch<React.SetStateAction<boolean>>;
-  mismatchError: boolean;
-  setMismatchError: React.Dispatch<React.SetStateAction<boolean>>;
-  isEmail: boolean;
-  setIsEmail: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-//
-//
-//
-
 const PASSWORD_LENGTH = /^.{8,16}$/;
 const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
 
@@ -34,18 +19,11 @@ const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
 //
 //
 
-const ResetPassword: React.FC<ResetPasswordProps> = ({
-  isPassword,
-  setIsPassword,
-  isPasswordCheck,
-  setIsPasswordCheck,
-  mismatchError,
-  setMismatchError,
-  isEmail,
-  setIsEmail,
-}) => {
+const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
+  const [isPassword, setIsPassword] = useState(false);
+  const [mismatchError, setMismatchError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isPasswordLength, setIsPasswordLength] = useState(false);
   const [isPasswordRegex, setIsPasswordRegex] = useState(false);
