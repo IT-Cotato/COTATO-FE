@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CotatoPanel from '@components/CotatoPanel';
-import { Box } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import CotatoButton from '@components/CotatoButton';
 import CotatoIcon from '@components/CotatoIcon';
 import panelText from '@assets/find_password_sending_email_panel_text.svg';
 import api from '@/api/api';
+import { media } from '@theme/media';
 
 //
 //
@@ -143,7 +142,7 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
    */
   const renderInputField = () => {
     return (
-      <Box sx={{ width: '32rem', marginTop: '5rem', marginBottom: '2.25rem' }}>
+      <InputSection>
         <Label>
           <p>이메일 입력</p>
         </Label>
@@ -159,7 +158,7 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
           />
         </InputDiv>
         {renderInputError()}
-      </Box>
+      </InputSection>
     );
   };
 
@@ -187,7 +186,24 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6rem !important;
+  padding: 6rem;
+
+  ${media.mobile`
+    padding: 8rem 3rem;
+  `}
+`;
+
+const InputSection = styled.div`
+  width: 32rem;
+  margin-top: 5rem;
+  margin-bottom: 2.25rem;
+
+  ${media.landscape`
+    width: 24rem;
+  `}
+  ${media.mobile`
+    width: 100%;
+  `}
 `;
 
 const Label = styled.div`
@@ -217,9 +233,14 @@ const InputDiv = styled.div`
 const InputBox = styled.input`
   width: 100%;
   border: none;
+  background-color: ${({ theme }) => theme.colors.common.white} !important;
   background: none;
   outline: none;
   font-family: Pretendard;
+  color: ${({ theme }) => theme.colors.common.black};
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray60};
+  }
 `;
 
 const Error = styled.div`
@@ -227,6 +248,7 @@ const Error = styled.div`
   align-items: center;
   margin: 0;
   gap: 0.35rem;
+  padding-left: 0.75rem;
   span {
     font-size: ${({ theme }) => theme.fontSize.sm};
     color: ${({ theme }) => theme.colors.secondary80};

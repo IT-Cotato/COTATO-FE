@@ -4,6 +4,8 @@ import CotatoPanel from '@components/CotatoPanel';
 import panelText from '@assets/find_password_sending_email_panel_text.svg';
 import CotatoButton from '@components/CotatoButton';
 import api from '@/api/api';
+import { media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
 
 //
 //
@@ -235,7 +237,11 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6rem !important;
+  padding: 6rem;
+
+  ${media.mobile`
+    padding: 8rem 3rem;
+  `}
 `;
 
 const Message = styled.p`
@@ -253,6 +259,10 @@ const Message = styled.p`
     font-family: 'Pretendard';
     font-weight: bold;
   }
+
+  ${media.mobile`
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
+  `}
 `;
 
 const InputDiv = styled.div`
@@ -261,6 +271,10 @@ const InputDiv = styled.div`
   align-items: center;
   gap: 1rem;
   margin-top: 2.6rem;
+
+  ${media.mobile`
+    gap: 0.5rem;
+  `}
 `;
 
 const InputBox = styled.input<{ filled: boolean }>`
@@ -273,7 +287,7 @@ const InputBox = styled.input<{ filled: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${({ theme }) => theme.colors.gray100};
+  color: ${({ theme }) => theme.colors.common.black};
   font-size: 2.8rem;
   font-family: 'Pretendard';
   font-weight: 700;
@@ -286,6 +300,17 @@ const InputBox = styled.input<{ filled: boolean }>`
   &:focus {
     border-width: 3px !important;
   }
+
+  ${media.landscape`
+    width: 4rem;
+    height: 4rem;
+    font-size: 2rem;
+  `}
+  ${media.mobile`
+    width: 3rem;
+    height: 3rem;
+    font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xl};
+  `}
 `;
 
 export default EmailAuth;

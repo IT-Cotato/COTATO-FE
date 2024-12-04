@@ -7,6 +7,8 @@ import CotatoButton from '@components/CotatoButton';
 import { Box } from '@mui/material';
 import api from '@/api/api';
 import { useNavigate } from 'react-router-dom';
+import { media } from '@theme/media';
+import { CotatoThemeType } from '@theme/theme';
 
 //
 //
@@ -158,7 +160,7 @@ const ResetPassword = () => {
     return (
       <Box sx={{ display: 'flex', gap: '0.6rem', paddingLeft: '0.75rem' }}>
         <ValidationDiv isValid={isPasswordLength}>
-          <CotatoIcon
+          <StyledCotatoIcon
             icon="check-box-solid"
             size="1.5rem"
             color={(theme) => (isPasswordLength ? theme.colors.sub3[60] : theme.colors.gray60)}
@@ -166,7 +168,7 @@ const ResetPassword = () => {
           <span>8-16자 입력</span>
         </ValidationDiv>
         <ValidationDiv isValid={isPasswordRegex}>
-          <CotatoIcon
+          <StyledCotatoIcon
             icon="check-box-solid"
             size="1.5rem"
             color={(theme) => (isPasswordRegex ? theme.colors.sub3[60] : theme.colors.gray60)}
@@ -265,6 +267,10 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 6rem;
+
+  ${media.mobile`
+    padding: 8rem 3rem;
+  `}
 `;
 
 const Label = styled.div`
@@ -284,6 +290,13 @@ const InputSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+
+  ${media.landscape`
+    width: 24rem;
+  `}
+  ${media.mobile`
+    width: 100%;
+  `}
 `;
 
 const InputDiv = styled.div`
@@ -317,6 +330,18 @@ const ValidationDiv = styled.div<{ isValid: boolean }>`
     font-size: ${({ theme }) => theme.fontSize.sm};
     color: ${({ isValid, theme }) => (isValid ? theme.colors.sub3[60] : theme.colors.gray60)};
   }
+
+  ${media.mobile`
+    span {
+      font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
+    }
+  `}
+`;
+
+const StyledCotatoIcon = styled(CotatoIcon)`
+  ${media.mobile`
+    width: 1rem !important;
+  `}
 `;
 
 const Error = styled.div`
