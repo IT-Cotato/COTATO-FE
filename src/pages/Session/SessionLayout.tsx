@@ -1,10 +1,10 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { ReactComponent as SessionHomeTag } from '@assets/session_home_tag.svg';
 import { Link } from 'react-router-dom';
-import { device, media } from '@theme/media';
-import { useMediaQuery } from '@mui/material';
+import { media } from '@theme/media';
 import { HEADER_HEIGHT } from '@theme/constants/constants';
+import CotatoPanel from '@components/CotatoPanel';
+import PanelText from '@assets/session_panel_text.svg';
 
 //
 //
@@ -19,12 +19,10 @@ interface SessionLayoutProps {
 //
 
 const SessionLayout = ({ children }: SessionLayoutProps) => {
-  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
-
   return (
     <Wrapper>
       <Link to="/session">
-        <SessionHomeTag width={isTabletOrSmaller ? '8.8rem' : '10rem'} />
+        <CotatoPanel size="short" textImgSrc={PanelText} />
       </Link>
       {children}
     </Wrapper>
