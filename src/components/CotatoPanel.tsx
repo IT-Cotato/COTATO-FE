@@ -26,13 +26,13 @@ const CotatoPanel: React.FC<CotatoPanelProps> = ({ size, textImgSrc }) => {
   const getPanelBackground = (size: SizeStateType) => {
     switch (size) {
       case 'short':
-        return <PanelShort />;
+        return <PanelShort style={{ width: '10.25rem' }} />;
       case 'default':
-        return <PanelDefault />;
+        return <PanelDefault style={{ width: '14rem' }} />;
       case 'long':
-        return <PanelLong />;
+        return <PanelLong style={{ width: '17.5rem' }} />;
       default:
-        return <PanelDefault />;
+        return <PanelDefault style={{ width: '14rem' }} />;
     }
   };
 
@@ -40,7 +40,7 @@ const CotatoPanel: React.FC<CotatoPanelProps> = ({ size, textImgSrc }) => {
    *
    */
   const renderPanelText = () => {
-    return <img src={textImgSrc} />;
+    return <img src={textImgSrc} style={{ width: '75%' }} />;
   };
 
   return (
@@ -56,6 +56,8 @@ const CotatoPanel: React.FC<CotatoPanelProps> = ({ size, textImgSrc }) => {
 //
 
 const Wrapper = styled.div`
+  width: fit-content;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,20 +65,16 @@ const Wrapper = styled.div`
 `;
 
 const BackgroundDiv = styled.div`
-  width: fit-content;
-  height: fit-content;
   display: flex;
   justify-content: center;
 `;
 
 const TextDiv = styled.div`
-  width: fit-content;
-  height: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 `;
 
 export default CotatoPanel;
