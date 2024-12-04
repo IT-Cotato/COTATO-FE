@@ -10,7 +10,7 @@ import { device, media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MobileSideMenuDrawerButton from './MobileSideMenuDrawerButton';
-import { Box, CircularProgress, Tooltip } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
