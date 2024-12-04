@@ -1,5 +1,5 @@
 export const useThemeMode = () => {
-  const theme = localStorage.getItem('theme') || 'light';
+  const theme = localStorage.getItem('theme') || 'dark';
 
   //
   //
