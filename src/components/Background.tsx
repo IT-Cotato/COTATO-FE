@@ -27,7 +27,7 @@ const Background = () => {
         top: 0,
         left: 0,
         width: '100%',
-        height: '100%',
+        height: '200vh',
         zIndex: -1,
         backgroundRepeat: 'repeat',
         backgroundSize: 'cover',
@@ -35,7 +35,13 @@ const Background = () => {
         transition: THEME_CHANGE_TRANSITION,
       }}
     >
-      <Box component="img" src={mode === 'light' ? lightBackgroundImage : darkBackgroundImage} />
+      <Box
+        component="img"
+        src={mode === 'light' ? lightBackgroundImage : darkBackgroundImage}
+        sx={{
+          objectFit: 'cover',
+        }}
+      />
     </Stack>
   );
 };
