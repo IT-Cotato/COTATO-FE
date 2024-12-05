@@ -35,7 +35,13 @@ const Background = () => {
         transition: THEME_CHANGE_TRANSITION,
       }}
     >
-      <Box component="img" src={mode === 'light' ? lightBackgroundImage : darkBackgroundImage} />
+      <Box
+        component="img"
+        src={mode === 'light' ? lightBackgroundImage : darkBackgroundImage}
+        sx={{
+          objectFit: 'cover',
+        }}
+      />
     </Stack>
   );
 };
