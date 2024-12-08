@@ -156,6 +156,7 @@ const AttendanceReportHeader = () => {
             defaultItem={attendanceListWithAll.find(
               (attendance) => attendance.attendanceId === selectedAttendanceId,
             )}
+            size="lg"
             width="12rem"
             color="yellow"
             onChange={handleAttendanceChange}

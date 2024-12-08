@@ -9,11 +9,18 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
+type CotatoDropBoxSize = 'md' | 'lg';
+
+//
+//
+//
+
 interface CotatoDropBoxProps<T> {
   reversed?: boolean;
   list?: T[];
   defaultItem?: T;
   color?: string;
+  size?: CotatoDropBoxSize;
   width?: string;
   height?: string;
   onChange: (item: T) => void;
@@ -36,19 +43,23 @@ const FADE_DURATION = 300;
 //
 
 /**
- * cotato drop box component
- * @param list drop box list
- * @param onChange list value change event
- * @param reversed drop box list reversed (default: true)
- * @param color drop box color (default: blue)
- * @param width drop box width (default: 8rem)
- * @param height drop box height (default: 3.2rem)
+ * Drop box component
+ * @param reversed reverse list
+ * @param list list of items
+ * @param defaultItem default item
+ * @param color color of drop box
+ * @param size size of drop box
+ * @param width width of drop box
+ * @param height height of drop box
+ * @param onChange function to handle change event
+ * @param title function to get title of item
  */
 const CotatoDropBox = <T,>({
   list,
   reversed = true,
   defaultItem,
   color = 'blue',
+  size = 'md',
   width = '8rem',
   height = '3.2rem',
   onChange,
@@ -78,7 +89,7 @@ const CotatoDropBox = <T,>({
 
     if (color === 'yellow') {
       return {
-        background: `url(${width === '12rem' ? drop_box_background_yellow_lg : drop_box_background_yellow})`,
+        background: `url(${size === 'lg' ? drop_box_background_yellow_lg : drop_box_background_yellow})`,
         arrowColor: theme.colors.primary40,
       };
     }
