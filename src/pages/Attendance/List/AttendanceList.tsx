@@ -6,9 +6,9 @@ import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import {
   CotatoAttendanceRecordResponseResultEnum,
-  CotatoAttendanceResponseOpenStatusEnum,
   CotatoMemberAttendanceRecordsResponse,
   CotatoMemberAttendResponse,
+  CotatoMemberAttendResponseIsOpenedEnum,
 } from 'cotato-openapi-clients';
 import { ReactComponent as GoalPotato } from '@assets/potato_goal.svg';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -54,7 +54,19 @@ const AttendanceList = () => {
    *
    */
   const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
-    if (attendance.isOpened === CotatoAttendanceResponseOpenStatusEnum.Open) {
+    const allowedAttendanceStatus = [
+      CotatoMemberAttendResponseIsOpenedEnum.Open,
+      CotatoMemberAttendResponseIsOpenedEnum.Late,
+      CotatoMemberAttendResponseIsOpenedEnum.Absent,
+    ] as CotatoMemberAttendResponseIsOpenedEnum[];
+
+    attendance.isOpened = CotatoMemberAttendResponseIsOpenedEnum.Open;
+
+    if (
+      allowedAttendanceStatus.includes(
+        attendance.isOpened as CotatoMemberAttendResponseIsOpenedEnum,
+      )
+    ) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
     }
   };
