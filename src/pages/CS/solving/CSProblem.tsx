@@ -16,6 +16,7 @@ import { CotatoReplyRequest } from 'cotato-openapi-clients';
 import fetchUserData from '@utils/fetchUserData';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
+import { QUIZ_END_NUMBER } from './constants';
 
 //
 //
@@ -227,11 +228,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
           .then((res) => {
             if (res.data.result === 'true') {
               setShowCorrect(true);
-              if ((quizData?.number as number) !== 10) {
-                setTimeout(() => setReturnToWaiting(true), 2500);
-              } else {
-                setReturnToWaiting(false);
-              }
+              setTimeout(() => setReturnToWaiting(true), 2500);
             } else {
               setShowIncorrect(true);
             }
@@ -328,14 +325,20 @@ const CSProblem: React.FC<CSProblemProps> = ({
           />
         )}
         <ButtonContainer disabled={!submitAllowed}>
-          {quizData?.number === 10 ? null : <button onClick={nextProblem}>다음문제</button>}
+          {quizData?.number === QUIZ_END_NUMBER ? null : (
+            <button onClick={nextProblem}>다음문제</button>
+          )}
           <button onClick={submitProblem}>제출하기</button>
         </ButtonContainer>
       </QuizContainer>
       {showCorrect && <BgCorrect />}
       {showIncorrect && <BgIncorrect />}
       {showKingKing && educationId && <BgKingKing educationId={educationId} />}
-      {returnToWaiting && <BgWaiting problemNumber={quizData?.number} />}
+      {quizData?.number === QUIZ_END_NUMBER ? (
+        <BgWaiting problemNumber={quizData?.number} />
+      ) : (
+        returnToWaiting && <BgWaiting problemNumber={quizData?.number} />
+      )}
     </Wrapper>
   );
 };
