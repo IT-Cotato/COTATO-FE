@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import background from '@assets/bg_waiting.svg';
 import mobile from '@assets/bg_waiting_mobile.svg';
+import { QUIZ_END_NUMBER, MESSAGE } from './constants/index';
 
 //
 //
@@ -16,23 +17,15 @@ interface BgWaitingProps {
 //
 //
 
-const QUIZ_END_NUMBER = 10;
-const WAITING_MESSAGE = '곧 문제가 시작됩니다. 잠시만 기다려주세요!';
-const ENDING_MESSAGE = 'CS 퀴즈가 종료되었습니다. 수고하셨습니다!';
-
-//
-//
-//
-
 const BgWaiting: React.FC<BgWaitingProps> = ({ problemNumber }) => {
-  const [message, setMessage] = useState(WAITING_MESSAGE);
+  const [message, setMessage] = useState(MESSAGE.WAITING);
 
   /**
    *
    */
   const handleEndingMessage = () => {
     if (problemNumber === QUIZ_END_NUMBER) {
-      setMessage(ENDING_MESSAGE);
+      setMessage(MESSAGE.ENDING);
     }
   };
 
