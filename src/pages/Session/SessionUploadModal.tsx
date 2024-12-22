@@ -27,6 +27,7 @@ import CotatoTimePicker from '@components/CotatoTimePicker';
 import api from '@/api/api';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
+import { getNextFriday } from './util/getNextFriday';
 
 //
 //
@@ -60,10 +61,10 @@ interface LocationInputBoxProps {
 const INITIAL_SESSION_STATE: SessionUploadInfo = {
   title: '',
   description: '',
-  sessionDateTime: new Date(),
+  sessionDateTime: getNextFriday(),
   attendTime: {
-    attendanceDeadLine: new Date(),
-    lateDeadLine: new Date(),
+    attendanceDeadLine: getNextFriday(19, 10),
+    lateDeadLine: getNextFriday(19, 20),
   },
   isOffline: true,
   isOnline: false,
@@ -493,25 +494,6 @@ const SessionUploadModal = ({
   useEffect(() => {
     if (sessionId) {
       fetchUpdateSession();
-    } else {
-      const getNextFidayDate = (hour: number, minute: number) => {
-        const today = new Date();
-        const day = today.getDay();
-        const diff = 5 - day;
-        const nextFriday = new Date(today);
-        nextFriday.setDate(today.getDate() + diff);
-        nextFriday.setHours(hour, minute, 0, 0);
-        return nextFriday;
-      };
-
-      const initialSession = produce(INITIAL_SESSION_STATE, (draft) => {
-        draft.sessionDateTime = getNextFidayDate(19, 0);
-        draft.attendTime = {
-          attendanceDeadLine: getNextFidayDate(19, 10),
-          lateDeadLine: getNextFidayDate(19, 20),
-        };
-      });
-      setSession(initialSession);
     }
 
     if (lastSessionNumber !== undefined) {
