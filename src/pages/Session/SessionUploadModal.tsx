@@ -396,6 +396,19 @@ const SessionUploadModal = ({
           </div>
         </InfoBox>
         <InfoBox $bold={true}>
+          <div>출석</div>
+          <div>
+            <ContentsInputWrapper>
+              <span>대면</span>
+              <CotatoThemeToggleSwitch checked={true} onChange={() => {}} />
+            </ContentsInputWrapper>
+            <ContentsInputWrapper>
+              <span>비대면</span>
+              <CotatoThemeToggleSwitch checked={true} onChange={() => {}} />
+            </ContentsInputWrapper>
+          </div>
+        </InfoBox>
+        <InfoBox $bold={true}>
           <div>
             출석 인정
             <CotatoTimePicker
