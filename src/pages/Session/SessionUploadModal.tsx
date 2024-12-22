@@ -21,7 +21,7 @@ import {
   CotatoSessionContentsDevTalkEnum,
   CotatoSessionContentsItIssueEnum,
   CotatoSessionContentsNetworkingEnum,
-  CotatoSessionListResponse,
+  CotatoSessionWithAttendanceResponse,
 } from 'cotato-openapi-clients';
 import CotatoTimePicker from '@components/CotatoTimePicker';
 import api from '@/api/api';
@@ -37,7 +37,7 @@ interface SessionUploadModalProps {
   headerText: string;
   handleClose: () => void;
   handleUpload: (session: SessionUploadInfo) => void;
-  sessionInfo?: CotatoSessionListResponse | null;
+  sessionId: number | null;
   lastSessionNumber?: number;
   requestImageAdd?: (image: SessionListImageInfo, order: number) => Promise<any>;
   requestImageReorder?: (imageList: SessionListImageInfo[]) => Promise<any>;
@@ -65,6 +65,8 @@ const INITIAL_SESSION_STATE: SessionUploadInfo = {
     attendanceDeadLine: new Date(),
     lateDeadLine: new Date(),
   },
+  isOffline: true,
+  isOnline: false,
   itIssue: CotatoSessionContentsItIssueEnum.Off,
   csEducation: CotatoSessionContentsCsEducationEnum.On,
   networking: CotatoSessionContentsNetworkingEnum.On,
@@ -81,7 +83,7 @@ const SessionUploadModal = ({
   headerText,
   handleClose,
   handleUpload,
-  sessionInfo,
+  sessionId,
   lastSessionNumber,
   requestImageAdd,
   requestImageReorder,
@@ -97,30 +99,28 @@ const SessionUploadModal = ({
    */
   const fetchUpdateSession = async () => {
     try {
-      const { data: attendancesInfo } = await api.get('/v2/api/attendances/info', {
-        params: {
-          sessionId: sessionInfo?.sessionId,
-        },
-      });
+      const { data: sessionWithAttendance } = await api.get<CotatoSessionWithAttendanceResponse>(
+        `/v1/api/session/${sessionId}`,
+      );
 
       const updateSession: SessionUploadInfo = {
-        sessionId: sessionInfo?.sessionId || 0,
-        title: sessionInfo?.title || '',
-        description: sessionInfo?.description || '',
-        sessionDateTime: new Date(sessionInfo?.sessionDateTime || ''),
-        placeName: sessionInfo?.placeName || '',
-        location: attendancesInfo.location,
+        sessionId: sessionWithAttendance.sessionId,
+        title: sessionWithAttendance.title,
+        description: sessionWithAttendance.description,
+        sessionDateTime: new Date(sessionWithAttendance.sessionDateTime || ''),
+        placeName: sessionWithAttendance.placeName,
+        location: sessionWithAttendance.attendance?.location,
         attendTime: {
-          attendanceDeadLine: attendancesInfo.attendanceDeadLine,
-          lateDeadLine: attendancesInfo.lateDeadLine,
+          attendanceDeadLine: new Date(sessionWithAttendance.attendance?.attendanceDeadLine || ''),
+          lateDeadLine: new Date(sessionWithAttendance.attendance?.lateDeadLine || ''),
         },
-        itIssue: sessionInfo?.sessionContents?.itIssue || CotatoSessionContentsItIssueEnum.Off,
-        csEducation:
-          sessionInfo?.sessionContents?.csEducation || CotatoSessionContentsCsEducationEnum.On,
-        networking:
-          sessionInfo?.sessionContents?.networking || CotatoSessionContentsNetworkingEnum.On,
-        devTalk: sessionInfo?.sessionContents?.devTalk || CotatoSessionContentsDevTalkEnum.Off,
-        imageInfos: sessionInfo?.imageInfos || [],
+        isOffline: sessionWithAttendance.isOffline,
+        isOnline: sessionWithAttendance.isOnline,
+        itIssue: sessionWithAttendance.sessionContents!.itIssue!,
+        csEducation: sessionWithAttendance.sessionContents!.csEducation!,
+        networking: sessionWithAttendance.sessionContents!.networking!,
+        devTalk: sessionWithAttendance.sessionContents!.devTalk!,
+        imageInfos: sessionWithAttendance.sessionImages!,
       };
 
       setSession(updateSession);
@@ -266,6 +266,28 @@ const SessionUploadModal = ({
   /**
    *
    */
+  const handleAttendanceOfflineChange = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.isOffline = !session.isOffline;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
+  const handleAttendanceOnlineChange = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.isOnline = !session.isOnline;
+      }),
+    );
+  };
+
+  /**
+   *
+   */
   const handleAttendanceDeadlineChange = (date: Date) => {
     setSession(
       produce(session, (draft) => {
@@ -400,11 +422,17 @@ const SessionUploadModal = ({
           <div>
             <ContentsInputWrapper>
               <span>대면</span>
-              <CotatoThemeToggleSwitch checked={true} onChange={() => {}} />
+              <CotatoThemeToggleSwitch
+                checked={session.isOffline}
+                onChange={handleAttendanceOfflineChange}
+              />
             </ContentsInputWrapper>
             <ContentsInputWrapper>
               <span>비대면</span>
-              <CotatoThemeToggleSwitch checked={true} onChange={() => {}} />
+              <CotatoThemeToggleSwitch
+                checked={session.isOnline}
+                onChange={handleAttendanceOnlineChange}
+              />
             </ContentsInputWrapper>
           </div>
         </InfoBox>
@@ -463,7 +491,7 @@ const SessionUploadModal = ({
    * Set default session state
    */
   useEffect(() => {
-    if (sessionInfo) {
+    if (sessionId) {
       fetchUpdateSession();
     } else {
       const getNextFidayDate = (hour: number, minute: number) => {
@@ -483,7 +511,6 @@ const SessionUploadModal = ({
           lateDeadLine: getNextFidayDate(19, 20),
         };
       });
-
       setSession(initialSession);
     }
 
@@ -494,7 +521,7 @@ const SessionUploadModal = ({
         }),
       );
     }
-  }, [sessionInfo, lastSessionNumber]);
+  }, [sessionId, lastSessionNumber]);
 
   return (
     <Modal

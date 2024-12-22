@@ -38,7 +38,7 @@ const SessionHome = () => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateSession, setUpdateSession] = useState<CotatoSessionListResponse | null>(null);
+  const [updateSessionId, setUpdateSessionId] = useState<number | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
@@ -76,8 +76,7 @@ const SessionHome = () => {
       return;
     }
 
-    const updateSession: CotatoSessionListResponse = JSON.parse(JSON.stringify(session));
-    setUpdateSession(updateSession);
+    setUpdateSessionId(session.sessionId!);
     setIsDetailModalOpen(false);
     setIsUpdateModalOpen(true);
   };
@@ -91,7 +90,7 @@ const SessionHome = () => {
     }
 
     const formData = new FormData();
-    formData.append('sessionId', updateSession?.sessionId?.toString() || '');
+    formData.append('sessionId', updateSessionId?.toString() || '');
     formData.append('image', image.imageFile);
     formData.append('order', order.toString());
 
@@ -110,7 +109,7 @@ const SessionHome = () => {
     });
 
     return api.patch('/v1/api/session/image/order', {
-      sessionId: updateSession?.sessionId,
+      sessionId: updateSessionId,
       orderInfos: reorderedImageList,
     });
   };
@@ -435,6 +434,7 @@ const SessionHome = () => {
         handleClose={() => setIsAddModalOpen(false)}
         headerText="세션 추가"
         handleUpload={handleSessionAdd}
+        sessionId={null}
         lastSessionNumber={sessionList?.length}
       />
       <SessionUploadModal
@@ -442,7 +442,7 @@ const SessionHome = () => {
         handleClose={() => setIsUpdateModalOpen(false)}
         headerText="세션 수정"
         handleUpload={handleSessionUpdate}
-        sessionInfo={updateSession}
+        sessionId={updateSessionId}
         requestImageAdd={requestImageAdd}
         requestImageReorder={requestImageReorder}
         requestImageRemove={requestImageRemove}
