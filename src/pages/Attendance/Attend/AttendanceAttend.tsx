@@ -11,10 +11,8 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
 import onlineCharacter from '@/assets/online_character.svg';
 import offlineTwoCharacter from '@/assets/offline_two_character.svg';
-
 import styled, { useTheme } from 'styled-components';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
@@ -107,7 +105,7 @@ const AttendanceAttend: React.FC = () => {
       return;
     }
 
-    navigate(`${location.pathname}/${attendanceType.toLowerCase()}/${data?.status?.toLowerCase()}`);
+    navigate(`${location.pathname}/${attendanceType.toLowerCase()}/${data?.result?.toLowerCase()}`);
   };
 
   /**

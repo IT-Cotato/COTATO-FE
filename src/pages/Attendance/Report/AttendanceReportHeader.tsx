@@ -3,7 +3,10 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
-import { CotatoAttendanceResponse, CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
+import {
+  CotatoAttendanceWithSessionResponse,
+  CotatoGenerationInfoResponse,
+} from 'cotato-openapi-clients';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
 import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
@@ -30,9 +33,9 @@ const AttendanceReportHeader = () => {
 
   const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
   const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
-  const [attendanceListWithAll, setAttendanceListWithAll] = useState<CotatoAttendanceResponse[]>(
-    [],
-  );
+  const [attendanceListWithAll, setAttendanceListWithAll] = useState<
+    CotatoAttendanceWithSessionResponse[]
+  >([]);
 
   const { generations } = useGeneration({
     generationId: selectedGenerationId.toString(),
@@ -59,7 +62,7 @@ const AttendanceReportHeader = () => {
   /**
    *
    */
-  const handleAttendanceChange = (attendance: CotatoAttendanceResponse) => {
+  const handleAttendanceChange = (attendance: CotatoAttendanceWithSessionResponse) => {
     setSelectedAttendanceId(attendance.attendanceId!);
     if (attendance.attendanceId !== REPORT_ALL_ID) {
       navigate(
@@ -89,7 +92,7 @@ const AttendanceReportHeader = () => {
       return;
     }
 
-    const newAttendaceList: CotatoAttendanceResponse[] = [...attendances.attendances];
+    const newAttendaceList: CotatoAttendanceWithSessionResponse[] = [...attendances.attendances];
     newAttendaceList.push({
       attendanceId: REPORT_ALL_ID,
       sessionId: REPORT_ALL_ID,
