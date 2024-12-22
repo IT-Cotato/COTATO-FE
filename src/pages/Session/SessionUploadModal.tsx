@@ -347,22 +347,8 @@ const SessionUploadModal = ({
         {renderDateInput()}
         {renderLocationInput()}
         {renderAttendanceTypeInput()}
-        <InfoBox $bold={true}>
-          <div>
-            출석 인정
-            <CotatoTimePicker
-              date={session.attendTime?.attendanceDeadLine ?? new Date()}
-              onDateChange={handleAttendanceDeadlineChange}
-            />
-          </div>
-          <div>
-            지각 인정
-            <CotatoTimePicker
-              date={session.attendTime?.lateDeadLine ?? new Date()}
-              onDateChange={handleLateDeadLineChange}
-            />
-          </div>
-        </InfoBox>
+        {renderAttendanceDeadlineInput()}
+        {renderAttendanceLateDeadlineInput()}
         {renderSessionContentsInput()}
         {renderDescriptionInput()}
       </InfoInputWrapper>
@@ -450,6 +436,44 @@ const SessionUploadModal = ({
               onChange={handleAttendanceOnlineChange}
             />
           </ContentsInputWrapper>
+        </div>
+      </InfoBox>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderAttendanceDeadlineInput = () => {
+    return (
+      <InfoBox $bold={true}>
+        <div>출석 인정 시간</div>
+        <div>
+          <CotatoTimePicker readonly date={session.sessionDateTime} />
+          <Seperator />
+          <CotatoTimePicker
+            date={session.attendTime?.attendanceDeadLine ?? new Date()}
+            onDateChange={handleAttendanceDeadlineChange}
+          />
+        </div>
+      </InfoBox>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderAttendanceLateDeadlineInput = () => {
+    return (
+      <InfoBox $bold={true}>
+        <div>지각 인정 시간</div>
+        <div>
+          <CotatoTimePicker readonly date={session.attendTime?.attendanceDeadLine ?? new Date()} />
+          <Seperator />
+          <CotatoTimePicker
+            date={session.attendTime?.lateDeadLine ?? new Date()}
+            onDateChange={handleLateDeadLineChange}
+          />
         </div>
       </InfoBox>
     );
@@ -772,6 +796,12 @@ const ContentsInputWrapper = styled.span`
       height: auto;
     }
   }
+`;
+
+const Seperator = styled.div`
+  width: 0.75rem;
+  height: 0;
+  border: 1px solid ${({ theme }) => theme.colors.gray70};
 `;
 
 const UploadButtonWrapper = styled.div`
