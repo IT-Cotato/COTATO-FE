@@ -341,102 +341,12 @@ const SessionUploadModal = ({
    *
    */
   const renderInfoInput = () => {
-    const getContentsInput = () => {
-      const contentList = [
-        {
-          name: 'IT 이슈',
-          checked: session.itIssue === CotatoSessionContentsItIssueEnum.On,
-          hanldeChange: handleItIssueChange,
-        },
-        {
-          name: 'CS 교육',
-          checked: session.csEducation === CotatoSessionContentsCsEducationEnum.On,
-          hanldeChange: handleCsEducationChange,
-        },
-        {
-          name: '네트워킹',
-          checked: session.networking === CotatoSessionContentsNetworkingEnum.On,
-          hanldeChange: handleNetworkingChange,
-        },
-        {
-          name: '데브토크',
-          checked: session.devTalk === CotatoSessionContentsDevTalkEnum.On,
-          hanldeChange: handleDevTalkChange,
-        },
-      ];
-
-      return (
-        <>
-          {contentList.map((content, index) => (
-            <ContentsInputWrapper key={index}>
-              <span>{content.name}</span>
-              <CotatoThemeToggleSwitch checked={content.checked} onChange={content.hanldeChange} />
-            </ContentsInputWrapper>
-          ))}
-        </>
-      );
-    };
-
     return (
       <InfoInputWrapper>
-        <TitleBox $bold={true}>
-          <input value={session.title} onChange={handleTitleChange} />
-          <IconButton>
-            <CotatoIcon icon="pencil-solid" color={(theme) => theme.colors.gray60} />
-          </IconButton>
-        </TitleBox>
-        <InfoBox onClick={() => setIsDayPickerOpen(true)}>
-          <input
-            placeholder="세션 날짜를 선택해 주세요."
-            value={
-              session.sessionDateTime &&
-              dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일 HH시 mm분')
-            }
-            readOnly={true}
-            style={{ cursor: 'pointer' }}
-          />
-          <IconButton>
-            <CotatoIcon icon="calender-solid" color={(theme) => theme.colors.gray60} />
-          </IconButton>
-        </InfoBox>
-        <InfoBox $bold={true}>
-          <div>세션 장소</div>
-          <div>
-            <LocationInputBox onClick={handleSearchLocationButtonClick}>
-              <input placeholder="장소 검색" value={address} readOnly={true} />
-              <button type="button">
-                <CotatoIcon icon="search" size="1.25rem" color={(theme) => theme.colors.gray60} />
-              </button>
-            </LocationInputBox>
-            <LocationInputBox $width="9rem">
-              <input
-                placeholder="장소명"
-                value={session.placeName}
-                readOnly={session.location === undefined}
-                onChange={handlePlaceNameChange}
-              />
-            </LocationInputBox>
-          </div>
-        </InfoBox>
-        <InfoBox $bold={true}>
-          <div>출석</div>
-          <div>
-            <ContentsInputWrapper>
-              <span>대면</span>
-              <CotatoThemeToggleSwitch
-                checked={session.isOffline}
-                onChange={handleAttendanceOfflineChange}
-              />
-            </ContentsInputWrapper>
-            <ContentsInputWrapper>
-              <span>비대면</span>
-              <CotatoThemeToggleSwitch
-                checked={session.isOnline}
-                onChange={handleAttendanceOnlineChange}
-              />
-            </ContentsInputWrapper>
-          </div>
-        </InfoBox>
+        {renderTitleInput()}
+        {renderDateInput()}
+        {renderLocationInput()}
+        {renderAttendanceTypeInput()}
         <InfoBox $bold={true}>
           <div>
             출석 인정
@@ -453,15 +363,149 @@ const SessionUploadModal = ({
             />
           </div>
         </InfoBox>
-        <InfoBox>{getContentsInput()}</InfoBox>
-        <InfoBox $height="8rem">
-          <textarea
-            placeholder="활동 내용을 작성하세요."
-            value={session.description}
-            onChange={handleDescriptionChange}
-          />
-        </InfoBox>
+        {renderSessionContentsInput()}
+        {renderDescriptionInput()}
       </InfoInputWrapper>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderTitleInput = () => {
+    return (
+      <TitleBox $bold={true}>
+        <input value={session.title} onChange={handleTitleChange} />
+        <IconButton>
+          <CotatoIcon icon="pencil-solid" color={(theme) => theme.colors.gray60} />
+        </IconButton>
+      </TitleBox>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderDateInput = () => {
+    return (
+      <InfoBox onClick={() => setIsDayPickerOpen(true)}>
+        <input
+          value={dayjs(session.sessionDateTime).format('YYYY년 MM월 DD일 HH시 mm분')}
+          readOnly={true}
+          style={{ cursor: 'pointer' }}
+        />
+        <IconButton>
+          <CotatoIcon icon="calender-solid" color={(theme) => theme.colors.gray60} />
+        </IconButton>
+      </InfoBox>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderLocationInput = () => {
+    return (
+      <InfoBox $bold={true}>
+        <div>세션 장소</div>
+        <div>
+          <LocationInputBox onClick={handleSearchLocationButtonClick}>
+            <input placeholder="장소 검색" value={address} readOnly={true} />
+            <button type="button">
+              <CotatoIcon icon="search" size="1.25rem" color={(theme) => theme.colors.gray60} />
+            </button>
+          </LocationInputBox>
+          <LocationInputBox $width="9rem">
+            <input
+              placeholder="장소명"
+              value={session.placeName}
+              readOnly={session.location === undefined}
+              onChange={handlePlaceNameChange}
+            />
+          </LocationInputBox>
+        </div>
+      </InfoBox>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderAttendanceTypeInput = () => {
+    return (
+      <InfoBox $bold={true}>
+        <div>출석</div>
+        <div>
+          <ContentsInputWrapper>
+            <span>대면</span>
+            <CotatoThemeToggleSwitch
+              checked={session.isOffline}
+              onChange={handleAttendanceOfflineChange}
+            />
+          </ContentsInputWrapper>
+          <ContentsInputWrapper>
+            <span>비대면</span>
+            <CotatoThemeToggleSwitch
+              checked={session.isOnline}
+              onChange={handleAttendanceOnlineChange}
+            />
+          </ContentsInputWrapper>
+        </div>
+      </InfoBox>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderSessionContentsInput = () => {
+    const contentList = [
+      {
+        name: 'IT 이슈',
+        checked: session.itIssue === CotatoSessionContentsItIssueEnum.On,
+        hanldeChange: handleItIssueChange,
+      },
+      {
+        name: 'CS 교육',
+        checked: session.csEducation === CotatoSessionContentsCsEducationEnum.On,
+        hanldeChange: handleCsEducationChange,
+      },
+      {
+        name: '네트워킹',
+        checked: session.networking === CotatoSessionContentsNetworkingEnum.On,
+        hanldeChange: handleNetworkingChange,
+      },
+      {
+        name: '데브토크',
+        checked: session.devTalk === CotatoSessionContentsDevTalkEnum.On,
+        hanldeChange: handleDevTalkChange,
+      },
+    ];
+
+    return (
+      <InfoBox>
+        {contentList.map((content, index) => (
+          <ContentsInputWrapper key={index}>
+            <span>{content.name}</span>
+            <CotatoThemeToggleSwitch checked={content.checked} onChange={content.hanldeChange} />
+          </ContentsInputWrapper>
+        ))}
+      </InfoBox>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderDescriptionInput = () => {
+    return (
+      <InfoBox $height="8rem">
+        <textarea
+          placeholder="활동 내용을 작성하세요."
+          value={session.description}
+          onChange={handleDescriptionChange}
+        />
+      </InfoBox>
     );
   };
 
