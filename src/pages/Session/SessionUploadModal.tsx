@@ -94,7 +94,7 @@ const SessionUploadModal = ({
   const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [address, setAddress] = useState('');
-
+  console.log(session);
   /**
    *
    */
@@ -257,9 +257,21 @@ const SessionUploadModal = ({
    *
    */
   const handleSessionDateChange = (date: Date) => {
+    const oneDayTime = 1000 * 60 * 60 * 24;
+    const dateTime = date.getTime() - (date.getTime() % oneDayTime);
+
+    const attendDeadLine = new Date(
+      dateTime + ((session.attendTime?.attendanceDeadLine?.getTime() as number) % oneDayTime),
+    );
+    const lateDeadLine = new Date(
+      dateTime + ((session.attendTime?.lateDeadLine?.getTime() as number) % oneDayTime),
+    );
+
     setSession(
       produce(session, (draft) => {
         draft.sessionDateTime = new Date(date);
+        draft.attendTime!.attendanceDeadLine = attendDeadLine;
+        draft.attendTime!.lateDeadLine = lateDeadLine;
       }),
     );
   };
