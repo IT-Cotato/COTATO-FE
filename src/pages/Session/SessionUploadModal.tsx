@@ -94,7 +94,7 @@ const SessionUploadModal = ({
   const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [address, setAddress] = useState('');
-  console.log(session);
+
   /**
    *
    */
@@ -552,6 +552,8 @@ const SessionUploadModal = ({
     if (isLocationModalOpen) {
       return (
         <SearchLocationModal
+          width="38rem"
+          height="80vh"
           setIsSearchModalOpen={setIsLocationModalOpen}
           onPlaceChange={handleLocationChange}
         />
@@ -606,7 +608,6 @@ const SessionUploadModal = ({
             {renderImageInput()}
             {renderInfoInput()}
             {renderUplaodButton()}
-            {renderSearchLocationModal()}
           </Wrapper>
           <CotatoDatePicker
             open={isDayPickerOpen}
@@ -621,6 +622,7 @@ const SessionUploadModal = ({
           pauseOnFocusLoss={false}
           theme={localStorage.getItem('theme') || 'light'}
         />
+        {renderSearchLocationModal()}
       </>
     </Modal>
   );
