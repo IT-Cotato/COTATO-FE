@@ -66,6 +66,16 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ openStatus, atten
         textColor: theme.colors.common.black_const,
         text: '지각',
       };
+    } else if (
+      openStatus === CotatoMemberAttendResponseOpenStatusEnum.Closed &&
+      attendanceResult === null
+    ) {
+      return {
+        backgroundColor: theme.colors.gray10,
+        icon: null,
+        textColor: theme.colors.common.black_const,
+        text: '미입력',
+      };
     } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Absent) {
       return {
         backgroundColor: theme.colors.gray10,
