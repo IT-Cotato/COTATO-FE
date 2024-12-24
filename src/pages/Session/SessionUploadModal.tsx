@@ -257,20 +257,20 @@ const SessionUploadModal = ({
    *
    */
   const handleSessionDateChange = (date: Date) => {
-    const oneDayTime = 1000 * 60 * 60 * 24;
-    const dateTime = date.getTime() - (date.getTime() % oneDayTime);
+    const attendanceDeadLine = dayjs(date)
+      .set('hour', session.attendTime!.attendanceDeadLine!.getHours())
+      .set('minute', session.attendTime!.attendanceDeadLine!.getMinutes())
+      .toDate();
 
-    const attendDeadLine = new Date(
-      dateTime + ((session.attendTime?.attendanceDeadLine?.getTime() as number) % oneDayTime),
-    );
-    const lateDeadLine = new Date(
-      dateTime + ((session.attendTime?.lateDeadLine?.getTime() as number) % oneDayTime),
-    );
+    const lateDeadLine = dayjs(date)
+      .set('hour', session.attendTime!.lateDeadLine!.getHours())
+      .set('minute', session.attendTime!.lateDeadLine!.getMinutes())
+      .toDate();
 
     setSession(
       produce(session, (draft) => {
         draft.sessionDateTime = new Date(date);
-        draft.attendTime!.attendanceDeadLine = attendDeadLine;
+        draft.attendTime!.attendanceDeadLine = attendanceDeadLine;
         draft.attendTime!.lateDeadLine = lateDeadLine;
       }),
     );
