@@ -18,6 +18,7 @@ import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { useGeolocation } from 'react-use';
 import api from '@/api/api';
 import {
+  CotatoAttendanceResponse,
   CotatoAttendanceResponseSessionTypeEnum,
   CotatoAttendResponse,
 } from 'cotato-openapi-clients';
@@ -62,8 +63,7 @@ const AttendanceAttend: React.FC = () => {
     sessionId: sessionId,
   });
 
-  const sessionTitle = currentAttendance?.sessionTitle;
-  const { data: attendanceData } = useSWR(
+  const { data: attendanceData } = useSWR<CotatoAttendanceResponse>(
     `/v2/api/attendances/${currentAttendance?.attendanceId}`,
     fetcher,
   );
@@ -201,7 +201,7 @@ const AttendanceAttend: React.FC = () => {
   const renderSessionInfo = () => {
     return (
       <Typography variant="h5" color={theme.colors.common.black} fontFamily="YComputer">
-        {currentGeneration?.generationNumber}기 {sessionTitle}
+        {currentGeneration?.generationNumber}기 {attendanceData?.sessionTitle}
       </Typography>
     );
   };
@@ -224,15 +224,15 @@ const AttendanceAttend: React.FC = () => {
         {Object.entries(AttendanceStatusEnum)
           .filter(([key]) => {
             switch (key) {
-              case AttendanceStatusEnum.OFFLINE:
+              case 'OFFLINE':
                 return (
                   attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.All ||
-                  attendanceData.sessionType === CotatoAttendanceResponseSessionTypeEnum.Offline
+                  attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.Offline
                 );
-              case AttendanceStatusEnum.ONLINE:
+              case 'ONLINE':
                 return (
                   attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.All ||
-                  attendanceData.sessionType === CotatoAttendanceResponseSessionTypeEnum.Online
+                  attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.Online
                 );
               default:
                 return false;
