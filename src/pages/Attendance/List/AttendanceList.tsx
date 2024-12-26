@@ -5,8 +5,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import {
-  CotatoAttendanceRecordResponseResultEnum,
-  CotatoAttendanceResponseOpenStatusEnum,
   CotatoMemberAttendanceRecordsResponse,
   CotatoMemberAttendResponse,
   CotatoMemberAttendResponseOpenStatusEnum,
@@ -57,16 +55,16 @@ const AttendanceList = () => {
    */
   const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
     const allowedAttendanceStatus = [
-      CotatoMemberAttendResponseIsOpenedEnum.Open,
-      CotatoMemberAttendResponseIsOpenedEnum.Late,
-      CotatoMemberAttendResponseIsOpenedEnum.Absent,
-    ] as CotatoMemberAttendResponseIsOpenedEnum[];
+      CotatoMemberAttendResponseOpenStatusEnum.Open,
+      CotatoMemberAttendResponseOpenStatusEnum.Late,
+      CotatoMemberAttendResponseOpenStatusEnum.Absent,
+    ] as CotatoMemberAttendResponseOpenStatusEnum[];
 
-    attendance.isOpened = CotatoMemberAttendResponseIsOpenedEnum.Open;
+    attendance.openStatus = CotatoMemberAttendResponseOpenStatusEnum.Open;
 
     if (
       allowedAttendanceStatus.includes(
-        attendance.isOpened as CotatoMemberAttendResponseIsOpenedEnum,
+        attendance.openStatus as CotatoMemberAttendResponseOpenStatusEnum,
       )
     ) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
