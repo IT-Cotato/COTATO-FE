@@ -191,6 +191,8 @@ const SessionHome = () => {
         attendanceDeadLine: getDateString(session.attendTime?.attendanceDeadLine),
         lateDeadLine: getDateString(session.attendTime?.lateDeadLine),
       },
+      isOffline: session.isOffline,
+      isOnline: session.isOnline,
       itIssue: session.itIssue,
       csEducation: session.csEducation,
       networking: session.networking,
