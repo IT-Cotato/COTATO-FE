@@ -5,8 +5,8 @@ import { ReactComponent as AbsentIcon } from '@assets/attendance_absent_icon.svg
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import CotatoIcon from '@components/CotatoIcon';
 import {
-  CotatoAttendanceResponseOpenStatusEnum,
-  CotatoAttendanceRecordResponseResultEnum,
+  CotatoMemberAttendResponseOpenStatusEnum,
+  CotatoMemberAttendResponseResultEnum,
 } from 'cotato-openapi-clients';
 
 //
@@ -14,95 +14,83 @@ import {
 //
 
 interface AttendaceStatusProps {
-  isOpened?: CotatoAttendanceResponseOpenStatusEnum;
-  attendanceResult?: CotatoAttendanceRecordResponseResultEnum | null;
-}
-
-enum AttendanceStatus {
-  Before,
-  Open,
-  PresentOffline,
-  PresentOnline,
-  LateOffline,
-  LateOnline,
-  Absent,
+  openStatus?: CotatoMemberAttendResponseOpenStatusEnum;
+  attendanceResult?: CotatoMemberAttendResponseResultEnum | null;
 }
 
 //
 //
 //
 
-const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ isOpened, attendanceResult }) => {
+const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ openStatus, attendanceResult }) => {
   const theme = useTheme();
 
-  /**
-   *
-   */
-  const getAttendanceStatus = () => {
-    // if (isOpened === AttendResponseIsOpenedEnum.Before) {
-    if (isOpened === CotatoAttendanceResponseOpenStatusEnum.Before) {
-      return AttendanceStatus.Before;
+  const getStatusStyle = () => {
+    if (openStatus === CotatoMemberAttendResponseOpenStatusEnum.Before) {
+      return {
+        backgroundColor: theme.colors.gray40,
+        icon: null,
+        textColor: theme.colors.common.white_const,
+        text: '출석예정',
+      };
     } else if (
-      isOpened === CotatoAttendanceResponseOpenStatusEnum.Open &&
+      openStatus === CotatoMemberAttendResponseOpenStatusEnum.Open &&
       attendanceResult === null
     ) {
-      return AttendanceStatus.Open;
-    } else if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Offline) {
-      return AttendanceStatus.PresentOffline;
-    } else if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Online) {
-      return AttendanceStatus.PresentOnline;
-    } else if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Late) {
-      return AttendanceStatus.LateOffline;
+      return {
+        backgroundColor: theme.colors.primary80,
+        icon: null,
+        textColor: theme.colors.common.white_const,
+        text: '출석중',
+      };
+    } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Offline) {
+      return {
+        backgroundColor: theme.colors.gray10,
+        icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
+        textColor: theme.colors.common.black_const,
+        text: '출석',
+      };
+    } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Online) {
+      return {
+        backgroundColor: theme.colors.gray10,
+        icon: <OnlineIcon />,
+        textColor: theme.colors.common.black_const,
+        text: '출석',
+      };
+    } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Late) {
+      return {
+        backgroundColor: theme.colors.gray10,
+        icon: (
+          <CotatoIcon icon="bell-exclaimation-solid" color={(theme) => theme.colors.secondary80} />
+        ),
+        textColor: theme.colors.common.black_const,
+        text: '지각',
+      };
+    } else if (
+      openStatus === CotatoMemberAttendResponseOpenStatusEnum.Closed &&
+      attendanceResult === null
+    ) {
+      return {
+        backgroundColor: theme.colors.gray10,
+        icon: null,
+        textColor: theme.colors.common.black_const,
+        text: '미입력',
+      };
+    } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Absent) {
+      return {
+        backgroundColor: theme.colors.gray10,
+        icon: <AbsentIcon />,
+        textColor: theme.colors.common.black_const,
+        text: '결석',
+      };
     }
 
-    return AttendanceStatus.Absent;
-  };
-
-  const getStatusStyle = () => {
-    switch (getAttendanceStatus()) {
-      case AttendanceStatus.Before:
-        return {
-          backgroundColor: theme.colors.gray40,
-          icon: null,
-          textColor: theme.colors.common.white_const,
-          text: '출석예정',
-        };
-      case AttendanceStatus.Open:
-        return {
-          backgroundColor: theme.colors.primary80,
-          icon: null,
-          textColor: theme.colors.common.white_const,
-          text: '출석중',
-        };
-      case AttendanceStatus.PresentOffline:
-        return {
-          backgroundColor: theme.colors.gray10,
-          icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
-          textColor: theme.colors.common.black_const,
-          text: '출석',
-        };
-      case AttendanceStatus.PresentOnline:
-        return {
-          backgroundColor: theme.colors.gray10,
-          icon: <OnlineIcon />,
-          textColor: theme.colors.common.black_const,
-          text: '출석',
-        };
-      case AttendanceStatus.LateOffline:
-        return {
-          backgroundColor: theme.colors.gray10,
-          icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
-          textColor: theme.colors.common.black_const,
-          text: '출석',
-        };
-      case AttendanceStatus.Absent:
-        return {
-          backgroundColor: theme.colors.gray10,
-          icon: <AbsentIcon />,
-          textColor: theme.colors.common.black_const,
-          text: '결석',
-        };
-    }
+    return {
+      backgroundColor: '',
+      icon: null,
+      textColor: '',
+      text: '',
+    };
   };
 
   const { backgroundColor, icon, textColor, text } = getStatusStyle();

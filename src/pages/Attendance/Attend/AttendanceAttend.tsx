@@ -1,5 +1,4 @@
 import { useGeneration } from '@/hooks/useGeneration';
-import { useSession } from '@/hooks/useSession';
 import {
   Box,
   CircularProgress,
@@ -11,19 +10,23 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
 import onlineCharacter from '@/assets/online_character.svg';
 import offlineTwoCharacter from '@/assets/offline_two_character.svg';
-
 import styled, { useTheme } from 'styled-components';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { useGeolocation } from 'react-use';
 import api from '@/api/api';
-import { CotatoAttendResponse } from 'cotato-openapi-clients';
+import {
+  CotatoAttendanceResponse,
+  CotatoAttendanceResponseSessionTypeEnum,
+  CotatoAttendResponse,
+} from 'cotato-openapi-clients';
 import useGetAttendances from '@/hooks/useGetAttendances';
 import { LoadingIndicator } from '@components/LoadingIndicator';
 import CotatoIcon from '@components/CotatoIcon';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 //
 //
@@ -55,15 +58,15 @@ const AttendanceAttend: React.FC = () => {
   const { currentGeneration, isGenerationLoading } = useGeneration();
   const { latitude, longitude, error: geoLocationError } = useGeolocation(geolocationOptions);
 
-  const { sessions, isSessionLoading } = useSession({
-    generationId: currentGeneration?.generationId,
-  });
   const { currentAttendance, isAttendanceLoading, isAttendanceError } = useGetAttendances({
     generationId: currentGeneration?.generationId,
     sessionId: sessionId,
   });
 
-  const sessionTitle = sessions?.find((session) => session.sessionId === sessionId)?.title;
+  const { data: attendanceData } = useSWR<CotatoAttendanceResponse>(
+    `/v2/api/attendances/${currentAttendance?.attendanceId}`,
+    fetcher,
+  );
 
   const [attendanceType, setAttendanceType] = React.useState<
     keyof typeof AttendanceStatusEnum | null
@@ -107,7 +110,7 @@ const AttendanceAttend: React.FC = () => {
       return;
     }
 
-    navigate(`${location.pathname}/${attendanceType.toLowerCase()}/${data?.status?.toLowerCase()}`);
+    navigate(`${location.pathname}/${attendanceType.toLowerCase()}/${data?.result?.toLowerCase()}`);
   };
 
   /**
@@ -198,7 +201,7 @@ const AttendanceAttend: React.FC = () => {
   const renderSessionInfo = () => {
     return (
       <Typography variant="h5" color={theme.colors.common.black} fontFamily="YComputer">
-        {currentGeneration?.generationNumber}기 {sessionTitle}
+        {currentGeneration?.generationNumber}기 {attendanceData?.sessionTitle}
       </Typography>
     );
   };
@@ -218,38 +221,55 @@ const AttendanceAttend: React.FC = () => {
         }}
         padding="0"
       >
-        {Object.entries(AttendanceStatusEnum).map(([key, value]) => (
-          <StyledBox
-            key={key}
-            gap="1rem"
-            $isSelected={attendanceType === key}
-            onClick={() => handleAttendanceClick(key as keyof typeof AttendanceStatusEnum)}
-          >
-            {attendanceType === key ? (
-              <CotatoIcon
-                icon="check-circle-solid"
-                color={(theme) => theme.colors.sub3[40]}
-                size={isMobileOrSmaller ? '1rem' : '2rem'}
-              />
-            ) : (
-              <Box height={isMobileOrSmaller ? '1rem' : '2rem'} />
-            )}
-            <Box
-              component="img"
-              src={key === 'ONLINE' ? onlineCharacter : offlineTwoCharacter}
-              alt={key === 'ONLINE' ? 'onlineCharacter' : 'offlineTwoCharacter'}
-              width={isMobileOrSmaller ? '3rem' : '5rem'}
-              height={isMobileOrSmaller ? '2.5rem' : '4rem'}
-            />
-            <Typography
-              variant="h5"
-              fontFamily="YComputer"
-              fontSize={isMobileOrSmaller ? '1.2rem' : '1.5rem'}
+        {Object.entries(AttendanceStatusEnum)
+          .filter(([key]) => {
+            switch (key) {
+              case 'OFFLINE':
+                return (
+                  attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.All ||
+                  attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.Offline
+                );
+              case 'ONLINE':
+                return (
+                  attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.All ||
+                  attendanceData?.sessionType === CotatoAttendanceResponseSessionTypeEnum.Online
+                );
+              default:
+                return false;
+            }
+          })
+          .map(([key, value]) => (
+            <StyledBox
+              key={key}
+              gap="1rem"
+              $isSelected={attendanceType === key}
+              onClick={() => handleAttendanceClick(key as keyof typeof AttendanceStatusEnum)}
             >
-              {value}
-            </Typography>
-          </StyledBox>
-        ))}
+              {attendanceType === key ? (
+                <CotatoIcon
+                  icon="check-circle-solid"
+                  color={(theme) => theme.colors.sub3[40]}
+                  size={isMobileOrSmaller ? '1rem' : '2rem'}
+                />
+              ) : (
+                <Box height={isMobileOrSmaller ? '1rem' : '2rem'} />
+              )}
+              <Box
+                component="img"
+                src={key === 'ONLINE' ? onlineCharacter : offlineTwoCharacter}
+                alt={key === 'ONLINE' ? 'onlineCharacter' : 'offlineTwoCharacter'}
+                width={isMobileOrSmaller ? '3rem' : '5rem'}
+                height={isMobileOrSmaller ? '2.5rem' : '4rem'}
+              />
+              <Typography
+                variant="h5"
+                fontFamily="YComputer"
+                fontSize={isMobileOrSmaller ? '1.2rem' : '1.5rem'}
+              >
+                {value}
+              </Typography>
+            </StyledBox>
+          ))}
       </StyledStack>
     );
   };
@@ -258,7 +278,7 @@ const AttendanceAttend: React.FC = () => {
    *
    */
   const renderActionButton = () => {
-    if (isSessionLoading || isAttendanceLoading || isAttendanceError) {
+    if (isAttendanceLoading || isAttendanceError) {
       return renderLoadingButton();
     }
 
@@ -297,7 +317,7 @@ const AttendanceAttend: React.FC = () => {
    *
    */
   const renderContents = () => {
-    if (isGenerationLoading || isSessionLoading) {
+    if (isGenerationLoading) {
       return <LoadingIndicator />;
     }
 

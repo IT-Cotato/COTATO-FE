@@ -1,14 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-  CotatoAttendanceRecordResponseResultEnum,
-  CotatoMemberAttendResponse,
-} from 'cotato-openapi-clients';
+import { CotatoMemberAttendResponse } from 'cotato-openapi-clients';
 import { Stack } from '@mui/material';
 import AttendanceCardStatus from '@components/attendance/attedance-card/AttendanceCardStatus';
 import { media } from '@theme/media';
 import dayjs from 'dayjs';
-import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -31,12 +27,6 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
 }) => {
   return (
     <Container onClick={() => onClick(attendance)}>
-      {attendance.attendanceResult === CotatoAttendanceRecordResponseResultEnum.Late && (
-        <StyledLateIcon
-          icon="bell-exclaimation-solid"
-          color={(theme) => theme.colors.secondary80}
-        />
-      )}
       <Stack gap="0.25rem">
         <DateText>{dayjs(attendance.sessionDateTime).format('YYYY.MM.DD')}</DateText>
         <TitleText>
@@ -44,8 +34,8 @@ const AttendanceGridCard: React.FC<AttendanceCardProps> = ({
         </TitleText>
       </Stack>
       <AttendanceCardStatus
-        isOpened={attendance.isOpened}
-        attendanceResult={attendance.attendanceResult}
+        openStatus={attendance.openStatus}
+        attendanceResult={attendance.result}
       />
     </Container>
   );
@@ -76,14 +66,6 @@ const Container = styled.div`
     height: 9.5rem;
     gap: 0.125rem;
   `}
-`;
-
-const StyledLateIcon = styled(CotatoIcon)`
-  position: absolute;
-  top: 0.625rem;
-  right: 0.625rem;
-  width: 1rem;
-  height: 1rem;
 `;
 
 const DateText = styled.p`

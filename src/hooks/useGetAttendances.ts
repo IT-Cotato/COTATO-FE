@@ -1,5 +1,8 @@
 import fetcher from '@utils/fetcher';
-import { CotatoAttendanceResponse, CotatoAttendancesResponse } from 'cotato-openapi-clients';
+import {
+  CotatoAttendancesResponse,
+  CotatoAttendanceWithSessionResponse,
+} from 'cotato-openapi-clients';
 import React from 'react';
 import useSWR from 'swr';
 
@@ -14,7 +17,7 @@ interface UseGetAttendancesProps {
 
 interface UseGetAttendancesReturn {
   attendances: CotatoAttendancesResponse | undefined;
-  currentAttendance: CotatoAttendanceResponse | undefined;
+  currentAttendance: CotatoAttendanceWithSessionResponse | undefined;
   isAttendanceLoading: boolean;
   isAttendanceError: any;
 }

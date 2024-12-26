@@ -6,9 +6,11 @@ import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
 import {
   CotatoAttendanceRecordResponseResultEnum,
+  CotatoAttendanceResponseOpenStatusEnum,
   CotatoMemberAttendanceRecordsResponse,
   CotatoMemberAttendResponse,
-  CotatoMemberAttendResponseIsOpenedEnum,
+  CotatoMemberAttendResponseOpenStatusEnum,
+  CotatoMemberAttendResponseResultEnum,
 } from 'cotato-openapi-clients';
 import { ReactComponent as GoalPotato } from '@assets/potato_goal.svg';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -110,10 +112,8 @@ const AttendanceList = () => {
       theme.colors.pastelTone.pink[100],
     ];
 
-    const getCardBackgroundColor = (
-      attendanceResult?: CotatoAttendanceRecordResponseResultEnum,
-    ) => {
-      if (attendanceResult === CotatoAttendanceRecordResponseResultEnum.Absent) {
+    const getCardBackgroundColor = (attendanceResult?: CotatoMemberAttendResponseResultEnum) => {
+      if (attendanceResult === CotatoMemberAttendResponseResultEnum.Absent) {
         return theme.colors.pastelTone.blue[100];
       }
 
@@ -134,7 +134,7 @@ const AttendanceList = () => {
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
               attendance={attendance}
-              backgroundColor={getCardBackgroundColor(attendance.attendanceResult)}
+              backgroundColor={getCardBackgroundColor(attendance.result)}
               generationNumber={currentGeneration?.generationNumber || 0}
               onClick={handleCardClick}
             />
