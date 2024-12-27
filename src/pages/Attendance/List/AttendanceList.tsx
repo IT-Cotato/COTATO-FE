@@ -54,7 +54,19 @@ const AttendanceList = () => {
    *
    */
   const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
-    if (attendance.openStatus === CotatoMemberAttendResponseOpenStatusEnum.Open) {
+    const allowedAttendanceStatus = [
+      CotatoMemberAttendResponseIsOpenedEnum.Open,
+      CotatoMemberAttendResponseIsOpenedEnum.Late,
+      CotatoMemberAttendResponseIsOpenedEnum.Absent,
+    ] as CotatoMemberAttendResponseIsOpenedEnum[];
+
+    attendance.isOpened = CotatoMemberAttendResponseIsOpenedEnum.Open;
+
+    if (
+      allowedAttendanceStatus.includes(
+        attendance.isOpened as CotatoMemberAttendResponseIsOpenedEnum,
+      )
+    ) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
     }
   };
