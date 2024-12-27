@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
 import {
-  CotatoAttendanceResponse,
+  CotatoAttendanceWithSessionResponse,
   CotatoGenerationInfoResponse,
   CotatoSessionListResponse,
 } from 'cotato-openapi-clients';
@@ -17,7 +17,7 @@ import CotatoIcon from './CotatoIcon';
 type CotatoDropBoxType =
   | CotatoGenerationInfoResponse
   | CotatoSessionListResponse
-  | CotatoAttendanceResponse;
+  | CotatoAttendanceWithSessionResponse;
 
 interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
   list: T[];
@@ -90,8 +90,10 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   /**
    *
    */
-  const isTypeAttendance = (item: CotatoDropBoxType): item is CotatoAttendanceResponse => {
-    return (item as CotatoAttendanceResponse).attendanceId !== undefined;
+  const isTypeAttendance = (
+    item: CotatoDropBoxType,
+  ): item is CotatoAttendanceWithSessionResponse => {
+    return (item as CotatoAttendanceWithSessionResponse).attendanceId !== undefined;
   };
 
   /**

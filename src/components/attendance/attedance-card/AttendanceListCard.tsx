@@ -3,12 +3,8 @@ import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as CharacterEyeClose } from '@/assets/character_eye_close.svg';
 import AttendanceCardStatus from '@components/attendance/attedance-card/AttendanceCardStatus';
-import {
-  CotatoAttendanceRecordResponseResultEnum,
-  CotatoMemberAttendResponse,
-} from 'cotato-openapi-clients';
+import { CotatoMemberAttendResponse } from 'cotato-openapi-clients';
 import dayjs from 'dayjs';
-import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -103,12 +99,6 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
         boxShadow={`1px 1px 10px 0px ${getBoxColor().imageBoxShaodwColor}`}
       >
         <ImageBox>
-          {attendance.attendanceResult === CotatoAttendanceRecordResponseResultEnum.Late && (
-            <StyledLateIcon
-              icon="bell-exclaimation-solid"
-              color={(theme) => theme.colors.secondary80}
-            />
-          )}
           <CharacterEyeClose style={{ width: '100%', height: '100%' }} />
         </ImageBox>
       </ImageBackground>
@@ -116,8 +106,8 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
         <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%">
           {renderAttendanceInfo()}
           <AttendanceCardStatus
-            isOpened={attendance.isOpened}
-            attendanceResult={attendance.attendanceResult}
+            openStatus={attendance.openStatus}
+            attendanceResult={attendance.result}
           />
         </Stack>
       </Box>
@@ -158,10 +148,4 @@ const ImageBox = styled(Box)`
   width: 16rem;
   height: 17.5em;
   padding: 3rem;
-`;
-
-const StyledLateIcon = styled(CotatoIcon)`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
 `;

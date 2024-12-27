@@ -21,6 +21,7 @@ import 'swiper/css/scrollbar';
 import { toast } from 'react-toastify';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGeneration } from '@/hooks/useGeneration';
+import getDateString from '@utils/getDateString';
 
 //
 //
@@ -38,7 +39,7 @@ const SessionHome = () => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [updateSession, setUpdateSession] = useState<CotatoSessionListResponse | null>(null);
+  const [updateSessionId, setUpdateSessionId] = useState<number | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState<CotatoSessionListResponse | null>(null);
@@ -46,19 +47,6 @@ const SessionHome = () => {
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-
-  /**
-   *
-   */
-  const getDateString = (date?: Date) => {
-    if (!date) {
-      return '';
-    }
-
-    const dateISO = new Date(date);
-    dateISO.setHours(dateISO.getHours() + 9);
-    return dateISO.toISOString().substring(0, 19);
-  };
 
   /**
    *
@@ -76,8 +64,7 @@ const SessionHome = () => {
       return;
     }
 
-    const updateSession: CotatoSessionListResponse = JSON.parse(JSON.stringify(session));
-    setUpdateSession(updateSession);
+    setUpdateSessionId(session.sessionId!);
     setIsDetailModalOpen(false);
     setIsUpdateModalOpen(true);
   };
@@ -91,7 +78,7 @@ const SessionHome = () => {
     }
 
     const formData = new FormData();
-    formData.append('sessionId', updateSession?.sessionId?.toString() || '');
+    formData.append('sessionId', updateSessionId?.toString() || '');
     formData.append('image', image.imageFile);
     formData.append('order', order.toString());
 
@@ -110,7 +97,7 @@ const SessionHome = () => {
     });
 
     return api.patch('/v1/api/session/image/order', {
-      sessionId: updateSession?.sessionId,
+      sessionId: updateSessionId,
       orderInfos: reorderedImageList,
     });
   };
@@ -167,6 +154,9 @@ const SessionHome = () => {
     formData.append('attendanceDeadLine', getDateString(session.attendTime.attendanceDeadLine));
     formData.append('lateDeadLine', getDateString(session.attendTime.lateDeadLine));
 
+    formData.append('isOffline', session.isOffline ? 'true' : 'false');
+    formData.append('isOnline', session.isOnline ? 'true' : 'false');
+
     session.imageInfos.forEach((imageInfo) => {
       if (imageInfo.imageFile) {
         formData.append('images', imageInfo.imageFile);
@@ -174,7 +164,7 @@ const SessionHome = () => {
     });
 
     api
-      .post('/v1/api/session/add', formData)
+      .post('/v1/api/session', formData)
       .then(() => {
         mutateSessionList();
         setIsAddModalOpen(false);
@@ -190,7 +180,7 @@ const SessionHome = () => {
       return;
     }
 
-    const updatedSessoinInfo = {
+    const updateSession = {
       sessionId: session.sessionId,
       title: session.title,
       description: session.description,
@@ -198,9 +188,11 @@ const SessionHome = () => {
       placeName: session.placeName,
       location: session.location,
       attendTime: {
-        attendanceDeadLine: getDateString(session?.attendTime?.attendanceDeadLine),
-        lateDeadLine: getDateString(session?.attendTime?.lateDeadLine),
+        attendanceDeadLine: getDateString(session.attendTime?.attendanceDeadLine),
+        lateDeadLine: getDateString(session.attendTime?.lateDeadLine),
       },
+      isOffline: session.isOffline,
+      isOnline: session.isOnline,
       itIssue: session.itIssue,
       csEducation: session.csEducation,
       networking: session.networking,
@@ -208,7 +200,7 @@ const SessionHome = () => {
     };
 
     api
-      .patch('/v1/api/session/update', updatedSessoinInfo)
+      .patch('/v1/api/session', updateSession)
       .then(() => {
         mutateSessionList();
         setIsUpdateModalOpen(false);
@@ -435,6 +427,7 @@ const SessionHome = () => {
         handleClose={() => setIsAddModalOpen(false)}
         headerText="세션 추가"
         handleUpload={handleSessionAdd}
+        sessionId={null}
         lastSessionNumber={sessionList?.length}
       />
       <SessionUploadModal
@@ -442,7 +435,7 @@ const SessionHome = () => {
         handleClose={() => setIsUpdateModalOpen(false)}
         headerText="세션 수정"
         handleUpload={handleSessionUpdate}
-        sessionInfo={updateSession}
+        sessionId={updateSessionId}
         requestImageAdd={requestImageAdd}
         requestImageReorder={requestImageReorder}
         requestImageRemove={requestImageRemove}

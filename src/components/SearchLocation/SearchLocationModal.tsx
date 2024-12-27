@@ -12,18 +12,17 @@ import { IconButton } from '@mui/material';
 //
 //
 
-// interface Place {
-//   place_name: string;
-//   address_name: string;
-//   phone: string;
-//   x: string;
-//   y: string;
-// }
-
 interface SearchLocationModalProps {
+  width?: string;
+  height?: string;
   setIsSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setLocationName?: React.Dispatch<React.SetStateAction<string>>;
   onPlaceChange?: (place: Place) => void;
+}
+
+interface BackgroundProps {
+  $width: string;
+  $height: string;
 }
 
 //
@@ -31,6 +30,8 @@ interface SearchLocationModalProps {
 //
 
 const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
+  width = '34rem',
+  height = '38rem',
   setIsSearchModalOpen,
   setLocationName,
   onPlaceChange,
@@ -54,7 +55,7 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
   }
 
   return (
-    <Background>
+    <Background $width={width} $height={height}>
       <Modal>
         <Header>
           <StyledIconButton onClick={() => setIsSearchModalOpen(false)}>
@@ -110,15 +111,16 @@ const SearchLocationModal: React.FC<SearchLocationModalProps> = ({
 //
 //
 
-const Background = styled.div`
+const Background = styled.div<BackgroundProps>`
   background: rgba(0, 0, 0, 0);
-  width: 100vw;
-  height: 100vh;
+  width: ${({ $width }) => $width};
+  height: ${({ $height }) => $height};
   overflow: hidden;
   box-sizing: border-box;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 210;
 `;
 
@@ -126,12 +128,12 @@ const Modal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  width: 34rem;
-  height: 38rem;
+  width: 100%;
+  height: 100%;
   border-radius: 1.725rem;
   background-color: ${({ theme }) => theme.colors.common.white_const};
   padding: 2.5rem 2.25rem;
+
   h3 {
     width: 100%;
     text-align: center;
