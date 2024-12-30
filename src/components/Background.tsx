@@ -14,7 +14,7 @@ const Background = () => {
   const theme = useTheme();
 
   //
-  const { DefaultTheme } = useCotatoTheme();
+  const { theme: cotatoTheme } = useCotatoTheme();
 
   //
   //
@@ -37,7 +37,7 @@ const Background = () => {
     >
       <Box
         component="img"
-        src={DefaultTheme === 'light' ? lightBackgroundImage : darkBackgroundImage}
+        src={cotatoTheme === 'light' ? lightBackgroundImage : darkBackgroundImage}
         sx={{
           objectFit: 'cover',
           height: '100vh',
