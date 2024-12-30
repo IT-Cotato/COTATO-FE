@@ -10,8 +10,8 @@ import React from 'react';
 //
 
 function useCotatoTheme() {
-  const defaultTheme = localStorage.getItem('theme') || COTATO_DARK_THEME;
-  const [theme, setTheme] = React.useState(defaultTheme);
+  const currentTheme = localStorage.getItem('theme') || COTATO_DARK_THEME;
+  const [theme, setTheme] = React.useState(currentTheme);
 
   /**
    *
@@ -39,6 +39,7 @@ function useCotatoTheme() {
   //
   return {
     DefaultTheme: theme,
+    theme: currentTheme,
     onChangeTheme,
   };
 }
