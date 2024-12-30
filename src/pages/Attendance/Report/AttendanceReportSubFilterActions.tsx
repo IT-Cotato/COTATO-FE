@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { useAttendanceReportFilter } from '../hooks/useAttendanceReportFilter';
 import { useMatch } from 'react-router-dom';
 import { STATUS_ASSETS } from '../constants';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
+import { media } from '@theme/media';
 
 //
 //
@@ -14,6 +16,7 @@ import { STATUS_ASSETS } from '../constants';
 const AttendanceReportSubFilterActions = () => {
   //
   const { currentStatus, toggleStatus } = useAttendanceReportFilter();
+  const { isMobileOrSmaller } = useBreakpoints();
 
   /**
    *
@@ -43,7 +46,7 @@ const AttendanceReportSubFilterActions = () => {
             toggleStatus(status);
           }}
         >
-          {icon}
+          {isMobileOrSmaller ? null : icon}
           <StyledTypography $disabled={disabled}>{text}</StyledTypography>
         </StyledButton>
       ))}
@@ -83,10 +86,18 @@ const StyledButton = styled.button<{ $selected?: boolean; $disabled?: boolean }>
 
   opacity: ${({ $disabled }) => ($disabled ? 0.8 : 1)};
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+
+  ${media.mobile`
+    height: 2.25rem;
+  `}
 `;
 
 const StyledTypography = styled(Typography)<{ $disabled?: boolean }>`
   color: ${({ theme }) => theme.colors.common.black_const};
   color: ${({ theme, $disabled }) =>
     $disabled ? theme.colors.gray10 : theme.colors.common.black_const};
+
+  ${media.mobile`
+    font-size: 0.75rem !important;
+  `}
 `;

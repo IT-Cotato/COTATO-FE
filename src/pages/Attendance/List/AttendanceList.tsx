@@ -60,8 +60,6 @@ const AttendanceList = () => {
       CotatoMemberAttendResponseOpenStatusEnum.Absent,
     ] as CotatoMemberAttendResponseOpenStatusEnum[];
 
-    attendance.openStatus = CotatoMemberAttendResponseOpenStatusEnum.Open;
-
     if (
       allowedAttendanceStatus.includes(
         attendance.openStatus as CotatoMemberAttendResponseOpenStatusEnum,

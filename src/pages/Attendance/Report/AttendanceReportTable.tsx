@@ -108,11 +108,7 @@ const AttendanceReportTable = () => {
             </AttedanceTableLayout.TableCell>
             <AttedanceTableLayout.TableCell>
               <AttendanceStatusDropdown
-                status={
-                  ATTENDANCE_ASSETS_TEXT_MAP[
-                    record.result as keyof typeof ATTENDANCE_ASSETS_TEXT_MAP
-                  ]
-                }
+                status={record.result}
                 memberId={record?.memberInfo?.memberId}
                 attendanceId={attendanceId}
               />
@@ -174,8 +170,6 @@ const AttendanceReportTable = () => {
       filteredRecords = filteredRecords?.filter((record) =>
         record.memberInfo?.name?.toLowerCase().includes(search.toLowerCase()),
       );
-
-      console.log(filteredRecords);
 
       setCurrentRecords(filteredRecords);
     }

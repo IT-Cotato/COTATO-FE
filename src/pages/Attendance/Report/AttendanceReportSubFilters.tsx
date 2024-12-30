@@ -12,7 +12,14 @@ const AttendanceReportSubFilters = () => {
   //
   //
   return (
-    <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      width="100%"
+      flexWrap="wrap"
+      gap="0.75rem"
+    >
       <AttendanceReportSubFilterActions />
       <AttendanceReportSearch />
     </Stack>
