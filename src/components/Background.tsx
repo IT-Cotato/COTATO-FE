@@ -1,10 +1,10 @@
 import React from 'react';
-import { useThemeMode } from '@/hooks/useThemeMode';
 import { Box, Stack } from '@mui/material';
 import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
 import lightBackgroundImage from '@/assets/light_background.svg';
 import darkBackgroundImage from '@/assets/dark_background.svg';
+import useCotatoTheme from '@/hooks/useCotatoTheme';
 
 //
 //
@@ -14,7 +14,7 @@ const Background = () => {
   const theme = useTheme();
 
   //
-  const { mode } = useThemeMode();
+  const { DefaultTheme } = useCotatoTheme();
 
   //
   //
@@ -37,7 +37,7 @@ const Background = () => {
     >
       <Box
         component="img"
-        src={mode === 'light' ? lightBackgroundImage : darkBackgroundImage}
+        src={DefaultTheme === 'light' ? lightBackgroundImage : darkBackgroundImage}
         sx={{
           objectFit: 'cover',
           height: '100vh',
