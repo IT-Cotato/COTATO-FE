@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import fetcher from '@utils/fetcher';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
-import { FlexBox, MyPageHeader, MyPageWrapper } from '@pages/MyPage/MyInfo';
+import { FlexBox, MyPageHeader, MyPageWrapper } from '@pages/MyPage/MyPage';
 import GenerationModal from '@pages/MyPage/setting/GenerationModal';
 
 //
