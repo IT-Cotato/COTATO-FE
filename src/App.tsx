@@ -6,7 +6,7 @@ import Home from '@pages/Home/Home';
 import Login from '@pages/Login/Login';
 import Session from '@pages/Session/Session';
 import SignUp from '@pages/JoinUs/SignUp';
-import MyPage from '@pages/MyPage/MyPage';
+import MyPage from '@pages/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
 import FindID from '@pages/Login/FindID';
 import FindPWProcess from '@pages/Login/FindPWProcess';
