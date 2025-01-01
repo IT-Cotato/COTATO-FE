@@ -2,6 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MY_PAGE_PATH } from '../MyPageRouter';
 
+//
+//
+//
+
 const MyPage = () => {
   const navigate = useNavigate();
   return (

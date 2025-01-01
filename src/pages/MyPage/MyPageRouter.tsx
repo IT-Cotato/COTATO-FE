@@ -8,6 +8,10 @@ import {
   YearManagement,
 } from './contents';
 
+//
+//
+//
+
 export const MY_PAGE_PATH = {
   MYPAGE: '',
   POLICY: 'policy',
@@ -15,6 +19,10 @@ export const MY_PAGE_PATH = {
   MEMBERS: 'members',
   REGISTRATION: 'registration',
 } as const;
+
+//
+//
+//
 
 const MyPageRouter = () => {
   return (

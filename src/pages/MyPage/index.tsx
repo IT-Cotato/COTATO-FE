@@ -5,6 +5,10 @@ import useUser from '@/hooks/useUser';
 import Footer from '@components/Footer';
 import styled from 'styled-components';
 
+//
+//
+//
+
 const MyPage = () => {
   const { user } = useUser();
 
@@ -24,6 +28,10 @@ const MyPage = () => {
 };
 
 export default MyPage;
+
+//
+//
+//
 
 export const FlexBox = styled.div`
   display: flex;
