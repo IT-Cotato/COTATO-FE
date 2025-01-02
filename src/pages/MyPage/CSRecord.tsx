@@ -34,10 +34,14 @@ const CSRecord = () => {
     generationId || undefined,
   );
 
-  const { targetGeneration } = useGeneration({ generationId: selectedGenerationId });
+  const { currentGeneration, targetGeneration } = useGeneration({
+    generationId: selectedGenerationId,
+  });
+
+  const paramsGenerationId = targetGeneration?.generationId || currentGeneration?.generationId;
 
   const { data: hallOfFameData } = useSWR(
-    '/v1/api/mypage/hall-of-fame?generationId=' + targetGeneration?.generationId,
+    '/v1/api/mypage/hall-of-fame?generationId=' + paramsGenerationId,
     fetcher,
   );
 
@@ -63,7 +67,7 @@ const CSRecord = () => {
         <InfoDiv>
           <BadgeDiv>
             <Badge backgroundcolor="rgba(37, 156, 46, 0.52)">
-              {targetGeneration?.generationNumber}기
+              {currentGeneration?.generationNumber}기
             </Badge>
             <Badge backgroundcolor="rgba(235, 83, 83, 0.51)">
               {localeKr[(user?.position as keyof typeof localeKr) || 'NONE']}
