@@ -43,7 +43,7 @@ const AttendanceStatusDropdown: React.FC<AttendanceStatusDropdownProps> = ({
     try {
       await api.patch(`/v2/api/attendances/${attendanceId}/records`, {
         memberId,
-        attendanceResult: status.toUpperCase(),
+        result: status.toUpperCase(),
       });
 
       mutateAttendancesAttendanceIdRecords();
