@@ -30,6 +30,9 @@ interface ProfileInfoSectionProps {
 //
 //
 
+/**
+ * user.positin : 포지션 이미지 src
+ */
 const COTATO_CHARCTER_SVG_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> = {
   FE: cotatoCharacterFront,
   BE: cotatoCharacterBack,
@@ -38,6 +41,9 @@ const COTATO_CHARCTER_SVG_MAP: Record<CotatoMemberInfoResponsePositionEnum, stri
   NONE: cotatoCharacter,
 };
 
+/**
+ * user.position : 포지션 string
+ */
 const COTATO_POSITION_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> = {
   FE: 'FrontEnd',
   BE: 'BackEnd',
@@ -148,7 +154,6 @@ const ButtonSection = () => {
 };
 
 const ProfileCardContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.common.white};
   display: flex;
   width: 25rem;
   padding: 1.5rem 1rem;
@@ -185,8 +190,6 @@ const ProfileCardSectionTitle = styled.div`
   font-size: 1rem;
   font-style: normal;
   font-weight: 600;
-  line-height: 1.0625rem;
-  letter-spacing: -0.003rem;
 `;
 
 const ProfileCardStringInputSection = styled.div`
@@ -257,6 +260,12 @@ const ProfileInput = ({ isPrimary = true, ...props }: ProfileInputProps & TextFi
         },
         '& .MuiInputBase-sizeSmall': {
           height: '1.75rem',
+          '& .MuiInputBase-input': {
+            padding: '0.25rem 0.75rem',
+          },
+        },
+        '& .MuiInputBase-input': {
+          padding: '0.5rem 0.75rem',
         },
         '& .MuiInputBase-input.Mui-disabled': {
           '-webkit-text-fill-color': isPrimary
