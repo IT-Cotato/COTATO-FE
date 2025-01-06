@@ -265,7 +265,7 @@ const ProfileInput = ({ isPrimary = true, ...props }: ProfileInputProps & TextFi
           },
         },
         '& .MuiInputBase-input': {
-          padding: '0.5rem 0.75rem',
+          padding: '0.875rem 0.75rem',
         },
         '& .MuiInputBase-input.Mui-disabled': {
           '-webkit-text-fill-color': isPrimary
