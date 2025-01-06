@@ -247,9 +247,8 @@ const ResetPassword = () => {
       <CotatoPanel size="default" textImgSrc={panelText} />
       {renderInputField()}
       <CotatoButton
-        width="base"
-        height="long"
-        color="black"
+        isEnabled={true}
+        buttonStyle="line"
         text="비밀번호 재설정"
         handleClick={handleSubmit}
       />

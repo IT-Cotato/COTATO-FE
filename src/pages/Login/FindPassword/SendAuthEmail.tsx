@@ -167,10 +167,9 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
       <CotatoPanel size="long" textImgSrc={panelText} />
       {renderInputField()}
       <CotatoButton
-        width="base"
-        height="long"
-        color="black"
-        text="버튼"
+        isEnabled={true}
+        buttonStyle="line"
+        text="인증 이메일 보내기"
         handleClick={handleSubmit}
       />
     </Wrapper>
