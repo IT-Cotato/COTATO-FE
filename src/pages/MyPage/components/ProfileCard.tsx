@@ -16,12 +16,34 @@ import useUser from '@/hooks/useUser';
 //
 //
 
+interface ProfileImageSectionProps {
+  position?: CotatoMemberInfoResponsePositionEnum;
+}
+interface ProfileNameSectionProps {
+  name?: string;
+}
+interface ProfileInfoSectionProps {
+  position?: CotatoMemberInfoResponsePositionEnum;
+}
+
+//
+//
+//
+
 const COTATO_CHARCTER_SVG_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> = {
   FE: cotatoCharacterFront,
   BE: cotatoCharacterBack,
   PM: cotatoCharacterPM,
   DESIGN: cotatoCharacterDesign,
   NONE: cotatoCharacter,
+};
+
+const COTATO_POSITION_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> = {
+  FE: 'FrontEnd',
+  BE: 'BackEnd',
+  PM: 'ProductManager',
+  DESIGN: 'Designer',
+  NONE: 'None',
 };
 
 //
@@ -33,57 +55,97 @@ const ProfileCard = () => {
 
   return (
     <ProfileCardContainer>
-      <ProfileImage
-        src={COTATO_CHARCTER_SVG_MAP[user?.position ?? CotatoMemberInfoResponsePositionEnum.None]}
-      />
-      <ProfileCardSection>
-        <ProfileCardSectionTitle>이름</ProfileCardSectionTitle>
-        <ProfileCardStringInputSection>
-          <ProfileInput defaultValue="한승연" isPrimary={true} disabled={true} />
-        </ProfileCardStringInputSection>
-      </ProfileCardSection>
-      <ProfileCardSection>
-        <ProfileCardSectionTitle>정보</ProfileCardSectionTitle>
-        <ProfileCardStringInputSection>
-          <ProfileInput placeholder="기수" defaultValue={'9기'} isPrimary={false} disabled={true} />
-          <ProfileInput
-            placeholder="파트"
-            defaultValue={'FrontEnd'}
-            isPrimary={false}
-            disabled={true}
-          />
-          <ProfileInput />
-        </ProfileCardStringInputSection>
-      </ProfileCardSection>
-      <ProfileCardSection>
-        <ProfileCardSectionTitle>자기소개</ProfileCardSectionTitle>
-        <ProfileCardStringInputSection>
-          <ProfileInput />
-        </ProfileCardStringInputSection>
-      </ProfileCardSection>
-      <ProfileCardSection>
-        <ProfileCardLinkInputSection>
-          <LinkContainer>
-            <Github />
-            <ProfileInput size="small" />
-          </LinkContainer>
-          <LinkContainer>
-            <Link />
-            <ProfileInput size="small" />
-          </LinkContainer>
-        </ProfileCardLinkInputSection>
-      </ProfileCardSection>
-      <ProfileCardButtonSection>
-        <ProfileCardButton>
-          <Upload />
-        </ProfileCardButton>
-        <ProfileCardButton>수정하기</ProfileCardButton>
-      </ProfileCardButtonSection>
+      <ProfileImageSection position={user?.position} />
+      <NameSection name={user?.name} />
+      <InfoSection position={user?.position} />
+      <IntroductionSection />
+      <LinksSection />
+      <ButtonSection />
     </ProfileCardContainer>
   );
 };
 
 export default ProfileCard;
+
+//
+//
+//
+
+const ProfileImageSection = ({ position }: ProfileImageSectionProps) => {
+  return (
+    <ProfileImage
+      src={COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]}
+    />
+  );
+};
+
+const NameSection = ({ name }: ProfileNameSectionProps) => {
+  return (
+    <ProfileCardSection>
+      <ProfileCardSectionTitle>이름</ProfileCardSectionTitle>
+      <ProfileCardStringInputSection>
+        <ProfileInput defaultValue={name} isPrimary={true} disabled={true} />
+      </ProfileCardStringInputSection>
+    </ProfileCardSection>
+  );
+};
+
+const InfoSection = ({ position }: ProfileInfoSectionProps) => {
+  return (
+    <ProfileCardSection>
+      <ProfileCardSectionTitle>정보</ProfileCardSectionTitle>
+      <ProfileCardStringInputSection>
+        <ProfileInput placeholder="기수" defaultValue={'9기'} isPrimary={false} disabled={true} />
+        <ProfileInput
+          placeholder="파트"
+          defaultValue={COTATO_POSITION_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]}
+          isPrimary={false}
+          disabled={true}
+        />
+        <ProfileInput />
+      </ProfileCardStringInputSection>
+    </ProfileCardSection>
+  );
+};
+
+const IntroductionSection = () => {
+  return (
+    <ProfileCardSection>
+      <ProfileCardSectionTitle>자기소개</ProfileCardSectionTitle>
+      <ProfileCardStringInputSection>
+        <ProfileInput />
+      </ProfileCardStringInputSection>
+    </ProfileCardSection>
+  );
+};
+
+const LinksSection = () => {
+  return (
+    <ProfileCardSection>
+      <ProfileCardLinkInputSection>
+        <LinkContainer>
+          <Github />
+          <ProfileInput size="small" />
+        </LinkContainer>
+        <LinkContainer>
+          <Link />
+          <ProfileInput size="small" />
+        </LinkContainer>
+      </ProfileCardLinkInputSection>
+    </ProfileCardSection>
+  );
+};
+
+const ButtonSection = () => {
+  return (
+    <ProfileCardButtonSection>
+      <ProfileCardButton>
+        <Upload />
+      </ProfileCardButton>
+      <ProfileCardButton>수정하기</ProfileCardButton>
+    </ProfileCardButtonSection>
+  );
+};
 
 const ProfileCardContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.common.white};
