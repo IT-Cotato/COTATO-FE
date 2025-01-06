@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MY_PAGE_PATH } from '../MyPageRouter';
-import useUser from '@/hooks/useUser';
 import ProfileCard from '../components/ProfileCard';
 import styled from 'styled-components';
+import { ReactComponent as RightAngle } from '@/pages/MyPage/tempAsssets/angle_right.svg';
 
 //
 //
@@ -23,27 +23,36 @@ const MyPage = () => {
             <InfoSectionItemContainer>
               <InfoSectionItem>aaa@gmail.com</InfoSectionItem>
               <InfoSectionItem>전화번호</InfoSectionItem>
-              <InfoSectionItem>비밀번호 재설정 버튼</InfoSectionItem>
-              <InfoSectionItem>개인정보 관리 버튼</InfoSectionItem>
+              <InfoSectionItem $clickable onClick={() => console.log('비밀번호 변경하기')}>
+                비밀번호 재설정 버튼
+                <RightAngle />
+              </InfoSectionItem>
+              <InfoSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.POLICY)}>
+                개인정보 관리 버튼
+                <RightAngle />
+              </InfoSectionItem>
             </InfoSectionItemContainer>
           </InfoSection>
 
           <InfoSection>
-            <InfoSectionTitle>Cotato Management Section</InfoSectionTitle>
+            <InfoSectionTitle>동아리 관리</InfoSectionTitle>
             <InfoSectionItemContainer>
-              <InfoSectionItem>기수관리 버튼</InfoSectionItem>
-              <InfoSectionItem>부원 관리 버튼</InfoSectionItem>
-              <InfoSectionItem>신입기수 관리 버튼</InfoSectionItem>
+              <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.YEAR)}>
+                기수관리 버튼
+                <RightAngle />
+              </ManageSectionItem>
+              <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.MEMBERS)}>
+                부원 관리 버튼
+                <RightAngle />
+              </ManageSectionItem>
+              <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.REGISTRATION)}>
+                신입기수 관리 버튼
+                <RightAngle />
+              </ManageSectionItem>
             </InfoSectionItemContainer>
           </InfoSection>
         </InfoSectionContainer>
       </ContentContainer>
-      <div>
-        <button onClick={() => navigate(MY_PAGE_PATH.POLICY)}>policy</button>
-        <button onClick={() => navigate(MY_PAGE_PATH.YEAR)}>year</button>
-        <button onClick={() => navigate(MY_PAGE_PATH.MEMBERS)}>members</button>
-        <button onClick={() => navigate(MY_PAGE_PATH.REGISTRATION)}>registration</button>
-      </div>
     </MyPageWrapper>
   );
 };
@@ -70,6 +79,7 @@ const ContentContainer = styled.div`
 const InfoSectionContainer = styled.div`
   display: flex;
   flex: 1;
+  max-width: 50rem;
   flex-direction: column;
   align-items: center;
   align-self: stretch;
@@ -104,11 +114,11 @@ const InfoSectionItemContainer = styled.div`
   align-self: stretch;
 `;
 
-const InfoSectionItem = styled.div`
+const SectionItem = styled.div`
   display: flex;
-  height: 3.75rem;
   padding: 1.25rem;
   align-items: center;
+  justify-content: space-between;
   gap: 0.625rem;
   align-self: stretch;
   border-radius: 0.5rem;
@@ -116,4 +126,14 @@ const InfoSectionItem = styled.div`
   border-color: ${({ theme }) => theme.colors.primary90};
   background-color: ${({ theme }) => theme.colors.common.white};
   color: ${({ theme }) => theme.colors.gray60};
+`;
+
+const InfoSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`
+  height: 3.75rem;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'cursor')};
+`;
+
+const ManageSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`
+  padding: 1.875rem 0.75rem;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'cursor')};
 `;
