@@ -11,6 +11,7 @@ import cotatoCharacterDesign from '@assets/cotato_character_design.svg';
 import cotatoCharacter from '@assets/crown_character.svg';
 import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
 import useUser from '@/hooks/useUser';
+import { media } from '@theme/media';
 
 //
 //
@@ -155,7 +156,8 @@ const ButtonSection = () => {
 
 const ProfileCardContainer = styled.div`
   display: flex;
-  width: 25rem;
+  max-width: 25rem;
+  width: 100%;
   padding: 1.5rem 1rem;
   flex-direction: column;
   align-items: center;
@@ -164,6 +166,9 @@ const ProfileCardContainer = styled.div`
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
   background-color: ${({ theme }) => theme.colors.common.real_white};
+  ${media.tablet`
+      max-width: 50rem;
+  `}
 `;
 
 const ProfileImage = styled.div<{ src: string }>`

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ReactComponent as RightAngle } from '@/pages/MyPage/tempAsssets/angle_right.svg';
 import { useNavigate } from 'react-router-dom';
 import { MY_PAGE_PATH } from '@pages/MyPage/MyPageRouter';
+import { media } from '@theme/media';
 
 //
 //
@@ -82,10 +83,16 @@ const InfoSectionContainer = styled.div`
   display: flex;
   flex: 1;
   max-width: 50rem;
+  min-width: 18rem;
   flex-direction: column;
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
+  gap: 2.25rem;
+  ${media.tablet`
+    flex: none;
+    min-width: 16rem;
+  `}
 `;
 
 const SectionContainer = styled.div`
