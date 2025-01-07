@@ -8,6 +8,15 @@ import { MY_PAGE_PATH } from '@pages/MyPage/MyPageRouter';
 //
 //
 
+interface AccountSectionProps {
+  email: string;
+  phoneNum: string;
+}
+
+//
+//
+//
+
 const InfoSection = () => {
   return (
     <InfoSectionContainer>
@@ -22,11 +31,6 @@ export default InfoSection;
 //
 //
 //
-
-interface AccountSectionProps {
-  email: string;
-  phoneNum: string;
-}
 
 const AccountSection = ({ email, phoneNum }: AccountSectionProps) => {
   const navigate = useNavigate();
