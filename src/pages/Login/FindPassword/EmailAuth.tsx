@@ -200,6 +200,18 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
     );
   };
 
+  /**
+   *
+   */
+  const renderResendSection = () => {
+    return (
+      <ResendDiv>
+        <p>인증번호를 받지 못하셨나요?</p>
+        <span>다시받기</span>
+      </ResendDiv>
+    );
+  };
+
   //
   //
   //
@@ -223,6 +235,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
         text="인증 완료"
         handleClick={handleSubmit}
       />
+      {renderResendSection()}
     </Wrapper>
   );
 };
@@ -309,6 +322,32 @@ const InputBox = styled.input<{ filled: boolean }>`
     width: 3rem;
     height: 3rem;
     font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xl};
+  `}
+`;
+
+const ResendDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 17.5rem;
+  p {
+    font-family: 'Pretendard';
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    color: ${({ theme }) => theme.colors.gray50};
+  }
+  span {
+    font-family: 'Pretendard';
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.gray50};
+    text-decoration-line: underline;
+  }
+
+  ${media.mobile`
+    p, span {
+      font-size: ${({ theme }: { theme: CotatoThemeType }) => theme.fontSize.xs};
+    }
   `}
 `;
 
