@@ -32,6 +32,10 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
   const [input, setInput] = useState<number[]>(Array(CODE_LENGTH).fill(null));
   const inputRef = useRef<InputRefType>(Array(CODE_LENGTH).fill(null));
 
+  const emailData = {
+    email: email,
+  };
+
   /**
    *
    */
@@ -155,6 +159,24 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
   /**
    *
    */
+  const resendEmail = () => {
+    api
+      .post('/v1/api/auth/verification', emailData, {
+        params: {
+          type: 'find-password',
+        },
+      })
+      .then(() => {
+        alert('인증 이메일이 재발송되었습니다.');
+      })
+      .catch((err) => {
+        alert('인증 이메일 재발송에 실패했습니다.');
+      });
+  };
+
+  /**
+   *
+   */
   const renderGuideMessage = () => {
     return (
       <Message>
@@ -207,7 +229,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
     return (
       <ResendDiv>
         <p>인증번호를 받지 못하셨나요?</p>
-        <span>다시받기</span>
+        <span onClick={resendEmail}>다시받기</span>
       </ResendDiv>
     );
   };
@@ -342,6 +364,7 @@ const ResendDiv = styled.div`
     font-weight: 600;
     color: ${({ theme }) => theme.colors.gray50};
     text-decoration-line: underline;
+    cursor: pointer;
   }
 
   ${media.mobile`
