@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import CotatoPanel from '@components/CotatoPanel';
-import panelText from '@assets/find_password_sending_email_panel_text.svg';
+import panelText from '@assets/find_password_auth_code_panel_text.svg';
 import CotatoButton from '@components/CotatoButton';
 import api from '@/api/api';
 import { media } from '@theme/media';
@@ -225,7 +225,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
 
   return (
     <Wrapper>
-      <CotatoPanel size="long" textImgSrc={panelText} />
+      <CotatoPanel size="default" textImgSrc={panelText} />
       {renderGuideMessage()}
       {renderInputField()}
       {renderInfoMessage()}
