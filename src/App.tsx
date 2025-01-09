@@ -9,10 +9,9 @@ import SignUp from '@pages/JoinUs/SignUp';
 import MyPage from '@pages/MyPage/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
 import FindID from '@pages/Login/FindID';
-import FindPWProcess from '@pages/Login/FindPWProcess';
+import FindPassword from '@pages/Login/FindPassword/FindPassword';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
-
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
 import { FAQ } from '@pages/FAQ';
 import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
@@ -67,7 +66,7 @@ function App() {
           <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/findid" element={<FindID />} />
-          <Route path="/findpw" element={<FindPWProcess />} />
+          <Route path="/findpw" element={<FindPassword />} />
           <Route path="/joinus" element={<SignUp />} />
           <Route path="/mypage/*" element={<MyPage />} />
           <Route path="/products" element={<ReadyState />} />
