@@ -29,7 +29,7 @@ const BUTTON_STYLE = (theme: any, buttonStyle?: string) => ({
   enabled: {
     cursor: 'pointer',
     borderWidth: '1px',
-    color: theme.colors.common.black_const,
+    color: theme.colors.common.black,
     filter: 'drop-shadow(1px 1px 15px rgba(255, 160, 0, 0.15))',
     backgroundColor: getBackgroundColor(theme, buttonStyle as string),
   },
