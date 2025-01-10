@@ -40,12 +40,12 @@ const AccountSection = ({ email, phoneNum }: AccountSectionProps) => {
       <InfoSectionItemContainer>
         <InfoSectionItem>{email}</InfoSectionItem>
         <InfoSectionItem>{phoneNum}</InfoSectionItem>
-        <InfoSectionItem $clickable onClick={() => console.log('비밀번호 변경하기')}>
-          비밀번호 재설정 버튼
+        <InfoSectionItem $clickable onClick={() => navigate('/findpw')}>
+          비밀번호 재설정
           <RightAngle style={{ position: 'absolute', right: '1.25rem' }} />
         </InfoSectionItem>
         <InfoSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.POLICY)}>
-          개인정보 관리 버튼
+          개인정보 관리
           <RightAngle style={{ position: 'absolute', right: '1.25rem' }} />
         </InfoSectionItem>
       </InfoSectionItemContainer>
@@ -61,15 +61,15 @@ const ManageSection = () => {
       <InfoSectionTitle>동아리 관리</InfoSectionTitle>
       <InfoSectionItemContainer>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.YEAR)}>
-          기수관리 버튼
+          기수관리
           <RightAngle />
         </ManageSectionItem>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.MEMBERS)}>
-          부원 관리 버튼
+          부원 관리
           <RightAngle />
         </ManageSectionItem>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.REGISTRATION)}>
-          신입기수 관리 버튼
+          신입기수 관리
           <RightAngle />
         </ManageSectionItem>
       </InfoSectionItemContainer>
@@ -143,14 +143,14 @@ const SectionItem = styled.div`
 const InfoSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`
   padding: 1.25rem;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'cursor')};
-  font-size: 0.8125rem;
+  font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: 400;
 `;
 
 const ManageSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`
   padding: 1.875rem 1.25rem;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'cursor')};
-  font-size: 1.125rem;
+  font-size: ${({ theme }) => theme.fontSize.lg};
   font-weight: 600;
 `;
 

@@ -46,8 +46,8 @@ const COTATO_CHARCTER_SVG_MAP: Record<CotatoMemberInfoResponsePositionEnum, stri
  * user.position : 포지션 string
  */
 const COTATO_POSITION_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> = {
-  FE: 'FrontEnd',
-  BE: 'BackEnd',
+  FE: 'Frontend',
+  BE: 'Backend',
   PM: 'ProductManager',
   DESIGN: 'Designer',
   NONE: 'None',
@@ -194,7 +194,7 @@ const ProfileCardSectionTitle = styled.div`
   align-self: stretch;
   color: ${({ theme }) => theme.colors.common.black};
   font-family: Pretendard;
-  font-size: 1rem;
+  font-size: ${({ theme }) => theme.fontSize.md};
   font-style: normal;
   font-weight: 600;
 `;
@@ -242,7 +242,7 @@ const ProfileCardButton = styled.button`
   background-color: ${({ theme }) => theme.colors.common.black};
   color: ${({ theme }) => theme.colors.common.real_white};
   font-family: Pretendard;
-  font-size: 1rem;
+  font-size: ${({ theme }) => theme.fontSize.md};
 `;
 
 //---custom input component---//
