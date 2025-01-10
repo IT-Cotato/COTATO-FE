@@ -27,8 +27,6 @@ const InfoSection = () => {
   );
 };
 
-export default InfoSection;
-
 //
 //
 //
@@ -78,6 +76,10 @@ const ManageSection = () => {
     </SectionContainer>
   );
 };
+
+//
+//
+//
 
 const InfoSectionContainer = styled.div`
   display: flex;
@@ -151,3 +153,5 @@ const ManageSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`
   font-size: 1.125rem;
   font-weight: 600;
 `;
+
+export default InfoSection;

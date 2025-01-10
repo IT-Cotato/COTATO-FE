@@ -19,7 +19,9 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+//
+//
+//
 
 const MyPageWrapper = styled.div`
   display: flex;
@@ -43,3 +45,5 @@ const ContentContainer = styled.div`
     flex-direction: column;
   `}
 `;
+
+export default MyPage;

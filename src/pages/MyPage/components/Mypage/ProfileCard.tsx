@@ -72,8 +72,6 @@ const ProfileCard = () => {
   );
 };
 
-export default ProfileCard;
-
 //
 //
 //
@@ -153,6 +151,10 @@ const ButtonSection = () => {
     </ProfileCardButtonSection>
   );
 };
+
+//
+//
+//
 
 const ProfileCardContainer = styled.div`
   display: flex;
@@ -282,3 +284,5 @@ const ProfileInput = ({ isPrimary = true, ...props }: ProfileInputProps & TextFi
     />
   );
 };
+
+export default ProfileCard;
