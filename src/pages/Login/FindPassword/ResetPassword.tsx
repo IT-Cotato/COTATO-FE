@@ -318,6 +318,7 @@ const InputBox = styled.input`
   background: none;
   outline: none;
   font-family: Pretendard;
+  color: ${({ theme }) => theme.colors.common.black};
 `;
 
 const ValidationDiv = styled.div<{ isValid: boolean }>`
