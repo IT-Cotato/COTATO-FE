@@ -27,8 +27,6 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
-
 //
 //
 //
@@ -40,3 +38,5 @@ export const FlexBox = styled.div`
   align-items: center;
   flex-direction: column;
 `;
+
+export default MyPage;
