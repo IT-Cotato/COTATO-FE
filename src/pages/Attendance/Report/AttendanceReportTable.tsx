@@ -7,7 +7,6 @@ import AttedanceTableLayout from './components/AttedanceTableLayout';
 import AttendanceStatusDropdown from './components/AttendanceStatusDropdown';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
-import { ATTENDANCE_ASSETS_TEXT_MAP } from '../constants';
 
 //
 //
