@@ -29,15 +29,6 @@ const MOUSE_WHEEL_OPTION = {
 const HomeSlide = () => {
   const swiperRef = React.useRef<SwiperClass | null>();
 
-  /**
-   *
-   */
-  const handleBackToFirstSlide = () => {
-    if (swiperRef?.current) {
-      swiperRef.current.slideTo(0); // Go to the first slide
-    }
-  };
-
   return (
     <>
       <StyledSwiper
@@ -61,7 +52,7 @@ const HomeSlide = () => {
         </StyledSwiperSlide>
         {/* Third Section */}
         <StyledSwiperSlide>
-          <HomeNewThirdSection handleBackToFirstSlide={handleBackToFirstSlide} />
+          <HomeNewThirdSection />
         </StyledSwiperSlide>
       </StyledSwiper>
     </>

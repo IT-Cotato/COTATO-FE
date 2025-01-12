@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Box, Grid2, Stack, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as CotatoCharacterFront } from '@assets/cotato_character_front.svg';
@@ -7,16 +7,12 @@ import { ReactComponent as CotatoCharacterPM } from '@assets/cotato_character_pm
 import { ReactComponent as CotatoCharacterDesign } from '@assets/cotato_character_design.svg';
 import { device, media } from '@theme/media';
 import CotatoTooltip from '@components/CotatoTooltip';
-import CotatoIcon from '@components/CotatoIcon';
-// import { ReactComponent as ArrowUp } from '@assets/arrow_up.svg';
+
+import HomeFooter from '@components/HomeFooter';
 
 //
 //
 //
-
-interface HomeNewThirdSectionProps {
-  handleBackToFirstSlide: () => void;
-}
 
 interface CotatoCharacterProps {
   component: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -37,7 +33,7 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
       FRONT: {
         component: CotatoCharacterFront,
         width: '11rem',
-        height: '10rem',
+        height: '8rem',
         tooltip: '#비주얼담당 #징검다리',
       },
     },
@@ -45,7 +41,7 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
       BACK: {
         component: CotatoCharacterBack,
         width: '11rem',
-        height: '10rem',
+        height: '8rem',
         tooltip: '#든든하게 #JAVA줄게',
       },
     },
@@ -53,7 +49,7 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
       PM: {
         component: CotatoCharacterPM,
         width: '9rem',
-        height: '10rem',
+        height: '8rem',
         tooltip: '#기초부터 #확실하게',
       },
     },
@@ -61,7 +57,7 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
       DESIGN: {
         component: CotatoCharacterDesign,
         width: '12rem',
-        height: '10rem',
+        height: '8rem',
         tooltip: '#디테일은 #자신있어',
       },
     },
@@ -71,7 +67,7 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
 //
 //
 
-const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProps) => {
+const HomeNewThirdSection = () => {
   const theme = useTheme();
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
@@ -115,11 +111,18 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
    */
   const renderCotatoCharacters = () => {
     return (
-      <Stack
-        direction="row"
-        justifyContent="center"
-        gap={isMobileOrSmaller ? '0rem' : isTabletOrSmaller ? '1rem' : '3rem'}
-        flexWrap="wrap"
+      <Grid2
+        container
+        spacing={{
+          xs: 0,
+          sm: 0,
+          md: 12,
+          lg: 12,
+        }}
+        columns={{
+          sm: 12,
+          md: 8,
+        }}
       >
         {COTATO_CHARCTER_SVG_LIST.map((svg) => {
           const key = Object.keys(svg)[0] as COTATO_CHARCTER_KEYS;
@@ -131,14 +134,19 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
           const tooltip = svg[key]?.tooltip as string;
 
           return (
-            <Stack
+            <Grid2
               key={key}
-              className={key}
               ref={(ref) => tooltipRefs.current.push(ref)}
-              alignItems="center"
-              sx={{
-                marginTop: '3rem',
+              size={{
+                md: 2,
+                sm: 6,
+                xs: 6,
               }}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              marginTop="3rem"
             >
               <CotatoTooltip
                 arrow
@@ -150,10 +158,7 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
                   disablePortal: true,
                 }}
               >
-                <Box
-                  width={isMobileOrSmaller ? '9rem' : '11.5rem'}
-                  height={isMobileOrSmaller ? '10rem' : '11rem'}
-                >
+                <Box width={isTabletOrSmaller ? '10rem' : '8rem'}>
                   <Character
                     width={
                       isMobileOrSmaller
@@ -176,39 +181,10 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
                   TEAM {key}
                 </Typography>
               </Box>
-            </Stack>
+            </Grid2>
           );
         })}
-      </Stack>
-    );
-  };
-
-  /**
-   *
-   */
-  const renderArrowUpButton = () => {
-    if (isTabletOrSmaller) {
-      return null;
-    }
-
-    return (
-      <StyledBox
-        boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
-        borderRadius="50%"
-        padding="0.5rem"
-        position="absolute"
-        bottom="5.5rem"
-      >
-        <CotatoIcon
-          icon="angle-up-solid"
-          style={{
-            cursor: 'pointer',
-            width: '2rem',
-            height: '2rem',
-          }}
-          onClick={handleBackToFirstSlide}
-        />
-      </StyledBox>
+      </Grid2>
     );
   };
 
@@ -257,8 +233,10 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
         {renderTitle()}
         {renderDescription()}
       </StyledStack>
-      <Stack>{renderCotatoCharacters()}</Stack>
-      {renderArrowUpButton()}
+      <Stack width="100%" alignItems="center">
+        {renderCotatoCharacters()}
+      </Stack>
+      <HomeFooter />
     </Wrapper>
   );
 };
@@ -276,26 +254,20 @@ const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
   width: 100%;
   height: 100%;
-  padding: 7.5rem 0;
+  padding: 2rem 0;
   gap: 3rem;
   font-family: 'YComputer';
 
   ${media.tablet`
-    padding: 5rem 0;
+    padding: 1.5rem 0;
   `}
 
   ${media.mobile`
-    padding: 2.5rem 0;
+    padding: 1rem 0;
   `}
-`;
-
-const StyledBox = styled(Box)`
-  &:hover {
-    transform: translateY(-0.25rem);
-    transition: transform 0.3s;
-  }
 `;
 
 export default HomeNewThirdSection;

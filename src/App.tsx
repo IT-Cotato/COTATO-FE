@@ -25,6 +25,7 @@ import { About } from '@pages/About';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Background from '@components/Background';
+import Footer from '@components/Footer';
 
 function App() {
   //
@@ -76,6 +77,7 @@ function App() {
           <Route path="/*" element={<NotFound />} />
         </Routes>
 
+        <Footer />
         {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>
