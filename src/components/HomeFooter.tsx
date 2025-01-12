@@ -7,7 +7,6 @@ import { ReactComponent as Cafe } from '@/assets/footer_cafe.svg';
 import { device, media } from '@theme/media';
 import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useMediaQuery } from '@mui/material';
-import { useLocation } from 'react-router-dom';
 
 //
 //
@@ -38,12 +37,8 @@ const URL_LIST: { [key: string]: string } = {
 //
 //
 
-const Footer = () => {
-  //
-  const location = useLocation();
-  const isInHome = location.pathname === '/';
-
-  const isTablet = useMediaQuery(`(max-width: ${device.tablet})`);
+const HomeFooter = () => {
+  const isTablet = useMediaQuery(`(max-width: ${device.laptop})`);
   const isLandScape = useMediaQuery(`(max-width: ${device.landscape})`);
   const isMobile = useMediaQuery(`(max-width: ${device.mobile})`);
 
@@ -79,7 +74,7 @@ const Footer = () => {
     </DescriptionWrapper>
   );
 
-  return isInHome ? null : (
+  return (
     <FooterWrapper>
       {renderSns()}
       {renderDescription()}
@@ -87,7 +82,7 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default HomeFooter;
 
 //
 //
@@ -98,14 +93,12 @@ const FooterWrapper = styled.footer`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 5rem 6.25rem 1.5rem 6.25rem;
+  padding: 5rem 6.25rem 4rem 6.25rem;
   gap: 1rem;
   transition: ${THEME_CHANGE_TRANSITION};
+
   ${media.laptop`
-    padding: 3rem 3.125rem 1.5rem 3.125rem;
-  `}
-  ${media.tablet`
-    padding: 3rem 1.5rem 1.5rem 1.25rem;
+    padding: 0rem 1.5rem 4rem 1.25rem;
     
   `}
   ${media.mobile`
@@ -118,7 +111,7 @@ const SnsWrapper = styled.div`
   display: flex;
   gap: 2.5rem;
 
-  ${media.tablet`
+  ${media.laptop`
     gap: 2rem;
   `}
   ${media.mobile`
@@ -137,7 +130,7 @@ const SnsBackground = styled.div`
   filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.25));
   cursor: pointer;
 
-  ${media.tablet`
+  ${media.laptop`
     width: 4rem;
     height: 4rem;
   `}
@@ -185,7 +178,7 @@ const SubTextContainer = styled.div`
     }
   }
 
-  ${media.tablet`
+  ${media.laptop`
     > p {
       font-size: 0.75rem;
       margin: 0rem;
