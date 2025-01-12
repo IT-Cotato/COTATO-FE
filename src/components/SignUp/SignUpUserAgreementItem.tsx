@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { produce, enableMapSet } from 'immer';
 import { CotatoPolicyInfoResponse, CotatoPolicyInfoResponseTypeEnum } from 'cotato-openapi-clients';
 import { marked } from 'marked';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import CotatoIcon from '@components/CotatoIcon';
 
 //
@@ -84,7 +84,7 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
             wordBreak: 'keep-all',
             whiteSpace: 'pre-wrap',
           }}
-          dangerouslySetInnerHTML={{ __html: sanitize(parsedHtml) }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(parsedHtml) }}
         />
       </Box>
     );
