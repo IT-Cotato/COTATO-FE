@@ -1,11 +1,11 @@
-import { Box, Grid2, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Box, Grid2, Stack, Typography } from '@mui/material';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as CotatoCharacterFront } from '@assets/cotato_character_front.svg';
 import { ReactComponent as CotatoCharacterBack } from '@assets/cotato_character_back.svg';
 import { ReactComponent as CotatoCharacterPM } from '@assets/cotato_character_pm.svg';
 import { ReactComponent as CotatoCharacterDesign } from '@assets/cotato_character_design.svg';
-import { device, media } from '@theme/media';
+import { media } from '@theme/media';
 import CotatoTooltip from '@components/CotatoTooltip';
 
 import HomeFooter from '@components/HomeFooter';
