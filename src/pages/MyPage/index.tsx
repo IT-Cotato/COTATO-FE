@@ -4,6 +4,7 @@ import MyPageRouter from './MyPageRouter';
 import useUser from '@/hooks/useUser';
 import Footer from '@components/Footer';
 import styled from 'styled-components';
+import { media } from '@theme/media';
 
 //
 //
@@ -21,8 +22,12 @@ const MyPage = () => {
 
   return (
     <FlexBox>
-      <MyPageRouter />
-      <Footer />
+      <ContentWrapper>
+        <MyPageRouter />
+      </ContentWrapper>
+      <div style={{ padding: '6.25rem' }}>
+        <Footer />
+      </div>
     </FlexBox>
   );
 };
@@ -33,10 +38,22 @@ const MyPage = () => {
 
 export const FlexBox = styled.div`
   display: flex;
-  min-height: calc(100vh - 4.5rem); //이게맞나?
+  min-height: calc(100vh - 4.5rem);
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  padding: 4.75rem 6.5rem 0rem 6.5rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 5.375rem;
+  width: 100%;
+  ${media.tablet`
+    padding: 2rem;
+  `}
 `;
 
 export default MyPage;

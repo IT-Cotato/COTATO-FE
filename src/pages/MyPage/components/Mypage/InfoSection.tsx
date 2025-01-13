@@ -44,7 +44,7 @@ const AccountSection = ({ email, phoneNum }: AccountSectionProps) => {
           비밀번호 재설정
           <RightAngle style={{ position: 'absolute', right: '1.25rem' }} />
         </InfoSectionItem>
-        <InfoSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.POLICY)}>
+        <InfoSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.POLICY.INFO)}>
           개인정보 관리
           <RightAngle style={{ position: 'absolute', right: '1.25rem' }} />
         </InfoSectionItem>

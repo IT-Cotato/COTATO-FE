@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import {
+  AccountDeletion,
   MemberManagement,
   MyPage,
   PolicyCheck,
@@ -14,7 +15,10 @@ import {
 
 export const MY_PAGE_PATH = {
   MYPAGE: '',
-  POLICY: 'policy',
+  POLICY: {
+    INFO: 'policy',
+    DELETION: 'delete',
+  },
   YEAR: 'year',
   MEMBERS: 'members',
   REGISTRATION: 'registration',
@@ -28,7 +32,11 @@ const MyPageRouter = () => {
   return (
     <Routes>
       <Route path={MY_PAGE_PATH.MYPAGE} element={<MyPage />} />
-      <Route path={MY_PAGE_PATH.POLICY} element={<PolicyCheck />} />
+      <Route path={MY_PAGE_PATH.POLICY.INFO} element={<PolicyCheck />} />
+      <Route
+        path={`${MY_PAGE_PATH.POLICY.INFO}/${MY_PAGE_PATH.POLICY.DELETION}`}
+        element={<AccountDeletion />}
+      />
       <Route path={MY_PAGE_PATH.YEAR} element={<YearManagement />} />
       <Route path={MY_PAGE_PATH.MEMBERS} element={<MemberManagement />} />
       <Route path={MY_PAGE_PATH.REGISTRATION} element={<RegistrationManagement />} />
