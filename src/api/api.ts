@@ -46,7 +46,7 @@ api.interceptors.response.use(
 
           return api(config);
         } catch (err) {
-          localStorage.clear();
+          localStorage.removeItem('token');
           window.location.replace('/');
         } finally {
           isRefreshing = false;

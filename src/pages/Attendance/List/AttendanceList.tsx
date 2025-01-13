@@ -7,6 +7,8 @@ import fetcherWithParams from '@utils/fetcherWithParams';
 import {
   CotatoMemberAttendanceRecordsResponse,
   CotatoMemberAttendResponse,
+  CotatoMemberAttendResponseOpenStatusEnum,
+  CotatoMemberAttendResponseResultEnum,
 } from 'cotato-openapi-clients';
 import { ReactComponent as GoalPotato } from '@assets/potato_goal.svg';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -15,7 +17,6 @@ import { media } from '@theme/media';
 import { ReactComponent as AbsetIcon } from '@assets/attendance_absent_icon.svg';
 import { ReactComponent as OnlineIcon } from '@assets/attendance_online_icon.svg';
 import { Divider, Stack } from '@mui/material';
-import { AttendResponseAttendanceResultEnum, AttendResponseIsOpenedEnum } from '@/enums/attend';
 import { useGeneration } from '@/hooks/useGeneration';
 import {
   AttendanceListLayoutType,
@@ -24,6 +25,7 @@ import {
 import useUser from '@/hooks/useUser';
 import { MemberRole } from '@/enums';
 import CotatoIcon from '@components/CotatoIcon';
+import { getAttendanceReportPath } from '../utils/util';
 
 //
 //
@@ -32,6 +34,7 @@ import CotatoIcon from '@components/CotatoIcon';
 const AttendanceList = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+
   const { generationId } = useParams();
   const { currentGeneration } = useGeneration();
   const { user } = useUser();
@@ -51,7 +54,17 @@ const AttendanceList = () => {
    *
    */
   const handleCardClick = (attendance: CotatoMemberAttendResponse) => {
-    if (attendance.isOpened === AttendResponseIsOpenedEnum.Open) {
+    const allowedAttendanceStatus = [
+      CotatoMemberAttendResponseOpenStatusEnum.Open,
+      CotatoMemberAttendResponseOpenStatusEnum.Late,
+      CotatoMemberAttendResponseOpenStatusEnum.Absent,
+    ] as CotatoMemberAttendResponseOpenStatusEnum[];
+
+    if (
+      allowedAttendanceStatus.includes(
+        attendance.openStatus as CotatoMemberAttendResponseOpenStatusEnum,
+      )
+    ) {
       navigate(`/attendance/attend/generation/${generationId}/session/${attendance.sessionId}`);
     }
   };
@@ -68,7 +81,12 @@ const AttendanceList = () => {
    */
   const handleClickReport = () => {
     navigate(
-      `/attendance/report/generation/${generationId}/session/${attendanceList.at(-1)?.sessionId}`,
+      getAttendanceReportPath({
+        keepSearchParam: false,
+        generationId: generationId,
+        sessionId: attendanceList.at(-1)?.sessionId,
+        attendanceId: attendanceList.at(-1)?.attendanceId,
+      }),
     );
   };
 
@@ -90,8 +108,8 @@ const AttendanceList = () => {
       theme.colors.pastelTone.pink[100],
     ];
 
-    const getCardBackgroundColor = (attendanceResult: AttendResponseAttendanceResultEnum) => {
-      if (attendanceResult === 'ABSENT') {
+    const getCardBackgroundColor = (attendanceResult?: CotatoMemberAttendResponseResultEnum) => {
+      if (attendanceResult === CotatoMemberAttendResponseResultEnum.Absent) {
         return theme.colors.pastelTone.blue[100];
       }
 
@@ -112,9 +130,7 @@ const AttendanceList = () => {
           <StyledSwiperSlide key={index}>
             <AttendanceListCard
               attendance={attendance}
-              backgroundColor={getCardBackgroundColor(
-                attendance.attendanceResult as AttendResponseAttendanceResultEnum,
-              )}
+              backgroundColor={getCardBackgroundColor(attendance.result)}
               generationNumber={currentGeneration?.generationNumber || 0}
               onClick={handleCardClick}
             />
@@ -219,13 +235,7 @@ const AttendanceList = () => {
   React.useEffect(() => {
     if (attendanceResponse?.memberAttendResponses) {
       const newMemberAttendaceResponse = [...attendanceResponse.memberAttendResponses];
-      newMemberAttendaceResponse.sort((a, b) => {
-        if (a.sessionId && b.sessionId) {
-          return a.sessionId - b.sessionId;
-        }
-
-        return 0;
-      });
+      newMemberAttendaceResponse.sort((a, b) => (a.sessionDateTime! < b.sessionDateTime! ? -1 : 1));
       setAttendanceList(newMemberAttendaceResponse);
     }
   }, [attendanceResponse]);
@@ -254,6 +264,7 @@ const Wrapper = styled.div`
   justify-content: center;
   width: 100%;
   min-height: calc(100vh - ${HEADER_HEIGHT});
+  overflow-x: hidden;
 
   ${media.mobile`
     min-height: 100vh;

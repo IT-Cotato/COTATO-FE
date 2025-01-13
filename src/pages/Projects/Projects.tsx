@@ -63,7 +63,7 @@ const Projects = () => {
     }
 
     return projects?.map((project) => (
-      <Grid2 key={project.projectId} size="auto">
+      <Grid2 key={project.projectId} size={{ xs: 10, sm: 6, md: 6, lg: 4, xl: 4 }}>
         <ProjectsCard
           {...project}
           onClick={() => setSelectedId((project.projectId as number).toString())}
@@ -76,7 +76,11 @@ const Projects = () => {
     <Wrapper>
       <CotatoPanel size="short" textImgSrc={PanelText} />
       {renderSubtitle()}
-      <Grid2 container spacing={8} justifyContent="center">
+      <Grid2
+        container
+        spacing={{ xs: 4, sm: 6, md: 6, lg: 6, xl: 8 }}
+        columns={{ xs: 10, sm: 12, md: 18, lg: 16, xl: 16 }}
+      >
         {renderProjects()}
       </Grid2>
       <ProjectDialog projectId={Number(selectedId)} open={!!selectedId} onClose={handleClose} />

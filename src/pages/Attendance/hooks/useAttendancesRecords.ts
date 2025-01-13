@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { CotatoAttendanceRecordResponse } from 'cotato-openapi-clients';
+import { CotatoAttendanceMemberInfo, CotatoAttendanceStatistic } from 'cotato-openapi-clients';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
@@ -12,9 +12,14 @@ interface UseAttendancesRecordsParams {
   name?: string;
 }
 
+export interface CotatoAttendanceRecordsGenerationResponse {
+  memberInfo: CotatoAttendanceMemberInfo;
+  statistic: CotatoAttendanceStatistic;
+}
+
 interface UseAttendancesRecordsReturn {
-  attendancesRecords: CotatoAttendanceRecordResponse[] | [];
-  filteredAttendancesRecords: CotatoAttendanceRecordResponse[] | [];
+  attendancesRecords: CotatoAttendanceRecordsGenerationResponse[] | [];
+  filteredAttendancesRecords: CotatoAttendanceRecordsGenerationResponse[] | [];
   isAttendancesRecordsLoading: boolean;
   isAttendancesRecordsError: boolean;
   mutateAttendancesRecords: () => void;
@@ -36,7 +41,7 @@ export const useAttendancesRecords = ({
     isLoading: isAttendancesRecordsLoading,
     error: isAttendancesRecordsError,
     mutate: mutateAttendancesRecords,
-  } = useSWR<CotatoAttendanceRecordResponse[]>(
+  } = useSWR<CotatoAttendanceRecordsGenerationResponse[]>(
     `/v2/api/attendances/records?generationId=${generationId}`,
     fetcher,
     {
