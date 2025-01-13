@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, useState } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 import styled, { useTheme } from 'styled-components';
 import { ReactComponent as Github } from '@/pages/MyPage/tempAsssets/github_icon.svg';
@@ -25,6 +25,17 @@ interface ProfileNameSectionProps {
 }
 interface ProfileInfoSectionProps {
   position?: CotatoMemberInfoResponsePositionEnum;
+  canModify: boolean;
+}
+interface IntroductionSectionProps {
+  canModify: boolean;
+}
+interface LinksSectionProps {
+  canModify: boolean;
+}
+interface ButtonSectionProps {
+  canModify: boolean;
+  setCanModify: Dispatch<React.SetStateAction<boolean>>;
 }
 
 //
@@ -59,15 +70,16 @@ const COTATO_POSITION_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> 
 
 const ProfileCard = () => {
   const { user } = useUser();
+  const [canModify, setCanModify] = useState(false);
 
   return (
     <ProfileCardContainer>
       <ProfileImageSection position={user?.position} />
       <NameSection name={user?.name} />
-      <InfoSection position={user?.position} />
-      <IntroductionSection />
-      <LinksSection />
-      <ButtonSection />
+      <InfoSection position={user?.position} canModify={canModify} />
+      <IntroductionSection canModify={canModify} />
+      <LinksSection canModify={canModify} />
+      <ButtonSection canModify={canModify} setCanModify={setCanModify} />
     </ProfileCardContainer>
   );
 };
@@ -95,7 +107,7 @@ const NameSection = ({ name }: ProfileNameSectionProps) => {
   );
 };
 
-const InfoSection = ({ position }: ProfileInfoSectionProps) => {
+const InfoSection = ({ position, canModify }: ProfileInfoSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardSectionTitle>정보</ProfileCardSectionTitle>
@@ -107,47 +119,54 @@ const InfoSection = ({ position }: ProfileInfoSectionProps) => {
           isPrimary={false}
           disabled={true}
         />
-        <ProfileInput />
+        <ProfileInput placeholder="소속" disabled={!canModify} />
       </ProfileCardStringInputSection>
     </ProfileCardSection>
   );
 };
 
-const IntroductionSection = () => {
+const IntroductionSection = ({ canModify }: IntroductionSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardSectionTitle>자기소개</ProfileCardSectionTitle>
       <ProfileCardStringInputSection>
-        <ProfileInput />
+        {canModify ? <ProfileInput /> : <ProfileInput disabled />}
       </ProfileCardStringInputSection>
     </ProfileCardSection>
   );
 };
 
-const LinksSection = () => {
+const LinksSection = ({ canModify }: LinksSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardLinkInputSection>
         <LinkContainer>
           <Github />
-          <ProfileInput size="small" />
+          <ProfileInput size="small" disabled={!canModify} />
         </LinkContainer>
         <LinkContainer>
           <Link />
-          <ProfileInput size="small" />
+          <ProfileInput size="small" disabled={!canModify} />
         </LinkContainer>
       </ProfileCardLinkInputSection>
     </ProfileCardSection>
   );
 };
 
-const ButtonSection = () => {
+const ButtonSection = ({ canModify, setCanModify }: ButtonSectionProps) => {
   return (
     <ProfileCardButtonSection>
       <ProfileCardButton>
         <Upload />
       </ProfileCardButton>
-      <ProfileCardButton>수정하기</ProfileCardButton>
+      <ProfileCardButton
+        onClick={() => {
+          setCanModify((prev: boolean) => !prev);
+        }}
+        canModify={canModify}
+      >
+        {canModify ? '수정완료' : '수정하기'}
+      </ProfileCardButton>
     </ProfileCardButtonSection>
   );
 };
@@ -232,15 +251,18 @@ const ProfileCardButtonSection = styled.div`
   align-self: stretch;
 `;
 
-const ProfileCardButton = styled.button`
+const ProfileCardButton = styled.button<{ canModify?: boolean }>`
   display: flex;
   padding: 0.625rem;
   justify-content: center;
   align-items: center;
   gap: 0.625rem;
+  border: none;
   border-radius: 0.25rem;
-  background-color: ${({ theme }) => theme.colors.common.black};
+  background-color: ${({ canModify, theme }) =>
+    canModify ? theme.colors.primary100_1 : theme.colors.common.black};
   color: ${({ theme }) => theme.colors.common.real_white};
+  cursor: pointer;
   font-family: Pretendard;
   font-size: ${({ theme }) => theme.fontSize.md};
 `;
@@ -259,10 +281,14 @@ const ProfileInput = ({ isPrimary = true, ...props }: ProfileInputProps & TextFi
       sx={{
         alignSelf: 'stretch',
         flex: 1,
+
         '& .MuiOutlinedInput-root': {
           '&.Mui-focused fieldset': {
             borderColor: theme.colors.gray40,
             borderRadius: '0.5rem',
+          },
+          '&.MuiInputBase-sizeSmall.Mui-disabled fieldset': {
+            border: 'none',
           },
         },
         '& .MuiInputBase-sizeSmall': {
