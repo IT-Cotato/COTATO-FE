@@ -9,6 +9,7 @@ import { device, media } from '@theme/media';
 import CotatoTooltip from '@components/CotatoTooltip';
 
 import HomeFooter from '@components/HomeFooter';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
@@ -32,32 +33,28 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
     {
       FRONT: {
         component: CotatoCharacterFront,
-        width: '11rem',
-        height: '8rem',
+        width: '7.5rem',
         tooltip: '#비주얼담당 #징검다리',
       },
     },
     {
       BACK: {
         component: CotatoCharacterBack,
-        width: '11rem',
-        height: '8rem',
+        width: '7.5rem',
         tooltip: '#든든하게 #JAVA줄게',
       },
     },
     {
       PM: {
         component: CotatoCharacterPM,
-        width: '9rem',
-        height: '8rem',
+        width: '7.5rem',
         tooltip: '#기초부터 #확실하게',
       },
     },
     {
       DESIGN: {
         component: CotatoCharacterDesign,
-        width: '12rem',
-        height: '8rem',
+        width: '8rem',
         tooltip: '#디테일은 #자신있어',
       },
     },
@@ -69,8 +66,9 @@ const COTATO_CHARCTER_SVG_LIST: Array<Partial<Record<COTATO_CHARCTER_KEYS, Cotat
 
 const HomeNewThirdSection = () => {
   const theme = useTheme();
-  const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
-  const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
+
+  const { isMobileOrSmaller, isTabletOrSmaller, isLaptopOrSmaller } = useBreakpoints();
+
   const tooltipRefs = React.useRef<Array<HTMLDivElement | null>>([]);
   const [tooltipOpenMap, setTooltipOpenMap] = React.useState<Map<string, boolean>>(
     new Map([
@@ -86,10 +84,7 @@ const HomeNewThirdSection = () => {
    */
   const renderTitle = () => {
     return (
-      <Typography
-        variant={isMobileOrSmaller ? 'h5' : isTabletOrSmaller ? 'h4' : 'h3'}
-        fontFamily="YComputer"
-      >
+      <Typography variant={isMobileOrSmaller ? 'h5' : 'h4'} fontFamily="YComputer">
         COTATO CLUB MEMBERS
       </Typography>
     );
@@ -100,7 +95,7 @@ const HomeNewThirdSection = () => {
    */
   const renderDescription = () => {
     return (
-      <Typography variant="body1" fontFamily="YComputer" textAlign="center">
+      <Typography variant="body1" textAlign="center">
         코테이토의 팀이 모이면, <br /> 도전을 시도할 수 있는 기술과 지식이 성장해요.
       </Typography>
     );
@@ -115,13 +110,13 @@ const HomeNewThirdSection = () => {
         container
         spacing={{
           xs: 0,
-          sm: 0,
-          md: 12,
+          sm: 4,
+          md: 8,
           lg: 12,
         }}
         columns={{
-          sm: 12,
-          md: 8,
+          sm: 16,
+          md: 16,
         }}
       >
         {COTATO_CHARCTER_SVG_LIST.map((svg) => {
@@ -130,7 +125,6 @@ const HomeNewThirdSection = () => {
             React.SVGProps<SVGSVGElement>
           >;
           const width = svg[key]?.width as string;
-          const height = svg[key]?.height as string;
           const tooltip = svg[key]?.tooltip as string;
 
           return (
@@ -138,15 +132,16 @@ const HomeNewThirdSection = () => {
               key={key}
               ref={(ref) => tooltipRefs.current.push(ref)}
               size={{
-                md: 2,
-                sm: 6,
+                lg: 4,
+                md: 4,
+                sm: 4,
                 xs: 6,
               }}
               display="flex"
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
-              marginTop="3rem"
+              marginTop={isTabletOrSmaller ? '3rem' : '0rem'}
             >
               <CotatoTooltip
                 arrow
@@ -158,16 +153,10 @@ const HomeNewThirdSection = () => {
                   disablePortal: true,
                 }}
               >
-                <Box width={isTabletOrSmaller ? '10rem' : '8rem'}>
+                <Box width={isLaptopOrSmaller ? '6rem' : '8rem'}>
                   <Character
-                    width={
-                      isMobileOrSmaller
-                        ? `calc(${width} * 0.7)`
-                        : isTabletOrSmaller
-                          ? `calc(${width} * 0.9)`
-                          : width
-                    }
-                    height={height}
+                    width={isLaptopOrSmaller ? `calc(${width} * 0.5)` : width}
+                    height={isTabletOrSmaller ? '6rem' : isLaptopOrSmaller ? '8rem' : '10rem'}
                   />
                 </Box>
               </CotatoTooltip>
@@ -257,16 +246,16 @@ const Wrapper = styled.section`
   justify-content: space-around;
   width: 100%;
   height: 100%;
-  padding: 2rem 0;
+  padding-bottom: 1rem;
   gap: 3rem;
   font-family: 'YComputer';
 
   ${media.tablet`
-    padding: 1.5rem 0;
+    padding: 1.5rem 0 0.5rem 0;
   `}
 
   ${media.mobile`
-    padding: 1rem 0;
+    padding: 2rem 0 0;
   `}
 `;
 

@@ -4,9 +4,12 @@ import { ReactComponent as Insta } from '@/assets/footer_insta.svg';
 import { ReactComponent as Youtube } from '@/assets/footer_youtube.svg';
 import { ReactComponent as Github } from '@/assets/footer_github.svg';
 import { ReactComponent as Cafe } from '@/assets/footer_cafe.svg';
-import { device, media } from '@theme/media';
+import { media } from '@theme/media';
 import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
-import { useMediaQuery } from '@mui/material';
+
+import { useBreakpoints } from '@/hooks/useBreakpoints';
+
+import useCotatoTheme from '@/hooks/useCotatoTheme';
 
 //
 //
@@ -38,19 +41,16 @@ const URL_LIST: { [key: string]: string } = {
 //
 
 const HomeFooter = () => {
-  const isTablet = useMediaQuery(`(max-width: ${device.laptop})`);
-  const isLandScape = useMediaQuery(`(max-width: ${device.landscape})`);
-  const isMobile = useMediaQuery(`(max-width: ${device.mobile})`);
+  const { isTabletOrSmaller } = useBreakpoints();
+  const { theme } = useCotatoTheme();
 
   const renderSns = () => (
     <SnsWrapper>
       {LOGO_LIST.map((logo) => {
         const LogoComponent = LOGO_COMPONENTS[logo];
         return (
-          <SnsBackground key={logo} onClick={() => open(URL_LIST[logo])}>
-            <LogoComponent
-              width={isMobile ? '2rem' : isLandScape ? '2.25rem' : isTablet ? '3rem' : '4rem'}
-            />
+          <SnsBackground key={logo} onClick={() => open(URL_LIST[logo])} $theme={theme}>
+            <LogoComponent width={isTabletOrSmaller ? '1.5rem' : '2rem'} />
           </SnsBackground>
         );
       })}
@@ -60,9 +60,9 @@ const HomeFooter = () => {
   const renderDescription = () => (
     <DescriptionWrapper>
       <p>
-        <MainText className="lg">Cotato</MainText>
+        <MainText className="sm">Cotato</MainText>
         &nbsp; &nbsp;
-        <MainText className="md">코테이토</MainText>
+        <MainText className="sm">코테이토</MainText>
       </p>
       <SubTextContainer>
         <p>
@@ -93,17 +93,16 @@ const FooterWrapper = styled.footer`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 5rem 6.25rem 4rem 6.25rem;
+  padding: 0rem 6.25rem 2rem 6.25rem;
   gap: 1rem;
   transition: ${THEME_CHANGE_TRANSITION};
 
   ${media.laptop`
-    padding: 0rem 1.5rem 4rem 1.25rem;
+    padding: 0rem 1.5rem 2rem 1.25rem;
     
   `}
   ${media.mobile`
-    padding:  3rem 1.25rem 1.5rem 1.25rem;
-    
+    padding: 0rem 1.25rem 2rem 1.25rem;
   `}
 `;
 
@@ -119,30 +118,23 @@ const SnsWrapper = styled.div`
   `}
 `;
 
-const SnsBackground = styled.div`
+const SnsBackground = styled.div<{ $theme: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 5rem;
-  height: 5rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.common.white};
-  filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.25));
+  filter: ${({ $theme }) =>
+    $theme === 'light'
+      ? 'drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.25))'
+      : 'drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.25))'};
   cursor: pointer;
 
-  ${media.laptop`
-    width: 4rem;
-    height: 4rem;
-  `}
-
-  ${media.landscape`
-    width: 3.5rem;
-    height: 3.5rem;
-  `}
-
-  ${media.mobile`
-    width: 3rem;
-    height: 3rem;
+  ${media.tablet`
+    width: 2.5rem;
+    height: 2.5rem;
   `}
 `;
 
@@ -155,11 +147,11 @@ const DescriptionWrapper = styled.div`
 const MainText = styled.span`
   color: ${({ theme }) => theme.colors.gray80};
 
-  &.md {
-    font-size: ${({ theme }) => theme.fontSize.md};
+  &.sm {
+    font-size: ${({ theme }) => theme.fontSize.sm};
   }
-  &.lg {
-    font-size: ${({ theme }) => theme.fontSize.lg};
+  &.xs {
+    font-size: ${({ theme }) => theme.fontSize.xs};
   }
 `;
 
