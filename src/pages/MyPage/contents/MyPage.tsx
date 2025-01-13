@@ -9,31 +9,19 @@ import { media } from '@theme/media';
 
 const MyPage = () => {
   return (
-    <MyPageWrapper>
+    <>
       <div>Mypage Header</div>
       <ContentContainer>
         <ProfileCard />
         <InfoSection />
       </ContentContainer>
-    </MyPageWrapper>
+    </>
   );
 };
 
 //
 //
 //
-
-const MyPageWrapper = styled.div`
-  display: flex;
-  padding: 4.75rem 6.5rem 0rem 6.5rem;
-  flex-direction: column;
-  align-items: center;
-  gap: 5.375rem;
-  width: 100%;
-  ${media.tablet`
-    padding: 2rem;
-  `}
-`;
 
 const ContentContainer = styled.div`
   display: flex;
