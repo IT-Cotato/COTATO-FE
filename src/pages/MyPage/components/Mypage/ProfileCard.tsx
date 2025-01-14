@@ -20,22 +20,27 @@ import { media } from '@theme/media';
 interface ProfileImageSectionProps {
   position?: CotatoMemberInfoResponsePositionEnum;
 }
+
 interface ProfileNameSectionProps {
   name?: string;
 }
+
 interface ProfileInfoSectionProps {
   position?: CotatoMemberInfoResponsePositionEnum;
-  canModify: boolean;
+  isModifying: boolean;
 }
+
 interface IntroductionSectionProps {
-  canModify: boolean;
+  isModifying: boolean;
 }
+
 interface LinksSectionProps {
-  canModify: boolean;
+  isModifying: boolean;
 }
+
 interface ButtonSectionProps {
-  canModify: boolean;
-  setCanModify: Dispatch<React.SetStateAction<boolean>>;
+  isModifying: boolean;
+  setisModifying: Dispatch<React.SetStateAction<boolean>>;
 }
 
 //
@@ -70,16 +75,16 @@ const COTATO_POSITION_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> 
 
 const ProfileCard = () => {
   const { user } = useUser();
-  const [canModify, setCanModify] = useState(false);
+  const [isModifying, setisModifying] = useState(false);
 
   return (
     <ProfileCardContainer>
       <ProfileImageSection position={user?.position} />
       <NameSection name={user?.name} />
-      <InfoSection position={user?.position} canModify={canModify} />
-      <IntroductionSection canModify={canModify} />
-      <LinksSection canModify={canModify} />
-      <ButtonSection canModify={canModify} setCanModify={setCanModify} />
+      <InfoSection position={user?.position} isModifying={isModifying} />
+      <IntroductionSection isModifying={isModifying} />
+      <LinksSection isModifying={isModifying} />
+      <ButtonSection isModifying={isModifying} setisModifying={setisModifying} />
     </ProfileCardContainer>
   );
 };
@@ -107,7 +112,7 @@ const NameSection = ({ name }: ProfileNameSectionProps) => {
   );
 };
 
-const InfoSection = ({ position, canModify }: ProfileInfoSectionProps) => {
+const InfoSection = ({ position, isModifying }: ProfileInfoSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardSectionTitle>정보</ProfileCardSectionTitle>
@@ -119,41 +124,41 @@ const InfoSection = ({ position, canModify }: ProfileInfoSectionProps) => {
           isPrimary={false}
           disabled={true}
         />
-        <ProfileInput placeholder="소속" disabled={!canModify} />
+        <ProfileInput placeholder="소속" disabled={!isModifying} />
       </ProfileCardStringInputSection>
     </ProfileCardSection>
   );
 };
 
-const IntroductionSection = ({ canModify }: IntroductionSectionProps) => {
+const IntroductionSection = ({ isModifying }: IntroductionSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardSectionTitle>자기소개</ProfileCardSectionTitle>
       <ProfileCardStringInputSection>
-        {canModify ? <ProfileInput /> : <ProfileInput disabled />}
+        <ProfileInput disabled={!isModifying} />
       </ProfileCardStringInputSection>
     </ProfileCardSection>
   );
 };
 
-const LinksSection = ({ canModify }: LinksSectionProps) => {
+const LinksSection = ({ isModifying }: LinksSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardLinkInputSection>
         <LinkContainer>
           <Github />
-          <ProfileInput size="small" disabled={!canModify} />
+          <ProfileInput size="small" disabled={!isModifying} />
         </LinkContainer>
         <LinkContainer>
           <Link />
-          <ProfileInput size="small" disabled={!canModify} />
+          <ProfileInput size="small" disabled={!isModifying} />
         </LinkContainer>
       </ProfileCardLinkInputSection>
     </ProfileCardSection>
   );
 };
 
-const ButtonSection = ({ canModify, setCanModify }: ButtonSectionProps) => {
+const ButtonSection = ({ isModifying, setisModifying }: ButtonSectionProps) => {
   return (
     <ProfileCardButtonSection>
       <ProfileCardButton>
@@ -161,11 +166,11 @@ const ButtonSection = ({ canModify, setCanModify }: ButtonSectionProps) => {
       </ProfileCardButton>
       <ProfileCardButton
         onClick={() => {
-          setCanModify((prev: boolean) => !prev);
+          setisModifying((prev: boolean) => !prev);
         }}
-        canModify={canModify}
+        isModifying={isModifying}
       >
-        {canModify ? '수정완료' : '수정하기'}
+        {isModifying ? '수정완료' : '수정하기'}
       </ProfileCardButton>
     </ProfileCardButtonSection>
   );
@@ -251,7 +256,7 @@ const ProfileCardButtonSection = styled.div`
   align-self: stretch;
 `;
 
-const ProfileCardButton = styled.button<{ canModify?: boolean }>`
+const ProfileCardButton = styled.button<{ isModifying?: boolean }>`
   display: flex;
   padding: 0.625rem;
   justify-content: center;
@@ -259,8 +264,8 @@ const ProfileCardButton = styled.button<{ canModify?: boolean }>`
   gap: 0.625rem;
   border: none;
   border-radius: 0.25rem;
-  background-color: ${({ canModify, theme }) =>
-    canModify ? theme.colors.primary100_1 : theme.colors.common.black};
+  background-color: ${({ isModifying, theme }) =>
+    isModifying ? theme.colors.primary100_1 : theme.colors.common.black};
   color: ${({ theme }) => theme.colors.common.real_white};
   cursor: pointer;
   font-family: Pretendard;
