@@ -75,15 +75,17 @@ const ContentContainer = styled.div`
   flex-direction: column;
   gap: 3.75rem;
   padding: 0 1.5rem 1.5rem 1.5rem;
-  background-color: ${({ theme }) => theme.colors.primary5};
+  background-color: ${({ theme }) => theme.colors.common.white};
 `;
 
 const NotificationContainer = styled.div`
   display: flex;
   max-width: 77rem;
+  padding: 2.25rem;
   flex-direction: column;
   align-items: flex-start;
   gap: 6.25rem;
+  background-color: ${({ theme }) => theme.colors.common.real_white};
 `;
 
 const Notification = styled.div`
