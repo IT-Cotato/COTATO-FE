@@ -30,7 +30,7 @@ export function useGeneration({ generationId }: UseGenerationParams = {}): UseGe
     data: generationData,
     isLoading: isGenerationLoading,
     error: isGenerationError,
-  } = useSWR<CotatoGenerationInfoResponse[]>('/v1/api/generation', fetcher, {
+  } = useSWR<CotatoGenerationInfoResponse[]>('/v1/api/generations', fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
@@ -40,7 +40,7 @@ export function useGeneration({ generationId }: UseGenerationParams = {}): UseGe
     data: currentGenerationData,
     isLoading: isCurrentGenerationLoading,
     error: currentGenerationError,
-  } = useSWR<CotatoGenerationInfoResponse>('/v1/api/generation/current', fetcher, {
+  } = useSWR<CotatoGenerationInfoResponse>('/v1/api/generations/current', fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,

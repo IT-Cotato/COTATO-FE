@@ -11,6 +11,7 @@ import { useGeneration } from '@/hooks/useGeneration';
 import useUser from '@/hooks/useUser';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
+import { checkIsAtLeastManager } from '@utils/role';
 
 const CSHome = () => {
   const { generationId } = useParams();
@@ -85,12 +86,14 @@ const CSHome = () => {
         <CSWrapper>
           <CSHeader>CS 문제풀이</CSHeader>
           <CSSetting>
-            <CotatoDropBox
-              list={generations}
-              onChange={onChangeGeneration}
-              title={(generation) => generation?.generationNumber + '기'}
-            />
-            {(user?.role === 'ADMIN' || user?.role === 'EDUCATION') && (
+            {generations && (
+              <CotatoDropBox
+                list={generations}
+                title={(generation) => generation?.generationNumber + '기'}
+                onChange={onChangeGeneration}
+              />
+            )}
+            {checkIsAtLeastManager(user?.role) && (
               <ButtonWrapper>
                 <IconButton onClick={onClickAddButton}>
                   <CotatoIcon icon="plus" color={(theme) => theme.colors.sub2[40]} />
