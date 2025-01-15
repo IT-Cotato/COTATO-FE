@@ -1,27 +1,21 @@
 /**
  * Member's role for page.
  *
- * - **REFUSED** (`0`) - Refused user.
- * - **GENERAL** (`30`) - Enrolled but not valid authorized user.
- * - **OLD_MEMBER** (`50`) - Previous user.
- * - **MEMBER** (`60`) - Current user.
- * - **OPERATION** (`70`) - 운영지원팀
- * - **EDUCATION** (`90`) - Editable for cs quiz.
- * - **ADMIN** (`120`) - Admin.
+ * - **NOTHING** (`0`) - Not a member.
+ * - **MEMBER** (`10`) - Current user.
+ * - **MANAGER** (`20`) - Can Manage CS Quiz, attendance
+ * - **ADMIN** (`30`) - Admin.
+ * - **DEV** (`40`) - FOR COTATO DEVELOPERS
  */
 export enum MemberRole {
-  /** Refused user. */
-  REFUSED = 0,
-  /** Enrolled but not valid authorized user. */
-  GENERAL = 30,
-  /** Previous user. */
-  OLD_MEMBER = 50,
-  /** Current user. */
-  MEMBER = 60,
-  /** 운영지원팀 */
-  OPERATION = 70,
-  /** Editable for cs quiz. */
-  EDUCATION = 90,
+  /** Not a member. */
+  NOTHING = 0,
+  /** Common user. */
+  MEMBER = 10,
+  /** Can Manage CS Quiz, attendance */
+  MANAGER = 20,
   /** Admin. */
-  ADMIN = 120,
+  ADMIN = 30,
+  /** FOR COTATO DEVELOPERS */
+  DEV = 40,
 }

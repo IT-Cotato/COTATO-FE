@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import fetcher from '@utils/fetcher';
 import { styled } from 'styled-components';
-import useSWR from 'swr';
 import generationSort from '@utils/generationSort';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import CotatoIcon from './CotatoIcon';
+import { useGeneration } from '@/hooks/useGeneration';
 
 interface Props {
   mode: string;
@@ -25,10 +24,7 @@ const RequestDropBox = ({
   onChangeGeneration,
   onChangePosition,
 }: Props) => {
-  const { data: generationData } = useSWR<CotatoGenerationInfoResponse[]>(
-    '/v1/api/generation',
-    fetcher,
-  );
+  const { generations: generationData } = useGeneration();
 
   const [generations, setGenerations] = useState<CotatoGenerationInfoResponse[]>();
   const [isOpen, setIsOpen] = useState(false);

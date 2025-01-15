@@ -15,6 +15,8 @@ import useUser from '@/hooks/useUser';
 import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
 import CotatoIcon from '@components/CotatoIcon';
 
+import { checkIsAtLeastMember, checkIsUnderAdmin } from '@utils/role';
+
 //
 //
 //
@@ -50,6 +52,117 @@ const MyInfo = () => {
     logout();
   }, []);
 
+  /**
+   *
+   */
+  const renderMemberMenus = () => {
+    if (!checkIsAtLeastMember(user?.role)) {
+      return null;
+    }
+
+    return (
+      <>
+        <DataBox>
+          <IDWrapper>
+            <Stack justifyContent="center" alignItems="center">
+              <ProfileImage
+                src={
+                  COTATO_CHARCTER_SVG_MAP[
+                    user?.position ?? CotatoMemberInfoResponsePositionEnum.None
+                  ]?.imgSrc as string
+                }
+              />
+            </Stack>
+            <InfoWrapper>
+              <p>아이디</p>
+              <TextContainer>
+                <p>{myInfo?.email}</p>
+              </TextContainer>
+            </InfoWrapper>
+          </IDWrapper>
+          <InfoWrapper>
+            <p>비밀번호</p>
+            <TextContainer>
+              <p>********</p>
+              <Button color="#000" to="/findpw">
+                <p>변경</p>
+              </Button>
+            </TextContainer>
+          </InfoWrapper>
+          <InfoWrapper>
+            <p>이름</p>
+            <TextContainer>
+              <p>{myInfo?.name}</p>
+            </TextContainer>
+          </InfoWrapper>
+          <InfoWrapper>
+            <p>합격기수</p>
+            <TextContainer>
+              <p>{myInfo?.generationNumber}기</p>
+            </TextContainer>
+          </InfoWrapper>
+          <InfoWrapper>
+            <p>포지션</p>
+            <TextContainer>
+              <p>{myInfo?.position}</p>
+            </TextContainer>
+          </InfoWrapper>
+          <InfoWrapper>
+            <p>전화번호</p>
+            <TextContainer>
+              <p>{myInfo?.phoneNumber}</p>
+            </TextContainer>
+          </InfoWrapper>
+        </DataBox>
+
+        <StyledLink to="cs-record">
+          <ButtonContainer>
+            <p>내가 풀어본 CS 문제풀이</p>
+            <CotatoIcon icon="angle-right-solid" size="2rem" />
+          </ButtonContainer>
+        </StyledLink>
+      </>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderAdminMenus = () => {
+    if (checkIsUnderAdmin(user?.role)) {
+      return null;
+    }
+
+    return (
+      <>
+        <StyledLink to="request">
+          <ButtonContainer>
+            <p>신입 감자 가입요청 확인/승인 </p>
+            <CotatoIcon icon="angle-right-solid" size="2rem" />
+          </ButtonContainer>
+        </StyledLink>
+
+        <StyledLink to="role-grant">
+          <ButtonContainer>
+            <p>관리자 권한 설정 </p>
+            <CotatoIcon icon="angle-right-solid" size="2rem" />
+          </ButtonContainer>
+        </StyledLink>
+
+        <StyledLink to="setting">
+          <ButtonContainer>
+            <p>시스템 설정</p>
+            <CotatoIcon icon="angle-right-solid" size="2rem" />
+          </ButtonContainer>
+        </StyledLink>
+      </>
+    );
+  };
+
+  //
+  //
+  //
+
   return (
     <FlexBox>
       <MyPageWrapper>
@@ -60,92 +173,8 @@ const MyInfo = () => {
         <MyDataHeader>
           <h3>내 정보</h3>
         </MyDataHeader>
-        {user?.role !== 'GENERAL' && (
-          <DataBox>
-            <IDWrapper>
-              <Stack justifyContent="center" alignItems="center">
-                <ProfileImage
-                  src={
-                    COTATO_CHARCTER_SVG_MAP[
-                      user?.position ?? CotatoMemberInfoResponsePositionEnum.None
-                    ]?.imgSrc as string
-                  }
-                />
-              </Stack>
-              <InfoWrapper>
-                <p>아이디</p>
-                <TextContainer>
-                  <p>{myInfo?.email}</p>
-                </TextContainer>
-              </InfoWrapper>
-            </IDWrapper>
-            <InfoWrapper>
-              <p>비밀번호</p>
-              <TextContainer>
-                <p>********</p>
-                <Button color="#000" to="/findpw">
-                  <p>변경</p>
-                </Button>
-              </TextContainer>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p>이름</p>
-              <TextContainer>
-                <p>{myInfo?.name}</p>
-              </TextContainer>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p>합격기수</p>
-              <TextContainer>
-                <p>{myInfo?.generationNumber}기</p>
-              </TextContainer>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p>포지션</p>
-              <TextContainer>
-                <p>{myInfo?.position}</p>
-              </TextContainer>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p>전화번호</p>
-              <TextContainer>
-                <p>{myInfo?.phoneNumber}</p>
-              </TextContainer>
-            </InfoWrapper>
-          </DataBox>
-        )}
-        {user?.role !== 'GENERAL' && (
-          <StyledLink to="cs-record">
-            <ButtonContainer>
-              <p>내가 풀어본 CS 문제풀이</p>
-              <CotatoIcon icon="angle-right-solid" size="2rem" />
-            </ButtonContainer>
-          </StyledLink>
-        )}
-        {user?.role === 'ADMIN' && (
-          <StyledLink to="request">
-            <ButtonContainer>
-              <p>신입 감자 가입요청 확인/승인 </p>
-              <CotatoIcon icon="angle-right-solid" size="2rem" />
-            </ButtonContainer>
-          </StyledLink>
-        )}{' '}
-        {user?.role === 'ADMIN' && (
-          <StyledLink to="role-grant">
-            <ButtonContainer>
-              <p>관리자 권한 설정 </p>
-              <CotatoIcon icon="angle-right-solid" size="2rem" />
-            </ButtonContainer>
-          </StyledLink>
-        )}
-        {user?.role === 'ADMIN' && (
-          <StyledLink to="setting">
-            <ButtonContainer>
-              <p>시스템 설정</p>
-              <CotatoIcon icon="angle-right-solid" size="2rem" />
-            </ButtonContainer>
-          </StyledLink>
-        )}
+        {renderMemberMenus()}
+        {renderAdminMenus()}
         <LogoutButtonWrapper>
           <button onClick={onClickLogout}>
             <p>로그아웃</p>
