@@ -1,9 +1,13 @@
 import React from 'react';
-import { ReactComponent as C } from '@assets/C_cs.svg';
+import { ReactComponent as C } from '@assets/C.svg';
 import { ReactComponent as S } from '@assets/S.svg';
 import { ReactComponent as Gyo } from '@assets/gyo.svg';
 import { ReactComponent as Yook } from '@assets/yook.svg';
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, styled } from '@mui/material';
+
+//
+//
+//
 
 const CSFirstSectionHeader = () => {
   return (
@@ -19,7 +23,7 @@ const CSFirstSectionHeader = () => {
           marginTop: '1.25rem',
         }}
       >
-        <C />
+        <StyledC />
       </Stack>
       <Stack>
         <S />
@@ -35,3 +39,12 @@ const CSFirstSectionHeader = () => {
 };
 
 export default CSFirstSectionHeader;
+
+//
+//
+//
+
+const StyledC = styled(C)`
+  width: 74px;
+  height: 80px;
+`;
