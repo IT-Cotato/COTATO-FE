@@ -1,6 +1,7 @@
 import React from 'react';
 import { HEADER_HEIGHT } from '@theme/constants/constants';
 import styled from 'styled-components';
+import CSFirstSection from './CSFirstSection/CSFirstSection';
 
 //
 //
@@ -10,7 +11,7 @@ const CSSlide = () => {
   return (
     <SlideContainer>
       <SlideSection>
-        <div>slide1</div>
+        <CSFirstSection />
       </SlideSection>
       <SlideSection>
         <div>slide2</div>
