@@ -1,7 +1,5 @@
-import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { HEADER_HEIGHT } from '@theme/constants/constants';
 import { media } from '@theme/media';
-import { ReactComponent as ProjectTag } from '@assets/project.svg';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import ProjectDialog from './ProjectDialog';
@@ -12,9 +10,10 @@ import { CotatoProjectSummaryResponse } from 'cotato-openapi-clients';
 import ProjectsCard from './ProjectsCard';
 import { ReactComponent as CotatoChip } from '@assets/cotato_chip.svg';
 import ReadyState from '@components/ReadyState';
+import CotatoPanel from '@components/CotatoPanel';
+import PanelText from '@assets/project_panel_text.svg';
 
 const Projects = () => {
-  const { isTabletOrSmaller } = useBreakpoints();
   const theme = useTheme();
 
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
@@ -75,7 +74,7 @@ const Projects = () => {
 
   return (
     <Wrapper>
-      <ProjectTag width={isTabletOrSmaller ? '8.8rem' : '10rem'} />
+      <CotatoPanel size="short" textImgSrc={PanelText} />
       {renderSubtitle()}
       <Grid2
         container
@@ -97,7 +96,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 4rem;
+  padding: 4rem 0;
   gap: 2.5rem;
   min-height: calc(100vh - ${HEADER_HEIGHT});
 

@@ -9,12 +9,10 @@ import SignUp from '@pages/JoinUs/SignUp';
 import MyPage from '@pages/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
 import FindID from '@pages/Login/FindID';
-import FindPWProcess from '@pages/Login/FindPWProcess';
+import FindPassword from '@pages/Login/FindPassword/FindPassword';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';
-
 import CotatoThemeProvider from '@theme/context/CotatoThemeProvider';
-import GlobalBackgroundSvgComponent from '@components/GlobalBackgroundSvgComponent';
 import { FAQ } from '@pages/FAQ';
 import { CotatoGlobalFab } from '@components/CotatoGlobalFab';
 import Projects from '@pages/Projects/Projects';
@@ -25,6 +23,7 @@ import CSRoutes from '@pages/CS/CSRoutes';
 import { About } from '@pages/About';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import Background from '@components/Background';
 
 function App() {
   //
@@ -54,9 +53,10 @@ function App() {
       <CotatoThemeProvider>
         <GlobalStyle />
         <ToastContainer position="bottom-right" autoClose={3000} />
+        <Background />
+
         <Header />
         <AgreementConfirmDialog />
-        <GlobalBackgroundSvgComponent />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
@@ -66,7 +66,7 @@ function App() {
           <Route path="/session/*" element={<Session />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/findid" element={<FindID />} />
-          <Route path="/findpw" element={<FindPWProcess />} />
+          <Route path="/findpw" element={<FindPassword />} />
           <Route path="/joinus" element={<SignUp />} />
           <Route path="/mypage/*" element={<MyPage />} />
           <Route path="/products" element={<ReadyState />} />
@@ -74,6 +74,7 @@ function App() {
           <Route path="/signin" element={<Login />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
+
         {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
       </CotatoThemeProvider>
     </div>

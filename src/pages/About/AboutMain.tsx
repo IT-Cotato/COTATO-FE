@@ -1,11 +1,12 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { ReactComponent as HeaderTag } from '@assets/header_tag.svg';
 import { ReactComponent as LaptopCotato } from '@assets/character_laptop_laugh.svg';
 import { ReactComponent as CotaoLogo } from '@assets/cotato_logo.svg';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import CotatoTooltip from '@components/CotatoTooltip';
+import CotatoPanel from '@components/CotatoPanel';
+import PanelText from '@assets/about_us_panel_text.svg';
 
 //
 //
@@ -16,10 +17,7 @@ const AboutMain = () => {
 
   return (
     <Wrapper>
-      <Title>
-        <HeaderTag />
-        <h1>About Us</h1>
-      </Title>
+      <CotatoPanel size="short" textImgSrc={PanelText} />
       <MainContent>
         <CotatoTooltip
           arrow
@@ -73,44 +71,6 @@ const Wrapper = styled.div`
   justify-content: center;
   gap: 4rem;
   padding: 4rem 0;
-`;
-
-const Title = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 12rem;
-  padding-top: 0.875rem;
-
-  > svg {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: -1;
-    width: 12rem;
-  }
-
-  > h1 {
-    color: ${({ theme }) => theme.colors.gray100};
-    font-family: Ycomputer;
-    font-size: 2rem;
-    font-weight: 400;
-    margin: 0;
-  }
-
-  ${media.tablet`
-    width: 10rem;
-    padding-top: 1.25rem;
-
-    > svg {
-      width: 10rem;
-    }
-
-    > h1 {
-      font-size: 1.5rem;
-    }
-  `}
 `;
 
 const MainContent = styled.div`
