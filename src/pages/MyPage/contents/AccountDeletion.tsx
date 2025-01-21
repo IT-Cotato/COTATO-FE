@@ -5,6 +5,16 @@ import { AccountDeletionModal } from '../components/AccountDeletion';
 
 const AccountDeletion = () => {
   const [isActiveButton, setIsActiveButton] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDeleteClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <ContentContainer>
@@ -47,27 +57,27 @@ const AccountDeletion = () => {
                 </p>
               </li>
             </ol>
-            <p>
+            <p style={{ margin: 0 }}>
               탈퇴와 관련해 추가적인 문의 사항이 있으시면 COTATO 관리자에게 연락해주시기 바랍니다.
             </p>
             <div style={{ height: '6.25rem' }} />
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
               <Checkbox
                 onChange={() => {
                   setIsActiveButton((prev) => !prev);
                 }}
               />
-              <p>안내사항을 모두 확인하였으며, 이에 동의합니다.</p>
+              <p style={{ margin: 0 }}>안내사항을 모두 확인하였으며, 이에 동의합니다.</p>
             </div>
           </Notification>
           <ButtonContainer>
-            <Button variant="contained" disabled={!isActiveButton}>
+            <Button variant="contained" disabled={!isActiveButton} onClick={handleDeleteClick}>
               탈퇴하기
             </Button>
           </ButtonContainer>
         </NotificationContainer>
       </ContentContainer>
-      <AccountDeletionModal />
+      <AccountDeletionModal open={isModalOpen} onClose={handleModalClose} />
     </>
   );
 };
