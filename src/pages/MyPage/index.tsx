@@ -38,19 +38,18 @@ const MyPage = () => {
 
 export const FlexBox = styled.div`
   display: flex;
+  width: 100%;
   min-height: calc(100vh - 4.5rem);
   justify-content: space-between;
-  align-items: center;
   flex-direction: column;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
-  padding: 4.75rem 6.5rem 0rem 6.5rem;
   flex-direction: column;
+  padding: 4.75rem 6.5rem 0rem 6.5rem;
   align-items: center;
   gap: 5.375rem;
-  width: 100%;
   ${media.tablet`
     padding: 2rem;
   `}
