@@ -23,6 +23,11 @@ import { IconButton } from '@mui/material';
 //
 //
 
+const EMAIL_REGEX = /^[^@]+@[^@]+$/;
+const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
+const PASSWORD_LENTH_REGEX = /^.{8,16}$/;
+const TEL_REGEX = /^010\d{4}\d{4}$/;
+
 const AGREEMENT_ITEMS = [
   {
     id: 1,
@@ -86,11 +91,9 @@ const SignUp = () => {
    */
   const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isId && !isAuthorized) {
-      const emailRegex =
-        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
       const emailCurrent = e.target.value;
       setId(emailCurrent);
-      if (!emailRegex.test(emailCurrent)) {
+      if (!EMAIL_REGEX.test(emailCurrent)) {
         setIdMessage('잘못된 이메일 형식입니다.');
         setIsId(false);
       } else {
@@ -105,13 +108,11 @@ const SignUp = () => {
    */
   const handlePasswordChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const passwordLength = /^.{8,16}$/;
-      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
       const passwordCurrent = e.target.value;
       setPassword(passwordCurrent);
-      setIsPasswordLength(passwordLength.test(passwordCurrent));
-      setIsPasswordRegex(passwordRegex.test(passwordCurrent));
-      if (passwordLength && passwordRegex) setIsPassword(true);
+      setIsPasswordLength(PASSWORD_LENTH_REGEX.test(passwordCurrent));
+      setIsPasswordRegex(PASSWORD_REGEX.test(passwordCurrent));
+      if (PASSWORD_LENTH_REGEX && PASSWORD_REGEX) setIsPassword(true);
     },
     [isPasswordLength, isPasswordRegex, passwordCheck],
   );
@@ -152,10 +153,9 @@ const SignUp = () => {
    *
    */
   const handleTelChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const telRegex = /^010\d{4}\d{4}$/;
     const telCurrent = e.target.value;
     setTel(telCurrent);
-    if (!telRegex.test(telCurrent)) {
+    if (!TEL_REGEX.test(telCurrent)) {
       setTelMessage('잘못된 전화번호 형식입니다.');
       setIsTel(false);
     } else {
