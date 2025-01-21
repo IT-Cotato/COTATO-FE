@@ -27,6 +27,7 @@ const EMAIL_REGEX = /^[^@]+@[^@]+$/;
 const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
 const PASSWORD_LENTH_REGEX = /^.{8,16}$/;
 const TEL_REGEX = /^010\d{4}\d{4}$/;
+const TEL_INVALID_REGEX = /^010-\d{4}-\d{4}$/;
 
 const AGREEMENT_ITEMS = [
   {
@@ -157,6 +158,9 @@ const SignUp = () => {
     setTel(telCurrent);
     if (!TEL_REGEX.test(telCurrent)) {
       setTelMessage('잘못된 전화번호 형식입니다.');
+      setIsTel(false);
+    } else if (TEL_INVALID_REGEX.test(telCurrent)) {
+      setTelMessage('\'-\'를 제외한 숫자만 입력해주세요.');
       setIsTel(false);
     } else {
       setTelMessage('');
