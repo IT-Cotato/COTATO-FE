@@ -2,25 +2,38 @@ import { Button, Dialog, Input, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+//
+//
+//
+
+//임시 상수값
 const DUMMY_ID = '11';
 const DUMMY_PASSWORD = '11';
+
+//
+//
+//
 
 interface AccoutDeletionModalProps {
   open: boolean;
   onClose: () => void;
 }
 
+//
+//
+//
+
 const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
   const [inputId, setInputId] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
+  //임시 로직
   useEffect(() => {
     const isValid = inputId === DUMMY_ID && inputPassword === DUMMY_PASSWORD;
     setIsButtonEnabled(isValid);
   }, [inputId, inputPassword]);
 
-  // 입력값 변경 핸들러
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputId(event.target.value);
   };
@@ -33,16 +46,7 @@ const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
     <Dialog open={open} onClose={onClose}>
       <ModalContainer>
         <HeaderSection>회원 탈퇴 확인</HeaderSection>
-        <InfoSection>
-          <p>
-            회원 탈퇴 시 계정은 30일 동안 비활성화 상태로 전환되며, 이후 회원 데이터가 영구적으로
-            삭제됩니다. 비활성화 기간 동안 COTATO 서비스 이용이 제한됩니다.
-          </p>
-          <p>정말 탈퇴하시겠습니까?</p>
-          <p style={{ margin: 0 }}>
-            탈퇴를 진행하려면 아래 입력란에 아이디와 비밀번호를 입력해 주세요.
-          </p>
-        </InfoSection>
+        <InfoSection>{renderInfoSection()}</InfoSection>
         <FormSection>
           <FormItem>
             <p style={{ margin: 0 }}>아이디</p>
@@ -63,7 +67,24 @@ const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
   );
 };
 
-export default AccountDeletionModal;
+const renderInfoSection = () => {
+  return (
+    <>
+      <p>
+        회원 탈퇴 시 계정은 30일 동안 비활성화 상태로 전환되며, 이후 회원 데이터가 영구적으로
+        삭제됩니다. 비활성화 기간 동안 COTATO 서비스 이용이 제한됩니다.
+      </p>
+      <p>정말 탈퇴하시겠습니까?</p>
+      <p style={{ margin: 0 }}>
+        탈퇴를 진행하려면 아래 입력란에 아이디와 비밀번호를 입력해 주세요.
+      </p>
+    </>
+  );
+};
+
+//
+//
+//
 
 const ModalContainer = styled.div`
   display: inline-flex;
@@ -129,3 +150,5 @@ const ProfileInput = styled(TextField)<{ isPrimary?: boolean }>`
     padding: 0.625rem;
   }
 `;
+
+export default AccountDeletionModal;
