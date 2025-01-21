@@ -71,6 +71,13 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
               },
             },
           },
+          desktopPaper: {
+            sx: {
+              '& .Mui-selected': {
+                backgroundColor: theme.colors.primary100,
+              },
+            },
+          },
         }}
       />
     </LocalizationProvider>
