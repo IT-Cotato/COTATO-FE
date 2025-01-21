@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Input, TextField } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -17,9 +17,11 @@ const AccountDeletionModal = () => {
       <FormSection>
         <FormItem>
           <p>아이디</p>
+          <ProfileInput />
         </FormItem>
         <FormItem>
           <p>비밀번호</p>
+          <ProfileInput type="password" />
         </FormItem>
       </FormSection>
       <ButtonSection>
@@ -57,6 +59,7 @@ const InfoSection = styled.div`
 `;
 
 const FormSection = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -66,6 +69,7 @@ const FormSection = styled.div`
 const FormItem = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   align-self: stretch;
 `;
@@ -78,4 +82,20 @@ const ButtonSection = styled.div`
   align-items: center;
   gap: 0.625rem;
   align-self: stretch;
+`;
+const ProfileInput = styled(TextField)<{ isPrimary?: boolean }>`
+  align-self: stretch;
+  width: 70%;
+
+  & .MuiOutlinedInput-root {
+    background-color: ${({ theme }) => theme.colors.primary20};
+    &.Mui-focused fieldset {
+      border-color: ${({ theme }) => theme.colors.gray40};
+      border-radius: 0.5rem;
+    }
+  }
+
+  & .MuiInputBase-input {
+    padding: 0.625rem;
+  }
 `;
