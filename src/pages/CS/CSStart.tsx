@@ -6,6 +6,7 @@ import { Tooltip } from 'react-tooltip';
 import { useGeneration } from '@/hooks/useGeneration';
 import { useEducation } from '@/hooks/useEducation';
 import useUser from '@/hooks/useUser';
+import { checkIsAtLeastManager } from '@utils/role';
 
 const CSStart = () => {
   const navigate = useNavigate();
@@ -115,7 +116,7 @@ const CSStart = () => {
         >
           <p>이전세션 선택하기</p>
         </OtherButton>
-        {['ADMIN', 'EDUCATION'].includes(user?.role as string) ? (
+        {checkIsAtLeastManager(user?.role) ? (
           <>
             {educationStatus === 'ONGOING' && (
               <Tooltip

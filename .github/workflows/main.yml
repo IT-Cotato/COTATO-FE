@@ -49,9 +49,9 @@ jobs:
 
       - name: Install Sentry CLI
         run: yarn global add @sentry/cli
-        
+
       - name: Build
-        run: yarn build
+        run: yarn build:prod
 
       - name: Upload sourcemaps to Sentry
         env:
