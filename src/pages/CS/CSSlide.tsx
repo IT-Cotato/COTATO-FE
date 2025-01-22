@@ -9,7 +9,7 @@ import CSFirstSection from './CSFirstSection/CSFirstSection';
 
 const CSSlide = () => {
   return (
-    <SlideContainer>
+    <SlideContainer id="cs-slide-container">
       <SlideSection>
         <CSFirstSection />
       </SlideSection>
