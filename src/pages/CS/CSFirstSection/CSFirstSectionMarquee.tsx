@@ -49,7 +49,7 @@ const CSFirstSectionMarquee = () => {
     {
       icon: <CloudIcon />,
       title: 'REST API',
-      color: `linear-gradient(90deg, ${theme.colors.primary100} 0%, ${theme.colors.sub3[20]} 100%)`,
+      color: `linear-gradient(90deg, ${theme.colors.secondary60} 0%, ${theme.colors.sub3[20]} 100%)`,
     },
     {
       icon: <NetworkIcon />,

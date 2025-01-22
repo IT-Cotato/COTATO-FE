@@ -2,6 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import CSFirstSectionHeader from './CSFirstSectionHeader';
 import CSFirstSectionMarquee from './CSFirstSectionMarquee';
+import CSFirstSectionContent from './CSFirstSectionContent';
 
 //
 //
@@ -21,6 +22,7 @@ const CSFirstSection = () => {
     >
       <CSFirstSectionHeader />
       <CSFirstSectionMarquee />
+      <CSFirstSectionContent />
     </Box>
   );
 };
