@@ -12,6 +12,8 @@ type btnStateType = 'default' | 'hover' | 'clicked';
 
 interface Props {
   BtnTextImg: React.FC<React.SVGProps<SVGSVGElement>>;
+  width?: string;
+  onClick?: () => void;
 }
 
 //
@@ -22,10 +24,21 @@ interface Props {
  * @param {React.FC<React.SVGProps<SVGSVGElement>>} BtnTextImg button text image(.svg) imported as React component
  * @returns pixel button component with animation
  */
-const CotatoPixelButton: React.FC<Props> = ({ BtnTextImg }) => {
+const CotatoPixelButton: React.FC<Props> = ({ BtnTextImg, width, onClick }) => {
   const [btnState, setBtnState] = useState<btnStateType>('default');
 
   const theme = useTheme();
+
+  /**
+   *
+   */
+  const handleClick = () => {
+    setBtnState('clicked');
+
+    if (onClick) {
+      onClick();
+    }
+  };
 
   /**
    *
@@ -76,9 +89,9 @@ const CotatoPixelButton: React.FC<Props> = ({ BtnTextImg }) => {
         type="submit"
         onMouseOver={() => setBtnState('hover')}
         onMouseLeave={() => setBtnState('default')}
-        onClick={() => setBtnState('clicked')}
+        onClick={handleClick}
       >
-        <BtnImg src={getImgSrcByState(btnState)} />
+        <BtnImg src={getImgSrcByState(btnState)} $width={width} />
         <BtnTextDiv $btnState={btnState} $getTextPositionByState={getTextPositionByState}>
           <BtnTextImg fill={getTextColorByState(btnState)} />
         </BtnTextDiv>
@@ -120,8 +133,8 @@ const Container = styled.button`
   }
 `;
 
-const BtnImg = styled.img`
-  width: 120px;
+const BtnImg = styled.img<{ $width?: string }>`
+  width: ${({ $width }) => $width || '120px'};
 `;
 
 const BtnTextDiv = styled.div<{
