@@ -4,10 +4,19 @@ import CSFirstSectionContentBoard from './components/CSFirstSectionContentBoard'
 import styled, { useTheme } from 'styled-components';
 import CSFirstSectionContentStatus from './components/CSFirstSectionContentStatus';
 import { ReactComponent as BulletListSolidIcon } from '@assets/bullet_list_solid.svg';
+import { ReactComponent as CSIcon } from '@assets/cs_icon.svg';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import fetcher from '@utils/fetcher';
+import useSWRImmutable from 'swr/dist/immutable';
+import { CotatoEducationCountResponse } from 'cotato-openapi-clients';
 
 const CSFirstSectionContent = () => {
+  const { data: statusValue } = useSWRImmutable<CotatoEducationCountResponse>(
+    '/api/education/counts',
+    fetcher,
+  );
+
   const theme = useTheme();
   const { isTabletOrSmaller } = useBreakpoints();
 
@@ -25,13 +34,13 @@ const CSFirstSectionContent = () => {
       <StatusBox>
         <CSFirstSectionContentStatus
           icon={<BulletListSolidIcon />}
-          status={9999}
+          status={statusValue?.quizCount ?? 0}
           title="전체 문제 수"
         />
         <CSFirstSectionContentStatus
-          icon={<BulletListSolidIcon />}
-          status={9999}
-          title="전체 문제 수"
+          icon={<CSIcon />}
+          status={statusValue?.educationCount ?? 0}
+          title="교육 횟수"
         />
       </StatusBox>
       <Box
