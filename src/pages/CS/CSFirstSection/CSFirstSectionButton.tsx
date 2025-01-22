@@ -1,8 +1,10 @@
 import React from 'react';
 import CotatoPixelButton from '@components/CotatoPixelButton';
-import { ReactComponent as GoQuizTextImg } from '@assets/cs_go_quiz_text.svg';
+import { ReactComponent as GoQuizTextImage } from '@assets/cs_go_quiz_text.svg';
 import { ReactComponent as VVIcon } from '@assets/vv.svg';
 import { styled } from 'styled-components';
+import { media } from '@theme/media';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
@@ -19,6 +21,8 @@ interface ButtonWrapperProps {
 const CSFirstSectionButton = () => {
   const [isHover, setIsHover] = React.useState(false);
 
+  const { isDesktopOrSmaller } = useBreakpoints();
+
   const handleButtonClick = () => {
     const slideContainer = document.querySelector('#cs-slide-container');
 
@@ -34,7 +38,11 @@ const CSFirstSectionButton = () => {
     <ButtonWrapper $isHover={isHover}>
       <VVIcon />
       <div onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
-        <CotatoPixelButton BtnTextImg={GoQuizTextImg} width="10rem" onClick={handleButtonClick} />
+        <CotatoPixelButton
+          BtnTextImg={StyledTextImage}
+          width={isDesktopOrSmaller ? '8.5rem' : '10rem'}
+          onClick={handleButtonClick}
+        />
       </div>
     </ButtonWrapper>
   );
@@ -55,4 +63,12 @@ const ButtonWrapper = styled.div<ButtonWrapperProps>`
     transform: translateX(-50%);
     top: ${({ $isHover }) => ($isHover ? '-5.5rem' : '-4.5rem')};
   }
+`;
+
+const StyledTextImage = styled(GoQuizTextImage)`
+  width: 8rem;
+
+  ${media.desktop`
+    width: 6.5rem;
+  `}
 `;

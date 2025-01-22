@@ -3,6 +3,7 @@ import { Box, Stack } from '@mui/material';
 import { ReactComponent as BrowserBoardBackground } from '@assets/cs_browswer_board.svg';
 import { styled } from 'styled-components';
 import { ReactComponent as EducationCharacter } from '@assets/cotato_character_education_ground.svg';
+import { media } from '@theme/media';
 
 //
 //
@@ -10,6 +11,8 @@ import { ReactComponent as EducationCharacter } from '@assets/cotato_character_e
 
 const BOARD_WIDTH = 26;
 const BOARD_HEIGHT = 10.5;
+const BOARD_WIDTH_MEDIUM = 20;
+const BOARD_HEIGHT_MEDIUM = 8.125;
 
 interface CSFirstSectionContentBoardProps {
   flip?: boolean;
@@ -94,7 +97,16 @@ const BrowserBoard = styled.div<BrowserBoardProps>`
     width: 100%;
     height: 100%;
     margin: 0;
-    padding: ${({ $flip }) => ($flip ? '4.875rem 1.5rem 0 2.5rem' : '4.875rem 2rem 0 1rem')};
+    padding: ${({ $flip }) => ($flip ? '4.875rem 1.5rem 0 2.5rem' : '4.875rem 2.5rem 0 1.5rem')};
     transform: ${({ $flip }) => ($flip ? 'scaleX(-1)' : 'none')};
   }
+
+  ${media.desktop`
+    width: ${BOARD_WIDTH_MEDIUM}rem;
+    height: ${BOARD_HEIGHT_MEDIUM}rem;
+
+    > p {
+      font-size: 1rem;
+      padding: ${({ $flip }: { $flip: boolean }) => ($flip ? '3.75rem 1rem 0 2.25rem' : '3.75rem 2rem 0 1.125rem')};
+  `}
 `;
