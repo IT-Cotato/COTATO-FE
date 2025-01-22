@@ -5,7 +5,7 @@ import { AccountDeletionModal } from '../components/AccountDeletion';
 import AccountDeletionImage from '@/pages/MyPage/tempAsssets/Text/AccountDeletion.svg';
 import CotatoPanel from '@components/CotatoPanel';
 import { Header } from './style';
-import BackButton from '../components/Mypage/common/BackButton';
+import BackButton from '../components/common/BackButton';
 
 //
 //

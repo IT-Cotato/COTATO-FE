@@ -7,7 +7,7 @@ import { ReactComponent as RightAngle } from '@/pages/MyPage/tempAsssets/angle_r
 import PolicyCheckImage from '@/pages/MyPage/tempAsssets/Text/PolicyCheck.svg';
 import CotatoPanel from '@components/CotatoPanel';
 import { Header } from './style';
-import BackButton from '../components/Mypage/common/BackButton';
+import BackButton from '../components/common/BackButton';
 
 //
 //
