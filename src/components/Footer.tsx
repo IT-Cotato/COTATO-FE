@@ -42,6 +42,7 @@ const Footer = () => {
   //
   const location = useLocation();
   const isInHome = location.pathname === '/';
+  const isInCsIntroduce = location.pathname === '/cs/introduce';
 
   const isTablet = useMediaQuery(`(max-width: ${device.tablet})`);
   const isLandScape = useMediaQuery(`(max-width: ${device.landscape})`);
@@ -79,7 +80,7 @@ const Footer = () => {
     </DescriptionWrapper>
   );
 
-  return isInHome ? null : (
+  return isInHome || isInCsIntroduce ? null : (
     <FooterWrapper>
       {renderSns()}
       {renderDescription()}
