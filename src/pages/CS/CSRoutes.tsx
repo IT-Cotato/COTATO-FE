@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import CSRedirect from './CSRedirect';
 import CSGuard from './CSGuard';
-import CSSlide from './CSSlide';
 
 //
 //
@@ -13,6 +12,7 @@ const AsyncCSManage = React.lazy(() => import('./manage/CSManage'));
 const AsyncCSStart = React.lazy(() => import('./CSStart'));
 const AsyncCSUpload = React.lazy(() => import('./admin/upload/CSAdminUpload'));
 const AsyncCSQuiz = React.lazy(() => import('./solving/CSQuiz'));
+const AsyncCSSlide = React.lazy(() => import('./CSSlide'));
 
 //
 //
@@ -27,7 +27,7 @@ const CSRoutes = () => {
     <React.Suspense fallback={<div>Loading...</div>}>
       <CSGuard>
         <Routes>
-          <Route path="/introduce" element={<CSSlide />} />
+          <Route path="/introduce" element={<AsyncCSSlide />} />
           <Route path="/:generationId" element={<AsyncCSHome />} />
           <Route path="/manage/*" element={<AsyncCSManage />} />
           <Route
