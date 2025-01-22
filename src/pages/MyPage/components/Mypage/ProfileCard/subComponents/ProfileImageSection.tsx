@@ -28,6 +28,8 @@ const COTATO_CHARCTER_SVG_MAP: Record<CotatoMemberInfoResponsePositionEnum, stri
 
 interface ProfileImageSectionProps {
   position?: CotatoMemberInfoResponsePositionEnum;
+  onImageChange: (file: File) => void;
+  isModifying: boolean;
 }
 
 //
@@ -38,11 +40,33 @@ interface ProfileImageSectionProps {
  * 프로필 이미지 영역
  * @param position 사용자의 파트
  */
-const ProfileImageSection = ({ position }: ProfileImageSectionProps) => {
+const ProfileImageSection = ({
+  position,
+  onImageChange,
+  isModifying,
+}: ProfileImageSectionProps) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onImageChange(file);
+    }
+  };
+
   return (
-    <ProfileImage
-      src={COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]}
-    />
+    <div>
+      <ProfileImage
+        src={COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]}
+      />
+      {isModifying && (
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+          id="profile-image-input"
+        />
+      )}
+    </div>
   );
 };
 

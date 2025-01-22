@@ -8,7 +8,8 @@ import { ReactComponent as Upload } from '@/pages/MyPage/tempAsssets/upload.svg'
 
 interface ButtonSectionProps {
   isModifying: boolean;
-  setisModifying: Dispatch<React.SetStateAction<boolean>>;
+  setIsModifying: (value: boolean) => void;
+  onSubmit: () => Promise<void>;
 }
 
 //
@@ -20,15 +21,21 @@ interface ButtonSectionProps {
  * @param isModifying 수정중인 상태
  * @param setIsModifing 수정중인 상태 set함수
  */
-const ButtonSection = ({ isModifying, setisModifying }: ButtonSectionProps) => {
+const ButtonSection = ({ isModifying, setIsModifying, onSubmit }: ButtonSectionProps) => {
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   return (
     <ProfileCardButtonSection>
-      <ProfileCardButton>
+      <ProfileCardButton onClick={() => fileInputRef.current?.click()}>
         <Upload />
       </ProfileCardButton>
       <ProfileCardButton
         onClick={() => {
-          setisModifying((prev: boolean) => !prev);
+          if (isModifying) {
+            onSubmit();
+          } else {
+            setIsModifying(true);
+          }
         }}
         isModifying={isModifying}
       >

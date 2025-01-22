@@ -10,6 +10,11 @@ import { ReactComponent as Link } from '@/pages/MyPage/tempAsssets/link2_icon.sv
 
 interface LinksSectionProps {
   isModifying: boolean;
+  links: Array<{
+    urlType: string;
+    url: string;
+  }>;
+  onChange: (index: number, value: string) => void;
 }
 
 //
@@ -20,17 +25,27 @@ interface LinksSectionProps {
  * 소개 링크 영역
  * @param isModifying 수정중인 상태
  */
-const LinksSection = ({ isModifying }: LinksSectionProps) => {
+const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardLinkInputSection>
         <LinkContainer>
           <Github />
-          <ProfileInput size="small" disabled={!isModifying} />
+          <ProfileInput
+            size="small"
+            disabled={!isModifying}
+            value={links[0].url}
+            onChange={(e) => onChange(0, e.target.value)}
+          />
         </LinkContainer>
         <LinkContainer>
           <Link />
-          <ProfileInput size="small" disabled={!isModifying} />
+          <ProfileInput
+            size="small"
+            disabled={!isModifying}
+            value={links[1].url}
+            onChange={(e) => onChange(1, e.target.value)}
+          />
         </LinkContainer>
       </ProfileCardLinkInputSection>
     </ProfileCardSection>

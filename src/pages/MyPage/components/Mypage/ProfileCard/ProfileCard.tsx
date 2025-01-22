@@ -10,6 +10,7 @@ import {
   NameSection,
   ProfileImageSection,
 } from './subComponents';
+import { useProfileForm } from '@pages/MyPage/hooks/useProfileForm';
 
 //
 //
@@ -17,16 +18,44 @@ import {
 
 const ProfileCard = () => {
   const { user } = useUser();
-  const [isModifying, setisModifying] = useState(false);
+  const [isModifying, setIsModifying] = useState(false);
+  const { form, handleIntroChange, handleLinkChange, handleImageChange, submitProfile } =
+    useProfileForm();
+
+  /**
+   *
+   */
+  const handleSubmit = async () => {
+    const success = await submitProfile();
+    if (success) {
+      setIsModifying(false);
+    }
+  };
 
   return (
     <ProfileCardContainer>
-      <ProfileImageSection position={user?.position} />
+      <ProfileImageSection
+        position={user?.position}
+        onImageChange={handleImageChange}
+        isModifying={isModifying}
+      />
       <NameSection name={user?.name} />
       <InfoSection position={user?.position} isModifying={isModifying} />
-      <IntroductionSection isModifying={isModifying} />
-      <LinksSection isModifying={isModifying} />
-      <ButtonSection isModifying={isModifying} setisModifying={setisModifying} />
+      <IntroductionSection
+        isModifying={isModifying}
+        value={form.introduction}
+        onChange={(value) => handleIntroChange('introduction', value)}
+      />
+      <LinksSection
+        isModifying={isModifying}
+        links={form.profileLinks}
+        onChange={handleLinkChange}
+      />
+      <ButtonSection
+        isModifying={isModifying}
+        setIsModifying={setIsModifying}
+        onSubmit={handleSubmit}
+      />
     </ProfileCardContainer>
   );
 };
