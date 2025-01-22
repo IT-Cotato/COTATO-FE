@@ -21,11 +21,11 @@ interface ButtonWrapperProps {
 const CSFirstSectionButton = () => {
   const [isHover, setIsHover] = React.useState(false);
 
-  const { isDesktopOrSmaller } = useBreakpoints();
+  const { isDesktopOrSmaller, isTabletOrSmaller } = useBreakpoints();
 
   const handleButtonClick = () => {
     const slideContainer = document.querySelector('#cs-slide-container');
-
+    console.log(slideContainer);
     if (slideContainer) {
       slideContainer.scrollTo({
         top: slideContainer.clientHeight,
@@ -34,16 +34,28 @@ const CSFirstSectionButton = () => {
     }
   };
 
+  const getButtonWidth = () => {
+    if (isTabletOrSmaller) {
+      return '7rem';
+    } else if (isDesktopOrSmaller) {
+      return '8.5rem';
+    } else {
+      return '10rem';
+    }
+  };
+
   return (
     <ButtonWrapper $isHover={isHover}>
-      <VVIcon />
-      <div onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
-        <CotatoPixelButton
-          BtnTextImg={StyledTextImage}
-          width={isDesktopOrSmaller ? '8.5rem' : '10rem'}
-          onClick={handleButtonClick}
-        />
-      </div>
+      <VVIcon onClick={isTabletOrSmaller ? handleButtonClick : undefined} />
+      {!isTabletOrSmaller && (
+        <div onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+          <CotatoPixelButton
+            BtnTextImg={StyledTextImage}
+            width={getButtonWidth()}
+            onClick={handleButtonClick}
+          />
+        </div>
+      )}
     </ButtonWrapper>
   );
 };
@@ -63,6 +75,20 @@ const ButtonWrapper = styled.div<ButtonWrapperProps>`
     transform: translateX(-50%);
     top: ${({ $isHover }) => ($isHover ? '-5.5rem' : '-4.5rem')};
   }
+
+  ${media.desktop`
+    > svg {
+      top: ${({ $isHover }: { $isHover: boolean }) => ($isHover ? '-4.75rem' : '-3.75rem')};
+    }
+  `}
+
+  ${media.tablet`
+    > svg {
+      top: ${({ $isHover }: { $isHover: boolean }) => ($isHover ? '-3.75rem' : '-2.75rem')};
+      top: -2rem;
+      width: 1.875rem;
+    }
+  `}
 `;
 
 const StyledTextImage = styled(GoQuizTextImage)`
@@ -70,5 +96,9 @@ const StyledTextImage = styled(GoQuizTextImage)`
 
   ${media.desktop`
     width: 6.5rem;
+  `}
+
+  ${media.tablet`
+    width: 5.5rem;
   `}
 `;

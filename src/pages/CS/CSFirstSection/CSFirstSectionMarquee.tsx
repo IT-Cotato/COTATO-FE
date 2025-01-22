@@ -14,6 +14,7 @@ import { ReactComponent as BoardIcon } from '@assets/cs_subject_board.svg';
 import { ReactComponent as WebCodeIcon } from '@assets/cs_subject_web_code.svg';
 import { ReactComponent as WebSiteIcon } from '@assets/cs_subject_web_site.svg';
 import { ReactComponent as ModuleIcon } from '@assets/cs_subject_module.svg';
+import { media } from '@theme/media';
 
 //
 //
@@ -146,4 +147,10 @@ const MarqueeItem = styled.div<MarqueeItemProps>`
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
   }
+
+  ${media.tablet`
+    margin: 0.5rem;
+    font-weight: 500;
+    gap: 1rem;
+  `}
 `;

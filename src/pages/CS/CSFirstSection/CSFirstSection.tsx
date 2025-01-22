@@ -4,12 +4,15 @@ import CSFirstSectionHeader from './CSFirstSectionHeader';
 import CSFirstSectionMarquee from './CSFirstSectionMarquee';
 import CSFirstSectionContent from './CSFirstSectionContent';
 import CSFirstSectionButton from './CSFirstSectionButton';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
 //
 
 const CSFirstSection = () => {
+  const { isTabletOrSmaller } = useBreakpoints();
+
   return (
     <Box
       sx={{
@@ -19,7 +22,7 @@ const CSFirstSection = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '2.5rem 0',
+        padding: isTabletOrSmaller ? '1rem 0' : '2.5rem 0',
       }}
     >
       <CSFirstSectionHeader />

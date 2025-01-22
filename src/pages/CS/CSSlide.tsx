@@ -2,6 +2,7 @@ import React from 'react';
 import { HEADER_HEIGHT } from '@theme/constants/constants';
 import styled from 'styled-components';
 import CSFirstSection from './CSFirstSection/CSFirstSection';
+import { media } from '@theme/media';
 
 //
 //
@@ -36,10 +37,14 @@ const SlideContainer = styled.div`
     display: none;
   }
   -ms-overflow-style: none;
+
+  ${media.tablet`
+    height: 100dvh;
+  `}
 `;
 
 const SlideSection = styled.section`
   scroll-snap-align: center;
   width: 100%;
-  height: calc(100vh - ${HEADER_HEIGHT});
+  height: 100%;
 `;

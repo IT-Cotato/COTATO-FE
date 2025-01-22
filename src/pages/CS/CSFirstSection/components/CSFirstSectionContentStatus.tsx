@@ -1,8 +1,9 @@
 import React from 'react';
-import { styled, useTheme } from 'styled-components';
+import { styled } from 'styled-components';
 import status_background from '@assets/cs_status_background.svg';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { media } from '@theme/media';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
@@ -12,11 +13,8 @@ const BOX_WIDTH = 10.125;
 const BOX_HEIGHT = 10.625;
 const BOX_WIDTH_MEDIUM = 7.5;
 const BOX_HEIGHT_MEDIUM = 7.875;
-
-// desktop box size to pixel
-// 10.125rem * 0.875 = 8.859375rem
-// 10.625rem * 0.875 = 9.265625rem
-// 8.859375 * 16 = 141.75px
+const BOX_WIDTH_SMALL = 6;
+const BOX_HEIGHT_SMALL = 6.25;
 
 interface CSFirstSectionContentStatusProps {
   icon: React.ReactNode;
@@ -29,29 +27,21 @@ interface CSFirstSectionContentStatusProps {
 //
 
 const CSFirstSectionContentStatus = ({ icon, status, title }: CSFirstSectionContentStatusProps) => {
-  const theme = useTheme();
+  const { isTabletOrSmaller } = useBreakpoints();
 
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.25rem',
+        gap: isTabletOrSmaller ? '0.25rem' : '0.5rem',
       }}
     >
       <StatusBox>
         {icon}
         <span>{status}회+</span>
       </StatusBox>
-      <Typography
-        fontFamily="Ycomputer"
-        fontSize="1.25rem"
-        fontWeight={400}
-        textAlign="center"
-        color={theme.colors.common.black}
-      >
-        {title}
-      </Typography>
+      <StyledTypo>{title}</StyledTypo>
     </Box>
   );
 };
@@ -88,19 +78,34 @@ const StatusBox = styled.div`
 
     > span {
       font-size: 1.25rem;
-      font-weight: 600;
+    }
+  `}
+
+  ${media.tablet`
+    width: ${BOX_WIDTH_SMALL}rem;
+    height: ${BOX_HEIGHT_SMALL}rem;
+    padding-bottom: 0.25rem;
+    gap: 0.5rem;
+
+    > span {
+      font-size: 1.125rem;
+    }
+
+    > svg {
+      width: 2.5rem;
+      height: 2rem;
     }
   `}
 `;
 
-const StyledTypo = styled.h2`
+const StyledTypo = styled.span`
   font-family: Ycomputer;
   font-size: 1.25rem;
   font-weight: 400;
   text-align: center;
   color: ${({ theme }) => theme.colors.common.black};
 
-  ${media.desktop`
+  ${media.tablet`
     font-size: 1rem;
   `}
 `;
