@@ -5,13 +5,16 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import CSManageHome from '@pages/CS/manage/CSManageHome';
 import QuizScorer from '@pages/CS/manage/scorer/QuizScorer';
 import AllScorer from '@pages/CS/manage/scorer/AllScorer';
+import { checkIsUnderManager } from '@utils/role';
 
 const CSManage = () => {
   const { data: user } = useSWR('/v1/api/member/info', fetcher);
 
   const navigate = useNavigate();
 
-  if (user?.role !== 'ADMIN' && user?.role !== 'EDUCATION') {
+  const isUnderManager = checkIsUnderManager(user?.role);
+
+  if (isUnderManager) {
     navigate('/');
   }
 
