@@ -107,6 +107,7 @@ export default CSFirstSectionMarquee;
 
 const StyledMarquee = styled(Marquee)`
   padding: 1rem 0;
+  overflow: hidden;
 `;
 
 const MarqueeItem = styled.div<MarqueeItemProps>`
