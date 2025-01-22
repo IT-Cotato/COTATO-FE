@@ -8,12 +8,12 @@ import { ReactComponent as CSIcon } from '@assets/cs_icon.svg';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import fetcher from '@utils/fetcher';
-import useSWRImmutable from 'swr/dist/immutable';
+import useSWRImmutable from 'swr/immutable';
 import { CotatoEducationCountResponse } from 'cotato-openapi-clients';
 
 const CSFirstSectionContent = () => {
   const { data: statusValue } = useSWRImmutable<CotatoEducationCountResponse>(
-    '/api/education/counts',
+    'v1/api/education/counts',
     fetcher,
   );
 
