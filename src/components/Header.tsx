@@ -33,7 +33,7 @@ const NAV_LIST: NAV_LIST_TYPE = Object.freeze([
   { name: 'Project', path: '/projects' },
   { name: 'Session', path: '/session' },
   { name: 'FAQ', path: '/faq' },
-  { name: 'CS Quiz', path: '/cs' },
+  { name: 'CS Quiz', path: '/cs/introduce' },
 ]);
 
 export type NAV_LIST_TYPE = ReadonlyArray<Readonly<NavItem>>;
