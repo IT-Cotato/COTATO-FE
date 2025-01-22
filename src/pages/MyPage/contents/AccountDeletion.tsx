@@ -2,6 +2,10 @@ import { Button, Checkbox } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AccountDeletionModal } from '../components/AccountDeletion';
+import AccountDeletionImage from '@/pages/MyPage/tempAsssets/Text/AccountDeletion.svg';
+import CotatoPanel from '@components/CotatoPanel';
+import { Header } from './style';
+import BackButton from '../components/Mypage/common/BackButton';
 
 //
 //
@@ -11,10 +15,16 @@ const AccountDeletion = () => {
   const [isActiveButton, setIsActiveButton] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  /**
+   *
+   */
   const handleDeleteClick = () => {
     setIsModalOpen(true);
   };
 
+  /**
+   *
+   */
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -22,7 +32,10 @@ const AccountDeletion = () => {
   return (
     <>
       <ContentContainer>
-        <div>탈퇴하기</div>
+        <Header>
+          <BackButton />
+          <CotatoPanel size={'short'} textImgSrc={AccountDeletionImage} />
+        </Header>
         <NotificationContainer>
           <Notification>
             {renderNotification()}
@@ -49,6 +62,9 @@ const AccountDeletion = () => {
   );
 };
 
+/**
+ *
+ */
 const renderNotification = () => {
   return (
     <>

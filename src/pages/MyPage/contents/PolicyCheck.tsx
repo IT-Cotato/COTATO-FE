@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import { MY_PAGE_PATH } from '../MyPageRouter';
 import { Button } from '@mui/material';
 import { ReactComponent as RightAngle } from '@/pages/MyPage/tempAsssets/angle_right.svg';
+import PolicyCheckImage from '@/pages/MyPage/tempAsssets/Text/PolicyCheck.svg';
+import CotatoPanel from '@components/CotatoPanel';
+import { Header } from './style';
+import BackButton from '../components/Mypage/common/BackButton';
 
 //
 //
@@ -13,7 +17,10 @@ const PolicyCheck = () => {
   const navigate = useNavigate();
   return (
     <ContentContainer>
-      <div>개인정보관리</div>
+      <Header>
+        <BackButton />
+        <CotatoPanel size={'default'} textImgSrc={PolicyCheckImage} />
+      </Header>
       <NotificationContainer>
         <Notification>{renderPersonalInfoNotification()}</Notification>
         <Notification>{renderPersonalLocationNotification()}</Notification>
@@ -31,6 +38,9 @@ const PolicyCheck = () => {
   );
 };
 
+/**
+ *
+ */
 const renderPersonalInfoNotification = () => {
   return (
     <>
@@ -54,6 +64,9 @@ const renderPersonalInfoNotification = () => {
   );
 };
 
+/**
+ *
+ */
 const renderPersonalLocationNotification = () => {
   return (
     <>
@@ -80,7 +93,9 @@ const renderPersonalLocationNotification = () => {
   );
 };
 
-export default PolicyCheck;
+//
+//
+//
 
 const ContentContainer = styled.div`
   display: flex;
@@ -119,3 +134,5 @@ const ButtonText = styled.p`
   font-family: Pretendard;
   margin: 0;
 `;
+
+export default PolicyCheck;
