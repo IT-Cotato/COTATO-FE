@@ -1,6 +1,7 @@
 import { Button, Dialog, Input, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { ReactComponent as Close } from '@/pages/MyPage/tempAsssets/close_button.svg';
 
 //
 //
@@ -45,7 +46,10 @@ const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <ModalContainer>
-        <HeaderSection>회원 탈퇴 확인</HeaderSection>
+        <Close style={{ position: 'absolute', right: '1rem' }} onClick={onClose} />
+        <HeaderSection>
+          <p style={{ margin: 0 }}>회원 탈퇴 확인</p>
+        </HeaderSection>
         <InfoSection>{renderInfoSection()}</InfoSection>
         <FormSection>
           <FormItem>
@@ -67,10 +71,13 @@ const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
   );
 };
 
+/**
+ *
+ */
 const renderInfoSection = () => {
   return (
     <>
-      <p>
+      <p style={{ marginTop: 0 }}>
         회원 탈퇴 시 계정은 30일 동안 비활성화 상태로 전환되며, 이후 회원 데이터가 영구적으로
         삭제됩니다. 비활성화 기간 동안 COTATO 서비스 이용이 제한됩니다.
       </p>
