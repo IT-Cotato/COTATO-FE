@@ -69,6 +69,7 @@ const ContentWrapper = styled.div`
   display: flex;
   justify-content: center;
   gap: 2.5rem;
+  margin-bottom: -3rem;
 
   ${media.desktop`
       gap: 1.5rem;
@@ -79,6 +80,7 @@ const ContentWrapper = styled.div`
     align-items: center;
     gap: 0.5rem;
     width: 100%;
+    margin-bottom: 0;
   `}
 `;
 
