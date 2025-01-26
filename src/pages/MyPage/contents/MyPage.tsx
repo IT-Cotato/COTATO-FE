@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { InfoSection, ProfileCard } from '../components/Mypage';
 import { media } from '@theme/media';
+import CotatoPanel from '@components/CotatoPanel';
+import MyPageImage from '@/pages/MyPage/tempAsssets/Text/MyPage.svg';
+import { Header } from './style';
 
 //
 //
@@ -10,7 +13,9 @@ import { media } from '@theme/media';
 const MyPage = () => {
   return (
     <>
-      <div>Mypage Header</div>
+      <Header>
+        <CotatoPanel size={'default'} textImgSrc={MyPageImage} />
+      </Header>
       <ContentContainer>
         <ProfileCard />
         <InfoSection />
