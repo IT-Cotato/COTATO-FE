@@ -21,7 +21,7 @@ const ManageSection = () => {
     <SectionContainer>
       <InfoSectionTitle>동아리 관리</InfoSectionTitle>
       <InfoSectionItemContainer>
-        <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.YEAR)}>
+        <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.GENERATION_MANAGEMENT)}>
           기수관리
           <RightAngle />
         </ManageSectionItem>

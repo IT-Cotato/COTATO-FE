@@ -6,8 +6,8 @@ import {
   MyPage,
   PolicyCheck,
   RegistrationManagement,
-  YearManagement,
 } from './contents';
+import { MypageGenerationManagement } from './generation-management';
 
 //
 //
@@ -19,9 +19,9 @@ export const MY_PAGE_PATH = {
     INFO: 'policy',
     DELETION: 'delete',
   },
-  YEAR: 'year',
   MEMBERS: 'members',
   REGISTRATION: 'registration',
+  GENERATION_MANAGEMENT: 'generation-management',
 } as const;
 
 //
@@ -37,7 +37,7 @@ const MyPageRouter = () => {
         path={`${MY_PAGE_PATH.POLICY.INFO}/${MY_PAGE_PATH.POLICY.DELETION}`}
         element={<AccountDeletion />}
       />
-      <Route path={MY_PAGE_PATH.YEAR} element={<YearManagement />} />
+      <Route path={MY_PAGE_PATH.GENERATION_MANAGEMENT} element={<MypageGenerationManagement />} />
       <Route path={MY_PAGE_PATH.MEMBERS} element={<MemberManagement />} />
       <Route path={MY_PAGE_PATH.REGISTRATION} element={<RegistrationManagement />} />
     </Routes>
