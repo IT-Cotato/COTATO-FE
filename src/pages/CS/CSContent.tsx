@@ -8,6 +8,7 @@ import fetcher from '@utils/fetcher';
 import { CotatoGenerationInfoResponse } from 'cotato-openapi-clients';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
+import { checkIsAtLeastAdmin } from '@utils/role';
 
 interface Props {
   education: IEducation;
@@ -33,7 +34,7 @@ const CSContent = ({ education, handleModifyButton, generation }: Props) => {
     <Content onClick={onclickContent}>
       <ContentWeek>{`${education.educationNumber}차시 문제`}</ContentWeek>
       <ContentTitle>{education.subject}</ContentTitle>
-      {user?.role === 'ADMIN' && (
+      {checkIsAtLeastAdmin(user?.role) && (
         <StyledIconButton
           onClick={(e) => {
             onClickModifyButton(e);

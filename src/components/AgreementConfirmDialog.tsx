@@ -40,7 +40,7 @@ const AgreementConfirmDialog = () => {
   const [checkAll, setCheckAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const isOverRefused = MemberRole[user?.role ?? 'REFUSED'] >= MemberRole.REFUSED;
+  const isMember = MemberRole[user?.role ?? MemberRole.NOTHING] >= MemberRole.MEMBER;
   const alreadyAgreed = localStorage.getItem('agreement') === 'true';
 
   /**
@@ -244,7 +244,7 @@ const AgreementConfirmDialog = () => {
   //
 
   return (
-    <StyledDialog open={Boolean(essentialPolicies.length && isOverRefused && !alreadyAgreed)}>
+    <StyledDialog open={Boolean(essentialPolicies.length && isMember && !alreadyAgreed)}>
       <DialogTitle>{renderTitle()}</DialogTitle>
       <DialogContent>
         <Stack gap="1rem">{renderPolicies()}</Stack>
