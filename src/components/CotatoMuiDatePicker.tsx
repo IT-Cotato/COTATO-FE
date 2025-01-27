@@ -7,7 +7,7 @@ import CotatoIcon from './CotatoIcon';
 //
 
 interface CotatoMuiDatePickerProps extends DatePickerProps<any> {
-  placeholder: string;
+  placeholder?: string;
 }
 
 //
