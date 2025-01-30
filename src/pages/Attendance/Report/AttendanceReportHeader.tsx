@@ -159,23 +159,24 @@ const AttendanceReportHeader = () => {
         </Box>
         <Stack direction="row" justifyContent="space-between" gap="1rem">
           <Stack direction="row" spacing="1rem">
-            {generations && (
-              <CotatoDropBox
-                list={generations}
-                onChange={handleGenerationChange}
-                defaultItemId={selectedGenerationId}
-                color="yellow"
-              />
-            )}
-            {attendanceListWithAll && (
-              <CotatoDropBox
-                list={attendanceListWithAll}
-                onChange={handleAttendanceChange}
-                defaultItemId={selectedAttendanceId}
-                width="12rem"
-                color="yellow"
-              />
-            )}
+            <CotatoDropBox
+              list={generations}
+              defaultItem={targetGeneration}
+              color="yellow"
+              title={(generation) => generation?.generationNumber + '기'}
+              onChange={handleGenerationChange}
+            />
+            <CotatoDropBox
+              list={attendanceListWithAll}
+              defaultItem={attendanceListWithAll.find(
+                (attendance) => attendance.attendanceId === selectedAttendanceId,
+              )}
+              size="lg"
+              width="12rem"
+              color="yellow"
+              title={(attendance) => attendance?.sessionTitle}
+              onChange={handleAttendanceChange}
+            />
           </Stack>
           <Stack direction="column-reverse">
             <Button
