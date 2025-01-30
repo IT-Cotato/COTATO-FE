@@ -189,6 +189,18 @@ const SessionUploadModal = ({
   /**
    *
    */
+  const handlePlaceClearButtonClick = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.placeName = '';
+      }),
+    );
+    setAddress('');
+  };
+
+  /**
+   *
+   */
   const handleItIssueChange = () => {
     setSession(
       produce(session, (draft) => {
@@ -413,13 +425,16 @@ const SessionUploadModal = ({
               <CotatoIcon icon="search" size="1.25rem" color={(theme) => theme.colors.gray60} />
             </button>
           </LocationInputBox>
-          <LocationInputBox $width="9rem">
+          <LocationInputBox $width="12rem">
             <input
               placeholder="장소명"
               value={session.placeName}
               readOnly={session.location === undefined}
               onChange={handlePlaceNameChange}
             />
+            <button type="button" onClick={handlePlaceClearButtonClick}>
+              <CotatoIcon icon="trash-alt" size="1.25rem" color={(theme) => theme.colors.gray60} />
+            </button>
           </LocationInputBox>
         </div>
       </InfoBox>
