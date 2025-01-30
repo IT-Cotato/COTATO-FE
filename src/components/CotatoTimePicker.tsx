@@ -62,8 +62,14 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           ['& .MuiOutlinedInput-notchedOutline']: {
             border: 'none',
           },
+          ['& .Mui-disabled']: {
+            '-webkit-text-fill-color': 'inherit',
+          },
         }}
         slotProps={{
+          textField: {
+            disabled: true,
+          },
           inputAdornment: {
             sx: {
               ['& .MuiSvgIcon-root']: {
@@ -75,6 +81,10 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
             sx: {
               ['& .Mui-selected']: {
                 backgroundColor: theme.colors.primary100_2,
+
+                '&:hover': {
+                  backgroundColor: theme.colors.primary100_2,
+                },
               },
             },
           },
