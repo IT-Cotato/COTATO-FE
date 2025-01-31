@@ -55,10 +55,10 @@ const AttendanceReportExcelExportModal = ({
    */
   const handleCheckboxChange = (attendance: CotatoAttendanceWithSessionResponse) => {
     if (attendance.sessionId === ALL_SESSION_ID) {
-      if (checkedAttendances.length === 1 && checkedAttendances[0].sessionId === ALL_SESSION_ID) {
+      if (checkedAttendances.some((a) => a.sessionId === ALL_SESSION_ID)) {
         setCheckedAttendances([]);
       } else {
-        setCheckedAttendances([attendance]);
+        setCheckedAttendances([...attendancesWithAll]);
       }
     } else {
       if (checkedAttendances.some((a) => a.sessionId === ALL_SESSION_ID)) {
