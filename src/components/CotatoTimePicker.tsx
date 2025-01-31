@@ -5,6 +5,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ko';
 import { useTheme } from 'styled-components';
+import { Box, Button } from '@mui/material';
 
 //
 //
@@ -62,8 +63,36 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           ['& .MuiOutlinedInput-notchedOutline']: {
             border: 'none',
           },
+          ['& .Mui-disabled']: {
+            '-webkit-text-fill-color': 'inherit',
+          },
+        }}
+        slots={{
+          actionBar: (props) => (
+            <Box
+              {...props}
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                padding: '0.25rem',
+              }}
+            >
+              <Button
+                // eslint-disable-next-line react/prop-types
+                onClick={props.onAccept}
+                sx={{
+                  color: theme.colors.primary100,
+                }}
+              >
+                확인
+              </Button>
+            </Box>
+          ),
         }}
         slotProps={{
+          textField: {
+            disabled: true,
+          },
           inputAdornment: {
             sx: {
               ['& .MuiSvgIcon-root']: {
@@ -73,8 +102,12 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           },
           desktopPaper: {
             sx: {
-              '& .Mui-selected': {
-                backgroundColor: theme.colors.primary100,
+              ['& .Mui-selected']: {
+                backgroundColor: theme.colors.primary100_2 + ' !important',
+
+                '&:hover': {
+                  backgroundColor: theme.colors.primary100_2 + ' !important',
+                },
               },
             },
           },
