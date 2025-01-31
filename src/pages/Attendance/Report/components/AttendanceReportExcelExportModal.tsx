@@ -62,7 +62,11 @@ const AttendanceReportExcelExportModal = ({
       }
     } else {
       if (checkedAttendances.some((a) => a.sessionId === ALL_SESSION_ID)) {
-        setCheckedAttendances([attendance]);
+        setCheckedAttendances(
+          checkedAttendances.filter(
+            (a) => a.sessionId !== ALL_SESSION_ID && a.sessionId !== attendance.sessionId,
+          ),
+        );
       } else {
         if (checkedAttendances.some((a) => a.sessionId === attendance.sessionId)) {
           setCheckedAttendances(
