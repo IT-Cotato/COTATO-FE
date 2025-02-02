@@ -2,15 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { media } from '@theme/media';
 import { AccountSection, ManageSection } from './subComponents';
+import { useInfoForm } from '@pages/MyPage/hooks/useInfoForm';
+import useUser from '@/hooks/useUser';
 
 //
 //
 //
 
 const InfoSection = () => {
+  const { user } = useUser();
+  const { form } = useInfoForm(user?.memberId);
   return (
     <InfoSectionContainer>
-      <AccountSection email={'aaa@naver.com'} phoneNum={'000-0000-0000'} />
+      <AccountSection email={form.email} phoneNum={form.phoneNumber} />
       <ManageSection />
     </InfoSectionContainer>
   );
