@@ -20,7 +20,7 @@ const ProfileCard = () => {
   const { user } = useUser();
   const [isModifying, setIsModifying] = useState(false);
   const { form, handleIntroChange, handleLinkChange, handleImageChange, submitProfile } =
-    useProfileForm();
+    useProfileForm(user?.memberId);
 
   /**
    *
@@ -36,6 +36,7 @@ const ProfileCard = () => {
     <ProfileCardContainer>
       <ProfileImageSection
         position={user?.position}
+        value={form.profileImage}
         onImageChange={handleImageChange}
         isModifying={isModifying}
       />

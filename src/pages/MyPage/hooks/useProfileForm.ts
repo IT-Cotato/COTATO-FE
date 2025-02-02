@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import api from '@/api/api';
 
+//
+//
+//
+
 interface ProfileForm {
   introduction: string;
   university: string;
@@ -8,10 +12,14 @@ interface ProfileForm {
     urlType: 'GITHUB' | 'BLOG';
     url: string;
   }[];
-  profileImage: File | null;
+  profileImage: File | string | null;
 }
 
-export const useProfileForm = () => {
+//
+//
+//
+
+export const useProfileForm = (memberId: number | undefined) => {
   const [form, setForm] = useState<ProfileForm>({
     introduction: '',
     university: '',
@@ -22,10 +30,13 @@ export const useProfileForm = () => {
     profileImage: null,
   });
 
+  /**
+   *
+   */
   useEffect(() => {
-    const fetchMemberInfo = async () => {
+    const fetchMemberProfile = async (memberId: number | undefined) => {
       try {
-        const response = await api.get('');
+        const response = await api.get(`/v1/api/member/${memberId}/profile`);
         setForm((prev) => ({
           ...prev,
           ...response.data,
@@ -35,13 +46,19 @@ export const useProfileForm = () => {
       }
     };
 
-    fetchMemberInfo();
+    fetchMemberProfile(memberId);
   }, []);
 
+  /**
+   *
+   */
   const handleIntroChange = (field: keyof ProfileForm, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  /**
+   *
+   */
   const handleLinkChange = (index: number, value: string) => {
     setForm((prev) => ({
       ...prev,
@@ -51,10 +68,16 @@ export const useProfileForm = () => {
     }));
   };
 
+  /**
+   *
+   */
   const handleImageChange = (file: File) => {
     setForm((prev) => ({ ...prev, profileImage: file }));
   };
 
+  /**
+   *
+   */
   const submitProfile = async () => {
     try {
       const formData = new FormData();
@@ -80,7 +103,7 @@ export const useProfileForm = () => {
 
       return true;
     } catch (error) {
-      console.error('Profile update failed:', error);
+      console.error('Failed to update member info:', error);
       return false;
     }
   };

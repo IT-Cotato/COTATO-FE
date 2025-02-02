@@ -30,6 +30,7 @@ interface ProfileImageSectionProps {
   position?: CotatoMemberInfoResponsePositionEnum;
   onImageChange: (file: File) => void;
   isModifying: boolean;
+  value: File | string | null;
 }
 
 //
@@ -44,6 +45,7 @@ const ProfileImageSection = ({
   position,
   onImageChange,
   isModifying,
+  value,
 }: ProfileImageSectionProps) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -53,16 +55,19 @@ const ProfileImageSection = ({
   };
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <ProfileImage
-        src={COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]}
+        src={
+          value
+            ? (value as string)
+            : COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]
+        }
       />
       {isModifying && (
-        <input
+        <ProfileImageInput
           type="file"
-          accept="image/*"
+          accept="image/png, image/jpeg"
           onChange={handleFileChange}
-          style={{ display: 'none' }}
           id="profile-image-input"
         />
       )}
@@ -80,6 +85,16 @@ const ProfileImage = styled.div<{ src: string }>`
   border-radius: 15rem;
   background-image: url(${({ src }) => src});
   background-size: cover;
+`;
+
+const ProfileImageInput = styled.input`
+  position: absolute;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 15rem;
+  top: 0;
+  background-color: gray;
+  opacity: 0.5;
 `;
 
 export default ProfileImageSection;
