@@ -2,6 +2,7 @@ import { Button, Dialog, Input, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Close } from '@/pages/MyPage/tempAsssets/close_button.svg';
+import CotatoButton from '@components/CotatoButton';
 
 //
 //
@@ -62,9 +63,12 @@ const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
           </FormItem>
         </FormSection>
         <ButtonSection>
-          <Button variant="contained" disabled={!isButtonEnabled}>
-            탈퇴하기
-          </Button>
+          <CotatoButton
+            isEnabled={isButtonEnabled}
+            buttonStyle="filled"
+            text="탈퇴하기"
+            handleClick={() => {}}
+          />
         </ButtonSection>
       </ModalContainer>
     </Dialog>

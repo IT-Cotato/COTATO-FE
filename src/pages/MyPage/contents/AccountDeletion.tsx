@@ -6,6 +6,7 @@ import AccountDeletionImage from '@/pages/MyPage/tempAsssets/Text/AccountDeletio
 import CotatoPanel from '@components/CotatoPanel';
 import { Header } from './style';
 import BackButton from '../components/common/BackButton';
+import CotatoButton from '@components/CotatoButton';
 
 //
 //
@@ -49,9 +50,12 @@ const AccountDeletion = () => {
             </CheckboxContainer>
           </Notification>
           <ButtonContainer>
-            <Button variant="contained" disabled={!isActiveButton} onClick={handleDeleteClick}>
-              탈퇴하기
-            </Button>
+            <CotatoButton
+              isEnabled={isActiveButton}
+              buttonStyle="filled"
+              text="탈퇴하기"
+              handleClick={handleDeleteClick}
+            />
           </ButtonContainer>
         </NotificationContainer>
       </ContentContainer>
