@@ -45,7 +45,7 @@ const ProfileCard = () => {
       <IntroductionSection
         isModifying={isModifying}
         value={form.introduction}
-        onChange={(value) => handleIntroChange('introduction', value)}
+        onChange={(value) => handleIntroChange(value)}
       />
       <LinksSection
         isModifying={isModifying}

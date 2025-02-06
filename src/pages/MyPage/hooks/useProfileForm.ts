@@ -52,8 +52,8 @@ export const useProfileForm = (memberId: number | undefined) => {
   /**
    *
    */
-  const handleIntroChange = (field: keyof ProfileForm, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+  const handleIntroChange = (value: string) => {
+    setForm((prev) => ({ ...prev, introduction: value }));
   };
 
   /**
