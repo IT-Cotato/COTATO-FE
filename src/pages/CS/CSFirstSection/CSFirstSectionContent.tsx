@@ -5,11 +5,12 @@ import styled, { useTheme } from 'styled-components';
 import CSFirstSectionContentStatus from './components/CSFirstSectionContentStatus';
 import { ReactComponent as BulletListSolidIcon } from '@assets/bullet_list_solid.svg';
 import { ReactComponent as CSIcon } from '@assets/cs_icon.svg';
-import { media } from '@theme/media';
+import { media, device } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import fetcher from '@utils/fetcher';
 import useSWRImmutable from 'swr/immutable';
 import { CotatoEducationCountResponse } from 'cotato-openapi-clients';
+import { DESKTOP_HEIGHT } from './constants';
 
 const CSFirstSectionContent = () => {
   const { data: statusValue } = useSWRImmutable<CotatoEducationCountResponse>(
@@ -67,11 +68,19 @@ export default CSFirstSectionContent;
 
 const ContentWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   gap: 2.5rem;
   margin-bottom: -3rem;
+  width: 100%;
+  max-width: ${device.wide};
+
+  @media (max-height: ${DESKTOP_HEIGHT}) {
+    justify-content: center;
+    gap: 4rem;
+  }
 
   ${media.desktop`
+      justify-content: center;
       gap: 1.5rem;
   `}
 

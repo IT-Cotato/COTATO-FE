@@ -3,8 +3,10 @@ import CotatoPixelButton from '@components/CotatoPixelButton';
 import { ReactComponent as GoQuizTextImage } from '@assets/cs_go_quiz_text.svg';
 import { ReactComponent as VVIcon } from '@assets/vv.svg';
 import { styled } from 'styled-components';
-import { media } from '@theme/media';
+import { media, device } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import { useMediaQuery } from '@mui/material';
+import { DESKTOP_HEIGHT } from './constants';
 
 //
 //
@@ -22,10 +24,11 @@ const CSFirstSectionButton = () => {
   const [isHover, setIsHover] = React.useState(false);
 
   const { isDesktopOrSmaller, isTabletOrSmaller } = useBreakpoints();
+  const isDesktopHeightOrSmaller = useMediaQuery(`(max-height:${DESKTOP_HEIGHT})`);
 
   const handleButtonClick = () => {
     const slideContainer = document.querySelector('#cs-slide-container');
-    console.log(slideContainer);
+
     if (slideContainer) {
       slideContainer.scrollTo({
         top: slideContainer.clientHeight,
@@ -37,7 +40,7 @@ const CSFirstSectionButton = () => {
   const getButtonWidth = () => {
     if (isTabletOrSmaller) {
       return '7rem';
-    } else if (isDesktopOrSmaller) {
+    } else if (isDesktopOrSmaller || isDesktopHeightOrSmaller) {
       return '8.5rem';
     } else {
       return '10rem';
@@ -76,11 +79,17 @@ const ButtonWrapper = styled.div<ButtonWrapperProps>`
     top: ${({ $isHover }) => ($isHover ? '-5.5rem' : '-4.5rem')};
   }
 
-  ${media.desktop`
+  /* ${media.desktop`
     > svg {
       top: ${({ $isHover }: { $isHover: boolean }) => ($isHover ? '-4.75rem' : '-3.75rem')};
     }
-  `}
+  `} */
+
+  @media (max-width: ${device.desktop}), (max-height: 800px) {
+    > svg {
+      top: ${({ $isHover }: { $isHover: boolean }) => ($isHover ? '-4.75rem' : '-3.75rem')};
+    }
+  }
 
   ${media.tablet`
     > svg {
