@@ -2,8 +2,9 @@ import React from 'react';
 import { styled } from 'styled-components';
 import status_background from '@assets/cs_status_background.svg';
 import { Box } from '@mui/material';
-import { media } from '@theme/media';
+import { media, device } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import { DESKTOP_HEIGHT } from '../constants';
 
 //
 //
@@ -71,7 +72,7 @@ const StatusBox = styled.div`
     font-weight: 700;
   }
 
-  ${media.desktop`
+  /* ${media.desktop`
     width: ${BOX_WIDTH_MEDIUM}rem;
     height: ${BOX_HEIGHT_MEDIUM}rem;
     padding-bottom: 0.375rem;
@@ -79,7 +80,17 @@ const StatusBox = styled.div`
     > span {
       font-size: 1.25rem;
     }
-  `}
+  `} */
+
+  @media (max-width: ${device.desktop}), (max-height: ${DESKTOP_HEIGHT}) {
+    width: ${BOX_WIDTH_MEDIUM}rem;
+    height: ${BOX_HEIGHT_MEDIUM}rem;
+    padding-bottom: 0.375rem;
+
+    > span {
+      font-size: 1.25rem;
+    }
+  }
 
   ${media.tablet`
     width: ${BOX_WIDTH_SMALL}rem;

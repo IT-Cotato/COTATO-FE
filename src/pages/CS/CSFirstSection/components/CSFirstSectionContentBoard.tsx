@@ -3,7 +3,8 @@ import { Stack } from '@mui/material';
 import { ReactComponent as BrowserBoardBackground } from '@assets/cs_browswer_board.svg';
 import { styled } from 'styled-components';
 import { ReactComponent as EducationCharacter } from '@assets/cotato_character_education_ground.svg';
-import { media } from '@theme/media';
+import { media, device } from '@theme/media';
+import { DESKTOP_HEIGHT } from '../constants';
 
 //
 //
@@ -108,14 +109,24 @@ const BrowserBoard = styled.div<BrowserBoardProps>`
     transform: ${({ $flip }) => ($flip ? 'scaleX(-1)' : 'none')};
   }
 
-  ${media.desktop`
+  /* ${media.desktop`
     width: ${BOARD_WIDTH_MEDIUM}rem;
     height: ${BOARD_HEIGHT_MEDIUM}rem;
 
     > p {
       font-size: 1rem;
       padding: ${({ $flip }: { $flip: boolean }) => ($flip ? '3.75rem 1rem 0 2.25rem' : '3.75rem 2rem 0 1.125rem')};
-  `}
+  `} */
+
+  @media (max-width: ${device.desktop}), (max-height: ${DESKTOP_HEIGHT}) {
+    width: ${BOARD_WIDTH_MEDIUM}rem;
+    height: ${BOARD_HEIGHT_MEDIUM}rem;
+
+    > p {
+      font-size: 1rem;
+      padding: ${({ $flip }) => ($flip ? '3.75rem 1rem 0 2.25rem' : '3.75rem 2rem 0 1.125rem')};
+    }
+  }
 
   ${media.tablet`
     width: ${BOARD_WIDTH_SMALL}rem;
