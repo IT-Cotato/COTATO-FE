@@ -56,7 +56,9 @@ const getBackgroundColor = (theme: any, style: string) => {
 };
 
 /**
- * cotato button component
+ * if the isEnabled prop should be a state value, you can use it like this:
+ * @example <CotatoButton isEnabled={isEnabled as false} text="button text" handleClick={handleClick} />
+ * 
  * @param isEnabled button enable or disable
  * @param buttonStyle enabled button style - filled, line
  * @param text button text
