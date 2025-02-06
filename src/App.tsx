@@ -24,6 +24,8 @@ import { About } from '@pages/About';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Background from '@components/Background';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 function App() {
   //
@@ -50,33 +52,35 @@ function App() {
 
   return (
     <div className="App">
-      <CotatoThemeProvider>
-        <GlobalStyle />
-        <ToastContainer position="bottom-right" autoClose={3000} />
-        <Background />
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+        <CotatoThemeProvider>
+          <GlobalStyle />
+          <ToastContainer position="bottom-right" autoClose={3000} />
+          <Background />
 
-        <Header />
-        <AgreementConfirmDialog />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/attendance/*" element={<AttendanceRoutes />} />
-          <Route path="/cs/*" element={<CSRoutes />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/session/*" element={<Session />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/findid" element={<FindID />} />
-          <Route path="/findpw" element={<FindPassword />} />
-          <Route path="/joinus" element={<SignUp />} />
-          <Route path="/mypage/*" element={<MyPage />} />
-          <Route path="/products" element={<ReadyState />} />
-          <Route path="/projects" element={<ReadyState />} />
-          <Route path="/signin" element={<Login />} />
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
+          <Header />
+          <AgreementConfirmDialog />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/attendance/*" element={<AttendanceRoutes />} />
+            <Route path="/cs/*" element={<CSRoutes />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/session/*" element={<Session />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/findid" element={<FindID />} />
+            <Route path="/findpw" element={<FindPassword />} />
+            <Route path="/joinus" element={<SignUp />} />
+            <Route path="/mypage/*" element={<MyPage />} />
+            <Route path="/products" element={<ReadyState />} />
+            <Route path="/projects" element={<ReadyState />} />
+            <Route path="/signin" element={<Login />} />
+            <Route path="/*" element={<NotFound />} />
+          </Routes>
 
-        {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
-      </CotatoThemeProvider>
+          {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
+        </CotatoThemeProvider>
+      </LocalizationProvider>
     </div>
   );
 }

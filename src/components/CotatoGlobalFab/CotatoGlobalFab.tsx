@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import CotatoFloatingActionButton from '@components/CotatoFloatingActionButton/CotatoFloatingActionButton';
 import CotatoFloatingActionButtonItem from '@components/CotatoFloatingActionButton/CotatoFloatingActionButtonItem';
 import fetchUserData from '@utils/fetchUserData';
-import { MemberRole } from '@/enums';
 import { feedbackIntegration } from '@/sentryFeedbackIntegtation';
 import CotatoIcon from '@components/CotatoIcon';
+import { checkIsAtLeastMember } from '@utils/role';
 
 //
 //
@@ -26,14 +26,14 @@ const CotatoGlobalFab = () => {
 
   const errorReportButtonRef = useRef<HTMLButtonElement>(null);
 
-  const isOverOldMember = MemberRole[user?.role ?? 'REFUSED'] >= MemberRole.OLD_MEMBER;
+  const isMember = checkIsAtLeastMember(user?.role);
 
   //
   const fabList = {
     attendance: {
-      name: isOverOldMember ? '출석' : '코테이토 회원 전용 기능입니다!',
+      name: isMember ? '출석' : '코테이토 회원 전용 기능입니다!',
       icon: <AttendanceIcon width="100%" height="100%" />,
-      disabled: !isOverOldMember,
+      disabled: !isMember,
       onClick: () => {
         navigate('/attendance');
       },

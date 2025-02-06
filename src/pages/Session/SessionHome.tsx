@@ -12,7 +12,6 @@ import { useMediaQuery } from '@mui/material';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper/modules';
-import fetchUserData from '@utils/fetchUserData';
 import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
 import SessionDetailModal from '@pages/Session/SessionDetailModal';
 import 'swiper/css';
@@ -22,6 +21,8 @@ import { toast } from 'react-toastify';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGeneration } from '@/hooks/useGeneration';
 import getDateString from '@utils/getDateString';
+import useUser from '@/hooks/useUser';
+import { checkIsAtLeastAdmin } from '@utils/role';
 
 //
 //
@@ -35,7 +36,7 @@ const SessionHome = () => {
     '/v1/api/session',
     (url: string) => fetcherWithParams(url, { generationId: selectedGeneration?.generationId }),
   );
-  const { data: userData } = fetchUserData();
+  const { user } = useUser();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -287,7 +288,7 @@ const SessionHome = () => {
             height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
           />
         )}
-        {userData?.role === 'ADMIN' && !isTabletOrSmaller && (
+        {checkIsAtLeastAdmin(user?.role) && !isTabletOrSmaller && (
           <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
         )}
       </SettingTab>

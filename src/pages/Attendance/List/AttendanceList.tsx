@@ -23,9 +23,9 @@ import {
   useAttendanceListLayoutStore,
 } from '@/zustand-stores/useAttendanceListLayoutStore';
 import useUser from '@/hooks/useUser';
-import { MemberRole } from '@/enums';
 import CotatoIcon from '@components/CotatoIcon';
 import { getAttendanceReportPath } from '../utils/util';
+import { checkIsAtLeastManager } from '@utils/role';
 
 //
 //
@@ -39,7 +39,7 @@ const AttendanceList = () => {
   const { currentGeneration } = useGeneration();
   const { user } = useUser();
 
-  const isAdmin = MemberRole[user?.role ?? 'REFUSED'] >= MemberRole.EDUCATION;
+  const isManager = checkIsAtLeastManager(user?.role);
 
   const { data: attendanceResponse } = useSWR<CotatoMemberAttendanceRecordsResponse>(
     '/v2/api/attendances/records/members',
@@ -211,7 +211,7 @@ const AttendanceList = () => {
    *
    */
   const renderActions = () => {
-    if (!isAdmin) {
+    if (!isManager) {
       return null;
     }
 

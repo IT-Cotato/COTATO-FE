@@ -8,6 +8,7 @@ import { MultipleQuiz, ShortQuiz } from './CSAdminUploadSlides';
 import { createMultipleQuiz } from './utils/createMultipleQuiz';
 import { useGeneration } from '@/hooks/useGeneration';
 import { useEducation } from '@/hooks/useEducation';
+import { checkIsAtLeastManager } from '@utils/role';
 
 //
 //
@@ -83,7 +84,7 @@ const CSAdminUpload = () => {
   setTimeout(() => {
     if (isLoading) return;
 
-    if (!['ADMIN', 'EDUCATION'].includes(userData?.role as string)) {
+    if (!checkIsAtLeastManager(userData?.role)) {
       window.location.href = '/';
     }
   }, 500);

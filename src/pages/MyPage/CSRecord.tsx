@@ -72,9 +72,6 @@ const CSRecord = () => {
             <Badge backgroundcolor="rgba(235, 83, 83, 0.51)">
               {localeKr[(user?.position as keyof typeof localeKr) || 'NONE']}
             </Badge>
-            <Badge backgroundcolor="#93C6FE">
-              {localeKr[(user?.role as keyof typeof localeKr) || 'NONE']}
-            </Badge>
           </BadgeDiv>
           <h2>감자 {user?.name}님 반갑습니다.</h2>
           <RecordDiv>

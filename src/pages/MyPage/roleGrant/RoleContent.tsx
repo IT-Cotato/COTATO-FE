@@ -7,6 +7,7 @@ import api from '@/api/api';
 import fetcher from '@utils/fetcher';
 import useSWRImmutable from 'swr/immutable';
 import { Checkbox } from '@mui/material';
+import { CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 
 interface Props {
   mode: string;
@@ -54,11 +55,11 @@ const RoleContent = ({ mode, member, addOm, onChangeAddOm, onChangeRemoveOm }: P
 
   const getMemberRole = useCallback((role: IRole) => {
     if (role.name === '운영진') {
-      return 'ADMIN';
+      return CotatoMemberInfoResponseRoleEnum.Admin;
     } else if (role.name === '교육 팀원') {
-      return 'EDUCATION';
+      return CotatoMemberInfoResponseRoleEnum.Manager;
     } else if (role.name === '일반 부원') {
-      return 'MEMBER';
+      return CotatoMemberInfoResponseRoleEnum.Member;
     }
 
     return '';
