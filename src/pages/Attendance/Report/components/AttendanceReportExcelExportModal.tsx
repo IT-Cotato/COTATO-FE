@@ -3,7 +3,7 @@ import CotatoIcon from '@components/CotatoIcon';
 import { Modal, Box, Typography, Button } from '@mui/material';
 import dayjs from 'dayjs';
 import React from 'react';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import CheckBox from '@mui/material/Checkbox';
 import {
   CotatoAttendanceWithSessionResponse,
@@ -133,9 +133,11 @@ const AttendanceReportExcelExportModal = ({
     return (
       <Box
         sx={{
+          width: '100%',
           display: 'flex',
           gap: '0.5rem',
           alignItems: 'center',
+          justifyContent: 'flex-start',
           padding: '0.75rem 1rem',
         }}
       >
@@ -169,8 +171,12 @@ const AttendanceReportExcelExportModal = ({
           overflowY: 'auto',
         }}
       >
-        {attendancesWithAll.map((attendance) => (
-          <Button key={attendance.sessionId} onClick={() => handleCheckboxChange(attendance)}>
+        {attendancesWithAll.map((attendance, index) => (
+          <Button
+            key={attendance.sessionId}
+            onClick={() => handleCheckboxChange(attendance)}
+            disabled={index === 1}
+          >
             <Box
               sx={{
                 display: 'flex',
@@ -180,16 +186,24 @@ const AttendanceReportExcelExportModal = ({
             >
               <CheckBox
                 checked={checkedAttendances.some((a) => a.sessionId === attendance.sessionId)}
+                disabled={index === 1}
                 sx={{
                   padding: 0,
-                  color: theme.colors.common.black + ' !important',
+
+                  '&.Mui-checked': {
+                    color: theme.colors.common.black,
+                  },
+
+                  '&.Mui-disabled': {
+                    color: theme.colors.gray20,
+                  },
                 }}
               />
               <Typography
                 sx={{
                   fontFamily: 'Ycomputer',
                   fontSize: '1rem',
-                  color: theme.colors.common.black,
+                  color: index === 1 ? theme.colors.gray30 : theme.colors.common.black,
                 }}
               >
                 {attendance.sessionTitle}&nbsp;
@@ -252,6 +266,7 @@ const AttendanceReportExcelExportModal = ({
         }}
       >
         {renderExcelExportHeader()}
+        <StyledHr />
         {renderExcelExportBody()}
         {renderExportButton()}
       </Box>
@@ -260,3 +275,14 @@ const AttendanceReportExcelExportModal = ({
 };
 
 export default AttendanceReportExcelExportModal;
+
+//
+//
+//
+
+const StyledHr = styled.hr`
+  width: 100%;
+  height: 1px;
+  border: none;
+  background-color: ${({ theme }) => theme.colors.gray30};
+`;
