@@ -1,4 +1,4 @@
-import { Button, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AccountDeletionModal } from '../components/AccountDeletion';
@@ -7,13 +7,16 @@ import CotatoPanel from '@components/CotatoPanel';
 import { Header } from './style';
 import BackButton from '../components/common/BackButton';
 import CotatoButton from '@components/CotatoButton';
+import useUser from '@/hooks/useUser';
+import { useAccountDeletion } from '../hooks/useAccountDeletion';
 
 //
 //
 //
 
 const AccountDeletion = () => {
-  const [isActiveButton, setIsActiveButton] = useState(false);
+  const { user } = useUser();
+  const { form, updateForm, deactivateAccount } = useAccountDeletion(user?.memberId);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   /**
@@ -41,17 +44,13 @@ const AccountDeletion = () => {
           <Notification>
             {renderNotification()}
             <CheckboxContainer>
-              <Checkbox
-                onChange={() => {
-                  setIsActiveButton((prev) => !prev);
-                }}
-              />
+              <Checkbox onChange={(e) => updateForm('isTermsAgreed', e.target.checked)} />
               <p style={{ margin: 0 }}>안내사항을 모두 확인하였으며, 이에 동의합니다.</p>
             </CheckboxContainer>
           </Notification>
           <ButtonContainer>
             <CotatoButton
-              isEnabled={isActiveButton}
+              isEnabled={form.isTermsAgreed}
               buttonStyle="filled"
               text="탈퇴하기"
               handleClick={handleDeleteClick}
@@ -61,7 +60,13 @@ const AccountDeletion = () => {
       </ContentContainer>
 
       {/* Modal */}
-      <AccountDeletionModal open={isModalOpen} onClose={handleModalClose} />
+      <AccountDeletionModal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        form={form}
+        updateForm={updateForm}
+        deactivateAccount={deactivateAccount}
+      />
     </>
   );
 };
