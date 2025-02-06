@@ -60,7 +60,7 @@ const MyPage = () => {
         <MyDataHeader>
           <h3>내 정보</h3>
         </MyDataHeader>
-        {user?.role !== 'GENERAL' && (
+        {/* {user?.role !== 'GENERAL' && (
           <DataBox>
             <IDWrapper>
               <Stack justifyContent="center" alignItems="center">
@@ -113,15 +113,15 @@ const MyPage = () => {
               </TextContainer>
             </InfoWrapper>
           </DataBox>
-        )}
-        {user?.role !== 'GENERAL' && (
+        )} */}
+        {/* {user?.role !== 'GENERAL' && (
           <StyledLink to="cs-record">
             <ButtonContainer>
               <p>내가 풀어본 CS 문제풀이</p>
               <CotatoIcon icon="angle-right-solid" size="2rem" />
             </ButtonContainer>
           </StyledLink>
-        )}
+        )} */}
         {user?.role === 'ADMIN' && (
           <StyledLink to="request">
             <ButtonContainer>

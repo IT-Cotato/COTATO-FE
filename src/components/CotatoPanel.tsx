@@ -8,7 +8,7 @@ import { ReactComponent as PanelLong } from '@assets/cotato_panel_long.svg';
 //
 //
 
-type SizeStateType = 'short' | 'default' | 'long';
+export type SizeStateType = 'short' | 'default' | 'long';
 
 interface CotatoPanelProps {
   size: SizeStateType;
