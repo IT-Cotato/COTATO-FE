@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { DayPicker } from 'react-day-picker';
-import 'react-day-picker/dist/style.css';
 import { ko } from 'date-fns/locale';
 import { styled } from 'styled-components';
 

@@ -22,6 +22,7 @@ import AgreementConfirmDialog from '@components/AgreementConfirmDialog';
 import CSRoutes from '@pages/CS/CSRoutes';
 import { About } from '@pages/About';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-day-picker/dist/style.css';
 import { ToastContainer } from 'react-toastify';
 import Background from '@components/Background';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
