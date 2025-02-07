@@ -5,7 +5,7 @@ import { MY_PAGE_PATH } from '../MyPageRouter';
 import { Button } from '@mui/material';
 import { ReactComponent as RightAngle } from '@/pages/MyPage/tempAsssets/angle_right.svg';
 import PolicyCheckImage from '@/pages/MyPage/tempAsssets/Text/PolicyCheck.svg';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import { Header } from './style';
 import BackButton from '../components/common/BackButton';
 
@@ -19,7 +19,7 @@ const PolicyCheck = () => {
     <ContentContainer>
       <Header>
         <BackButton />
-        <CotatoPanel size={'default'} textImgSrc={PolicyCheckImage} />
+        <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={PolicyCheckImage} />
       </Header>
       <NotificationContainer>
         <Notification>{renderPersonalInfoNotification()}</Notification>

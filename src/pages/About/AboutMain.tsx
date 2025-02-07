@@ -5,7 +5,7 @@ import { ReactComponent as CotaoLogo } from '@assets/cotato_logo.svg';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import CotatoTooltip from '@components/CotatoTooltip';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import PanelText from '@assets/about_us_panel_text.svg';
 
 //
@@ -17,7 +17,7 @@ const AboutMain = () => {
 
   return (
     <Wrapper>
-      <CotatoPanel size="short" textImgSrc={PanelText} />
+      <CotatoPanel size={SizeStateEnum.SHORT} textImgSrc={PanelText} />
       <MainContent>
         <CotatoTooltip
           arrow

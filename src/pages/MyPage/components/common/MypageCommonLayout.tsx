@@ -1,4 +1,4 @@
-import CotatoPanel, { SizeStateType } from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import { Box, Stack } from '@mui/material';
 import { Header } from '@pages/MyPage/contents/style';
 import React from 'react';
@@ -11,7 +11,7 @@ import BackButton from './BackButton';
 interface MypageCommonLayoutProps {
   slotProps: {
     header: {
-      panelSize: SizeStateType;
+      panelSize: SizeStateEnum;
       textImgSrc: string;
     };
   };
