@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import background from '@assets/bg_waiting.svg';
 import mobile from '@assets/bg_waiting_mobile.svg';
@@ -31,11 +31,18 @@ interface WaitingProps {
 //
 //
 
+const EXIT_TIMEOUT = 4000;
+
+//
+//
+//
+
 const CSQuiz: React.FC<WaitingProps> = () => {
   const params = useParams();
   const currentEducationId = params.educationId;
 
   const webSocket = React.useRef<WebSocket | undefined>(undefined);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [message, setMessage] = useState<MessageType>({
     status: null,
@@ -67,6 +74,10 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
     return () => {
       webSocket.current?.close(4000, 'disconnect websocket on purpose');
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
   }, []);
 
@@ -150,6 +161,12 @@ const CSQuiz: React.FC<WaitingProps> = () => {
             break;
 
           case EXIT_EVENT:
+            {
+              timeoutRef.current = setTimeout(() => {
+                navigate('/cs');
+              }, EXIT_TIMEOUT);
+            }
+
             break;
 
           case SHOW_KING_EVENT:
