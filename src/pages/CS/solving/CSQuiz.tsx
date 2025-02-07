@@ -150,7 +150,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
             break;
 
           case EXIT_EVENT:
-            navigate('/cs');
             break;
 
           case SHOW_KING_EVENT:
