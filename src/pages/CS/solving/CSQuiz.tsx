@@ -206,6 +206,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       {showProblem && (
         <div className="problem">
           <CSProblem
+            message={message}
             quizId={message.quizId}
             submitAllowed={allowSubmit}
             problemId={problemId}
