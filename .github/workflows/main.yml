@@ -61,7 +61,7 @@ jobs:
           sentry-cli sourcemaps upload --org cotato-fe --project cotato build
 
       - name: Save Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: |
