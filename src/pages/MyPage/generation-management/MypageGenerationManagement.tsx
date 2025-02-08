@@ -4,6 +4,7 @@ import MypageGenerationManagementAddButton from './MypageGenerationManagementAdd
 import MypageGenerationManagementContent from './MypageGenerationManagementContent';
 import GenerationManagementImage from '@/pages/MyPage/tempAsssets/generation_management.svg';
 import MypageCommonLayout from '../components/common/MypageCommonLayout';
+import { SizeStateEnum } from '@components/CotatoPanel';
 
 //
 //
@@ -14,7 +15,7 @@ const MypageGenerationManagement = () => {
     <MypageCommonLayout
       slotProps={{
         header: {
-          panelSize: 'long',
+          panelSize: SizeStateEnum.LONG,
           textImgSrc: GenerationManagementImage,
         },
       }}
