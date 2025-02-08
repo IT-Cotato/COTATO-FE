@@ -1,5 +1,18 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
+export interface CotatoApiResponse<T> {
+  code: string;
+  message: string;
+  response: T;
+}
+
+export interface CotatoApiErrorResponse {
+  data: {
+    code: string;
+    message: string;
+  };
+}
+
 const api = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   withCredentials: true,
