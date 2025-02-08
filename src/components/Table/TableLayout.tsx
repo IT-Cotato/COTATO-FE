@@ -29,8 +29,8 @@ const CenterAlignedTableCell: React.FC<TableCellProps> = ({ children, ...props }
   );
 };
 
-const StyledTableCell = styled(CenterAlignedTableCell)`
-  width: 20%;
+const StyledTableCell = styled(CenterAlignedTableCell)<{ width?: string }>`
+  width: ${({ width }) => (width ? width : '20%')};
   border-bottom: 1px solid ${({ theme }) => theme.colors.primary60} !important;
 `;
 

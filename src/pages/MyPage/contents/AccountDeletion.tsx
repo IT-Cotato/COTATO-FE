@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AccountDeletionModal } from '../components/AccountDeletion';
 import AccountDeletionImage from '@/pages/MyPage/tempAsssets/Text/AccountDeletion.svg';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import { Header } from './style';
 import BackButton from '../components/common/BackButton';
 
@@ -34,7 +34,7 @@ const AccountDeletion = () => {
       <ContentContainer>
         <Header>
           <BackButton />
-          <CotatoPanel size={'short'} textImgSrc={AccountDeletionImage} />
+          <CotatoPanel size={SizeStateEnum.SHORT} textImgSrc={AccountDeletionImage} />
         </Header>
         <NotificationContainer>
           <Notification>

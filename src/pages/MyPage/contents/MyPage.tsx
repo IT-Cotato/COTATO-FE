@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { InfoSection, ProfileCard } from '../components/Mypage';
 import { media } from '@theme/media';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import MyPageImage from '@/pages/MyPage/tempAsssets/Text/MyPage.svg';
 import { Header } from './style';
 
@@ -14,7 +14,7 @@ const MyPage = () => {
   return (
     <>
       <Header>
-        <CotatoPanel size={'default'} textImgSrc={MyPageImage} />
+        <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={MyPageImage} />
       </Header>
       <ContentContainer>
         <ProfileCard />

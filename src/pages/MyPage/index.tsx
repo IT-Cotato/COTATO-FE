@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MyPageRouter from './MyPageRouter';
 import useUser from '@/hooks/useUser';
@@ -11,14 +11,18 @@ import { media } from '@theme/media';
 //
 
 const MyPage = () => {
-  const { user } = useUser();
+  const { user, isUserLoading } = useUser();
 
   const navigate = useNavigate();
 
-  //로그인 되어있지 않다면 홈으로 리다이렉트
-  if (!user) {
-    navigate('/');
-  }
+  //
+  //
+  //
+  useEffect(() => {
+    if (!user && !isUserLoading) {
+      navigate('/');
+    }
+  }, [user, isUserLoading, navigate]);
 
   return (
     <FlexBox>
