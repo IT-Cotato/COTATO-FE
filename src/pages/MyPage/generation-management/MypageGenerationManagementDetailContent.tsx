@@ -11,7 +11,7 @@ import CotatoIcon from '@components/CotatoIcon';
 import CotatoMuiButton from '@components/CotatoMuiButton';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useGenerationsPeriodPatchMutate } from '../hooks/useGenerationsPeriodPatch';
+import { useGenerationsPeriodPatchMutation } from '../hooks/useGenerationsPeriodPatchMutation';
 import MypageGenerationManagementDetailContentMemberInfo from './MypageGenerationManagementDetailContentMemberInfo';
 
 //
@@ -23,7 +23,7 @@ const MypageGenerationManagementDetailContent = () => {
   const theme = useTheme();
 
   //
-  const { mutateGenerationsPeriodPatch } = useGenerationsPeriodPatchMutate({
+  const { mutateGenerationsPeriodPatch } = useGenerationsPeriodPatchMutation({
     generationId: Number(params.generationId),
   });
 
