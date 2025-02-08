@@ -16,7 +16,7 @@ import { media } from '@theme/media';
 const AttendanceReportSubFilterActions = () => {
   //
   const { currentStatus, toggleStatus } = useAttendanceReportFilter();
-  const { isMobileOrSmaller } = useBreakpoints();
+  const { isMobileOrSmaller, isLandScapeOrSmaller } = useBreakpoints();
 
   /**
    *
@@ -35,7 +35,7 @@ const AttendanceReportSubFilterActions = () => {
   //
   //
   return (
-    <Stack direction="row" width="100%" height="3rem" gap="1rem">
+    <Stack direction="row" width={isLandScapeOrSmaller ? '100%' : 'auto'} height="3rem" gap="1rem">
       {STATUS_ASSETS.map(({ status, icon, text }) => (
         <StyledButton
           key={status}
