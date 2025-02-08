@@ -7,7 +7,10 @@ import {
   PolicyCheck,
   RegistrationManagement,
 } from './contents';
-import { MypageGenerationManagement } from './generation-management';
+import {
+  MypageGenerationManagement,
+  MypageGenerationManagementDetail,
+} from './generation-management';
 
 //
 //
@@ -24,6 +27,10 @@ export const MY_PAGE_PATH = {
   GENERATION_MANAGEMENT: 'generation-management',
 } as const;
 
+export const COMMON_PATH = {
+  GENERATION: 'generations/:generationId',
+} as const;
+
 //
 //
 //
@@ -38,6 +45,11 @@ const MyPageRouter = () => {
         element={<AccountDeletion />}
       />
       <Route path={MY_PAGE_PATH.GENERATION_MANAGEMENT} element={<MypageGenerationManagement />} />
+      <Route
+        path={`${MY_PAGE_PATH.GENERATION_MANAGEMENT}/${COMMON_PATH.GENERATION}`}
+        element={<MypageGenerationManagementDetail />}
+      />
+
       <Route path={MY_PAGE_PATH.MEMBERS} element={<MemberManagement />} />
       <Route path={MY_PAGE_PATH.REGISTRATION} element={<RegistrationManagement />} />
     </Routes>

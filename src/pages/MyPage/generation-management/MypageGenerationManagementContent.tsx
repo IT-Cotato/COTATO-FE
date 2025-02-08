@@ -19,7 +19,7 @@ const MypageGenerationManagementContent = () => {
    *
    */
   const handleClickGeneration = (generationId: number) => {
-    navigate(`/mypage/generation-management/${generationId}`);
+    navigate(`/mypage/generation-management/generations/${generationId}`);
   };
 
   //
