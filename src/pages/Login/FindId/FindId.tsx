@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
@@ -7,6 +7,7 @@ import panelText from '@assets/find_id_panel_text.svg';
 import CotatoButton from '@components/CotatoButton';
 import CotatoIcon from '@components/CotatoIcon';
 import { media } from '@theme/media';
+import FindIdResult from './FindIdResult';
 
 //
 //
@@ -134,13 +135,15 @@ const FindId = () => {
     );
   };
 
-  useEffect(() => {
-    console.log(isName, isTel);
-  }, [isName, isTel]);
+  /**
+   *
+   */
+  const renderFindId = () => {
+    if (showResult) {
+      return;
+    }
 
-  return (
-    <Wrapper>
-      <CotatoPanel size="long" textImgSrc={panelText} />
+    return (
       <Form onSubmit={handleSubmit}>
         <InputDiv>
           <Label>
@@ -178,6 +181,25 @@ const FindId = () => {
         </InputDiv>
         <CotatoButton isEnabled={true} buttonStyle="line" text="아이디 찾기" />
       </Form>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderFindIdResult = () => {
+    if (!showResult) {
+      return;
+    }
+
+    return <FindIdResult userName={name} userId={id} />;
+  };
+
+  return (
+    <Wrapper>
+      <CotatoPanel size="long" textImgSrc={panelText} />
+      {renderFindId()}
+      {renderFindIdResult()}
     </Wrapper>
   );
 };
