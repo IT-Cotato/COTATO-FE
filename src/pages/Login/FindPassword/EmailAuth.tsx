@@ -169,7 +169,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
       .then(() => {
         alert('인증 이메일이 재발송되었습니다.');
       })
-      .catch((err) => {
+      .catch(() => {
         alert('인증 이메일 재발송에 실패했습니다.');
       });
   };
@@ -251,12 +251,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
       {renderGuideMessage()}
       {renderInputField()}
       {renderInfoMessage()}
-      <CotatoButton
-        isEnabled={true}
-        buttonStyle="line"
-        text="인증 완료"
-        handleClick={handleSubmit}
-      />
+      <CotatoButton isEnabled={true} buttonStyle="line" text="인증 완료" onClick={handleSubmit} />
       {renderResendSection()}
     </Wrapper>
   );

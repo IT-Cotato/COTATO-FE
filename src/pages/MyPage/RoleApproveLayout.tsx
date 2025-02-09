@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
-import fetcher from '@utils/fetcher';
 import { useNavigate } from 'react-router-dom';
-import useSWR from 'swr';
 import { styled } from 'styled-components';
 import { CardContent } from '@mui/material';
+import { checkIsAtLeastAdmin } from '@utils/role';
+import useUser from '@/hooks/useUser';
 
 interface Props {
   headerText: string;
@@ -11,11 +11,11 @@ interface Props {
 }
 
 const RoleApproveLayout = ({ headerText, children }: Props) => {
-  const { data: user } = useSWR('/v1/api/member/info', fetcher);
+  const { user } = useUser();
 
   const navigate = useNavigate();
 
-  if (user?.role !== 'ADMIN') {
+  if (!checkIsAtLeastAdmin(user?.role)) {
     navigate('/mypage');
   }
 

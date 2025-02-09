@@ -250,7 +250,7 @@ const ResetPassword = () => {
         isEnabled={true}
         buttonStyle="line"
         text="비밀번호 재설정"
-        handleClick={handleSubmit}
+        onClick={handleSubmit}
       />
     </Wrapper>
   );

@@ -11,6 +11,7 @@ import { useGeneration } from '@/hooks/useGeneration';
 import useUser from '@/hooks/useUser';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
+import { checkIsAtLeastManager } from '@utils/role';
 
 const CSHome = () => {
   const { generationId } = useParams();

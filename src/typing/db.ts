@@ -1,10 +1,3 @@
-export interface MemberData {
-  memberId: number;
-  name: string;
-  backFourNumber: number;
-  role: 'ADMIN' | 'EDUCATION' | 'GENERAL' | 'MEMBER' | 'OLD_MEMBER' | 'REFUSED' | 'OPERATION';
-}
-
 export interface Multiples {
   number: number;
   question: string;

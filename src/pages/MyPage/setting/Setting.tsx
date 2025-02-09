@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import useSWR from 'swr';
 import { FlexBox, MyPageHeader, MyPageWrapper } from '@pages/MyPage/MyInfo';
 import GenerationModal from '@pages/MyPage/setting/GenerationModal';
+import { checkIsAtLeastAdmin } from '@utils/role';
 
 //
 //
@@ -31,7 +32,7 @@ const Setting = () => {
         <MyPageHeader>
           <h1>시스템 설정</h1>
         </MyPageHeader>
-        {user?.role === 'ADMIN' && (
+        {checkIsAtLeastAdmin(user?.role) && (
           <ButtonContainer>
             <p>기수를 추가하기</p>
             <Button background="#477FEB" onClick={() => setModalOpen(true)}>
