@@ -22,6 +22,7 @@ import { toast } from 'react-toastify';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGeneration } from '@/hooks/useGeneration';
 import getDateString from '@utils/getDateString';
+import { checkIsAtLeastAdmin } from '@utils/role';
 
 //
 //
@@ -288,7 +289,7 @@ const SessionHome = () => {
             onChange={handleGenerationChange}
           />
         )}
-        {checkIsAtLeastAdmin(user?.role) && !isTabletOrSmaller && (
+        {checkIsAtLeastAdmin(userData?.role) && !isTabletOrSmaller && (
           <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
         )}
       </SettingTab>
