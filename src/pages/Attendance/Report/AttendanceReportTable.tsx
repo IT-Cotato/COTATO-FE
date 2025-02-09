@@ -37,9 +37,10 @@ const AttendanceReportTable = () => {
   const attendanceId = currentAttendance?.attendanceId;
 
   //
-  const { attendancesAttendanceIdRecords } = useAttendancesAttendanceIdRecordsGet({
-    attendanceId: attendanceId ?? 0,
-  });
+  const { attendancesAttendanceIdRecords, isAttendancesAttendanceIdRecordsLoading } =
+    useAttendancesAttendanceIdRecordsGet({
+      attendanceId: attendanceId ?? 0,
+    });
 
   //
   const [currentRecords, setCurrentRecords] = React.useState(attendancesAttendanceIdRecords);
@@ -48,7 +49,7 @@ const AttendanceReportTable = () => {
   //
   //
   useEffect(() => {
-    if (!attendancesAttendanceIdRecords) {
+    if (!attendancesAttendanceIdRecords || isAttendancesAttendanceIdRecordsLoading) {
       return;
     }
 

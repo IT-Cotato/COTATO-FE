@@ -1,5 +1,5 @@
 import { CotatoChangeGenerationPeriodRequest } from 'cotato-openapi-clients';
-import useSWR, { mutate as globalMutate } from 'swr';
+import { mutate as globalMutate } from 'swr';
 import api, { CotatoApiErrorResponse, CotatoApiResponse } from '@/api/api';
 import { toast } from 'react-toastify';
 

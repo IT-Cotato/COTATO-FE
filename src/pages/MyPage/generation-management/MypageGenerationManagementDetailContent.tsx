@@ -243,7 +243,7 @@ const MypageGenerationManagementDetailContent = () => {
   //
 
   return (
-    <Stack>
+    <Stack gap="4rem">
       <StyledCard>
         <Stack gap="1.5rem">
           {renderTitle()}
