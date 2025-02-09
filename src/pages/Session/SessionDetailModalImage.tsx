@@ -8,6 +8,8 @@ import 'swiper/css/pagination';
 import { CotatoSessionListImageInfoResponse } from 'cotato-openapi-clients';
 import { Skeleton } from '@mui/material';
 import { media } from '@theme/media';
+import imageSortByOrder from '@utils/imageSortByOrder';
+import { SessionListImageInfo } from '@/typing/session';
 
 //
 //
@@ -46,7 +48,7 @@ const SessionDetailModalImage = ({ imageList }: SessionDetailModalImageProps) =>
         clickable: false,
       }}
     >
-      {imageList?.map((image, index) => (
+      {imageSortByOrder(imageList as SessionListImageInfo[]).map((image, index) => (
         <StyledSwiperSlide key={index}>
           {imageLoading && (
             <Skeleton

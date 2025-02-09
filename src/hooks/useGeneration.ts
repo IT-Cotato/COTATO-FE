@@ -17,7 +17,15 @@ interface UseGenerationReturn {
   generations: CotatoGenerationInfoResponse[] | undefined;
   isGenerationLoading: boolean;
   isGenerationError: any;
+  mutateGenerations: () => void;
+  mutateCurrentGeneration: () => void;
 }
+
+//
+//
+//
+
+const MAX_RETRY_COUNT = 5;
 
 //
 //
@@ -30,20 +38,24 @@ export function useGeneration({ generationId }: UseGenerationParams = {}): UseGe
     data: generationData,
     isLoading: isGenerationLoading,
     error: isGenerationError,
+    mutate: mutateGenerations,
   } = useSWR<CotatoGenerationInfoResponse[]>('/v1/api/generations', fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
+    errorRetryCount: MAX_RETRY_COUNT,
   });
 
   const {
     data: currentGenerationData,
     isLoading: isCurrentGenerationLoading,
     error: currentGenerationError,
+    mutate: mutateCurrentGeneration,
   } = useSWR<CotatoGenerationInfoResponse>('/v1/api/generations/current', fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
+    errorRetryCount: MAX_RETRY_COUNT,
   });
 
   const currentGeneration = currentGenerationData;
@@ -61,6 +73,8 @@ export function useGeneration({ generationId }: UseGenerationParams = {}): UseGe
   _return.current.generations = generationData;
   _return.current.isGenerationLoading = isGenerationLoading || isCurrentGenerationLoading;
   _return.current.isGenerationError = isGenerationError || currentGenerationError;
+  _return.current.mutateGenerations = mutateGenerations;
+  _return.current.mutateCurrentGeneration = mutateCurrentGeneration;
 
   return _return.current;
 }

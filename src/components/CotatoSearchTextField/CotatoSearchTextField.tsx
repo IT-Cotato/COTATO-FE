@@ -7,7 +7,18 @@ import { useTheme } from 'styled-components';
 //
 //
 
-const CotatoTextField = ({ ...props }: TextFieldProps) => {
+type CotatoSearchTextFieldProps = TextFieldProps & {
+  isEndAdornment?: boolean;
+};
+
+//
+//
+//
+
+const CotatoSearchTextField = ({
+  isEndAdornment = false,
+  ...props
+}: CotatoSearchTextFieldProps) => {
   const theme = useTheme();
 
   /**
@@ -22,6 +33,31 @@ const CotatoTextField = ({ ...props }: TextFieldProps) => {
     props.onChange?.(event);
   };
 
+  /**
+   *
+   */
+  const renderAdornment = () => {
+    return (
+      <Box width="1.25rem" display="flex" justifyContent="center" alignItems="center">
+        <CotatoIcon icon="search" color={(theme) => theme.colors.common.black} size="1.25rem" />
+      </Box>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderClearButton = () => {
+    if (!props.value) {
+      return null;
+    }
+
+    return (
+      <IconButton onClick={handleClear}>
+        <CotatoIcon icon="times" color={(theme) => theme.colors.common.black} size="1rem" />
+      </IconButton>
+    );
+  };
   //
   //
   //
@@ -31,20 +67,8 @@ const CotatoTextField = ({ ...props }: TextFieldProps) => {
       variant="standard"
       slotProps={{
         input: {
-          startAdornment: (
-            <Box width="1.25rem" display="flex" justifyContent="center" alignItems="center">
-              <CotatoIcon
-                icon="search"
-                color={(theme) => theme.colors.common.black}
-                size="1.25rem"
-              />
-            </Box>
-          ),
-          endAdornment: props.value ? (
-            <IconButton onClick={handleClear}>
-              <CotatoIcon icon="times" color={(theme) => theme.colors.common.black} size="1rem" />
-            </IconButton>
-          ) : null,
+          startAdornment: isEndAdornment ? null : renderAdornment(),
+          endAdornment: isEndAdornment ? renderAdornment() : renderClearButton(),
         },
       }}
       sx={{
@@ -70,4 +94,4 @@ const CotatoTextField = ({ ...props }: TextFieldProps) => {
   );
 };
 
-export default CotatoTextField;
+export default CotatoSearchTextField;

@@ -51,7 +51,6 @@ const AttendanceAttend: React.FC = () => {
 
   const geolocationOptions = {
     enableHighAccuracy: true,
-    timeout: 1000 * 10,
   };
 
   const sessionId = Number(params.sessionId);

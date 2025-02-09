@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import panelText from '@assets/find_password_reset_password_panel_text.svg';
 import CotatoIcon from '@components/CotatoIcon';
 import CotatoButton from '@components/CotatoButton';
@@ -244,7 +244,7 @@ const ResetPassword = () => {
 
   return (
     <Wrapper>
-      <CotatoPanel size="default" textImgSrc={panelText} />
+      <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={panelText} />
       {renderInputField()}
       <CotatoButton
         isEnabled={true}

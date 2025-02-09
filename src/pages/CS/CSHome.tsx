@@ -86,12 +86,14 @@ const CSHome = () => {
         <CSWrapper>
           <CSHeader>CS 문제풀이</CSHeader>
           <CSSetting>
-            <CotatoDropBox
-              list={generations}
-              onChange={onChangeGeneration}
-              title={(generation) => generation?.generationNumber + '기'}
-            />
-            {(user?.role === 'ADMIN' || user?.role === 'EDUCATION') && (
+            {generations && (
+              <CotatoDropBox
+                list={generations}
+                title={(generation) => generation?.generationNumber + '기'}
+                onChange={onChangeGeneration}
+              />
+            )}
+            {checkIsAtLeastManager(user?.role) && (
               <ButtonWrapper>
                 <IconButton onClick={onClickAddButton}>
                   <CotatoIcon icon="plus" color={(theme) => theme.colors.sub2[40]} />
@@ -124,7 +126,7 @@ const CSHome = () => {
         educatoin={modifyEducation}
         generationId={selectedGeneration?.generationId}
         fetchEducations={fetchEducations}
-        sessionCount={selectedGeneration?.sessionCount}
+        // sessionCount={selectedGeneration?.sessionCount}
       />
     </>
   );
