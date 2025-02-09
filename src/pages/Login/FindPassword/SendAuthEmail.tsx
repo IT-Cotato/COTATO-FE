@@ -171,7 +171,7 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
         isEnabled={true}
         buttonStyle="line"
         text="인증 이메일 보내기"
-        handleClick={handleSubmit}
+        onClick={handleSubmit}
       />
     </Wrapper>
   );
