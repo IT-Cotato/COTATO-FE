@@ -74,7 +74,9 @@ const StyledButton = styled.button<{ isEnabled: boolean; buttonStyle: string | u
   border-color: ${({ theme }) => theme.colors.primary100_1};
   font-size: ${({ theme }) => theme.fontSize.md};
   color: ${({ buttonStyle, theme }) =>
-    buttonStyle === 'filled' ? theme.colors.common.black_const : theme.colors.common.black};
+    buttonStyle === 'filled'
+      ? theme.colors.common.black_const
+      : theme.colors.common.black} !important;
   ${({ isEnabled, buttonStyle, theme }) =>
     isEnabled ? BUTTON_STYLE(theme, buttonStyle).enabled : BUTTON_STYLE(theme).disabled};
 `;
