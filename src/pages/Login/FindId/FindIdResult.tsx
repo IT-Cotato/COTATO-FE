@@ -70,6 +70,7 @@ const ResultContainer = styled.div`
   p {
     font-family: Pretendard;
     font-size: ${({ theme }) => theme.fontSize.xl};
+    color: ${({ theme }) => theme.colors.common.black};
     font-weight: 800;
     margin: 0;
   }
