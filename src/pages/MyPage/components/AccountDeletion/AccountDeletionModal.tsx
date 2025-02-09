@@ -1,4 +1,4 @@
-import { Button, Dialog, Input, TextField } from '@mui/material';
+import { Button, Dialog, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Close } from '@/pages/MyPage/tempAsssets/close_button.svg';
