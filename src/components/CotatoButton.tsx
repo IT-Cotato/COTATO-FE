@@ -5,21 +5,12 @@ import styled from 'styled-components';
 //
 //
 
-interface EnabledButtonProps {
-  isEnabled: true;
-  buttonStyle: 'filled' | 'line';
+interface CotatoButtonProps {
+  isEnabled: boolean;
+  buttonStyle?: 'filled' | 'line';
   text: string;
   handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
-
-interface DisabledButtonProps {
-  isEnabled: false;
-  buttonStyle?: never;
-  text: string;
-  handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
-}
-
-type CotatoButtonProps = EnabledButtonProps | DisabledButtonProps;
 
 //
 //
@@ -56,9 +47,7 @@ const getBackgroundColor = (theme: any, style: string) => {
 };
 
 /**
- * if the isEnabled prop should be a state value, you can use it like this:
- * @example <CotatoButton isEnabled={isEnabled as false} text="button text" handleClick={handleClick} />
- * 
+ * cotato button component
  * @param isEnabled button enable or disable
  * @param buttonStyle enabled button style - filled, line
  * @param text button text
