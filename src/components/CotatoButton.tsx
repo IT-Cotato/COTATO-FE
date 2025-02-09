@@ -6,14 +6,14 @@ import styled from 'styled-components';
 //
 
 interface EnabledButtonProps {
-  isEnabled: true;
+  isEnabled: boolean;
   buttonStyle: 'filled' | 'line';
   text: string;
   handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
 
 interface DisabledButtonProps {
-  isEnabled: false;
+  isEnabled: boolean;
   buttonStyle?: never;
   text: string;
   handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
