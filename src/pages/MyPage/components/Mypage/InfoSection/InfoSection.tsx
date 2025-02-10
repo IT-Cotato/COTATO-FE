@@ -15,7 +15,7 @@ const InfoSection = () => {
   return (
     <InfoSectionContainer>
       <AccountSection email={form.email} phoneNum={form.phoneNumber} />
-      <ManageSection />
+      {user?.role !== 'MEMBER' && <ManageSection />}
     </InfoSectionContainer>
   );
 };
