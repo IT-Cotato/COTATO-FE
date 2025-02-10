@@ -33,7 +33,7 @@ const InfoSectionContainer = styled.div`
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
-  gap: 2.25rem;
+  gap: 0.75rem;
   ${media.tablet`
     flex: none;
     min-width: 16rem;

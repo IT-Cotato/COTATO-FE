@@ -80,8 +80,8 @@ const ProfileImageSection = ({
 //
 
 const ProfileImage = styled.div<{ src: string }>`
-  width: 15rem;
-  height: 15rem;
+  width: 11.25rem;
+  height: 11.25rem;
   border-radius: 15rem;
   background-image: url(${({ src }) => src});
   background-size: cover;
@@ -89,8 +89,8 @@ const ProfileImage = styled.div<{ src: string }>`
 
 const ProfileImageInput = styled.input`
   position: absolute;
-  width: 15rem;
-  height: 15rem;
+  width: 11.25rem;
+  height: 11.25rem;
   border-radius: 15rem;
   top: 0;
   background-color: gray;
