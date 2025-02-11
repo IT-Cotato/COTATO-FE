@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import fetcher from '@utils/fetcher';
 import { styled } from 'styled-components';
 import useSWR from 'swr';
-import { FlexBox, MyPageHeader, MyPageWrapper } from '@pages/MyPage/MyPage';
 import GenerationModal from '@pages/MyPage/setting/GenerationModal';
 import { checkIsAtLeastAdmin } from '@utils/role';
+import { FlexBox } from '..';
 
 //
 //
@@ -47,6 +47,35 @@ const Setting = () => {
 };
 
 export default Setting;
+
+export const MyPageWrapper = styled.div`
+  max-width: 920px;
+  width: 80%;
+  min-height: 100vh;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 20px;
+  }
+`;
+
+export const MyPageHeader = styled.div`
+  margin: 120px 0 48px;
+
+  @media screen and (max-width: 768px) {
+    margin: 72px 0 40px;
+  }
+
+  > h1 {
+    color: ${({ theme }) => theme.colors.common.black};
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  > p {
+    margin-top: 8px;
+  }
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
