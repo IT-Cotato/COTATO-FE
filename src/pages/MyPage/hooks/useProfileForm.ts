@@ -61,7 +61,7 @@ export const useProfileForm = (memberId: number | undefined) => {
     };
 
     fetchMemberProfile(memberId);
-  }, []);
+  }, [memberId]);
 
   /**
    *
