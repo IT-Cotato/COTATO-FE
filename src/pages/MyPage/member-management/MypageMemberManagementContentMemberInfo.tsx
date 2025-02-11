@@ -98,6 +98,9 @@ const MypageMemberManagementContentMemberInfo = () => {
                     backgroundColor: theme.colors.primary20,
                     maxWidth: '8rem',
                   }}
+                  MenuProps={{
+                    disableScrollLock: true,
+                  }}
                   fullWidth
                   onChange={() => {}}
                 >
