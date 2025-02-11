@@ -28,6 +28,9 @@ const COTATO_CHARCTER_SVG_MAP: Record<CotatoMemberInfoResponsePositionEnum, stri
 
 interface ProfileImageSectionProps {
   position?: CotatoMemberInfoResponsePositionEnum;
+  onImageChange: (file: File) => void;
+  isModifying: boolean;
+  value: File | string | null;
 }
 
 //
@@ -38,11 +41,37 @@ interface ProfileImageSectionProps {
  * 프로필 이미지 영역
  * @param position 사용자의 파트
  */
-const ProfileImageSection = ({ position }: ProfileImageSectionProps) => {
+const ProfileImageSection = ({
+  position,
+  onImageChange,
+  isModifying,
+  value,
+}: ProfileImageSectionProps) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onImageChange(file);
+    }
+  };
+
   return (
-    <ProfileImage
-      src={COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]}
-    />
+    <div style={{ position: 'relative' }}>
+      <ProfileImage
+        src={
+          value
+            ? (value as string)
+            : COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]
+        }
+      />
+      {isModifying && (
+        <ProfileImageInput
+          type="file"
+          accept="image/png, image/jpeg"
+          onChange={handleFileChange}
+          id="profile-image-input"
+        />
+      )}
+    </div>
   );
 };
 
@@ -51,11 +80,21 @@ const ProfileImageSection = ({ position }: ProfileImageSectionProps) => {
 //
 
 const ProfileImage = styled.div<{ src: string }>`
-  width: 15rem;
-  height: 15rem;
+  width: 11.25rem;
+  height: 11.25rem;
   border-radius: 15rem;
   background-image: url(${({ src }) => src});
   background-size: cover;
+`;
+
+const ProfileImageInput = styled.input`
+  position: absolute;
+  width: 11.25rem;
+  height: 11.25rem;
+  border-radius: 15rem;
+  top: 0;
+  background-color: gray;
+  opacity: 0.5;
 `;
 
 export default ProfileImageSection;

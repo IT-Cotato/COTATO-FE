@@ -5,21 +5,12 @@ import styled from 'styled-components';
 //
 //
 
-interface EnabledButtonProps {
+interface CotatoButtonProps {
   isEnabled: boolean;
-  buttonStyle: 'filled' | 'line';
+  buttonStyle: 'filled' | 'line' | undefined;
   text: string;
   handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
-
-interface DisabledButtonProps {
-  isEnabled: boolean;
-  buttonStyle?: never;
-  text: string;
-  handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
-}
-
-type CotatoButtonProps = EnabledButtonProps | DisabledButtonProps;
 
 //
 //
@@ -69,7 +60,12 @@ const CotatoButton: React.FC<CotatoButtonProps> = ({
   handleClick,
 }) => {
   return (
-    <StyledButton isEnabled={isEnabled} buttonStyle={buttonStyle} onClick={handleClick}>
+    <StyledButton
+      isEnabled={isEnabled}
+      buttonStyle={buttonStyle}
+      onClick={handleClick}
+      disabled={!isEnabled}
+    >
       {text}
     </StyledButton>
   );

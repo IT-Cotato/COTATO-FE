@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import {
   ProfileCardSection,
   ProfileCardSectionTitle,
@@ -12,6 +12,8 @@ import {
 
 interface IntroductionSectionProps {
   isModifying: boolean;
+  value: string;
+  onChange: (value: string) => void;
 }
 
 //
@@ -22,12 +24,16 @@ interface IntroductionSectionProps {
  * 자기소개 영역
  * @param isModifying 수정중인 상태
  */
-const IntroductionSection = ({ isModifying }: IntroductionSectionProps) => {
+const IntroductionSection = ({ isModifying, value, onChange }: IntroductionSectionProps) => {
   return (
     <ProfileCardSection>
       <ProfileCardSectionTitle>자기소개</ProfileCardSectionTitle>
       <ProfileCardStringInputSection>
-        <ProfileInput disabled={!isModifying} />
+        <ProfileInput
+          disabled={!isModifying}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
       </ProfileCardStringInputSection>
     </ProfileCardSection>
   );
