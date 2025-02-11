@@ -37,9 +37,23 @@ export const useProfileForm = (memberId: number | undefined) => {
     const fetchMemberProfile = async (memberId: number | undefined) => {
       try {
         const response = await api.get(`/v1/api/member/${memberId}/profile`);
+
         setForm((prev) => ({
           ...prev,
           ...response.data,
+          profileLinks: [
+            {
+              urlType: 'GITHUB',
+              url:
+                response.data.profileLinks.find((link: any) => link.urlType === 'GITHUB')?.url ??
+                '',
+            },
+            {
+              urlType: 'BLOG',
+              url:
+                response.data.profileLinks.find((link: any) => link.urlType === 'BLOG')?.url ?? '',
+            },
+          ],
         }));
       } catch (error) {
         console.error('Failed to fetch member info:', error);
