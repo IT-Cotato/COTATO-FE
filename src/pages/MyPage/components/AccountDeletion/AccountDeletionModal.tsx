@@ -2,45 +2,44 @@ import { Button, Dialog, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Close } from '@/pages/MyPage/tempAsssets/close_button.svg';
+import CotatoButton from '@components/CotatoButton';
 
 //
 //
 //
 
-//임시 상수값
-const DUMMY_ID = '11';
-const DUMMY_PASSWORD = '11';
-
-//
-//
-//
-
-interface AccoutDeletionModalProps {
-  open: boolean;
-  onClose: () => void;
+interface DeactivationForm {
+  email: string;
+  password: string;
+  isTermsAgreed: boolean;
 }
 
+interface AccountDeletionModalProps {
+  open: boolean;
+  onClose: () => void;
+  form: DeactivationForm;
+  updateForm: (field: keyof DeactivationForm, value: string | boolean) => void;
+  deactivateAccount: () => Promise<boolean | undefined>;
+}
 //
 //
 //
 
-const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
-  const [inputId, setInputId] = useState('');
-  const [inputPassword, setInputPassword] = useState('');
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-
-  //임시 로직
-  useEffect(() => {
-    const isValid = inputId === DUMMY_ID && inputPassword === DUMMY_PASSWORD;
-    setIsButtonEnabled(isValid);
-  }, [inputId, inputPassword]);
-
-  const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputId(event.target.value);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputPassword(event.target.value);
+const AccountDeletionModal = ({
+  open,
+  onClose,
+  form,
+  updateForm,
+  deactivateAccount,
+}: AccountDeletionModalProps) => {
+  /**
+   *
+   */
+  const handleDeactivateClick = async () => {
+    const success = await deactivateAccount();
+    if (success) {
+      onClose();
+    }
   };
 
   return (
@@ -54,17 +53,27 @@ const AccountDeletionModal = ({ open, onClose }: AccoutDeletionModalProps) => {
         <FormSection>
           <FormItem>
             <p style={{ margin: 0 }}>아이디</p>
-            <ProfileInput value={inputId} onChange={handleIdChange} />
+            <ProfileInput
+              value={form.email}
+              onChange={(e) => updateForm('email', e.target.value)}
+            />
           </FormItem>
           <FormItem>
             <p style={{ margin: 0 }}>비밀번호</p>
-            <ProfileInput type="password" value={inputPassword} onChange={handlePasswordChange} />
+            <ProfileInput
+              type="password"
+              value={form.password}
+              onChange={(e) => updateForm('password', e.target.value)}
+            />
           </FormItem>
         </FormSection>
         <ButtonSection>
-          <Button variant="contained" disabled={!isButtonEnabled}>
-            탈퇴하기
-          </Button>
+          <CotatoButton
+            isEnabled={form.email !== '' && form.password !== ''}
+            buttonStyle="filled"
+            text={'탈퇴하기'}
+            onClick={handleDeactivateClick}
+          />
         </ButtonSection>
       </ModalContainer>
     </Dialog>

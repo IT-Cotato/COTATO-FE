@@ -45,14 +45,10 @@ export const ProfileInput = styled(TextField)<{ isPrimary?: boolean }>`
 
   & .MuiInputBase-sizeSmall {
     height: 1.75rem;
-
-    & .MuiInputBase-input {
-      padding: 0.25rem 0.75rem;
-    }
   }
 
   & .MuiInputBase-input {
-    padding: 0.875rem 0.75rem;
+    padding: 0.75rem 0.75rem;
   }
 
   & .MuiInputBase-input.Mui-disabled {

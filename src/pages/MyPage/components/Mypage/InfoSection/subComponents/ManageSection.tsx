@@ -43,7 +43,7 @@ const ManageSection = () => {
 //
 
 const ManageSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`
-  padding: 1.875rem 1.25rem;
+  padding: 1.25rem 0.75rem;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'cursor')};
   font-size: ${({ theme }) => theme.fontSize.lg};
   font-weight: 600;

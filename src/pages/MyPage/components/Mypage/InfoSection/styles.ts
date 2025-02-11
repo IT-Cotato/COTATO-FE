@@ -7,7 +7,6 @@ export const SectionContainer = styled.div`
   align-items: flex-start;
   gap: 2.25rem;
   align-self: stretch;
-  background-color: white;
   border-radius: 1rem;
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
