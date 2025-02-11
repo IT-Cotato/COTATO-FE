@@ -7,6 +7,7 @@ import styled, { useTheme } from 'styled-components';
 import CheckBox from '@mui/material/Checkbox';
 import {
   CotatoAttendanceWithSessionResponse,
+  CotatoAttendanceWithSessionResponseOpenStatusEnum,
   CotatoAttendanceWithSessionResponseSessionTypeEnum,
 } from 'cotato-openapi-clients';
 import api from '@/api/api';
@@ -45,10 +46,18 @@ const AttendanceReportExcelExportModal = ({
       attendanceId: 0,
       sessionTitle: '전체',
       sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.NoAttend,
+      openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
     } as CotatoAttendanceWithSessionResponse,
   ].concat([...(attendances?.attendances || [])].reverse() || []);
 
   const theme = useTheme();
+
+  /**
+   *
+   */
+  const isDisableExportAttendance = (attendance: CotatoAttendanceWithSessionResponse) => {
+    return attendance.openStatus !== CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed;
+  };
 
   /**
    *
@@ -58,7 +67,12 @@ const AttendanceReportExcelExportModal = ({
       if (checkedAttendances.some((a) => a.sessionId === ALL_SESSION_ID)) {
         setCheckedAttendances([]);
       } else {
-        setCheckedAttendances([...attendancesWithAll]);
+        // setCheckedAttendances([...attendancesWithAll]);
+        setCheckedAttendances(
+          attendancesWithAll.filter(
+            (a) => a.openStatus === CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
+          ),
+        );
       }
     } else {
       if (checkedAttendances.some((a) => a.sessionId === ALL_SESSION_ID)) {
@@ -171,11 +185,11 @@ const AttendanceReportExcelExportModal = ({
           overflowY: 'auto',
         }}
       >
-        {attendancesWithAll.map((attendance, index) => (
+        {attendancesWithAll.map((attendance) => (
           <Button
             key={attendance.sessionId}
             onClick={() => handleCheckboxChange(attendance)}
-            disabled={index === 1}
+            disabled={isDisableExportAttendance(attendance)}
           >
             <Box
               sx={{
@@ -186,7 +200,7 @@ const AttendanceReportExcelExportModal = ({
             >
               <CheckBox
                 checked={checkedAttendances.some((a) => a.sessionId === attendance.sessionId)}
-                disabled={index === 1}
+                disabled={isDisableExportAttendance(attendance)}
                 sx={{
                   padding: 0,
 
@@ -203,7 +217,9 @@ const AttendanceReportExcelExportModal = ({
                 sx={{
                   fontFamily: 'Ycomputer',
                   fontSize: '1rem',
-                  color: index === 1 ? theme.colors.gray30 : theme.colors.common.black,
+                  color: isDisableExportAttendance(attendance)
+                    ? theme.colors.gray30
+                    : theme.colors.common.black,
                 }}
               >
                 {attendance.sessionTitle}&nbsp;
