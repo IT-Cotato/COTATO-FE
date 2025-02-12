@@ -31,7 +31,7 @@ export const useOMManagement = () => {
    */
   const transferMemberIdToActive = (memberId: number) => {
     try {
-      api.patch(`/v1/api/member/${memberId}/status`);
+      api.patch(`/v1/api/member/${memberId}/status`, null, { params: { target: 'APPROVED' } });
     } catch (error) {
       console.error('Failed to patch old member to active member:', error);
     }

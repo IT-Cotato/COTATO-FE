@@ -46,7 +46,11 @@ export const useActiveMemberManagement = () => {
    */
   const transferMemberIdsToOM = (memberIds: number[]) => {
     try {
-      api.patch('/v1/api/member/status', { memberIds: memberIds });
+      api.patch(
+        '/v1/api/member/status',
+        { memberIds: memberIds },
+        { params: { target: 'RETIRE' } },
+      );
     } catch (error) {
       console.error('Failed to patch active members to old members:', error);
     }
