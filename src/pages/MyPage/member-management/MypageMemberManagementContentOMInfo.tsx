@@ -12,6 +12,7 @@ import { CotatoMemberInfoResponse } from 'cotato-openapi-clients';
 
 interface MypageMemberManagementContentOMInfoProps {
   data: CotatoMemberInfoResponse[];
+  transferMemberIdToActive: (memberId: number) => void;
 }
 
 //
@@ -26,6 +27,7 @@ const TableCell = TableLayout.TableCell;
 
 const MypageMemberManagementContentOMInfo = ({
   data,
+  transferMemberIdToActive,
 }: MypageMemberManagementContentOMInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
 
@@ -63,6 +65,7 @@ const MypageMemberManagementContentOMInfo = ({
                     backgroundColor: theme.colors.primary20,
                     maxWidth: '8rem',
                   }}
+                  onClick={() => transferMemberIdToActive(item.memberId)}
                 >
                   부원으로 전환
                 </Button>

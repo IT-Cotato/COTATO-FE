@@ -15,7 +15,7 @@ export const useActiveMemberManagement = () => {
   useEffect(() => {
     const fetchActiveMembers = async () => {
       try {
-        const response = await api.get(`/v1/api/admin/active-members`);
+        const response = await api.get(`/v1/api/member`, { params: { status: 'APPROVED' } });
         setActiveMembers(response.data);
       } catch (error) {
         console.error('Failed to fetch active members:', error);
@@ -46,7 +46,7 @@ export const useActiveMemberManagement = () => {
    */
   const transferMemberIdsToOM = (memberIds: number[]) => {
     try {
-      api.patch('/v1/api/admin/status', { memberIds: memberIds });
+      api.patch('/v1/api/member/status', { memberIds: memberIds });
     } catch (error) {
       console.error('Failed to patch active members to old members:', error);
     }

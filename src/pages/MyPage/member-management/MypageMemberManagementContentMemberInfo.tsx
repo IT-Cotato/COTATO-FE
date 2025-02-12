@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Checkbox, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
 import TableLayout from '@components/Table/TableLayout';
 import TableRenderer from '@components/Table/TableRenderer';
@@ -13,6 +13,8 @@ import { CotatoMemberInfoResponse, CotatoMemberInfoResponseRoleEnum } from 'cota
 interface MypageMemberManagementContentMemberInfoProps {
   data: CotatoMemberInfoResponse[];
   updateMemberRole: (memberId: number, newRole: CotatoMemberInfoResponseRoleEnum) => void;
+  memberIds: number[];
+  setMemberIds: Dispatch<SetStateAction<number[]>>;
 }
 
 //
@@ -28,9 +30,10 @@ const TableCell = TableLayout.TableCell;
 const MypageMemberManagementContentMemberInfo = ({
   data,
   updateMemberRole,
+  memberIds,
+  setMemberIds,
 }: MypageMemberManagementContentMemberInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
-  const [memberIds, setMemberIds] = useState<number[]>([]);
 
   const sampleHead = ['이름', '역할'];
 
@@ -54,7 +57,18 @@ const MypageMemberManagementContentMemberInfo = ({
                     fontSize: theme.fontSize.lg,
                   }}
                 >
-                  <Checkbox />
+                  <Checkbox
+                    checked={memberIds.includes(item.memberId)}
+                    onChange={(event) => {
+                      if (event.target.checked) {
+                        setMemberIds((prev) => [...prev, item.memberId]);
+                      } else {
+                        setMemberIds((prev) =>
+                          prev.filter((memberId) => memberId !== item.memberId),
+                        );
+                      }
+                    }}
+                  />
                   <span style={{ padding: '1rem 0.75rem' }}>{item.name}</span>
                 </div>
               </TableCell>

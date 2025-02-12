@@ -15,7 +15,7 @@ export const useOMManagement = () => {
   useEffect(() => {
     const fetchOMMembers = async () => {
       try {
-        const response = await api.get(`/v1/api/admin/old-members`);
+        const response = await api.get(`/v1/api/member`, { params: { status: 'RETIRED' } });
         setOMMembers(response.data);
       } catch (error) {
         console.error('Failed to fetch old members:', error);

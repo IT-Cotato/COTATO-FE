@@ -19,6 +19,8 @@ import { useOMManagement } from '../hooks/useOMManagement';
 
 const MypageMemberManagementContent = () => {
   const [currentView, setCurrentView] = useState<'MEMBER' | 'OM'>('MEMBER');
+  const [memberIds, setMemberIds] = useState<number[]>([]);
+
   const { activeMembers, updateMemberRole, transferMemberIdsToOM } = useActiveMemberManagement();
   const { OMMembers, searchOM, transferMemberIdToActive } = useOMManagement();
 
@@ -49,7 +51,11 @@ const MypageMemberManagementContent = () => {
         </Stack>
         <Stack direction="row" alignItems="center">
           {currentView === 'MEMBER' && (
-            <TagButton disabled={true}>
+            <TagButton
+              isSelected={memberIds.length > 0}
+              disabled={memberIds.length <= 0}
+              onClick={() => transferMemberIdsToOM(memberIds)}
+            >
               <Refresh />
               OM으로 전환하기
             </TagButton>
@@ -71,9 +77,16 @@ const MypageMemberManagementContent = () => {
         <MypageMemberManagementContentMemberInfo
           data={activeMembers}
           updateMemberRole={updateMemberRole}
+          memberIds={memberIds}
+          setMemberIds={setMemberIds}
         />
       )}
-      {currentView === 'OM' && <MypageMemberManagementContentOMInfo data={OMMembers} />}
+      {currentView === 'OM' && (
+        <MypageMemberManagementContentOMInfo
+          data={OMMembers}
+          transferMemberIdToActive={transferMemberIdToActive}
+        />
+      )}
     </Stack>
   );
 };
