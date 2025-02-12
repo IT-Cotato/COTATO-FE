@@ -13,7 +13,8 @@ import { Box, Button } from '@mui/material';
 
 interface CotatoTimePickerProps {
   readonly?: boolean;
-  date: Date;
+  label?: string;
+  date?: Date;
   onDateChange?: (date: Date) => void;
 }
 
@@ -23,24 +24,26 @@ interface CotatoTimePickerProps {
 
 const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
   readonly = false,
+  label,
   date,
   onDateChange,
 }) => {
   const theme = useTheme();
 
   const handleDateChange = (newDate: Dayjs | null) => {
-    if (readonly || !onDateChange) {
+    if (readonly || !onDateChange || !newDate) {
       return;
     }
 
-    onDateChange(newDate?.toDate() || date);
+    onDateChange(newDate?.toDate());
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
       <TimePicker
         readOnly={readonly}
-        value={dayjs(date)}
+        label={label}
+        value={date && dayjs(date)}
         onChange={handleDateChange}
         sx={{
           ['& .MuiFormControl-root']: {
@@ -65,6 +68,12 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           },
           ['& .Mui-disabled']: {
             '-webkit-text-fill-color': 'inherit',
+          },
+          ['& .MuiFormLabel-root']: {
+            fontFamily: 'Pretendard',
+            fontSize: '0.875rem',
+            top: '-6px',
+            left: '-4px',
           },
         }}
         slots={{
