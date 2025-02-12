@@ -1,3 +1,4 @@
+import { th } from 'date-fns/locale';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -5,21 +6,12 @@ import styled from 'styled-components';
 //
 //
 
-interface EnabledButtonProps {
-  isEnabled: true;
-  buttonStyle: 'filled' | 'line';
+interface CotatoButtonProps {
+  isEnabled: boolean;
+  buttonStyle?: 'filled' | 'line';
   text: string;
-  handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
-
-interface DisabledButtonProps {
-  isEnabled: false;
-  buttonStyle?: never;
-  text: string;
-  handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
-}
-
-type CotatoButtonProps = EnabledButtonProps | DisabledButtonProps;
 
 //
 //
@@ -60,16 +52,11 @@ const getBackgroundColor = (theme: any, style: string) => {
  * @param isEnabled button enable or disable
  * @param buttonStyle enabled button style - filled, line
  * @param text button text
- * @param handleClick button click event
+ * @param onClick button click event
  */
-const CotatoButton: React.FC<CotatoButtonProps> = ({
-  isEnabled,
-  buttonStyle,
-  text,
-  handleClick,
-}) => {
+const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, text, onClick }) => {
   return (
-    <StyledButton isEnabled={isEnabled} buttonStyle={buttonStyle} onClick={handleClick}>
+    <StyledButton isEnabled={isEnabled} buttonStyle={buttonStyle} onClick={onClick}>
       {text}
     </StyledButton>
   );
@@ -86,6 +73,10 @@ const StyledButton = styled.button<{ isEnabled: boolean; buttonStyle: string | u
   border-style: solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
   font-size: ${({ theme }) => theme.fontSize.md};
+  color: ${({ buttonStyle, theme }) =>
+    buttonStyle === 'filled'
+      ? theme.colors.common.black_const
+      : theme.colors.common.black} !important;
   ${({ isEnabled, buttonStyle, theme }) =>
     isEnabled ? BUTTON_STYLE(theme, buttonStyle).enabled : BUTTON_STYLE(theme).disabled};
 `;

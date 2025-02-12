@@ -4517,10 +4517,10 @@ cosmiconfig@^7, cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-cotato-openapi-clients@2.250115.0-role.0:
-  version "2.250115.0-role.0"
-  resolved "https://registry.yarnpkg.com/cotato-openapi-clients/-/cotato-openapi-clients-2.250115.0-role.0.tgz#20cf27fbc29ffed90c8ba86af1afc65694b65536"
-  integrity sha512-cWZIbUrwFjPFjSsZkIoSFaryT6/FAVpABXD/xZQ9c/F468FN0ztTHuzuYotm6D1qT1iSHoxVUKYRzuwKd6/BNg==
+cotato-openapi-clients@^2.250208.0-mypage.0:
+  version "2.250208.0-mypage.0"
+  resolved "https://registry.yarnpkg.com/cotato-openapi-clients/-/cotato-openapi-clients-2.250208.0-mypage.0.tgz#776ac9da61ab1a14a49e3bfa194f963ac7172a25"
+  integrity sha512-4uLtBZ4Qp8IkYJCnuyoFyX3PklxVYRsLoP/RWBF05td7DcoC3yMG66LMs+x35/oFFYWCNyod8zpaW66CpF9r9Q==
   dependencies:
     "@openapitools/openapi-generator-cli" "^2.13.4"
     "@testing-library/jest-dom" "^5.17.0"
