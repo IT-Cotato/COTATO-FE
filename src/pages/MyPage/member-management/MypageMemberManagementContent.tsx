@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Stack, Tooltip } from '@mui/material';
+import { IconButton, InputBase, Paper, Stack, Tooltip } from '@mui/material';
 import MypageMemberManagementContentMemberInfo from './MypageMemberManagementContentMemberInfo';
 import MypageMemberManagementContentOMInfo from './MypageMemberManagementContentOMInfo';
+import { TagButton } from '../components/member-management/TagButton';
+import { ReactComponent as Info } from '@/pages/MyPage/tempAsssets/info_circle.svg';
+import { ReactComponent as Search } from '@/pages/MyPage/tempAsssets/search.svg';
+import { ReactComponent as Refresh } from '@/pages/MyPage/tempAsssets/refresh.svg';
 
 //
 //
@@ -53,21 +57,23 @@ const MypageMemberManagementContent = () => {
   const renderHeader = () => {
     return (
       <Stack direction="row" justifyContent="space-between">
-        <Stack direction="row" gap="0.25rem">
-          <button
+        <Stack direction="row" gap="0.25rem" alignItems="center">
+          <TagButton
+            isSelected={currentView === 'MEMBER'}
             onClick={() => {
               setCurrentView('MEMBER');
             }}
           >
             활동 부원
-          </button>
-          <button
+          </TagButton>
+          <TagButton
+            isSelected={currentView === 'OM'}
             onClick={() => {
               setCurrentView('OM');
             }}
           >
             OM
-          </button>
+          </TagButton>
           <Tooltip
             title={<CustomTooltip />}
             slotProps={{
@@ -84,12 +90,33 @@ const MypageMemberManagementContent = () => {
               },
             }}
           >
-            <button>i</button>
+            <Info />
           </Tooltip>
         </Stack>
-        <Stack>
-          {currentView === 'MEMBER' && <button>OM으로 전환하기</button>}
-          {currentView === 'OM' && <button>검색하기</button>}
+        <Stack direction="row" alignItems="center">
+          {currentView === 'MEMBER' && (
+            <TagButton disabled={true}>
+              <Refresh />
+              OM으로 전환하기
+            </TagButton>
+          )}
+          {currentView === 'OM' && (
+            <Paper
+              component="form"
+              sx={{
+                p: '2px 4px',
+                display: 'flex',
+                alignItems: 'center',
+                width: 400,
+                height: '2.25rem',
+              }}
+            >
+              <InputBase sx={{ ml: 1, flex: 1 }} placeholder="이름/기수/파트 검색"></InputBase>
+              <IconButton type="button">
+                <Search />
+              </IconButton>
+            </Paper>
+          )}
         </Stack>
       </Stack>
     );
