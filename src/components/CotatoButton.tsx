@@ -1,64 +1,57 @@
-import { th } from 'date-fns/locale';
 import React from 'react';
 import styled from 'styled-components';
+import { ReactComponent as PanelShort } from '@assets/cotato_panel_short.svg';
+import { ReactComponent as PanelDefault } from '@assets/cotato_panel_default.svg';
+import { ReactComponent as PanelLong } from '@assets/cotato_panel_long.svg';
 
 //
 //
 //
 
-interface CotatoButtonProps {
-  isEnabled: boolean;
-  buttonStyle?: 'filled' | 'line';
-  text: string;
-  onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
+export enum SizeStateEnum {
+  SHORT = 'short',
+  DEFAULT = 'default',
+  LONG = 'long',
 }
 
-//
-//
-//
-
-const BUTTON_STYLE = (theme: any, buttonStyle?: string) => ({
-  enabled: {
-    cursor: 'pointer',
-    borderWidth: '1px',
-    color: theme.colors.common.black,
-    filter: 'drop-shadow(1px 1px 15px rgba(255, 160, 0, 0.15))',
-    backgroundColor: getBackgroundColor(theme, buttonStyle as string),
-  },
-  disabled: {
-    cursor: 'not-allowed',
-    borderWidth: '0px',
-    color: theme.colors.gray80,
-    backgroundColor: theme.colors.gray30,
-  },
-});
+interface CotatoPanelProps {
+  size: SizeStateEnum;
+  textImgSrc: string;
+}
 
 /**
- *
+ * @param {SizeStateEnum} size panel size - short, default, long
+ * @param {string} textImgSrc panel text image source
  */
-const getBackgroundColor = (theme: any, style: string) => {
-  switch (style) {
-    case 'filled':
-      return theme.colors.primary80;
-    case 'line':
-      return theme.colors.common.white;
-    default:
-      return theme.colors.primary80;
-  }
-};
+const CotatoPanel: React.FC<CotatoPanelProps> = ({ size, textImgSrc }) => {
+  /**
+   *
+   */
+  const getPanelBackground = (size: SizeStateEnum) => {
+    switch (size) {
+      case SizeStateEnum.SHORT:
+        return <PanelShort style={{ width: '10.25rem' }} />;
+      case SizeStateEnum.DEFAULT:
+        return <PanelDefault style={{ width: '14rem' }} />;
+      case SizeStateEnum.LONG:
+        return <PanelLong style={{ width: '17.5rem' }} />;
+      default:
+        return <PanelDefault style={{ width: '14rem' }} />;
+    }
+  };
 
-/**
- * cotato button component
- * @param isEnabled button enable or disable
- * @param buttonStyle enabled button style - filled, line
- * @param text button text
- * @param onClick button click event
- */
-const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, text, onClick }) => {
+  /**
+   *
+   */
+  const renderPanelText = () => {
+    return <img src={textImgSrc} style={{ width: '75%' }} />;
+  };
+
   return (
-    <StyledButton isEnabled={isEnabled} buttonStyle={buttonStyle} onClick={onClick}>
-      {text}
-    </StyledButton>
+    <Wrapper>
+      <BackgroundDiv>{getPanelBackground(size)}</BackgroundDiv>
+      <TextDiv>{renderPanelText()}</TextDiv>
+    </Wrapper>
   );
 };
 
@@ -66,19 +59,26 @@ const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, tex
 //
 //
 
-const StyledButton = styled.button<{ isEnabled: boolean; buttonStyle: string | undefined }>`
-  width: 17.5rem;
-  height: 3rem;
-  border-radius: 1rem;
-  border-style: solid;
-  border-color: ${({ theme }) => theme.colors.primary100_1};
-  font-size: ${({ theme }) => theme.fontSize.md};
-  color: ${({ buttonStyle, theme }) =>
-    buttonStyle === 'filled'
-      ? theme.colors.common.black_const
-      : theme.colors.common.black} !important;
-  ${({ isEnabled, buttonStyle, theme }) =>
-    isEnabled ? BUTTON_STYLE(theme, buttonStyle).enabled : BUTTON_STYLE(theme).disabled};
+const Wrapper = styled.div`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
-export default CotatoButton;
+const BackgroundDiv = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const TextDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  margin-bottom: 0.5rem;
+`;
+
+export default CotatoPanel;
