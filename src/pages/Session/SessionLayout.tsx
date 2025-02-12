@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { media } from '@theme/media';
 import { HEADER_HEIGHT } from '@theme/constants/constants';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import PanelText from '@assets/session_panel_text.svg';
 
 //
@@ -22,7 +22,7 @@ const SessionLayout = ({ children }: SessionLayoutProps) => {
   return (
     <Wrapper>
       <Link to="/session">
-        <CotatoPanel size="short" textImgSrc={PanelText} />
+        <CotatoPanel size={SizeStateEnum.SHORT} textImgSrc={PanelText} />
       </Link>
       {children}
     </Wrapper>

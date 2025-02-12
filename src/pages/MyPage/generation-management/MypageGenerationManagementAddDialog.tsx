@@ -211,7 +211,7 @@ const MypageGenerationManagementAddDialog = ({
           isEnabled={isValid}
           buttonStyle="filled"
           text="추가하기"
-          onClick={handleSubmit(onSubmit)}
+          handleClick={handleSubmit(onSubmit)}
         />
       </CotatoDialogActions>
     </CotatoDialog>
