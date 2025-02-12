@@ -4,14 +4,14 @@ import TableLayout from '@components/Table/TableLayout';
 import TableRenderer from '@components/Table/TableRenderer';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { useTheme } from 'styled-components';
-import { CotatoMemberEnrollInfoResponse } from 'cotato-openapi-clients';
+import { CotatoMemberInfoResponse } from 'cotato-openapi-clients';
 
 //
 //
 //
 
 interface MypageMemberManagementContentOMInfoProps {
-  data: CotatoMemberEnrollInfoResponse[];
+  data: CotatoMemberInfoResponse[];
 }
 
 //

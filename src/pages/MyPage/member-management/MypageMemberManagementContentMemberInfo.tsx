@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
-import { Checkbox, MenuItem, Select, Stack } from '@mui/material';
+import { Checkbox, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
 import TableLayout from '@components/Table/TableLayout';
 import TableRenderer from '@components/Table/TableRenderer';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
-import { MemberRole } from '@/enums';
 import { useTheme } from 'styled-components';
-import {
-  CotatoMemberEnrollInfoResponse,
-  CotatoMemberEnrollInfoResponseRoleEnum,
-} from 'cotato-openapi-clients';
+import { CotatoMemberInfoResponse, CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 
 //
 //
 //
 
 interface MypageMemberManagementContentMemberInfoProps {
-  data: CotatoMemberEnrollInfoResponse[];
+  data: CotatoMemberInfoResponse[];
+  updateMemberRole: (memberId: number, newRole: CotatoMemberInfoResponseRoleEnum) => void;
 }
 
 //
@@ -24,27 +21,13 @@ interface MypageMemberManagementContentMemberInfoProps {
 
 const TableCell = TableLayout.TableCell;
 
-const getRoleEnum = (role: CotatoMemberEnrollInfoResponseRoleEnum | undefined): MemberRole => {
-  switch (role) {
-    case 'MANAGER':
-      return MemberRole.MANAGER;
-    case 'ADMIN':
-      return MemberRole.ADMIN;
-    case 'DEV':
-      return MemberRole.DEV;
-    case 'MEMBER':
-      return MemberRole.MEMBER;
-    default:
-      return MemberRole.NOTHING;
-  }
-};
-
 //
 //
 //
 
 const MypageMemberManagementContentMemberInfo = ({
   data,
+  updateMemberRole,
 }: MypageMemberManagementContentMemberInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
   const [memberIds, setMemberIds] = useState<number[]>([]);
@@ -72,12 +55,12 @@ const MypageMemberManagementContentMemberInfo = ({
                   }}
                 >
                   <Checkbox />
-                  <span style={{ padding: '1rem 0.75rem' }}>{item?.name}</span>
+                  <span style={{ padding: '1rem 0.75rem' }}>{item.name}</span>
                 </div>
               </TableCell>
               <TableCell>
                 <Select
-                  defaultValue={getRoleEnum(item?.role)}
+                  defaultValue={item.role}
                   size="small"
                   sx={{
                     fontFamily: 'YComputer',
@@ -89,12 +72,17 @@ const MypageMemberManagementContentMemberInfo = ({
                     disableScrollLock: true,
                   }}
                   fullWidth
-                  onChange={() => {}}
+                  onChange={(e: SelectChangeEvent) => {
+                    updateMemberRole(
+                      item.memberId,
+                      e.target.value as CotatoMemberInfoResponseRoleEnum,
+                    );
+                  }}
                 >
-                  <MenuItem value={MemberRole.DEV}>개발팀</MenuItem>
-                  <MenuItem value={MemberRole.ADMIN}>관리자</MenuItem>
-                  <MenuItem value={MemberRole.MANAGER}>부관리자</MenuItem>
-                  <MenuItem value={MemberRole.MEMBER}>멤버</MenuItem>
+                  <MenuItem value={CotatoMemberInfoResponseRoleEnum.Dev}>개발팀</MenuItem>
+                  <MenuItem value={CotatoMemberInfoResponseRoleEnum.Admin}>관리자</MenuItem>
+                  <MenuItem value={CotatoMemberInfoResponseRoleEnum.Manager}>부관리자</MenuItem>
+                  <MenuItem value={CotatoMemberInfoResponseRoleEnum.Member}>멤버</MenuItem>
                 </Select>
               </TableCell>
             </>

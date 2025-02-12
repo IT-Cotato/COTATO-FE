@@ -1,5 +1,5 @@
 import api from '@/api/api';
-import { CotatoMemberEnrollInfoResponse } from 'cotato-openapi-clients';
+import { CotatoMemberInfoResponse } from 'cotato-openapi-clients';
 import { useEffect, useState } from 'react';
 
 //
@@ -7,8 +7,11 @@ import { useEffect, useState } from 'react';
 //
 
 export const useOMManagement = () => {
-  const [OMMembers, setOMMembers] = useState<CotatoMemberEnrollInfoResponse[]>([]);
+  const [OMMembers, setOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
 
+  /**
+   * OMMembers Init
+   */
   useEffect(() => {
     const fetchOMMembers = async () => {
       try {
@@ -22,6 +25,10 @@ export const useOMManagement = () => {
     fetchOMMembers();
   }, []);
 
+  /**
+   * memberId를 활동 멤버로 변경
+   * @param memberId number
+   */
   const transferMemberIdToActive = (memberId: number) => {
     try {
       api.patch(`/v1/api/member/${memberId}/status`);

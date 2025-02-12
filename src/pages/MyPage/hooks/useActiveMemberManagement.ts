@@ -1,8 +1,5 @@
 import api from '@/api/api';
-import {
-  CotatoMemberEnrollInfoResponse,
-  CotatoMemberEnrollInfoResponseRoleEnum,
-} from 'cotato-openapi-clients';
+import { CotatoMemberInfoResponse, CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 import { useEffect, useState } from 'react';
 
 //
@@ -10,8 +7,11 @@ import { useEffect, useState } from 'react';
 //
 
 export const useActiveMemberManagement = () => {
-  const [activeMembers, setActiveMembers] = useState<CotatoMemberEnrollInfoResponse[]>([]);
+  const [activeMembers, setActiveMembers] = useState<CotatoMemberInfoResponse[]>([]);
 
+  /**
+   * activeMembers Init
+   */
   useEffect(() => {
     const fetchActiveMembers = async () => {
       try {
@@ -25,14 +25,25 @@ export const useActiveMemberManagement = () => {
     fetchActiveMembers();
   }, []);
 
-  const updateMemberRole = (memberId: number, newRole: CotatoMemberEnrollInfoResponseRoleEnum) => {
+  /**
+   * memberId 의 role 변경
+   * @param memberId number
+   * @param newRole CotatoMemberInfoResponseRoleEnum
+   */
+  const updateMemberRole = (memberId: number, newRole: CotatoMemberInfoResponseRoleEnum) => {
     try {
       api.patch(`/v1/api/member/${memberId}/role`, { memberId: memberId, role: newRole });
     } catch (error) {
+      const apiError = error as { message: string };
+      alert(apiError.message || '권한 변경에 실패했습니다.');
       console.error('Failed to patch member role:', error);
     }
   };
 
+  /**
+   * memberIds 배열을 모두 OM으로 변경
+   * @param memberIds number[]
+   */
   const transferMemberIdsToOM = (memberIds: number[]) => {
     try {
       api.patch('/v1/api/admin/status', { memberIds: memberIds });

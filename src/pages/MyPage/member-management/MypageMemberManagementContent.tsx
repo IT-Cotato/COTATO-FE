@@ -67,7 +67,12 @@ const MypageMemberManagementContent = () => {
   return (
     <Stack gap="1.5rem">
       {renderHeader()}
-      {currentView === 'MEMBER' && <MypageMemberManagementContentMemberInfo data={activeMembers} />}
+      {currentView === 'MEMBER' && (
+        <MypageMemberManagementContentMemberInfo
+          data={activeMembers}
+          updateMemberRole={updateMemberRole}
+        />
+      )}
       {currentView === 'OM' && <MypageMemberManagementContentOMInfo data={OMMembers} />}
     </Stack>
   );
