@@ -5,10 +5,18 @@ import TableRenderer from '@components/Table/TableRenderer';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { MemberRole } from '@/enums';
 import { useTheme } from 'styled-components';
+import {
+  CotatoMemberEnrollInfoResponse,
+  CotatoMemberEnrollInfoResponseRoleEnum,
+} from 'cotato-openapi-clients';
 
 //
 //
 //
+
+interface MypageMemberManagementContentMemberInfoProps {
+  data: CotatoMemberEnrollInfoResponse[];
+}
 
 //
 //
@@ -16,16 +24,18 @@ import { useTheme } from 'styled-components';
 
 const TableCell = TableLayout.TableCell;
 
-const getRoleEnum = (role: string): MemberRole => {
-  switch (role.toUpperCase()) {
+const getRoleEnum = (role: CotatoMemberEnrollInfoResponseRoleEnum | undefined): MemberRole => {
+  switch (role) {
     case 'MANAGER':
       return MemberRole.MANAGER;
     case 'ADMIN':
       return MemberRole.ADMIN;
     case 'DEV':
       return MemberRole.DEV;
-    default:
+    case 'MEMBER':
       return MemberRole.MEMBER;
+    default:
+      return MemberRole.NOTHING;
   }
 };
 
@@ -33,43 +43,19 @@ const getRoleEnum = (role: string): MemberRole => {
 //
 //
 
-const MypageMemberManagementContentMemberInfo = () => {
+const MypageMemberManagementContentMemberInfo = ({
+  data,
+}: MypageMemberManagementContentMemberInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
 
   const sampleHead = ['이름', '역할'];
-  const sampleData = [
-    {
-      name: '동현',
-      role: '기자',
-    },
-    {
-      name: '에릭',
-      role: 'MANAGER',
-    },
-    {
-      name: '치지',
-      role: '기획자',
-    },
-    {
-      name: '영훈',
-      role: '기획자',
-    },
-    {
-      name: '제훈',
-      role: '기획자',
-    },
-    {
-      name: '제니',
-      role: '디자이너',
-    },
-  ];
 
   const renderTableRenderer = () => {
     const theme = useTheme();
 
     return (
       <TableRenderer
-        data={sampleData}
+        data={data}
         head={sampleHead}
         repeatCount={isLandScapeOrSmaller ? 1 : 2}
         render={(item) => {
