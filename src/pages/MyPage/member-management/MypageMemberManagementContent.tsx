@@ -6,7 +6,6 @@ import { TagButton } from '../components/member-management/TagButton';
 import { ReactComponent as Refresh } from '@/pages/MyPage/tempAsssets/refresh.svg';
 import InfoTooltip from '../components/member-management/InfoTooltip';
 import SearchBar from '../components/member-management/SearchBar';
-import { CotatoMemberEnrollInfoResponse } from 'cotato-openapi-clients';
 import { useActiveMemberManagement } from '../hooks/useActiveMemberManagement';
 import { useOMManagement } from '../hooks/useOMManagement';
 
@@ -20,8 +19,8 @@ import { useOMManagement } from '../hooks/useOMManagement';
 
 const MypageMemberManagementContent = () => {
   const [currentView, setCurrentView] = useState<'MEMBER' | 'OM'>('MEMBER');
-  const { activeMembers } = useActiveMemberManagement();
-  const { OMMembers } = useOMManagement();
+  const { activeMembers, updateMemberRole, transferMemberIdsToOM } = useActiveMemberManagement();
+  const { OMMembers, searchOM, transferMemberIdToActive } = useOMManagement();
 
   /**
    *

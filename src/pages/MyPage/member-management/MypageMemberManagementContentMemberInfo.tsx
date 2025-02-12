@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Checkbox, MenuItem, Select, Stack } from '@mui/material';
 import TableLayout from '@components/Table/TableLayout';
 import TableRenderer from '@components/Table/TableRenderer';
@@ -47,6 +47,7 @@ const MypageMemberManagementContentMemberInfo = ({
   data,
 }: MypageMemberManagementContentMemberInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
+  const [memberIds, setMemberIds] = useState<number[]>([]);
 
   const sampleHead = ['이름', '역할'];
 
