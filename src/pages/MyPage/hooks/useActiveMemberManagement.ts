@@ -1,29 +1,35 @@
 import api from '@/api/api';
 import { CotatoMemberInfoResponse, CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 import { useEffect, useState } from 'react';
+import { MemberManagementView } from '../member-management/MypageMemberManagementContent';
 
 //
 //
 //
 
-export const useActiveMemberManagement = () => {
+export const useActiveMemberManagement = (view: MemberManagementView) => {
   const [activeMembers, setActiveMembers] = useState<CotatoMemberInfoResponse[]>([]);
 
   /**
-   * activeMembers Init
+   *
+   */
+  const fetchActiveMembers = async () => {
+    try {
+      const response = await api.get(`/v1/api/member`, { params: { status: 'APPROVED' } });
+      setActiveMembers(response.data);
+    } catch (error) {
+      console.error('Failed to fetch active members:', error);
+    }
+  };
+
+  /**
+   * activeMembers update
    */
   useEffect(() => {
-    const fetchActiveMembers = async () => {
-      try {
-        const response = await api.get(`/v1/api/member`, { params: { status: 'APPROVED' } });
-        setActiveMembers(response.data);
-      } catch (error) {
-        console.error('Failed to fetch active members:', error);
-      }
-    };
+    if (view === 'OM') return;
 
     fetchActiveMembers();
-  }, []);
+  }, [view]);
 
   /**
    * memberId 의 role 변경
@@ -41,16 +47,21 @@ export const useActiveMemberManagement = () => {
   };
 
   /**
-   * memberIds 배열을 모두 OM으로 변경
+   * memberIds 배열을 모두 OM으로 변경 후 업데이트
    * @param memberIds number[]
    */
-  const transferMemberIdsToOM = (memberIds: number[]) => {
+  const transferMemberIdsToOM = async (
+    memberIds: number[],
+    setMemberIds: React.Dispatch<React.SetStateAction<number[]>>,
+  ) => {
     try {
-      api.patch(
+      await api.patch(
         '/v1/api/member/status',
         { memberIds: memberIds },
         { params: { target: 'RETIRE' } },
       );
+      await fetchActiveMembers();
+      setMemberIds([]);
     } catch (error) {
       console.error('Failed to patch active members to old members:', error);
     }
