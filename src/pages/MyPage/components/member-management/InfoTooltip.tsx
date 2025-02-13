@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ReactComponent as Info } from '@/pages/MyPage/tempAsssets/info_circle.svg';
-import { IconButton, Tooltip, useMediaQuery } from '@mui/material';
-import { device } from '@theme/media';
+import { IconButton, Tooltip } from '@mui/material';
 
 //
 //
@@ -51,6 +50,11 @@ const CustomTooltip = () => {
 
 export default function InfoTooltip() {
   const [open, setOpen] = useState(false);
+
+  //
+  //
+  //
+
   return (
     <Tooltip
       open={open}

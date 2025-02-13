@@ -18,6 +18,11 @@ interface SearchBarProps {
 
 export default function SearchBar({ value, setValue }: SearchBarProps) {
   const isTablet = useMediaQuery(`(max-width:${device.tablet})`);
+
+  //
+  //
+  //
+
   return (
     <Paper
       component="form"

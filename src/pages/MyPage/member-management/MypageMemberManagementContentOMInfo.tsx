@@ -23,6 +23,8 @@ const TableCell = TableLayout.TableCell;
 
 const rowsPerPage = 10; // 한 페이지당 보여줄 아이템 수
 
+const sampleHead = ['이름', '역할'];
+
 //
 //
 //
@@ -35,12 +37,16 @@ const MypageMemberManagementContentOMInfo = ({
 
   const [page, setPage] = useState(1);
 
+  /**
+   *
+   */
   const handlePageChange = (e: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
-  const sampleHead = ['이름', '역할'];
-
+  /**
+   *
+   */
   const renderTableRenderer = () => {
     const theme = useTheme();
     return (

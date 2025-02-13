@@ -1,5 +1,5 @@
-import { TextField, TextFieldProps } from '@mui/material';
-import styled, { useTheme } from 'styled-components';
+import { TextField } from '@mui/material';
+import styled from 'styled-components';
 
 export const ProfileCardSection = styled.div`
   display: flex;

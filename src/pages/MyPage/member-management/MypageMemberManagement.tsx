@@ -1,5 +1,4 @@
 import React from 'react';
-import { Stack } from '@mui/material';
 import GenerationManagementImage from '@/pages/MyPage/tempAsssets/member_management.svg';
 import MypageCommonLayout from '../components/common/MypageCommonLayout';
 import { SizeStateEnum } from '@components/CotatoPanel';

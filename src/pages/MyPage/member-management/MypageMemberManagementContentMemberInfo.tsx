@@ -23,6 +23,8 @@ interface MypageMemberManagementContentMemberInfoProps {
 
 const TableCell = TableLayout.TableCell;
 
+const sampleHead = ['이름', '역할'];
+
 //
 //
 //
@@ -35,8 +37,9 @@ const MypageMemberManagementContentMemberInfo = ({
 }: MypageMemberManagementContentMemberInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
 
-  const sampleHead = ['이름', '역할'];
-
+  /**
+   *
+   */
   const renderTableRenderer = () => {
     const theme = useTheme();
 
