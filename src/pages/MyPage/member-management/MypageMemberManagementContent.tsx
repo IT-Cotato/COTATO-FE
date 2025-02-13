@@ -22,10 +22,11 @@ export type MemberManagementView = 'MEMBER' | 'OM';
 const MypageMemberManagementContent = () => {
   const [currentView, setCurrentView] = useState<MemberManagementView>('MEMBER');
   const [memberIds, setMemberIds] = useState<number[]>([]);
+  const [searchValue, setSearchValue] = useState('');
 
   const { activeMembers, updateMemberRole, transferMemberIdsToOM } =
     useActiveMemberManagement(currentView);
-  const { OMMembers, searchOM, transferMemberIdToActive } = useOMManagement(currentView);
+  const { filteredOMMembers, transferMemberIdToActive } = useOMManagement(currentView, searchValue);
 
   /**
    *
@@ -63,7 +64,7 @@ const MypageMemberManagementContent = () => {
               OM으로 전환하기
             </TagButton>
           )}
-          {currentView === 'OM' && <SearchBar />}
+          {currentView === 'OM' && <SearchBar value={searchValue} setValue={setSearchValue} />}
         </Stack>
       </Stack>
     );
@@ -86,7 +87,7 @@ const MypageMemberManagementContent = () => {
       )}
       {currentView === 'OM' && (
         <MypageMemberManagementContentOMInfo
-          data={OMMembers}
+          data={filteredOMMembers}
           transferMemberIdToActive={transferMemberIdToActive}
         />
       )}

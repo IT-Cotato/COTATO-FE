@@ -1,8 +1,21 @@
 import { IconButton, InputBase, Paper } from '@mui/material';
 import { ReactComponent as Search } from '@/pages/MyPage/tempAsssets/search.svg';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
-export default function SearchBar() {
+//
+//
+//
+
+interface SearchBarProps {
+  value: string;
+  setValue: Dispatch<SetStateAction<string>>;
+}
+
+//
+//
+//
+
+export default function SearchBar({ value, setValue }: SearchBarProps) {
   return (
     <Paper
       component="form"
@@ -14,7 +27,14 @@ export default function SearchBar() {
         height: '2.25rem',
       }}
     >
-      <InputBase sx={{ ml: 1, flex: 1 }} placeholder="이름/기수/파트 검색"></InputBase>
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder="이름/기수/파트 검색"
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
+      ></InputBase>
       <IconButton type="button">
         <Search />
       </IconButton>

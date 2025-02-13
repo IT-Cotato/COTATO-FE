@@ -7,11 +7,34 @@ import { MemberManagementView } from '../member-management/MypageMemberManagemen
 //
 //
 
-export const useOMManagement = (view: MemberManagementView) => {
+export const useOMManagement = (view: MemberManagementView, searchValue: string) => {
   const [OMMembers, setOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
+  const [filteredOMMembers, setFilteredOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
 
   /**
-   *
+   * Update OMMembers
+   */
+  useEffect(() => {
+    if (view === 'MEMBER') return;
+    fetchOMMembers();
+  }, [view]);
+
+  /**
+   * Init FilteredOMMembers
+   */
+  useEffect(() => {
+    setFilteredOMMembers(OMMembers);
+  }, [OMMembers]);
+
+  /**
+   * Update FilteredOMMembers
+   */
+  useEffect(() => {
+    filterBySearchValue(searchValue);
+  }, [searchValue, OMMembers]);
+
+  /**
+   * Fetch OMMembers
    */
   const fetchOMMembers = async () => {
     try {
@@ -23,13 +46,26 @@ export const useOMManagement = (view: MemberManagementView) => {
   };
 
   /**
-   * OMMembers Update
+   * Update FilteredOMMembers by searchValue
+   * 검색 api 나오면 수정 필요
+   * @param searchValue string
    */
-  useEffect(() => {
-    if (view === 'MEMBER') return;
+  const filterBySearchValue = (searchValue: string) => {
+    if (!searchValue.trim()) {
+      setFilteredOMMembers(OMMembers);
+      return;
+    }
 
-    fetchOMMembers();
-  }, [view]);
+    const searchLower = searchValue.toLowerCase();
+
+    const filtered = OMMembers.filter(
+      (member) =>
+        member.name?.toLowerCase().includes(searchLower) ||
+        member.position?.toLowerCase().includes(searchLower),
+    );
+
+    setFilteredOMMembers(filtered);
+  };
 
   /**
    * memberId를 활동 멤버로 변경
@@ -46,11 +82,9 @@ export const useOMManagement = (view: MemberManagementView) => {
     }
   };
 
-  const searchOM = () => {};
-
   return {
     OMMembers,
-    searchOM,
+    filteredOMMembers,
     transferMemberIdToActive,
   };
 };
