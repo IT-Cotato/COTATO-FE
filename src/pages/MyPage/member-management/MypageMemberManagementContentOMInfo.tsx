@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Stack } from '@mui/material';
 import TableLayout from '@components/Table/TableLayout';
 import TableRenderer from '@components/Table/TableRenderer';
@@ -21,6 +21,8 @@ interface MypageMemberManagementContentOMInfoProps {
 
 const TableCell = TableLayout.TableCell;
 
+const rowsPerPage = 10; // 한 페이지당 보여줄 아이템 수
+
 //
 //
 //
@@ -31,6 +33,12 @@ const MypageMemberManagementContentOMInfo = ({
 }: MypageMemberManagementContentOMInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
 
+  const [page, setPage] = useState(1);
+
+  const handlePageChange = (e: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage);
+  };
+
   const sampleHead = ['이름', '역할'];
 
   const renderTableRenderer = () => {
@@ -40,6 +48,7 @@ const MypageMemberManagementContentOMInfo = ({
         data={data}
         head={sampleHead}
         repeatCount={isLandScapeOrSmaller ? 1 : 2}
+        pagination={{ page: page, rowsPerPage: rowsPerPage, onPageChange: handlePageChange }}
         render={(item) => {
           return (
             <>
