@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReactComponent as Info } from '@/pages/MyPage/tempAsssets/info_circle.svg';
-import { Tooltip } from '@mui/material';
+import { IconButton, Tooltip, useMediaQuery } from '@mui/material';
+import { device } from '@theme/media';
 
 //
 //
@@ -49,8 +50,12 @@ const CustomTooltip = () => {
 //
 
 export default function InfoTooltip() {
+  const [open, setOpen] = useState(false);
   return (
     <Tooltip
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
       title={<CustomTooltip />}
       slotProps={{
         tooltip: {
@@ -58,7 +63,7 @@ export default function InfoTooltip() {
             bgcolor: 'white',
             color: 'black',
             borderRadius: '0.625rem',
-            padding: '2rem 1.5rem',
+            p: '2rem 1.5rem',
             boxShadow: '0px 4px 30px rgba(0, 0, 0, 0.25)',
             maxWidth: 'none',
             width: 'auto',
@@ -66,7 +71,14 @@ export default function InfoTooltip() {
         },
       }}
     >
-      <Info />
+      <IconButton
+        onClick={() => setOpen(!open)}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        className="focus:outline-none"
+      >
+        <Info />
+      </IconButton>
     </Tooltip>
   );
 }

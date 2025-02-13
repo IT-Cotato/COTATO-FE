@@ -1,6 +1,7 @@
-import { IconButton, InputBase, Paper } from '@mui/material';
+import { IconButton, InputBase, Paper, useMediaQuery } from '@mui/material';
 import { ReactComponent as Search } from '@/pages/MyPage/tempAsssets/search.svg';
 import React, { Dispatch, SetStateAction } from 'react';
+import { device } from '@theme/media';
 
 //
 //
@@ -16,6 +17,7 @@ interface SearchBarProps {
 //
 
 export default function SearchBar({ value, setValue }: SearchBarProps) {
+  const isTablet = useMediaQuery(`(max-width:${device.tablet})`);
   return (
     <Paper
       component="form"
@@ -23,7 +25,7 @@ export default function SearchBar({ value, setValue }: SearchBarProps) {
         p: '2px 4px',
         display: 'flex',
         alignItems: 'center',
-        width: 400,
+        width: isTablet ? 200 : 400,
         height: '2.25rem',
       }}
     >

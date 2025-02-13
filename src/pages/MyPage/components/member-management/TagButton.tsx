@@ -1,4 +1,5 @@
 import { Button, ButtonProps } from '@mui/material';
+import { media } from '@theme/media';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -14,6 +15,10 @@ const StyledButton = styled(Button)<{ isSelected: boolean }>`
   && {
     display: flex;
     min-width: 6.25rem;
+    ${media.tablet`
+      min-width: 0;
+      padding: 0.125rem;
+      `}
     justify-content: center;
     align-items: center;
     padding: 0.25rem 0.625rem;
