@@ -20,7 +20,7 @@ import { Divider } from '@mui/material';
 const DELAY_TIME = 3000;
 
 //
-// keyboard sori wang jota ... T.T
+//
 //
 
 const Login = () => {
@@ -66,7 +66,7 @@ const Login = () => {
       })
       .then((res) => {
         localStorage.setItem('token', res.headers.accesstoken);
-        mutate('/v1/api/member/info'); // 로그인 후에는 swr 요청을 수동으로 해준다
+        mutate('/v1/api/member/info');
         handleLoginSuccess();
       })
       .catch(() => {
