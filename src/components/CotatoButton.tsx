@@ -10,7 +10,7 @@ interface CotatoButtonProps {
   isEnabled: boolean;
   buttonStyle: 'filled' | 'line' | undefined;
   text: string;
-  handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
 
 //
@@ -59,7 +59,7 @@ const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, tex
     <StyledButton
       isEnabled={isEnabled}
       buttonStyle={buttonStyle}
-      onClick={handleClick}
+      onClick={onClick}
       disabled={!isEnabled}
     >
       {text}
