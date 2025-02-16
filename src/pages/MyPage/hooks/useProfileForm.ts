@@ -9,8 +9,8 @@ import api from '@/api/api';
 //
 //
 
-type FormState = CotatoProfileInfoResponse & {
-  profileImage: string | null | File;
+type FormState = Omit<CotatoProfileInfoResponse, 'profileImage'> & {
+  profileImage: string | File | null;
 };
 
 //
@@ -93,11 +93,10 @@ export const useProfileForm = (memberId: number | undefined) => {
           introduction: form.introduction,
           university: form.university,
           profileLinks: form.profileLinks,
-          profileImage: typeof form.profileImage === 'string' ? form.profileImage : null,
         }),
       );
 
-      if (form.profileImage && typeof form.profileImage !== 'string') {
+      if (form.profileImage instanceof File) {
         formData.append('profileImage', form.profileImage);
       }
 
