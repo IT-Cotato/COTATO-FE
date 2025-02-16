@@ -1,84 +1,89 @@
 import { useState, useEffect } from 'react';
+import {
+  CotatoProfileInfoResponse,
+  CotatoProfileLinkResponseUrlTypeEnum,
+} from 'cotato-openapi-clients';
 import api from '@/api/api';
 
 //
 //
 //
 
-interface ProfileForm {
-  introduction: string;
-  university: string;
-  profileLinks: {
-    urlType: 'GITHUB' | 'BLOG';
-    url: string;
-  }[];
-  profileImage: File | string | null;
-}
+type FormState = CotatoProfileInfoResponse & {
+  profileImage: string | null | File;
+};
 
 //
 //
 //
 
 export const useProfileForm = (memberId: number | undefined) => {
-  const [form, setForm] = useState<ProfileForm>({
-    introduction: '',
-    university: '',
-    profileLinks: [
-      { urlType: 'GITHUB', url: '' },
-      { urlType: 'BLOG', url: '' },
-    ],
-    profileImage: null,
-  });
+  const [form, setForm] = useState<FormState | null>(null);
 
-  /**
-   *
-   */
+  const fetchMemberProfile = async () => {
+    if (memberId === undefined) return;
+
+    try {
+      const response = await api.get<CotatoProfileInfoResponse>(
+        `/v1/api/member/${memberId}/profile`,
+      );
+
+      const defaultLinks = [
+        { linkId: 0, urlType: CotatoProfileLinkResponseUrlTypeEnum.Github, url: '' },
+        { linkId: 1, urlType: CotatoProfileLinkResponseUrlTypeEnum.Blog, url: '' },
+      ];
+
+      setForm({
+        ...response.data,
+        profileLinks:
+          response.data.profileLinks.length === 0 ? defaultLinks : response.data.profileLinks,
+      });
+    } catch (error) {
+      console.error('Failed to fetch member info:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchMemberProfile = async (memberId: number | undefined) => {
-      try {
-        const response = await api.get(`/v1/api/member/${memberId}/profile`);
-        setForm((prev) => ({
-          ...prev,
-          ...response.data,
-        }));
-      } catch (error) {
-        console.error('Failed to fetch member info:', error);
-      }
-    };
+    fetchMemberProfile();
+  }, [memberId]);
 
-    fetchMemberProfile(memberId);
-  }, []);
+  const handleUniversityChange = (value: string) => {
+    if (!form) return;
+    setForm({
+      ...form,
+      university: value,
+    });
+  };
 
-  /**
-   *
-   */
   const handleIntroChange = (value: string) => {
-    setForm((prev) => ({ ...prev, introduction: value }));
+    if (!form) return;
+    setForm({
+      ...form,
+      introduction: value,
+    });
   };
 
-  /**
-   *
-   */
-  const handleLinkChange = (index: number, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      profileLinks: prev.profileLinks.map((link, i) =>
-        i === index ? { ...link, url: value } : link,
+  const handleLinkChange = (urlType: CotatoProfileLinkResponseUrlTypeEnum, value: string) => {
+    if (!form) return;
+    setForm({
+      ...form,
+      profileLinks: form.profileLinks.map((link) =>
+        link.urlType === urlType ? { ...link, url: value } : link,
       ),
-    }));
+    });
   };
 
-  /**
-   *
-   */
   const handleImageChange = (file: File) => {
-    setForm((prev) => ({ ...prev, profileImage: file }));
+    if (!form) return;
+    setForm({
+      ...form,
+      profileImage: file as unknown as string,
+    });
   };
 
-  /**
-   *
-   */
   const submitProfile = async () => {
+    if (!form) return false;
+
     try {
       const formData = new FormData();
 
@@ -88,10 +93,11 @@ export const useProfileForm = (memberId: number | undefined) => {
           introduction: form.introduction,
           university: form.university,
           profileLinks: form.profileLinks,
+          profileImage: typeof form.profileImage === 'string' ? form.profileImage : null,
         }),
       );
 
-      if (form.profileImage) {
+      if (form.profileImage && typeof form.profileImage !== 'string') {
         formData.append('profileImage', form.profileImage);
       }
 
@@ -101,6 +107,7 @@ export const useProfileForm = (memberId: number | undefined) => {
         },
       });
 
+      fetchMemberProfile();
       return true;
     } catch (error) {
       console.error('Failed to update member info:', error);
@@ -108,11 +115,21 @@ export const useProfileForm = (memberId: number | undefined) => {
     }
   };
 
-  return {
-    form,
-    handleIntroChange,
-    handleLinkChange,
-    handleImageChange,
-    submitProfile,
-  };
+  return form
+    ? {
+        form,
+        handleUniversityChange,
+        handleIntroChange,
+        handleLinkChange,
+        handleImageChange,
+        submitProfile,
+      }
+    : {
+        form: null,
+        handleUniversityChange: () => {},
+        handleIntroChange: () => {},
+        handleLinkChange: () => {},
+        handleImageChange: () => {},
+        submitProfile: () => Promise.resolve(false),
+      };
 };
