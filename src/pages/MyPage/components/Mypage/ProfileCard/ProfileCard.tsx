@@ -19,8 +19,16 @@ import { useProfileForm } from '@pages/MyPage/hooks/useProfileForm';
 const ProfileCard = () => {
   const { user } = useUser();
   const [isModifying, setIsModifying] = useState(false);
-  const { form, handleIntroChange, handleLinkChange, handleImageChange, submitProfile } =
-    useProfileForm(user?.memberId);
+  const {
+    form,
+    handleUniversityChange,
+    handleIntroChange,
+    handleLinkChange,
+    handleImageChange,
+    submitProfile,
+  } = useProfileForm(user?.memberId);
+
+  if (!form) return <div>loading</div>;
 
   /**
    *
@@ -35,16 +43,22 @@ const ProfileCard = () => {
   return (
     <ProfileCardContainer>
       <ProfileImageSection
-        position={user?.position}
+        position={form.position}
         value={form.profileImage}
         onImageChange={handleImageChange}
         isModifying={isModifying}
       />
       <NameSection name={user?.name} />
-      <InfoSection position={user?.position} isModifying={isModifying} />
+      <InfoSection
+        position={form.position}
+        isModifying={isModifying}
+        generationNumber={form.generationNumber}
+        value={form.university ?? ''}
+        onChange={(value) => handleUniversityChange(value)}
+      />
       <IntroductionSection
         isModifying={isModifying}
-        value={form.introduction}
+        value={form.introduction ?? ''}
         onChange={(value) => handleIntroChange(value)}
       />
       <LinksSection
