@@ -1,4 +1,3 @@
-import { th } from 'date-fns/locale';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -10,7 +9,7 @@ interface CotatoButtonProps {
   isEnabled: boolean;
   buttonStyle: 'filled' | 'line' | undefined;
   text: string;
-  onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
+  handleClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
 
 //
@@ -52,9 +51,14 @@ const getBackgroundColor = (theme: any, style: string) => {
  * @param isEnabled button enable or disable
  * @param buttonStyle enabled button style - filled, line
  * @param text button text
- * @param onClick button click event
+ * @param handleClick button click event
  */
-const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, text, onClick }) => {
+const CotatoButton: React.FC<CotatoButtonProps> = ({
+  isEnabled,
+  buttonStyle,
+  text,
+  handleClick,
+}) => {
   return (
     <StyledButton
       isEnabled={isEnabled}
@@ -78,10 +82,6 @@ const StyledButton = styled.button<{ isEnabled: boolean; buttonStyle: string | u
   border-style: solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
   font-size: ${({ theme }) => theme.fontSize.md};
-  color: ${({ buttonStyle, theme }) =>
-    buttonStyle === 'filled'
-      ? theme.colors.common.black_const
-      : theme.colors.common.black} !important;
   ${({ isEnabled, buttonStyle, theme }) =>
     isEnabled ? BUTTON_STYLE(theme, buttonStyle).enabled : BUTTON_STYLE(theme).disabled};
 `;
