@@ -1,12 +1,10 @@
-import useGetAttendances from '@/hooks/useGetAttendances';
-import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 import React, { useEffect } from 'react';
+import useGetAttendances from '@/hooks/useGetAttendances';
 import { useAttendancesAttendanceIdRecordsGet } from '../hooks/useAttendancesAttendanceIdRecordsGet';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
-import AttedanceTableLayout from './components/AttedanceTableLayout';
 import AttendanceStatusDropdown from './components/AttendanceStatusDropdown';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
+import { TableLayout, TableRenderer } from '@components/Table';
 
 //
 //
@@ -19,7 +17,7 @@ const TABLE_HEAD = ['이름', '출석 상태'];
 //
 
 const AttendanceReportTable = () => {
-  const { isMobileOrSmaller } = useBreakpoints();
+  const { isLandScapeOrSmaller } = useBreakpoints();
 
   const [searchParams] = useSearchParams();
   const status = searchParams.getAll('status') ?? [];
@@ -45,114 +43,6 @@ const AttendanceReportTable = () => {
 
   //
   const [currentRecords, setCurrentRecords] = React.useState(attendancesAttendanceIdRecords);
-
-  /**
-   *
-   */
-  const renderTableHead = () => {
-    if (isMobileOrSmaller) {
-      return (
-        <TableRow>
-          {TABLE_HEAD.map((head) => (
-            <AttedanceTableLayout.TableHeadTableCell key={head}>
-              {head}
-            </AttedanceTableLayout.TableHeadTableCell>
-          ))}
-        </TableRow>
-      );
-    }
-
-    return (
-      <TableRow>
-        {TABLE_HEAD.map((head) => (
-          <>
-            <AttedanceTableLayout.TableHeadTableCell key={head}>
-              {head}
-            </AttedanceTableLayout.TableHeadTableCell>
-          </>
-        ))}
-        {TABLE_HEAD.map((head) => (
-          <>
-            <AttedanceTableLayout.TableHeadTableCell key={head}>
-              {head}
-            </AttedanceTableLayout.TableHeadTableCell>
-          </>
-        ))}
-      </TableRow>
-    );
-  };
-
-  /**
-   *
-   */
-  const renderEmptyTableCell = () => {
-    return (
-      <>
-        <TableCell />
-        <TableCell />
-      </>
-    );
-  };
-
-  /**
-   *
-   */
-  const renderTableBody = () => {
-    if (isMobileOrSmaller) {
-      return currentRecords?.map((record) => (
-        <>
-          <AttedanceTableLayout.TableRow key={uuid()}>
-            <AttedanceTableLayout.TableCell>
-              {record.memberInfo?.name}
-            </AttedanceTableLayout.TableCell>
-            <AttedanceTableLayout.TableCell>
-              <AttendanceStatusDropdown
-                status={record.result}
-                memberId={record?.memberInfo?.memberId}
-                attendanceId={attendanceId}
-              />
-            </AttedanceTableLayout.TableCell>
-          </AttedanceTableLayout.TableRow>
-        </>
-      ));
-    }
-
-    return Array.from({ length: Math.ceil(currentRecords?.length / 2) }, (_, i) => {
-      const firstRecord = currentRecords[i * 2];
-      const secondRecord = currentRecords?.[i * 2 + 1];
-
-      return (
-        <AttedanceTableLayout.TableRow key={uuid()}>
-          <AttedanceTableLayout.TableCell>
-            {firstRecord?.memberInfo?.name}
-          </AttedanceTableLayout.TableCell>
-          <AttedanceTableLayout.TableCell>
-            <AttendanceStatusDropdown
-              status={firstRecord.result}
-              memberId={firstRecord?.memberInfo?.memberId}
-              attendanceId={attendanceId}
-            />
-          </AttedanceTableLayout.TableCell>
-          {secondRecord ? (
-            <>
-              <AttedanceTableLayout.TableCell>
-                {secondRecord?.memberInfo?.name}
-              </AttedanceTableLayout.TableCell>
-              <AttedanceTableLayout.TableCell>
-                <AttendanceStatusDropdown
-                  status={secondRecord.result}
-                  memberId={secondRecord?.memberInfo?.memberId}
-                  attendanceId={attendanceId}
-                />
-              </AttedanceTableLayout.TableCell>
-            </>
-          ) : (
-            renderEmptyTableCell()
-          )}
-        </AttedanceTableLayout.TableRow>
-      );
-    });
-  };
 
   //
   //
@@ -194,12 +84,23 @@ const AttendanceReportTable = () => {
   //
 
   return (
-    <AttedanceTableLayout.TableContainer>
-      <Table>
-        <AttedanceTableLayout.TableHead>{renderTableHead()}</AttedanceTableLayout.TableHead>
-        <TableBody>{renderTableBody()}</TableBody>
-      </Table>
-    </AttedanceTableLayout.TableContainer>
+    <TableRenderer
+      head={TABLE_HEAD}
+      data={currentRecords}
+      repeatCount={isLandScapeOrSmaller ? 1 : 2}
+      render={(record) => (
+        <>
+          <TableLayout.TableCell>{record.memberInfo?.name}</TableLayout.TableCell>
+          <TableLayout.TableCell>
+            <AttendanceStatusDropdown
+              status={record.result}
+              memberId={record?.memberInfo?.memberId}
+              attendanceId={attendanceId}
+            />
+          </TableLayout.TableCell>
+        </>
+      )}
+    />
   );
 };
 
