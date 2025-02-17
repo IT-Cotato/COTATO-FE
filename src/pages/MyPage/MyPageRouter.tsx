@@ -6,6 +6,7 @@ import {
   MypageGenerationManagementDetail,
 } from './generation-management';
 import { MypageMemberManagement } from './member-management';
+import MyPageJoinManagement from './join-management/MyPageJoinManagement';
 
 //
 //
@@ -46,7 +47,7 @@ const MyPageRouter = () => {
       />
 
       <Route path={MY_PAGE_PATH.MEMBERS} element={<MypageMemberManagement />} />
-      <Route path={MY_PAGE_PATH.REGISTRATION} element={<RegistrationManagement />} />
+      <Route path={MY_PAGE_PATH.REGISTRATION} element={<MyPageJoinManagement />} />
     </Routes>
   );
 };
