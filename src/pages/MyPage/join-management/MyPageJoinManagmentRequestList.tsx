@@ -7,6 +7,7 @@ import { MemberStatus } from '@/enums/MemberStatus';
 import { Divider } from '@mui/material';
 import { MEMBER_POSITION } from '../constants';
 import EmptyResult from '../components/common/EmptyResult';
+import { media } from '@theme/media';
 
 //
 //
@@ -188,12 +189,24 @@ export const ItemWrapper = styled.div`
   p {
     font-size: ${({ theme }) => theme.fontSize.md};
     color: ${({ theme }) => theme.colors.common.black};
+  }
+
+  ${media.mobile`
+      flex-direction: column;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+    `}
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  ${media.mobile`
+    gap: 0.25rem;
+    width: 100%;
+  `}
 `;
 
 export default MyPageJoinManagmentRequestList;
