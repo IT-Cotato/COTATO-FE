@@ -105,7 +105,7 @@ const StyledIconButton = styled(IconButton)`
   bottom: 1rem;
   right: 1rem;
 
-  @media screen and  {
+  @media screen and (max-width: 768px) {
     bottom: 12px;
     right: 12px;
   }
