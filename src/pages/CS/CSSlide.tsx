@@ -14,9 +14,9 @@ const CSSlide = () => {
       <SlideSection>
         <CSFirstSection />
       </SlideSection>
-      <SlideSection>
+      {/* <SlideSection>
         <div>slide2</div>
-      </SlideSection>
+      </SlideSection> */}
     </SlideContainer>
   );
 };
