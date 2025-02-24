@@ -9,7 +9,7 @@ import HoverO from '@assets/O_hover.svg';
 import HoverT from '@assets/T_hover.svg';
 import HoverA from '@assets/A_hover.svg';
 import { media } from '@theme/media';
-import HomeFirstSectionCotatoJoinus from './HomeFirstSectionCotatoJoinus';
+// import HomeFirstSectionCotatoJoinus from './HomeFirstSectionCotatoJoinus';
 
 //
 //
@@ -37,7 +37,7 @@ const HomeFirstSectionCotato = () => {
 
   return (
     <Wrapper>
-      <HomeFirstSectionCotatoJoinus />
+      {/* <HomeFirstSectionCotatoJoinus /> */}
       <DefaultCharacter src={DefaultC} hoversrc={HoverC} margin="100px 0 0 0" />
       <DefaultCharacter src={DefaultO} hoversrc={HoverO} margin="30px 0 0 30px" />
       <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="60px 0 0 0" scale={1.2} />
