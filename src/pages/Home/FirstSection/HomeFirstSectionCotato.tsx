@@ -9,9 +9,7 @@ import HoverO from '@assets/O_hover.svg';
 import HoverT from '@assets/T_hover.svg';
 import HoverA from '@assets/A_hover.svg';
 import { media } from '@theme/media';
-import { ReactComponent as JoinusText } from '@assets/joinus_text_svg.svg';
-import CotatoPixelButton from '@components/CotatoPixelButton';
-import { useBreakpoints } from '@/hooks/useBreakpoints';
+import HomeFirstSectionCotatoJoinus from './HomeFirstSectionCotatoJoinus';
 
 //
 //
@@ -29,8 +27,6 @@ interface CharacterProps {
 //
 
 const HomeFirstSectionCotato = () => {
-  const { isLandScapeOrSmaller } = useBreakpoints();
-
   const DefaultCharacter = ({ src, hoversrc, margin, scale }: CharacterProps) => {
     return <Character src={src} hoversrc={hoversrc} margin={margin} scale={scale} />;
   };
@@ -39,31 +35,9 @@ const HomeFirstSectionCotato = () => {
     scale: 1,
   };
 
-  /**
-   *
-   */
-  const handleJoinusButtonClick = () => {
-    open('https://forms.gle/hGQyVwQexVbYDP2B6');
-  };
-
-  /**
-   *
-   */
-  const renderJoinusButton = () => {
-    return (
-      <JoinusButtonWrapper>
-        <CotatoPixelButton
-          BtnTextImg={StyledJoinText}
-          width={isLandScapeOrSmaller ? '9rem' : '10rem'}
-          onClick={handleJoinusButtonClick}
-        />
-      </JoinusButtonWrapper>
-    );
-  };
-
   return (
     <Wrapper>
-      {renderJoinusButton()}
+      <HomeFirstSectionCotatoJoinus />
       <DefaultCharacter src={DefaultC} hoversrc={HoverC} margin="100px 0 0 0" />
       <DefaultCharacter src={DefaultO} hoversrc={HoverO} margin="30px 0 0 30px" />
       <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="60px 0 0 0" scale={1.2} />
@@ -195,26 +169,5 @@ const Character = styled.div<CharacterProps>`
       height: 90px;
       background-size: 90px 110px;
     }
-  `}
-`;
-
-const JoinusButtonWrapper = styled.div`
-  position: absolute;
-  top: 8.5rem;
-
-  ${media.tablet`
-    top: 8rem;
-  `}
-
-  ${media.landscape`
-    top: 7.5rem;
-  `}
-`;
-
-const StyledJoinText = styled(JoinusText)`
-  width: 8rem;
-
-  ${media.landscape`
-    width: 7rem;
   `}
 `;
