@@ -2,6 +2,7 @@ import React from 'react';
 import { Stack, Table } from '@mui/material';
 import TableLayout from './TableLayout';
 import { TableBody, TableRow as MuiTableRow } from '@mui/material';
+import { useTheme } from 'styled-components';
 
 //
 //
@@ -40,6 +41,7 @@ const TableRenderer = <T,>({
     onPageChange: () => {},
   },
 }: TableRendererProps<T>) => {
+  const theme = useTheme();
   //
   const arr: T[][] = Array.from({ length: repeatCount }, () => []);
 
@@ -130,7 +132,7 @@ const TableRenderer = <T,>({
   return (
     <>
       <TableContainer>
-        <Table>
+        <Table sx={{ backgroundColor: `${theme.colors.const.white} !important` }}>
           {renderTableHead()}
           {renderTableBody()}
         </Table>

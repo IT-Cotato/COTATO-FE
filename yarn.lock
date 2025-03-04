@@ -2812,6 +2812,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/lodash@^4.17.15":
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.15.tgz#12d4af0ed17cc7600ce1f9980cec48fc17ad1e89"
+  integrity sha512-w/P33JFeySuhN6JLkysYUK2gEmy9kHHFN7E8ro0tkfmlDOgxBDzWEZ/J8cWA+fHqFevpswDTFZnDx+R9lbL6xw==
+
 "@types/mime@^1":
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.5.tgz#1ef302e01cf7d2b5a0fa526790c9123bf1d06690"
@@ -4522,10 +4527,10 @@ cosmiconfig@^7, cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-cotato-openapi-clients@2.250115.0-role.1:
-  version "2.250115.0-role.1"
-  resolved "https://registry.yarnpkg.com/cotato-openapi-clients/-/cotato-openapi-clients-2.250115.0-role.1.tgz#3c6ae13647c777068e290539ab6364a1c0058fb0"
-  integrity sha512-4vlt+22fCDElB/JpMP30/lykRIy6sx+/jGFtDJNEboKH055TlzT/jYLBQxkzeBDpFlMi2EWNokh6pINDbjC+9A==
+cotato-openapi-clients@2.250208.0-mypage.1:
+  version "2.250208.0-mypage.1"
+  resolved "https://registry.yarnpkg.com/cotato-openapi-clients/-/cotato-openapi-clients-2.250208.0-mypage.1.tgz#308deb49cf3ddeb59725b0f0fb763edd47c1dcb1"
+  integrity sha512-y9YYt4FdS+2WiVVjGIO93UPu07Ey1bid9gRLuuVJzIWbc47zzec5TDImxQoa0KMapQuwru6H0PmAZiK0APOpew==
   dependencies:
     "@openapitools/openapi-generator-cli" "^2.13.4"
     "@testing-library/jest-dom" "^5.17.0"

@@ -35,7 +35,7 @@ const AttendanceReportHeader = () => {
   const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
   const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
   const [attendanceListWithAll, setAttendanceListWithAll] = useState<
-    CotatoAttendanceWithSessionResponse[]
+    Omit<CotatoAttendanceWithSessionResponse, 'openStatus'>[]
   >([]);
 
   const { generations } = useGeneration({
@@ -93,7 +93,9 @@ const AttendanceReportHeader = () => {
       return;
     }
 
-    const newAttendaceList: CotatoAttendanceWithSessionResponse[] = [...attendances.attendances];
+    const newAttendaceList: Omit<CotatoAttendanceWithSessionResponse, 'openStatus'>[] = [
+      ...attendances.attendances,
+    ];
     newAttendaceList.push({
       attendanceId: REPORT_ALL_ID,
       sessionId: REPORT_ALL_ID,
@@ -159,7 +161,7 @@ const AttendanceReportHeader = () => {
           )}
           {attendanceListWithAll && (
             <CotatoDropBox
-              list={attendanceListWithAll}
+              list={attendanceListWithAll as CotatoAttendanceWithSessionResponse[]}
               onChange={handleAttendanceChange}
               defaultItemId={selectedAttendanceId}
               width="12rem"
@@ -173,16 +175,14 @@ const AttendanceReportHeader = () => {
             disabled
             variant="contained"
             onClick={handleExportExcelClick}
-            startIcon={
-              <CotatoIcon icon="upload-alt-solid" color={theme.colors.common.black_const} />
-            }
+            startIcon={<CotatoIcon icon="upload-alt-solid" color={theme.colors.const.black} />}
             sx={{
               backgroundColor: theme.colors.primary80,
               borderRadius: '0.325rem',
             }}
           >
             <Typography
-              color={theme.colors.common.black_const}
+              color={theme.colors.const.black}
               sx={{
                 fontFamily: 'Ycomputer',
                 fontSize: '1rem',

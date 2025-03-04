@@ -208,7 +208,7 @@ const AgreementConfirmDialog = () => {
           <StyledDiv
             style={{
               fontSize: theme.fontSize.xs,
-              color: theme.colors.common.black_const,
+              color: theme.colors.const.black,
               lineHeight: '1rem',
               wordBreak: 'keep-all',
               whiteSpace: 'pre-wrap',

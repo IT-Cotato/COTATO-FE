@@ -69,9 +69,9 @@ export default MypageGenerationManagementContent;
 
 const StyledBox = styled(Box)`
   cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.primary30};
+  background-color: ${({ theme }) => theme.colors.const.primary30};
   transition: background-color 0.3s ease;
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary50};
+    background-color: ${({ theme }) => theme.colors.const.primary50};
   }
 `;
