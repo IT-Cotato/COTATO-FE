@@ -1,16 +1,11 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import {
-  AccountDeletion,
-  MemberManagement,
-  MyPage,
-  PolicyCheck,
-  RegistrationManagement,
-} from './contents';
+import { AccountDeletion, MyPage, PolicyCheck, RegistrationManagement } from './contents';
 import {
   MypageGenerationManagement,
   MypageGenerationManagementDetail,
 } from './generation-management';
+import { MypageMemberManagement } from './member-management';
 
 //
 //
@@ -50,7 +45,7 @@ const MyPageRouter = () => {
         element={<MypageGenerationManagementDetail />}
       />
 
-      <Route path={MY_PAGE_PATH.MEMBERS} element={<MemberManagement />} />
+      <Route path={MY_PAGE_PATH.MEMBERS} element={<MypageMemberManagement />} />
       <Route path={MY_PAGE_PATH.REGISTRATION} element={<RegistrationManagement />} />
     </Routes>
   );

@@ -9,6 +9,7 @@ import {
   SectionItem,
 } from '../styles';
 import styled from 'styled-components';
+import { logout } from '@utils/logout';
 
 //
 //
@@ -26,9 +27,16 @@ interface AccountSectionProps {
 const AccountSection = ({ email, phoneNum }: AccountSectionProps) => {
   const navigate = useNavigate();
 
+  const LogoutButtonHandler = async () => {
+    await logout();
+  };
+
   return (
     <SectionContainer>
-      <InfoSectionTitle>계정 정보</InfoSectionTitle>
+      <InfoSectionHeader>
+        계정 정보
+        <LogoutButton onClick={LogoutButtonHandler}>로그아웃</LogoutButton>
+      </InfoSectionHeader>
       <InfoSectionItemContainer>
         <InfoSectionItem>{email}</InfoSectionItem>
         <InfoSectionItem>{phoneNum}</InfoSectionItem>
@@ -48,6 +56,20 @@ const AccountSection = ({ email, phoneNum }: AccountSectionProps) => {
 //
 //
 //
+
+const InfoSectionHeader = styled(InfoSectionTitle)`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LogoutButton = styled.button`
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: Pretender;
+`;
 
 const InfoSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`
   padding: 1.25rem;
