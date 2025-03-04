@@ -120,12 +120,12 @@ const RequestPopup = ({ mode, member, generation, position, isOpen, setIsOpen }:
             <CotatoIcon
               icon="times-circle-solid"
               size="3rem"
-              color={(theme) => theme.colors.common.black_const}
+              color={(theme) => theme.colors.const.black}
             />
           ) : (
             <CotatoIcon
               icon="check-solid"
-              color={(theme) => theme.colors.common.black_const}
+              color={(theme) => theme.colors.const.black}
               size="2rem"
             />
           )}

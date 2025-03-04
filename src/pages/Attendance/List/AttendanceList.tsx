@@ -383,7 +383,7 @@ const StyledButton = styled.button`
   width: 17.625rem;
   height: 3rem;
   border-radius: 1rem;
-  background-color: ${({ theme }) => theme.colors.common.white_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
   border: ${({ theme }) => `1px solid ${theme.colors.primary100_1}`};
   cursor: pointer;
   transition: background-color 0.3s;

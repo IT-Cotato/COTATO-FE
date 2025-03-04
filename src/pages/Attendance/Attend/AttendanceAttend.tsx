@@ -412,8 +412,8 @@ const StyledBox = styled(Box)<{ $isSelected: boolean }>`
   width: 15rem;
   height: 15rem;
   background-color: ${({ theme, $isSelected }) =>
-    $isSelected ? theme.colors.primary50 : theme.colors.common.white_const};
-  color: ${({ theme }) => theme.colors.common.black_const};
+    $isSelected ? theme.colors.primary50 : theme.colors.const.white};
+  color: ${({ theme }) => theme.colors.const.black};
   border-radius: 2rem;
   box-shadow: 1.5px 1.5px 23px 15px rgba(255, 160, 0, 0.15);
   cursor: pointer;
@@ -438,8 +438,7 @@ const StyledButton = styled.button<{ $disabled: boolean }>`
     $disabled ? theme.colors.gray30 : theme.colors.primary80};
   box-shadow: ${({ $disabled }) =>
     $disabled ? 'none' : '1px 1px 15px 3px rgba(255, 160, 0, 0.15)'};
-  color: ${({ theme, $disabled }) =>
-    $disabled ? theme.colors.gray50 : theme.colors.common.black_const};
+  color: ${({ theme, $disabled }) => ($disabled ? theme.colors.gray50 : theme.colors.const.black)};
   font-size: 1.25rem;
   cursor: pointer;
 

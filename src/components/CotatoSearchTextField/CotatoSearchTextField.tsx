@@ -73,20 +73,20 @@ const CotatoSearchTextField = ({
       }}
       sx={{
         '& .MuiInputBase-input': {
-          color: theme.colors.common.black,
+          color: theme.colors.const.black,
         },
         gap: '0.5rem',
         '& .MuiInputBase-root': {
           gap: '0.5rem',
         },
         '& .MuiInput-underline:before': {
-          borderBottomColor: theme.colors.common.black,
+          borderBottomColor: theme.colors.const.black,
         },
         '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-          borderBottomColor: theme.colors.primary60,
+          borderBottomColor: theme.colors.const.primary60,
         },
         '& .MuiInput-underline:after': {
-          borderBottomColor: theme.colors.primary100,
+          borderBottomColor: theme.colors.const.primary100,
         },
       }}
       {...props}

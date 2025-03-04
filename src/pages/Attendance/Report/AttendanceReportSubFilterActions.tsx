@@ -93,9 +93,8 @@ const StyledButton = styled.button<{ $selected?: boolean; $disabled?: boolean }>
 `;
 
 const StyledTypography = styled(Typography)<{ $disabled?: boolean }>`
-  color: ${({ theme }) => theme.colors.common.black_const};
-  color: ${({ theme, $disabled }) =>
-    $disabled ? theme.colors.gray10 : theme.colors.common.black_const};
+  color: ${({ theme }) => theme.colors.const.black};
+  color: ${({ theme, $disabled }) => ($disabled ? theme.colors.gray10 : theme.colors.const.black)};
 
   ${media.mobile`
     font-size: 0.75rem !important;

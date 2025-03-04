@@ -15,7 +15,7 @@ const StyledTableHead = styled(TableHead)`
 `;
 
 const StyledTableRow = styled(TableRow)`
-  background-color: ${({ theme }) => theme.colors.common.white_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
 `;
 
 /**

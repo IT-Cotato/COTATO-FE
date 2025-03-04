@@ -57,7 +57,7 @@ const ProjectsCard = ({
       >
         <Typography
           variant={isTabletOrSmaller ? 'h6' : isLaptopOrSmaller ? 'h5' : 'h4'}
-          color={theme.colors.common.black_const}
+          color={theme.colors.const.black}
           fontWeight="700"
         >
           {name}
@@ -114,7 +114,7 @@ const ProjectsCard = ({
         <Typography
           noWrap
           variant={isTabletOrSmaller ? 'body2' : isLaptopOrSmaller ? 'body2' : 'body1'}
-          color={theme.colors.common.black_const}
+          color={theme.colors.const.black}
           padding="0"
           sx={{
             fontFamily: 'Pretendard',
