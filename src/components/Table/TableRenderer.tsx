@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from '@mui/material';
 import TableLayout from './TableLayout';
 import { TableBody, TableRow as MuiTableRow } from '@mui/material';
+import { useTheme } from 'styled-components';
 
 //
 //
@@ -24,6 +25,8 @@ const TableHeadTableCell = TableLayout.TableCell;
 const TableRow = TableLayout.TableRow;
 
 const TableRenderer = <T,>({ data, head, render, repeatCount = 2 }: TableRendererProps<T>) => {
+  const theme = useTheme();
+
   //
   const arr: T[][] = Array.from({ length: repeatCount }, () => []);
 
@@ -76,7 +79,7 @@ const TableRenderer = <T,>({ data, head, render, repeatCount = 2 }: TableRendere
 
   return (
     <TableContainer>
-      <Table>
+      <Table sx={{ backgroundColor: `${theme.colors.const.white} !important` }}>
         {renderTableHead()}
         {renderTableBody()}
       </Table>

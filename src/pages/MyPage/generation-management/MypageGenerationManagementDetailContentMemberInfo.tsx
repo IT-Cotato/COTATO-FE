@@ -16,6 +16,7 @@ import {
 import MypageGenerationManagementMemberRoleActions from './MypageGenerationManagementMemberRoleActions';
 import { useGenerationMembersMutation } from '../hooks/useGenerationMembersMutation';
 import { toast } from 'react-toastify';
+import { useTheme } from 'styled-components';
 
 //
 //
@@ -29,6 +30,8 @@ const TABLE_HEADS = ['이름', '역할'];
 //
 
 const MypageGenerationManagementDetailContentMemberInfo = () => {
+  const theme = useTheme();
+
   const { generationId } = useNumberParams();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
@@ -85,7 +88,9 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
   const renderHeader = () => {
     return (
       <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h6">부원 정보</Typography>
+        <Typography variant="h6" color={theme.colors.common.black}>
+          부원 정보
+        </Typography>
         <Box display="flex" gap="1rem">
           <CotatoMuiButton
             startIcon={<CotatoIcon icon="plus-solid" size="1.25rem" />}
@@ -118,8 +123,18 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
         render={(info) => {
           return (
             <>
-              <TableCell>{info?.name}</TableCell>
-              <TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: theme.colors.const.white,
+                }}
+              >
+                {info?.name}
+              </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: theme.colors.const.white,
+                }}
+              >
                 <MypageGenerationManagementMemberRoleActions
                   memberInfo={info}
                   onChange={(id, role) =>

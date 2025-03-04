@@ -1,8 +1,5 @@
 import { useRef } from 'react';
-import {
-  CotatoAddableMemberInfo,
-  FindAddableMembersForGenerationMember1Request,
-} from 'cotato-openapi-clients';
+import { CotatoPageMemberResponse, FindMembersByStatusRequest } from 'cotato-openapi-clients';
 import useSWR from 'swr';
 import fetcherWithParams from '@utils/fetcherWithParams';
 
@@ -10,10 +7,10 @@ import fetcherWithParams from '@utils/fetcherWithParams';
 //
 //
 
-type UseMemberParams = FindAddableMembersForGenerationMember1Request;
+type UseMemberParams = FindMembersByStatusRequest;
 
 interface UseMemberReturn {
-  members: CotatoAddableMemberInfo[] | undefined;
+  members: CotatoPageMemberResponse | undefined;
   isMembersLoading: boolean;
   isMembersError: any;
   mutateMembers: () => void;
@@ -27,7 +24,7 @@ export const useMembers = (params: UseMemberParams) => {
   const _return = useRef<UseMemberReturn>({} as UseMemberReturn);
 
   //
-  const { data, isLoading, error, mutate } = useSWR<CotatoAddableMemberInfo[]>(
+  const { data, isLoading, error, mutate } = useSWR<CotatoPageMemberResponse>(
     ['/v1/api/member', params],
     ([url, params]) => fetcherWithParams(url, params),
     {
@@ -40,7 +37,7 @@ export const useMembers = (params: UseMemberParams) => {
   //
   //
 
-  _return.current.members = data ?? [];
+  _return.current.members = data ?? undefined;
   _return.current.isMembersLoading = isLoading;
   _return.current.isMembersError = error;
   _return.current.mutateMembers = mutate;
