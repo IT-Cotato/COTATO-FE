@@ -295,8 +295,8 @@ const StyledBox = styled(Box)`
   width: 25rem;
   height: 12rem;
   gap: 4rem;
-  background-color: ${({ theme }) => theme.colors.common.white_const};
-  color: ${({ theme }) => theme.colors.common.black_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
+  color: ${({ theme }) => theme.colors.const.black};
   border-radius: 2rem;
   box-shadow: 1.5px 1.5px 23px 15px rgba(255, 160, 0, 0.15);
 
@@ -310,9 +310,9 @@ const StyledButton = styled.button`
   width: 25rem;
   height: 4rem;
   border: none;
-  background-color: ${({ theme }) => theme.colors.common.white_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
   box-shadow: 1px 1px 15px 3px rgba(255, 160, 0, 0.15);
-  color: ${({ theme }) => theme.colors.common.black_const};
+  color: ${({ theme }) => theme.colors.const.black};
   font-size: 1.25rem;
   cursor: pointer;
   transition: background-color 0.3s;

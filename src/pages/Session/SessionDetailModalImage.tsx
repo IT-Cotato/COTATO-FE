@@ -72,7 +72,7 @@ const SessionDetailModalImage = ({ imageList }: SessionDetailModalImageProps) =>
 //
 
 const StyledSwiper = styled(Swiper)`
-  background: ${({ theme }) => theme.colors.common.black_const};
+  background: ${({ theme }) => theme.colors.const.black};
   width: ${IMAGE_WIDTH};
   height: 100%;
 

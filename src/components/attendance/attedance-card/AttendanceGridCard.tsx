@@ -57,7 +57,7 @@ const Container = styled.div`
   padding: 1rem;
   border-radius: 1.5rem;
   border: 1px solid ${({ theme }) => theme.colors.primary70};
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
   box-shadow: 1px 1px 20px 5px rgba(255, 160, 0, 0.15);
   cursor: pointer;
 
@@ -83,7 +83,7 @@ const TitleText = styled.p`
   margin: 0;
   font-family: Ycomputer;
   font-size: 1.125rem;
-  color: ${({ theme }) => theme.colors.common.black_const};
+  color: ${({ theme }) => theme.colors.const.black};
 
   ${media.tablet`
     font-size: 1rem;

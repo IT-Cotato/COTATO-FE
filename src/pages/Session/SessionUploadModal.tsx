@@ -774,7 +774,7 @@ const LocationInputBox = styled.span<LocationInputBoxProps>`
   width: ${({ $width }) => $width || '10rem'};
   border-radius: 0.5rem;
   border: 1px solid ${({ theme }) => theme.colors.gray60};
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
 
   > input {
     width: 100%;
@@ -802,7 +802,7 @@ const LocationInputBox = styled.span<LocationInputBoxProps>`
 
 const TitleBox = styled(InfoBox)`
   border: 2px solid ${({ theme }) => theme.colors.primary90};
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
 `;
 
 const ContentsInputWrapper = styled.span`

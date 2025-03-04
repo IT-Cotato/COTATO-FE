@@ -1,5 +1,5 @@
-import { Button, Dialog, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Dialog, TextField } from '@mui/material';
 import styled from 'styled-components';
 import { ReactComponent as Close } from '@/pages/MyPage/tempAsssets/close_button.svg';
 import CotatoButton from '@components/CotatoButton';

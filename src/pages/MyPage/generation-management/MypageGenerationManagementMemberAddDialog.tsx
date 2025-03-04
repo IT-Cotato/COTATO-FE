@@ -11,18 +11,15 @@ import CotatoSearchTextField from '@components/CotatoSearchTextField/CotatoSearc
 import { Checkbox, Divider, List, ListItem, ListItemText, Select, MenuItem } from '@mui/material';
 import { Stack } from '@mui/system';
 import { getMemberPostionText } from '@utils/member';
-import {
-  CotatoAddableMemberInfoPositionEnum,
-  CotatoMemberInfoResponseStatusEnum,
-} from 'cotato-openapi-clients';
+import { CotatoAddableMemberInfoPositionEnum } from 'cotato-openapi-clients';
 import { useDebounce } from 'react-use';
 import { styled, useTheme } from 'styled-components';
-import { useMembers } from '../hooks/useMembers';
 import { xor } from 'lodash';
 
 import { useGeneration } from '@/hooks/useGeneration';
 import { useGenerationMembersMutation } from '../hooks/useGenerationMembersMutation';
 import { toast } from 'react-toastify';
+import { useMemberAddable } from '../hooks/useMemberAddable';
 
 //
 //
@@ -58,9 +55,8 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
     React.useState<CotatoAddableMemberInfoPositionEnum>(null as any);
 
   //
-  const { members } = useMembers({
+  const { addableMembers } = useMemberAddable({
     generationId,
-    status: CotatoMemberInfoResponseStatusEnum.Approved,
     name: debouncedSearchName,
     passedGenerationNumber: selectedGeneration,
     position: selectedPosition,
@@ -81,13 +77,16 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
   const handleSelectMember = (memberId: number) => {
     setSelectedMembers(xor(selectedMembers, [memberId]));
   };
-  const isAllSelected = selectedMembers.length === members?.length ?? false;
+  console.log(addableMembers?.memberInfos);
+  const isAllSelected = selectedMembers.length === addableMembers?.memberInfos.length ?? false;
 
   /**
    *
    */
   const handleToggleAllMembers = () => {
-    setSelectedMembers(isAllSelected ? [] : (members?.map((member) => member.memberId) ?? []));
+    setSelectedMembers(
+      isAllSelected ? [] : (addableMembers?.memberInfos.map((member) => member.memberId) ?? []),
+    );
   };
 
   /**
@@ -183,7 +182,7 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
   const renderMemberList = () => {
     return (
       <StyledList disablePadding>
-        {members?.map((member) => {
+        {addableMembers?.memberInfos.map((member) => {
           return (
             <StyledListItem key={member.memberId}>
               <Checkbox
@@ -216,8 +215,8 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
       <CotatoDialogActions>
         <CotatoMuiButton
           sx={{
-            backgroundColor: `${theme.colors.gray100} !important`,
-            color: `${theme.colors.common.white} !important`,
+            backgroundColor: `${theme.colors.const.gray100} !important`,
+            color: `${theme.colors.const.white} !important`,
           }}
           fontFamily="YComputer"
           onClick={onClose}

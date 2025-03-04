@@ -185,16 +185,14 @@ const AttendanceReportHeader = () => {
               disableElevation
               variant="contained"
               onClick={handleExportExcelClick}
-              startIcon={
-                <CotatoIcon icon="upload-alt-solid" color={theme.colors.common.black_const} />
-              }
+              startIcon={<CotatoIcon icon="upload-alt-solid" color={theme.colors.const.black} />}
               sx={{
                 backgroundColor: theme.colors.primary80,
                 borderRadius: '0.325rem',
               }}
             >
               <Typography
-                color={theme.colors.common.black_const}
+                color={theme.colors.const.black}
                 sx={{
                   fontFamily: 'Ycomputer',
                   fontSize: '1rem',
