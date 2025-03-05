@@ -1,12 +1,19 @@
 import { css } from 'styled-components';
 
+export const MOBILE_BREAKPOINT = 400;
+export const LANDSCAPE_BREAKPOINT = 576;
+export const TABLET_BREAKPOINT = 768;
+export const LAPTOP_BREAKPOINT = 1024;
+export const DESKTOP_BREAKPOINT = 1280;
+export const WIDE_BREAKPOINT = 1440;
+
 export const device = {
-  mobile: '400px',
-  landscape: '576px',
-  tablet: '768px',
-  laptop: '1024px',
-  desktop: '1280px',
-  wide: '1440px',
+  mobile: `${MOBILE_BREAKPOINT}px`,
+  landscape: `${LANDSCAPE_BREAKPOINT}px`,
+  tablet: `${TABLET_BREAKPOINT}px`,
+  laptop: `${LAPTOP_BREAKPOINT}px`,
+  desktop: `${DESKTOP_BREAKPOINT}px`,
+  wide: `${WIDE_BREAKPOINT}px`,
 };
 
 export const media = {
