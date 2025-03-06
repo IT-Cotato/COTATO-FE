@@ -1,3 +1,4 @@
+import { useCotatoFabOpenStore } from '@/zustand-stores/useCotatoFabOpenStore';
 import { Box, Fab, SvgIcon, Tooltip, useMediaQuery } from '@mui/material';
 import { device } from '@theme/media';
 import React, { forwardRef } from 'react';
@@ -32,6 +33,7 @@ const CotatoFloatingActionButtonItem = forwardRef<
   HTMLButtonElement,
   CotatoFloatingActionButtonItemProps
 >(({ name, svgIcon, icon, selected, disabled, onClick }, ref) => {
+  const { toggleCotatoFabOpen } = useCotatoFabOpenStore();
   const theme = useTheme();
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
 
@@ -54,6 +56,7 @@ const CotatoFloatingActionButtonItem = forwardRef<
     }
 
     onClick();
+    toggleCotatoFabOpen();
   };
 
   //

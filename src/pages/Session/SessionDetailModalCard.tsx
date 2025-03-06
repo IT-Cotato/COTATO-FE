@@ -6,10 +6,11 @@ import { ReactComponent as CloseIcon } from '@assets/close_dotted_circle.svg';
 import SessionContents from '@components/Session/SessionContents';
 import { device, media } from '@theme/media';
 import { IconButton, Stack, useMediaQuery } from '@mui/material';
-import fetchUserData from '@utils/fetchUserData';
 import { useGeneration } from '@/hooks/useGeneration';
 import dayjs from 'dayjs';
 import CotatoIcon from '@components/CotatoIcon';
+import useUser from '@/hooks/useUser';
+import { checkIsAtLeastAdmin } from '@utils/role';
 
 //
 //
@@ -31,7 +32,7 @@ const SessionDetailModalCard = ({
   handleClickUpdateSession,
 }: SessionDetailModalCardProps) => {
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
-  const { data: useData } = fetchUserData();
+  const { user } = useUser();
   const { generations } = useGeneration();
 
   /**
@@ -47,7 +48,7 @@ const SessionDetailModalCard = ({
         <h3>{session?.title}</h3>
         {!isTabletOrSmaller && (
           <Stack direction="row" alignItems="center">
-            {useData?.role === 'ADMIN' && (
+            {checkIsAtLeastAdmin(user?.role) && (
               <IconButton
                 onClick={() => {
                   if (typeof handleClickUpdateSession !== 'function') {

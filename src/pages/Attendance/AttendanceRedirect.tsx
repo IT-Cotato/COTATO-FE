@@ -20,14 +20,7 @@ const AttendanceRedirect = () => {
       return;
     }
 
-    const { sessionCount, generationId } = currentGeneration;
-
-    // if there is no session, navigate to home
-    if (!sessionCount) {
-      navigate('/');
-
-      return;
-    }
+    const { generationId } = currentGeneration;
 
     // navigate to current generation page
     navigate(`/attendance/list/generation/${generationId}?viewType=${listLayoutType}`);
