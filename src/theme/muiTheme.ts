@@ -82,9 +82,11 @@ theme.typography.h3 = {
   fontSize: '3rem',
   [theme.breakpoints.down('tablet')]: {
     fontSize: '1.75rem',
+    fontWeight: '500',
   },
   [theme.breakpoints.down('landscape')]: {
     fontSize: '1.5rem',
+    fontWeight: '500',
   },
 };
 
@@ -92,9 +94,11 @@ theme.typography.h4 = {
   fontSize: '2.25rem',
   [theme.breakpoints.down('tablet')]: {
     fontSize: '1.5rem',
+    fontWeight: '500',
   },
   [theme.breakpoints.down('landscape')]: {
     fontSize: '1.25rem',
+    fontWeight: '500',
   },
 };
 
@@ -102,9 +106,11 @@ theme.typography.h5 = {
   fontSize: '1.875rem',
   [theme.breakpoints.down('tablet')]: {
     fontSize: '1.375rem',
+    fontWeight: '500',
   },
   [theme.breakpoints.down('landscape')]: {
     fontSize: '1.125rem',
+    fontWeight: '500',
   },
 };
 
@@ -112,49 +118,63 @@ theme.typography.h6 = {
   fontSize: '1.5rem',
   [theme.breakpoints.down('tablet')]: {
     fontSize: '1.25rem',
+    fontWeight: '500',
   },
   [theme.breakpoints.down('landscape')]: {
     fontSize: '1rem',
-  },
-};
-
-theme.typography.body1 = {
-  fontSize: '1.25rem',
-  [theme.breakpoints.down('tablet')]: {
-    fontSize: '1rem',
-  },
-  [theme.breakpoints.down('landscape')]: {
-    fontSize: '0.875rem',
-  },
-};
-
-theme.typography.body2 = {
-  fontSize: '1.125rem',
-  [theme.breakpoints.down('tablet')]: {
-    fontSize: '0.875rem',
-  },
-  [theme.breakpoints.down('landscape')]: {
-    fontSize: '0.75rem',
+    fontWeight: '500',
   },
 };
 
 theme.typography.subtitle1 = {
-  fontSize: '1rem',
+  fontSize: '1.25rem',
   [theme.breakpoints.down('tablet')]: {
-    fontSize: '0.875rem',
+    fontSize: '1rem',
+    fontWeight: '500',
   },
   [theme.breakpoints.down('landscape')]: {
     fontSize: '0.75rem',
+    fontWeight: '500',
   },
 };
 
 theme.typography.subtitle2 = {
+  fontSize: '1.125rem',
+  [theme.breakpoints.down('tablet')]: {
+    fontSize: '0.875rem',
+    fontWeight: '500',
+  },
+  [theme.breakpoints.down('landscape')]: {
+    fontSize: '0.75rem',
+    fontWeight: '500',
+  },
+};
+
+theme.typography.body1 = {
+  fontSize: '1rem',
+  [theme.breakpoints.down('tablet')]: {
+    fontSize: '0.875rem',
+    lineHeight: '1.25rem',
+    fontWeight: '400',
+  },
+  [theme.breakpoints.down('landscape')]: {
+    fontSize: '0.875rem',
+    lineHeight: '1.25rem',
+    fontWeight: '400',
+  },
+};
+
+theme.typography.body2 = {
   fontSize: '0.875rem',
   [theme.breakpoints.down('tablet')]: {
     fontSize: '0.75rem',
+    lineHeight: '1.25rem',
+    fontWeight: '400',
   },
   [theme.breakpoints.down('landscape')]: {
     fontSize: '0.625rem',
+    lineHeight: '1.25rem',
+    fontWeight: '400',
   },
 };
 
@@ -162,8 +182,10 @@ theme.typography.caption = {
   fontSize: '0.75rem',
   [theme.breakpoints.down('tablet')]: {
     fontSize: '0.625rem',
+    lineHeight: '1.25rem',
   },
   [theme.breakpoints.down('landscape')]: {
     fontSize: '0.5rem',
+    lineHeight: '1.25rem',
   },
 };
