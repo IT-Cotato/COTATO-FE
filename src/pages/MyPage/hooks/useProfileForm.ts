@@ -106,7 +106,7 @@ export const useProfileForm = (memberId: number | undefined) => {
         },
       });
 
-      fetchMemberProfile();
+      await fetchMemberProfile();
       return true;
     } catch (error) {
       console.error('Failed to update member info:', error);

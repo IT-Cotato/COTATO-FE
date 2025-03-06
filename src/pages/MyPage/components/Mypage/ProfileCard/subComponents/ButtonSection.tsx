@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Upload } from '@/pages/MyPage/tempAsssets/upload.svg';
+import { CotatoLightTheme } from '@theme/theme';
 
 //
 //
@@ -26,8 +27,16 @@ const ButtonSection = ({ isModifying, setIsModifying, onSubmit }: ButtonSectionP
 
   return (
     <ProfileCardButtonSection>
-      <ProfileCardButton onClick={() => fileInputRef.current?.click()}>
-        <Upload />
+      <ProfileCardButton
+        onClick={() => {
+          if (isModifying) {
+            setIsModifying(false);
+          } else {
+            fileInputRef.current?.click();
+          }
+        }}
+      >
+        {isModifying ? '취소' : <Upload />}
       </ProfileCardButton>
       <ProfileCardButton
         onClick={() => {
@@ -67,8 +76,13 @@ const ProfileCardButton = styled.button<{ isModifying?: boolean }>`
   border: none;
   border-radius: 0.25rem;
   background-color: ${({ isModifying, theme }) =>
-    isModifying ? theme.colors.primary100_1 : theme.colors.common.black};
-  color: ${({ theme }) => theme.colors.common.real_white};
+    isModifying
+      ? theme.colors.secondary80
+      : theme === CotatoLightTheme
+        ? 'black'
+        : theme.colors.common.black};
+  color: ${({ isModifying, theme }) =>
+    isModifying ? theme.colors.common.real_white : theme.colors.common.white};
   cursor: pointer;
   font-family: Pretendard;
   font-size: ${({ theme }) => theme.fontSize.md};
