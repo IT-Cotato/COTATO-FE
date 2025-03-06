@@ -10,7 +10,7 @@ import { MemberManagementView } from '../member-management/MypageMemberManagemen
 export const useOMManagement = (view: MemberManagementView, searchValue: string) => {
   const [OMMembers, setOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
   const [filteredOMMembers, setFilteredOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
-  const [totalElements, setTotalElements] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize] = useState<number>(20);
 
@@ -56,7 +56,7 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
 
       setOMMembers(response.data.content);
       setFilteredOMMembers(response.data.content);
-      setTotalElements(response.data.totalElements);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Failed to fetch OM members:', error);
     }
@@ -114,8 +114,9 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
   return {
     filteredOMMembers,
     transferMemberIdToActive,
-    totalElements,
+    totalPages,
     currentPage,
+    pageSize,
     handlePageChange,
   };
 };

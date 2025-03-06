@@ -29,8 +29,9 @@ const MypageMemberManagementContent = () => {
   const {
     filteredOMMembers,
     transferMemberIdToActive,
-    totalElements,
+    totalPages,
     currentPage,
+    pageSize,
     handlePageChange,
   } = useOMManagement(currentView, searchValue);
 
@@ -95,8 +96,9 @@ const MypageMemberManagementContent = () => {
         <MypageMemberManagementContentOMInfo
           data={filteredOMMembers}
           transferMemberIdToActive={transferMemberIdToActive}
-          totalElements={totalElements}
+          totalPages={totalPages}
           page={currentPage}
+          pageSize={pageSize}
           onPageChange={handlePageChange}
         />
       )}
