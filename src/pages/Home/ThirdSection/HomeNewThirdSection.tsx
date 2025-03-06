@@ -93,6 +93,7 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
       <Typography
         variant={isMobileOrSmaller ? 'h5' : isTabletOrSmaller ? 'h4' : 'h3'}
         fontFamily="YComputer"
+        fontWeight="400"
       >
         COTATO CLUB MEMBERS
       </Typography>
@@ -170,8 +171,9 @@ const HomeNewThirdSection = ({ handleBackToFirstSlide }: HomeNewThirdSectionProp
                 <Typography
                   textAlign="center"
                   color={theme.colors.common.black}
-                  variant="h6"
+                  variant="subtitle1"
                   fontFamily="YComputer"
+                  fontWeight="500"
                 >
                   TEAM {key}
                 </Typography>

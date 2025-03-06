@@ -45,6 +45,7 @@ const AboutLayout: React.FC<AboutLayoutProps> = ({ dividerIcon, title, content }
             color={theme.colors.common.black}
             variant={isLandScapeOrSmaller ? 'h6' : 'h4'}
             fontFamily="YComputer"
+            fontWeight="500"
             width="100%"
           >
             {title}
