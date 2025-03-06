@@ -109,7 +109,7 @@ const AttendanceReportHeader = () => {
       sessionId: REPORT_ALL_ID,
       sessionTitle: '전체',
       sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.All,
-      //openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
+      openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
     });
     setAttendanceListWithAll(newAttendaceList);
 
