@@ -50,6 +50,8 @@ const CotatoTextField = ({ ...props }: TextFieldProps) => {
       sx={{
         '& .MuiInputBase-input': {
           color: theme.colors.common.black,
+          fontSize: '1rem',
+          fontFamily: 'Prentendard',
         },
         gap: '0.5rem',
         '& .MuiInputBase-root': {
