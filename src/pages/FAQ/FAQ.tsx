@@ -31,6 +31,7 @@ const FAQ = () => {
     return (
       <Stack gap="3rem" alignItems="center">
         <StyledTitleBox
+          fontFamily="YComputer"
           sx={{
             backgroundColor: theme.colors.primary100_2,
           }}
@@ -70,6 +71,7 @@ const FAQ = () => {
             backgroundColor: theme.colors.sub2['60'],
             color: theme.colors.common.white,
           }}
+          fontFamily="YComputer"
         >
           활동관련
         </StyledTitleBox>

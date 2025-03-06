@@ -84,7 +84,11 @@ const HomeNewThirdSection = () => {
    */
   const renderTitle = () => {
     return (
-      <Typography variant={isMobileOrSmaller ? 'h5' : 'h4'} fontFamily="YComputer">
+      <Typography
+        variant={isMobileOrSmaller ? 'h5' : isTabletOrSmaller ? 'h4' : 'h3'}
+        fontFamily="YComputer"
+        fontWeight="400"
+      >
         COTATO CLUB MEMBERS
       </Typography>
     );
@@ -164,8 +168,9 @@ const HomeNewThirdSection = () => {
                 <Typography
                   textAlign="center"
                   color={theme.colors.common.black}
-                  variant="h6"
+                  variant="subtitle1"
                   fontFamily="YComputer"
+                  fontWeight="500"
                 >
                   TEAM {key}
                 </Typography>

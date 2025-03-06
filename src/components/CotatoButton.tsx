@@ -1,4 +1,3 @@
-import { th } from 'date-fns/locale';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -8,8 +7,8 @@ import styled from 'styled-components';
 
 interface CotatoButtonProps {
   isEnabled: boolean;
-  buttonStyle?: 'filled' | 'line';
   text: string;
+  buttonStyle?: 'filled' | 'line';
   onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
 

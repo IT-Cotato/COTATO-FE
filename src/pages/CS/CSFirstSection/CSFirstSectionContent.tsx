@@ -73,6 +73,7 @@ const ContentWrapper = styled.div`
   margin-bottom: -3rem;
   width: 100%;
   max-width: ${device.wide};
+  flex: 1;
 
   @media (max-height: ${DESKTOP_HEIGHT}) {
     justify-content: center;

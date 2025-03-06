@@ -1,5 +1,5 @@
 import fetcher from '@utils/fetcher';
-import { CotatoPoliciesResponse, CotatoPolicyInfoResponse } from 'cotato-openapi-clients';
+import { CotatoPolicyInfoResponse } from 'cotato-openapi-clients';
 import { useRef } from 'react';
 import useSWR from 'swr';
 

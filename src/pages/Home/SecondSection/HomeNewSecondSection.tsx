@@ -24,7 +24,7 @@ import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import HomeNewSecondSectionMobileSwiper from './HomeNewSecondSectionMobileSwiper';
 import CotatoIcon from '@components/CotatoIcon';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 
 //
 //
@@ -141,8 +141,12 @@ const HomeNewSecondSection = () => {
   return (
     <Wrapper>
       <Title>
-        <h1>WHAT WE DO</h1>
-        <p>코테이토의 활동을 소개할게요!</p>
+        <Typography variant="h1" fontFamily="YComputer">
+          WHAT WE DO
+        </Typography>
+        <Typography variant="body1" fontFamily="YComputer">
+          코테이토의 활동을 소개할게요!
+        </Typography>
       </Title>
       {isLandScapeOrSmaller ? <HomeNewSecondSectionMobileSwiper /> : renderDesktopSwiper()}
     </Wrapper>
