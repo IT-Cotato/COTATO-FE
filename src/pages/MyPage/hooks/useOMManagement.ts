@@ -10,14 +10,17 @@ import { MemberManagementView } from '../member-management/MypageMemberManagemen
 export const useOMManagement = (view: MemberManagementView, searchValue: string) => {
   const [OMMembers, setOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
   const [filteredOMMembers, setFilteredOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
+  const [totalElements, setTotalElements] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize] = useState<number>(20);
 
   /**
    * Update OMMembers
    */
   useEffect(() => {
     if (view === 'MEMBER') return;
-    fetchOMMembers();
-  }, [view]);
+    fetchOMMembers(currentPage - 1); // API는 0부터 시작
+  }, [view, currentPage]);
 
   /**
    * Init FilteredOMMembers
@@ -27,27 +30,48 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
   }, [OMMembers]);
 
   /**
-   * Update FilteredOMMembers
+   * Update FilteredOMMembers when search value changes
    */
   useEffect(() => {
-    filterBySearchValue(searchValue);
-  }, [searchValue, OMMembers]);
+    if (searchValue.trim()) {
+      filterBySearchValue(searchValue);
+    } else if (view === 'OM') {
+      fetchOMMembers(currentPage - 1);
+    }
+  }, [searchValue]);
 
   /**
-   * Fetch OMMembers
+   * Fetch OMMembers with pagination
    */
-  const fetchOMMembers = async () => {
+  const fetchOMMembers = async (page: number) => {
     try {
-      const response = await api.get(`/v1/api/member`, { params: { status: 'RETIRED' } });
-      setOMMembers(response.data);
+      const response = await api.get(`/v1/api/member`, {
+        params: {
+          status: 'RETIRED',
+          page: page,
+          size: pageSize,
+          sort: [],
+        },
+      });
+
+      setOMMembers(response.data.content);
+      setFilteredOMMembers(response.data.content);
+      setTotalElements(response.data.totalElements);
     } catch (error) {
-      console.error('Failed to fetch old members:', error);
+      console.error('Failed to fetch OM members:', error);
     }
   };
 
   /**
+   * Handle page change
+   */
+  const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+
+  /**
    * Update FilteredOMMembers by searchValue
-   * 검색 api 나오면 수정 필요
+   * 검색 API가 추가되면 이 부분을 수정해야 함
    * @param searchValue string
    */
   const filterBySearchValue = (searchValue: string) => {
@@ -56,6 +80,7 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
       return;
     }
 
+    // 임시: 클라이언트 측 필터링
     const searchLower = searchValue.toLowerCase();
 
     const filtered = OMMembers.filter(
@@ -76,7 +101,7 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
       await api.patch(`/v1/api/member/${memberId}/status`, null, {
         params: { target: 'APPROVED' },
       });
-      await fetchOMMembers();
+      await fetchOMMembers(currentPage - 1);
     } catch (error) {
       console.error('Failed to patch old member to active member:', error);
     }
@@ -87,8 +112,10 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
   //
 
   return {
-    OMMembers,
     filteredOMMembers,
     transferMemberIdToActive,
+    totalElements,
+    currentPage,
+    handlePageChange,
   };
 };
