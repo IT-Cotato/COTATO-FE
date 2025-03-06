@@ -3,10 +3,7 @@ import { ProfileCardSection, ProfileInput } from '../styles';
 import styled from 'styled-components';
 import { ReactComponent as Github } from '@/pages/MyPage/tempAsssets/github_icon.svg';
 import { ReactComponent as Link } from '@/pages/MyPage/tempAsssets/link2_icon.svg';
-
-//
-//
-//
+import { CotatoProfileLinkResponseUrlTypeEnum } from 'cotato-openapi-clients';
 
 interface LinksSectionProps {
   isModifying: boolean;
@@ -14,17 +11,9 @@ interface LinksSectionProps {
     urlType: string;
     url: string;
   }>;
-  onChange: (index: number, value: string) => void;
+  onChange: (urlType: CotatoProfileLinkResponseUrlTypeEnum, value: string) => void;
 }
 
-//
-//
-//
-
-/**
- * 소개 링크 영역
- * @param isModifying 수정중인 상태
- */
 const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
   return (
     <ProfileCardSection>
@@ -34,8 +23,11 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
           <ProfileInput
             size="small"
             disabled={!isModifying}
-            value={links[0].url}
-            onChange={(e) => onChange(0, e.target.value)}
+            value={
+              links.find((link) => link.urlType === CotatoProfileLinkResponseUrlTypeEnum.Github)
+                ?.url ?? ''
+            }
+            onChange={(e) => onChange(CotatoProfileLinkResponseUrlTypeEnum.Github, e.target.value)}
           />
         </LinkContainer>
         <LinkContainer>
@@ -43,18 +35,17 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
           <ProfileInput
             size="small"
             disabled={!isModifying}
-            value={links[1].url}
-            onChange={(e) => onChange(1, e.target.value)}
+            value={
+              links.find((link) => link.urlType === CotatoProfileLinkResponseUrlTypeEnum.Blog)
+                ?.url ?? ''
+            }
+            onChange={(e) => onChange(CotatoProfileLinkResponseUrlTypeEnum.Blog, e.target.value)}
           />
         </LinkContainer>
       </ProfileCardLinkInputSection>
     </ProfileCardSection>
   );
 };
-
-//
-//
-//
 
 const ProfileCardLinkInputSection = styled.div`
   display: flex;

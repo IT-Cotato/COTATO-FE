@@ -65,6 +65,7 @@ const InfoSectionHeader = styled(InfoSectionTitle)`
 `;
 
 const LogoutButton = styled.button`
+  background: none;
   border: none;
   text-decoration: underline;
   cursor: pointer;
