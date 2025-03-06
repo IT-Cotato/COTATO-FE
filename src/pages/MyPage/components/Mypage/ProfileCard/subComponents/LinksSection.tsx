@@ -61,6 +61,7 @@ const LinkContainer = styled.div`
   align-items: center;
   gap: 0.5rem;
   align-self: stretch;
+  color: ${({ theme }) => theme.colors.common.black};
 `;
 
 export default LinksSection;
