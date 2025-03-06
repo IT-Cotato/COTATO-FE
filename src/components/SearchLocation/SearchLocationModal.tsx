@@ -131,7 +131,7 @@ const Modal = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 1.725rem;
-  background-color: ${({ theme }) => theme.colors.common.white_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
   padding: 2.5rem 2.25rem;
 
   h3 {
@@ -168,14 +168,14 @@ const SearchBar = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.common.black_const};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.const.black};
   margin-bottom: 1.5rem;
   input {
     width: 100%;
     border: none;
     outline: none;
     font-size: ${({ theme }) => theme.fontSize.sm};
-    background-color: ${({ theme }) => theme.colors.common.white_const};
+    background-color: ${({ theme }) => theme.colors.const.white};
   }
   svg {
     width: 1.25rem;

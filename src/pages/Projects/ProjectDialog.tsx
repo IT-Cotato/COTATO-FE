@@ -78,14 +78,14 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
             link={project?.projectUrl}
             logo={<LinkIcon />}
             name="링크"
-            color={theme.colors.common.black_const}
+            color={theme.colors.const.black}
             bgColor={theme.colors.gray20}
           />
           <ProjectsLink
             link={project?.githubUrl}
             logo={<GithubLightIcon />}
             name="GitHub"
-            bgColor={theme.colors.common.black_const}
+            bgColor={theme.colors.const.black}
           />
           <ProjectsLink
             link={project?.behanceUrl}

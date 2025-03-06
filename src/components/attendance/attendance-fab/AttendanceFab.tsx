@@ -42,7 +42,7 @@ const AttendanceFab = () => {
         <CotatoIcon
           icon="bars-solid"
           style={{ transform: 'rotate(90deg)' }}
-          color={(theme) => theme.colors.common.white_const}
+          color={(theme) => theme.colors.const.white}
           size="100%"
         />
       ),
@@ -58,11 +58,7 @@ const AttendanceFab = () => {
   return (
     <CotatoFloatingActionButton
       icon={
-        <CotatoIcon
-          icon="expand-solid"
-          size="100%"
-          color={(theme) => theme.colors.common.white_const}
-        />
+        <CotatoIcon icon="expand-solid" size="100%" color={(theme) => theme.colors.const.white} />
       }
       name="레이아웃"
     >

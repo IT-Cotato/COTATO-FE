@@ -28,7 +28,6 @@ export default function useUser() {
     error,
   } = useSWR<CotatoMemberInfoResponse>('/v1/api/member/info', fetcher, {
     revalidateOnFocus: false,
-    revalidateIfStale: false,
     dedupingInterval: 6000000,
     onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
       if (error.status === 400) return;

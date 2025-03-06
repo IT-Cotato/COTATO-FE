@@ -31,7 +31,7 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ openStatus, atten
       return {
         backgroundColor: theme.colors.gray40,
         icon: null,
-        textColor: theme.colors.common.white_const,
+        textColor: theme.colors.const.white,
         text: '출석예정',
       };
     } else if (
@@ -41,21 +41,21 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ openStatus, atten
       return {
         backgroundColor: theme.colors.primary80,
         icon: null,
-        textColor: theme.colors.common.white_const,
+        textColor: theme.colors.const.white,
         text: '출석중',
       };
     } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Offline) {
       return {
         backgroundColor: theme.colors.gray10,
         icon: <CotatoIcon icon="user-check-solid" color={(theme) => theme.colors.sub3[40]} />,
-        textColor: theme.colors.common.black_const,
+        textColor: theme.colors.const.black,
         text: '출석',
       };
     } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Online) {
       return {
         backgroundColor: theme.colors.gray10,
         icon: <OnlineIcon />,
-        textColor: theme.colors.common.black_const,
+        textColor: theme.colors.const.black,
         text: '출석',
       };
     } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Late) {
@@ -64,7 +64,7 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ openStatus, atten
         icon: (
           <CotatoIcon icon="bell-exclaimation-solid" color={(theme) => theme.colors.secondary80} />
         ),
-        textColor: theme.colors.common.black_const,
+        textColor: theme.colors.const.black,
         text: '지각',
       };
     } else if (
@@ -74,14 +74,14 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ openStatus, atten
       return {
         backgroundColor: theme.colors.gray10,
         icon: null,
-        textColor: theme.colors.common.black_const,
+        textColor: theme.colors.const.black,
         text: '미입력',
       };
     } else if (attendanceResult === CotatoMemberAttendResponseResultEnum.Absent) {
       return {
         backgroundColor: theme.colors.gray10,
         icon: <AbsentIcon />,
-        textColor: theme.colors.common.black_const,
+        textColor: theme.colors.const.black,
         text: '결석',
       };
     }

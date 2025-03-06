@@ -69,7 +69,7 @@ const InputBox = styled.div`
   height: 3.5rem;
   border-radius: 0.5rem;
   border: 1px solid ${({ theme }) => theme.colors.primary90};
-  background-color: ${({ theme }) => theme.colors.common.white_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
   display: flex;
   flex-direction: row;
   justify-content: space-between;

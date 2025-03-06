@@ -119,7 +119,7 @@ const Modal = styled.div`
   width: 34rem;
   height: 38rem;
   border-radius: 1.725rem;
-  background-color: ${({ theme }) => theme.colors.common.white_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
   padding: 2.5rem 2.25rem;
 
   ${media.mobile`
@@ -140,7 +140,7 @@ const Header = styled.div`
     left: 0;
   }
   h3 {
-    color: ${({ theme }) => theme.colors.common.black_const};
+    color: ${({ theme }) => theme.colors.const.black};
     font-size: 1.5rem;
     margin: 0;
   }
@@ -172,7 +172,7 @@ const Submit = styled.div`
     border-radius: 0.5rem;
     border: 1px solid ${({ theme }) => theme.colors.primary100_1};
     background-color: ${({ theme }) => theme.colors.primary50};
-    color: ${({ theme }) => theme.colors.common.black_const};
+    color: ${({ theme }) => theme.colors.const.black};
     font-size: ${({ theme }) => theme.fontSize.sm};
   }
 `;

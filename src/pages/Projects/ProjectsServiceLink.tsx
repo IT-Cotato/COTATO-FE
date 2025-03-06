@@ -35,7 +35,7 @@ const ProjectsLink = ({ link, logo, name, bgColor, color }: ProjectsLinkProps) =
       to={link}
       style={{
         backgroundColor: bgColor,
-        color: color ? color : theme.colors.common.white_const,
+        color: color ? color : theme.colors.const.white,
       }}
     >
       <Box width="1.375rem" height="1.375rem">

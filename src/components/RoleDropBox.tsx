@@ -45,7 +45,7 @@ const RoleDropBox = ({ selectedRole, onChangeRole }: Props) => {
         <CotatoIcon
           icon={isOpen ? 'angle-up' : 'angle-down'}
           size="1rem"
-          color={selectedRole ? selectedRole.color : (theme) => theme.colors.common.black_const}
+          color={selectedRole ? selectedRole.color : (theme) => theme.colors.const.black}
         />
       </SelectMenu>
       {isOpen && (

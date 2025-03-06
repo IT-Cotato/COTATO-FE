@@ -117,7 +117,7 @@ const ActivityCard = styled.div`
   padding: 0.5rem 0.9rem 1.5rem;
   border: 2.5px solid ${({ theme }) => theme.colors.primary100_2};
   border-radius: 1rem;
-  background-color: ${({ theme }) => theme.colors.common.white_const};
+  background-color: ${({ theme }) => theme.colors.const.white};
 
   > img {
     width: 14rem;

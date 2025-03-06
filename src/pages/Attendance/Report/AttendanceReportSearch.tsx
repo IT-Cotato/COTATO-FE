@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import CotatoTextField from '@components/CotatoTextField/CotatoTextField';
+import CotatoSearchTextField from '@components/CotatoSearchTextField/CotatoSearchTextField';
 import { Box } from '@mui/material';
 import { useDebounce } from 'react-use';
 import { useAttendanceReportFilter } from '../hooks/useAttendanceReportFilter';
@@ -46,7 +46,7 @@ const AttendanceReportSearch = () => {
 
   return (
     <Box width="18rem">
-      <CotatoTextField
+      <CotatoSearchTextField
         value={searchValue}
         variant="standard"
         fullWidth

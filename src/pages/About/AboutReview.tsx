@@ -140,7 +140,7 @@ const ReviewCard = styled.div<ReviewCardProps>`
   padding: 1rem 1.5rem;
   border: 2px solid ${({ theme }) => theme.colors.primary100_2};
   border-radius: 0.75rem;
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
 `;
 
 const CardContent = styled.span`

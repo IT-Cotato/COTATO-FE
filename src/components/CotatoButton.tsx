@@ -1,4 +1,3 @@
-import { th } from 'date-fns/locale';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -8,8 +7,8 @@ import styled from 'styled-components';
 
 interface CotatoButtonProps {
   isEnabled: boolean;
-  buttonStyle?: 'filled' | 'line';
   text: string;
+  buttonStyle?: 'filled' | 'line';
   onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -74,9 +73,7 @@ const StyledButton = styled.button<{ isEnabled: boolean; buttonStyle: string | u
   border-color: ${({ theme }) => theme.colors.primary100_1};
   font-size: ${({ theme }) => theme.fontSize.md};
   color: ${({ buttonStyle, theme }) =>
-    buttonStyle === 'filled'
-      ? theme.colors.common.black_const
-      : theme.colors.common.black} !important;
+    buttonStyle === 'filled' ? theme.colors.const.black : theme.colors.common.black} !important;
   ${({ isEnabled, buttonStyle, theme }) =>
     isEnabled ? BUTTON_STYLE(theme, buttonStyle).enabled : BUTTON_STYLE(theme).disabled};
 `;

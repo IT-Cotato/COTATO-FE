@@ -80,9 +80,7 @@ const CotatoGlobalFab = () => {
   //
   return (
     <CotatoFloatingActionButton
-      icon={
-        <CotatoIcon icon="search" size="100%" color={(theme) => theme.colors.common.white_const} />
-      }
+      icon={<CotatoIcon icon="search" size="100%" color={(theme) => theme.colors.const.white} />}
       name="바로가기"
     >
       {Object.entries(fabList).map(([key, value]) => (
@@ -107,6 +105,6 @@ export default CotatoGlobalFab;
 
 const StyledCSQuizIcon = styled(CSQuizIcon)`
   path {
-    fill: ${({ theme }) => theme.colors.common.white_const};
+    fill: ${({ theme }) => theme.colors.const.white};
   }
 `;

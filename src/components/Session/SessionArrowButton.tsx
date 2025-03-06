@@ -19,9 +19,9 @@ const SessionArrowButton = ({ direction, onClick }: SessionArrowButtonProps) => 
   return (
     <ArrowButton onClick={onClick}>
       {direction === 'prev' ? (
-        <CotatoIcon icon="angle-left-solid" color={(theme) => theme.colors.common.black_const} />
+        <CotatoIcon icon="angle-left-solid" color={(theme) => theme.colors.const.black} />
       ) : (
-        <CotatoIcon icon="angle-right-solid" color={(theme) => theme.colors.common.black_const} />
+        <CotatoIcon icon="angle-right-solid" color={(theme) => theme.colors.const.black} />
       )}
     </ArrowButton>
   );
@@ -38,7 +38,7 @@ const ArrowButton = styled.button`
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
   border: none;
   cursor: pointer;
 
