@@ -226,7 +226,9 @@ const MypageGenerationManagementDetailContent = () => {
           }}
           onClick={handleSubmit(onSubmit)}
         >
-          기수 정보 수정하기
+          <Typography fontFamily="YComputer" variant="body1">
+            기수 정보 수정하기
+          </Typography>
         </CotatoMuiButton>
       </Box>
     );
@@ -252,7 +254,11 @@ const MypageGenerationManagementDetailContent = () => {
       <StyledCard>
         <Stack gap="1.5rem">
           {renderTitle()}
-          <Stack direction="row" gap="2rem" alignItems="flex-end">
+          <Stack
+            direction={{ md: 'row', xs: 'column' }}
+            gap="2rem"
+            alignItems={{ md: 'flex-end', xs: 'flex-start' }}
+          >
             {renderCurrentGeneration()}
             {renderGenerationPeriodField()}
             {renderSubmitButton()}
