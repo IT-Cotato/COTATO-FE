@@ -87,7 +87,7 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
    */
   const renderHeader = () => {
     return (
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-between" flexWrap="wrap" gap="1rem">
         <Typography variant="h6" color={theme.colors.common.black}>
           부원 정보
         </Typography>
@@ -97,14 +97,18 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
             fontFamily="YComputer"
             onClick={() => setIsOpenMemberAddDialog(true)}
           >
-            인원 추가하기
+            <Typography fontFamily="YComputer" variant="body2">
+              인원 추가하기
+            </Typography>
           </CotatoMuiButton>
           <CotatoMuiButton
             startIcon={!isEditable ? <CotatoIcon icon="pencil-solid" size="1.25rem" /> : undefined}
             fontFamily="YComputer"
             onClick={() => setIsEditable(!isEditable)}
           >
-            {isEditable ? '수정 완료' : '역할 수정 / 기수에서 제외하기'}
+            <Typography fontFamily="YComputer" variant="body1">
+              {isEditable ? '수정 완료' : '역할 수정 / 기수에서 제외하기'}
+            </Typography>
           </CotatoMuiButton>
         </Box>
       </Stack>
