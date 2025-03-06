@@ -1,5 +1,5 @@
 import React from 'react';
-import CotatoIcon from '@components/CotatoIcon';
+import CotatoIcon, { CotatoIconProps } from '@components/CotatoIcon';
 import { Box, IconButton, TextField, TextFieldProps } from '@mui/material';
 import { useTheme } from 'styled-components';
 
@@ -9,6 +9,7 @@ import { useTheme } from 'styled-components';
 
 type CotatoSearchTextFieldProps = TextFieldProps & {
   isEndAdornment?: boolean;
+  iconColor?: CotatoIconProps['color'];
 };
 
 //
@@ -17,6 +18,7 @@ type CotatoSearchTextFieldProps = TextFieldProps & {
 
 const CotatoSearchTextField = ({
   isEndAdornment = false,
+  iconColor = (theme) => theme.colors.common.black,
   ...props
 }: CotatoSearchTextFieldProps) => {
   const theme = useTheme();
@@ -39,7 +41,7 @@ const CotatoSearchTextField = ({
   const renderAdornment = () => {
     return (
       <Box width="1.25rem" display="flex" justifyContent="center" alignItems="center">
-        <CotatoIcon icon="search" color={(theme) => theme.colors.common.black} size="1.25rem" />
+        <CotatoIcon icon="search" color={iconColor} size="1.25rem" />
       </Box>
     );
   };
@@ -54,7 +56,7 @@ const CotatoSearchTextField = ({
 
     return (
       <IconButton onClick={handleClear}>
-        <CotatoIcon icon="times" color={(theme) => theme.colors.common.black} size="1rem" />
+        <CotatoIcon icon="times" color={iconColor} size="1rem" />
       </IconButton>
     );
   };

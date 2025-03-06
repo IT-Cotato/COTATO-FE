@@ -8,7 +8,7 @@ import { useTheme, DefaultTheme } from 'styled-components';
 //
 //
 
-interface CotatoIconProps extends Omit<ObjectHTMLAttributes<HTMLObjectElement>, 'color'> {
+export interface CotatoIconProps extends Omit<ObjectHTMLAttributes<HTMLObjectElement>, 'color'> {
   icon: RegularIconName | SolidIconName;
   size?: string;
   color?: string | ((theme: DefaultTheme) => string);
