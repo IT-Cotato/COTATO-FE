@@ -120,7 +120,6 @@ const CSHome = () => {
         educatoin={modifyEducation}
         generationId={selectedGeneration?.generationId}
         fetchEducations={fetchEducations}
-        // sessionCount={selectedGeneration?.sessionCount}
       />
     </>
   );

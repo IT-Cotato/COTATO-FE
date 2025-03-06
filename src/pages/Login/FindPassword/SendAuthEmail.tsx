@@ -6,6 +6,7 @@ import CotatoIcon from '@components/CotatoIcon';
 import panelText from '@assets/find_password_send_email_panel_text.svg';
 import api from '@/api/api';
 import { media } from '@theme/media';
+import { CotatoSendEmailRequest } from 'cotato-openapi-clients';
 
 //
 //
@@ -95,7 +96,7 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
     }
 
     api
-      .post('/v1/api/auth/verification', emailData, {
+      .post<CotatoSendEmailRequest>('/v1/api/auth/verification', emailData, {
         params: {
           type: 'find-password',
         },
@@ -170,7 +171,7 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
         isEnabled={true}
         buttonStyle="line"
         text="인증 이메일 보내기"
-        handleClick={handleSubmit}
+        onClick={handleSubmit}
       />
     </Wrapper>
   );

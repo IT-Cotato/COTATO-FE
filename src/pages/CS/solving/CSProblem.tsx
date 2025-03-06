@@ -17,6 +17,7 @@ import fetchUserData from '@utils/fetchUserData';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
 import { QUIZ_END_NUMBER } from './constants';
+import { MessageType } from '../admin/upload/utils/handleWsMessage';
 
 //
 //
@@ -43,6 +44,7 @@ interface CSProblemProps {
   quizId: number | null;
   submitAllowed: boolean;
   problemId: number;
+  message: MessageType;
   showKingKing: boolean;
   educationId?: number;
   setShowKingKing: React.Dispatch<React.SetStateAction<boolean>>;
@@ -56,6 +58,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   quizId,
   submitAllowed,
   problemId,
+  message,
   educationId,
   showKingKing,
   setShowKingKing,
@@ -334,7 +337,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
       {showCorrect && <BgCorrect />}
       {showIncorrect && <BgIncorrect />}
       {showKingKing && educationId && <BgKingKing educationId={educationId} />}
-      {quizData?.number === QUIZ_END_NUMBER ? (
+      {message.command === 'exit' ? (
         <BgWaiting problemNumber={quizData?.number} />
       ) : (
         returnToWaiting && <BgWaiting problemNumber={quizData?.number} />

@@ -74,6 +74,8 @@ const CotatoSearchTextField = ({
       sx={{
         '& .MuiInputBase-input': {
           color: theme.colors.const.black,
+          fontSize: '1rem',
+          fontFamily: 'Prentendard',
         },
         gap: '0.5rem',
         '& .MuiInputBase-root': {
