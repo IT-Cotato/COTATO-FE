@@ -105,6 +105,6 @@ export default CotatoGlobalFab;
 
 const StyledCSQuizIcon = styled(CSQuizIcon)`
   path {
-    fill: ${({ theme }) => theme.colors.common.white_const};
+    fill: ${({ theme }) => theme.colors.const.white};
   }
 `;

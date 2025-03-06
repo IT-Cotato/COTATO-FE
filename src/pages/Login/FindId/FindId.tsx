@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import panelText from '@assets/find_id_panel_text.svg';
 import CotatoButton from '@components/CotatoButton';
 import CotatoIcon from '@components/CotatoIcon';
@@ -28,8 +27,6 @@ const FindId = () => {
   const [telErrMsg, setTelErrMsg] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [id, setId] = useState('');
-
-  const navigate = useNavigate();
 
   /**
    *
@@ -197,7 +194,7 @@ const FindId = () => {
 
   return (
     <Wrapper>
-      <CotatoPanel size="long" textImgSrc={panelText} />
+      <CotatoPanel size={SizeStateEnum.LONG} textImgSrc={panelText} />
       {renderFindId()}
       {renderFindIdResult()}
     </Wrapper>

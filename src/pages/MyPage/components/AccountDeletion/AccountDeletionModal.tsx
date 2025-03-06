@@ -72,7 +72,7 @@ const AccountDeletionModal = ({
             isEnabled={form.email !== '' && form.password !== ''}
             buttonStyle="filled"
             text={'탈퇴하기'}
-            handleClick={handleDeactivateClick}
+            onClick={handleDeactivateClick}
           />
         </ButtonSection>
       </ModalContainer>

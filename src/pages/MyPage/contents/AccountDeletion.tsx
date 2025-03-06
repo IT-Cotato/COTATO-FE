@@ -53,7 +53,7 @@ const AccountDeletion = () => {
               isEnabled={form.isTermsAgreed}
               buttonStyle="filled"
               text="탈퇴하기"
-              handleClick={handleDeleteClick}
+              onClick={handleDeleteClick}
             />
           </ButtonContainer>
         </NotificationContainer>
