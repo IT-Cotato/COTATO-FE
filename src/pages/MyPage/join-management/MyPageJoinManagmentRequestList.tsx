@@ -36,8 +36,7 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
    */
   const fetchRequestList = async () => {
     await api.get(`/v1/api/member?status=${MemberStatus.REQUESTED}`).then((res) => {
-      console.log(res.data);
-      setRequestList(res.data);
+      setRequestList(res.data.content);
     });
   };
 
@@ -161,7 +160,6 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
   //
   useEffect(() => {
     fetchRequestList();
-    console.log('!', generations);
   }, []);
 
   return <>{renderList()}</>;
