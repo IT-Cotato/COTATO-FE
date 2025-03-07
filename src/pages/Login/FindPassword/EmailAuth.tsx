@@ -251,12 +251,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
       {renderGuideMessage()}
       {renderInputField()}
       {renderInfoMessage()}
-      <CotatoButton
-        isEnabled={true}
-        buttonStyle="line"
-        text="인증 완료"
-        handleClick={handleSubmit}
-      />
+      <CotatoButton isEnabled={true} buttonStyle="line" text="인증 완료" onClick={handleSubmit} />
       {renderResendSection()}
     </Wrapper>
   );

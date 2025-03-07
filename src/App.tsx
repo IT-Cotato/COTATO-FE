@@ -8,7 +8,7 @@ import Session from '@pages/Session/Session';
 import SignUp from '@pages/JoinUs/SignUp';
 import MyPage from '@pages/MyPage';
 import { GlobalStyle } from '@theme/GlobalStyle';
-import FindID from '@pages/Login/FindID';
+import FindID from '@pages/Login/FindId/FindId';
 import FindPassword from '@pages/Login/FindPassword/FindPassword';
 import ReadyState from '@components/ReadyState';
 import NotFound from '@components/NotFound';

@@ -8,7 +8,16 @@ import {
 } from '@components/CotatoDialog';
 import CotatoMuiButton from '@components/CotatoMuiButton';
 import CotatoSearchTextField from '@components/CotatoSearchTextField/CotatoSearchTextField';
-import { Checkbox, Divider, List, ListItem, ListItemText, Select, MenuItem } from '@mui/material';
+import {
+  Checkbox,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Select,
+  MenuItem,
+  Box,
+} from '@mui/material';
 import { Stack } from '@mui/system';
 import { getMemberPostionText } from '@utils/member';
 import { CotatoAddableMemberInfoPositionEnum } from 'cotato-openapi-clients';
@@ -110,6 +119,7 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
         direction="row"
         padding="1.25rem 1.5rem 1rem"
         justifyContent="space-between"
+        flexWrap="wrap"
         alignItems="flex-end"
         position="sticky"
         top="0"
@@ -165,13 +175,16 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
               ))}
           </StyledSelect>
         </Stack>
-        <CotatoSearchTextField
-          fullWidth
-          isEndAdornment
-          placeholder="이름 검색"
-          value={searchName}
-          onChange={(e) => setSearchName(e.target.value)}
-        />
+        <Box maxWidth="10rem">
+          <CotatoSearchTextField
+            fullWidth
+            isEndAdornment
+            placeholder="이름 검색"
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            iconColor={(theme) => theme.colors.const.black}
+          />
+        </Box>
       </Stack>
     );
   };

@@ -39,6 +39,10 @@ const StyledButton = styled(Button)`
   ${media.tablet`
     left: 3rem;
     `};
+
+  ${media.landscape`
+    left: 0.5rem;
+  `};
 `;
 
 export default BackButton;
