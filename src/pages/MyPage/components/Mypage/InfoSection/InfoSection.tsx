@@ -4,6 +4,7 @@ import { media } from '@theme/media';
 import { AccountSection, ManageSection } from './subComponents';
 import { useInfoForm } from '@pages/MyPage/hooks/useInfoForm';
 import useUser from '@/hooks/useUser';
+import { CotatoLightTheme } from '@theme/theme';
 
 //
 //

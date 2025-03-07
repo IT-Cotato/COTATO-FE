@@ -27,7 +27,7 @@ const NameSection = ({ name }: NameSectionProps) => {
     <ProfileCardSection>
       <ProfileCardSectionTitle>이름</ProfileCardSectionTitle>
       <ProfileCardStringInputSection>
-        <ProfileInput defaultValue={name} isPrimary={true} disabled={true} />
+        <ProfileInput value={name} isPrimary={true} disabled={true} />
       </ProfileCardStringInputSection>
     </ProfileCardSection>
   );

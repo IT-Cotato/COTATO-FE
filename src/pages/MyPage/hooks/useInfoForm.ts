@@ -37,7 +37,7 @@ export const useInfoForm = (memberId: number | undefined) => {
     };
 
     fetchMemberInfo(memberId);
-  }, []);
+  }, [memberId]);
 
   return { form };
 };

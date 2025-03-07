@@ -17,6 +17,7 @@ interface TableRendererProps<T> {
     page: number;
     rowsPerPage: number;
     onPageChange: (e: React.ChangeEvent<unknown>, newPage: number) => void;
+    count?: number; // 전체 아이템 수 추가
   };
 }
 
@@ -45,13 +46,7 @@ const TableRenderer = <T,>({
   //
   const arr: T[][] = Array.from({ length: repeatCount }, () => []);
 
-  const getCurrentPageData = () => {
-    const start = (pagination.page - 1) * pagination.rowsPerPage;
-    const end = start + pagination.rowsPerPage;
-    return data.slice(start, end);
-  };
-
-  const paginatedData = getCurrentPageData();
+  const paginatedData = data;
 
   /**
    * 수정 필요 (임시 페이지네이션 구현)
@@ -113,10 +108,12 @@ const TableRenderer = <T,>({
    * @returns
    */
   const renderTablePagination = () => {
+    const totalItems = pagination.count !== undefined ? pagination.count : data.length;
+
     return (
       <Stack alignItems="center" mt={'6rem'}>
         <TablePagination
-          count={Math.ceil(data.length / pagination.rowsPerPage)}
+          count={totalItems} // 전체 아이템 수 전달
           page={pagination.page}
           onChange={pagination.onPageChange}
           shape="rounded"
