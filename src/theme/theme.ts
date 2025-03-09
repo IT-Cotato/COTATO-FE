@@ -165,6 +165,19 @@ export type CotatoThemeType = {
     lg: string;
     xl: string;
     xxl: string;
+    h1: string;
+    h2: string;
+    h3: string;
+    h4: string;
+    h5: string;
+    h6: string;
+    h7: string;
+    subtitle1: string;
+    subtitle2: string;
+    body1: string;
+    body2: string;
+    caption: string;
+    caption2: string;
   };
   size: {
     xs: string;
@@ -313,6 +326,19 @@ export const CotatoLightTheme = Object.freeze<CotatoThemeType>({
     lg: '1.125rem',
     xl: '1.25rem',
     xxl: '1.5rem',
+    h1: '4.875rem',
+    h2: '4.25rem',
+    h3: '3rem',
+    h4: '2.25rem',
+    h5: '1.875rem',
+    h6: '1.5rem',
+    h7: '1.375rem',
+    subtitle1: '1.25rem',
+    subtitle2: '1.125rem',
+    body1: '1rem',
+    body2: '0.875rem',
+    caption: '0.75rem',
+    caption2: '0.625rem',
   },
   size: {
     xs: '0.2rem',
@@ -461,6 +487,19 @@ export const CotatoDarkTheme = Object.freeze<CotatoThemeType>({
     lg: '1.125rem',
     xl: '1.25rem',
     xxl: '1.5rem',
+    h1: '4.875rem',
+    h2: '4.25rem',
+    h3: '3rem',
+    h4: '2.25rem',
+    h5: '1.875rem',
+    h6: '1.5rem',
+    h7: '1.375rem',
+    subtitle1: '1.25rem',
+    subtitle2: '1.125rem',
+    body1: '1rem',
+    body2: '0.875rem',
+    caption: '0.75rem',
+    caption2: '0.625rem',
   },
   size: {
     xs: '0.2rem',

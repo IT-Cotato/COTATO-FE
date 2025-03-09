@@ -8,6 +8,7 @@ import {
   CotatoMemberAttendResponseOpenStatusEnum,
   CotatoMemberAttendResponseResultEnum,
 } from 'cotato-openapi-clients';
+import { Typography } from '@mui/material';
 
 //
 //
@@ -99,7 +100,9 @@ const AttendaceCardStatus: React.FC<AttendaceStatusProps> = ({ openStatus, atten
     <Wrapper>
       <StyledSpeachBubble $color={backgroundColor} />
       <StatusContainer $textColor={textColor}>
-        <span>{text}</span>
+        <Typography variant="body1" fontFamily="YComputer">
+          {text}
+        </Typography>
         {icon}
       </StatusContainer>
     </Wrapper>
