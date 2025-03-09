@@ -34,7 +34,7 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
           <ProfileInput
             size="small"
             disabled={!isModifying}
-            value={links[0].url}
+            value={links[0]?.url}
             onChange={(e) => onChange(0, e.target.value)}
           />
         </LinkContainer>
@@ -43,7 +43,7 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
           <ProfileInput
             size="small"
             disabled={!isModifying}
-            value={links[1].url}
+            value={links[1]?.url}
             onChange={(e) => onChange(1, e.target.value)}
           />
         </LinkContainer>

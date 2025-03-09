@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import api from '@/api/api';
 import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import panelText from '@assets/find_id_panel_text.svg';
@@ -28,8 +27,6 @@ const FindId = () => {
   const [telErrMsg, setTelErrMsg] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [id, setId] = useState('');
-
-  const navigate = useNavigate();
 
   /**
    *

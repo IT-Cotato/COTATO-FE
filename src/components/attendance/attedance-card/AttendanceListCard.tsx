@@ -74,11 +74,7 @@ const AttendanceCardList: React.FC<AttendanceCardProps> = ({
   const renderAttendanceInfo = () => {
     return (
       <Stack width="10rem">
-        <StyledTypography
-          variant="body1"
-          fontSize="1.125rem"
-          color={theme.colors.common.black_const}
-        >
+        <StyledTypography variant="h6" fontSize="1.125rem" color={theme.colors.const.black}>
           {generationNumber}기 {attendance.sessionTitle}
         </StyledTypography>
         <StyledTypography variant="body2" fontSize="0.875rem" color={theme.colors.gray50}>

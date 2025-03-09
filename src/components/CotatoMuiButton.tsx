@@ -3,6 +3,7 @@ import { Button, ButtonProps } from '@mui/material';
 import { styled } from 'styled-components';
 
 interface CotatoMuiButtonProps extends ButtonProps {
+  dark?: boolean;
   height?: string;
   fontFamily?: string;
   fontSize?: string;
@@ -16,6 +17,7 @@ const CotatoMuiButton: React.FC<CotatoMuiButtonProps> = ({
   height,
   fontFamily,
   fontSize,
+  sx,
   ...props
 }) => {
   return (
@@ -24,26 +26,55 @@ const CotatoMuiButton: React.FC<CotatoMuiButtonProps> = ({
         height: height ?? '2.25rem',
         fontFamily: fontFamily ?? 'Prentard',
         fontSize: fontSize ?? '1rem',
+        ...sx,
       }}
       {...props}
     />
   );
 };
 
-const StyledMuiButton = styled(Button)<ButtonProps>(({ theme }) => ({
+const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, dark }) => ({
   '&.MuiButton-root': {
-    backgroundColor: `${theme.colors.primary100_1}`,
-    color: theme.colors.common.black,
+    backgroundColor: (() => {
+      switch (color) {
+        case 'error':
+          return dark ? theme.colors.secondary80 : theme.colors.const.secondary80;
+        case 'inherit':
+          return 'transparent';
+        default:
+          return dark ? theme.colors.primary100_1 : theme.colors.const.primary100_1;
+      }
+    })(),
+    color: (() => {
+      switch (color) {
+        case 'error':
+          return dark ? theme.colors.const.white : theme.colors.const.black;
+        default:
+          return dark ? theme.colors.const.black : theme.colors.const.white;
+      }
+    })(),
+    border: (() => {
+      switch (color) {
+        case 'error':
+          return 'none';
+        case 'inherit':
+          return `1px solid ${dark ? theme.colors.gray30 : theme.colors.const.gray30}`;
+        default:
+          return 'none';
+      }
+    })(),
     '&:hover': {
-      backgroundColor: theme.colors.primary100_2,
+      backgroundColor: dark ? theme.colors.primary100_2 : theme.colors.const.primary100_2,
     },
     '&:disabled': {
-      backgroundColor: theme.colors.gray30,
-      color: theme.colors.gray60,
+      backgroundColor: dark ? theme.colors.gray30 : theme.colors.const.gray30,
+      color: dark ? theme.colors.const.gray60 : theme.colors.const.gray60,
       '& .MuiButton-startIcon': {
         // For CotatoIcon disabled color
         div: {
-          backgroundColor: theme.colors.gray60 + ' !important',
+          backgroundColor: dark
+            ? theme.colors.const.gray60
+            : theme.colors.const.gray60 + ' !important',
         },
       },
     },

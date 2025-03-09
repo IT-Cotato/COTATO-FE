@@ -7,8 +7,8 @@ import styled from 'styled-components';
 
 interface CotatoButtonProps {
   isEnabled: boolean;
-  buttonStyle: 'filled' | 'line' | undefined;
   text: string;
+  buttonStyle?: 'filled' | 'line';
   onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -57,9 +57,9 @@ const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, tex
   return (
     <StyledButton
       isEnabled={isEnabled}
+      disabled={!isEnabled}
       buttonStyle={buttonStyle}
       onClick={onClick}
-      disabled={!isEnabled}
     >
       {text}
     </StyledButton>
@@ -77,6 +77,8 @@ const StyledButton = styled.button<{ isEnabled: boolean; buttonStyle: string | u
   border-style: solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
   font-size: ${({ theme }) => theme.fontSize.md};
+  color: ${({ buttonStyle, theme }) =>
+    buttonStyle === 'filled' ? theme.colors.const.black : theme.colors.common.black} !important;
   ${({ isEnabled, buttonStyle, theme }) =>
     isEnabled ? BUTTON_STYLE(theme, buttonStyle).enabled : BUTTON_STYLE(theme).disabled};
 `;
