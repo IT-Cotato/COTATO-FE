@@ -153,13 +153,13 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
           <StyledSelect
             slotProps={{
               input: {
+                placeholder: '포지션',
                 sx: {
                   fontFamily: 'YComputer',
                 },
               },
             }}
             displayEmpty={true}
-            placeholder="포지션"
             value={selectedPosition}
             onChange={(e) =>
               handlePositionSelect(e.target.value as CotatoAddableMemberInfoPositionEnum)

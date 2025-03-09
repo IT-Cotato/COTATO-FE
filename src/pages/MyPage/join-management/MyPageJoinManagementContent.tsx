@@ -95,7 +95,7 @@ const Tab = styled.div<{ active: boolean }>`
     active
       ? `
         background: ${theme.colors.primary100_1};
-        color: ${theme.colors.common.black_const};
+        color: ${theme.colors.const.black};
       `
       : `
         background: ${theme.colors.gray30};

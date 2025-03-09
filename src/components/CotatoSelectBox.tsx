@@ -45,7 +45,7 @@ const CotatoSelectBox = ({ defaultVal, selectList, metaDatas }: CotatoSelectBoxP
           <CotatoIcon
             icon={isOpen ? 'angle-up-solid' : 'angle-down-solid'}
             size="1.25rem"
-            color={(theme) => theme.colors.common.black_const}
+            color={(theme) => theme.colors.const.black}
           />
         </InputBox>
         {isOpen && (
@@ -104,7 +104,7 @@ const InputBox = styled.div`
   cursor: pointer;
   background: ${({ theme }) => theme.colors.gray20};
   p {
-    color: ${({ theme }) => theme.colors.common.black_const} !important;
+    color: ${({ theme }) => theme.colors.const.black} !important;
     font-size: ${({ theme }) => theme.fontSize.md};
     text-align: center;
   }
@@ -116,7 +116,7 @@ const ListBox = styled.div`
   margin-top: 0.25rem;
   width: 100%;
   height: fit-content;
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -129,7 +129,7 @@ const ListItem = styled.div<{ isSelected: boolean }>`
   width: 100%;
   height: 3.3rem;
   background: ${({ isSelected, theme }) =>
-    isSelected ? theme.colors.gray20 : theme.colors.common.white_const};
+    isSelected ? theme.colors.gray20 : theme.colors.const.white};
   display: flex;
   justify-content: center;
   align-items: center;

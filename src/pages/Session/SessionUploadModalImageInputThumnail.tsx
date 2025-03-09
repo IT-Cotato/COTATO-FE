@@ -67,7 +67,7 @@ const SessionUploadModalImageInputThumnail = ({
     return child;
   }
 
-  return createPortal(child, portal);
+  return <>{createPortal(child, portal)}</>;
 };
 
 //
