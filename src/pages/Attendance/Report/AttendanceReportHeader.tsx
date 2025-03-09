@@ -207,6 +207,7 @@ const AttendanceReportHeader = () => {
       <AttendanceReportExcelExportModal
         open={excelModalOpen}
         generationId={selectedGenerationId}
+        selectedAttendanceId={selectedAttendanceId}
         onClose={handleExcelModalClose}
       />
     </>
