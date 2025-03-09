@@ -8,28 +8,32 @@ import { ReactComponent as PanelLong } from '@assets/cotato_panel_long.svg';
 //
 //
 
-type SizeStateType = 'short' | 'default' | 'long';
+export enum SizeStateEnum {
+  SHORT = 'short',
+  DEFAULT = 'default',
+  LONG = 'long',
+}
 
 interface CotatoPanelProps {
-  size: SizeStateType;
+  size: SizeStateEnum;
   textImgSrc: string;
 }
 
 /**
- * @param {SizeStateType} size panel size - short, default, long
+ * @param {SizeStateEnum} size panel size - short, default, long
  * @param {string} textImgSrc panel text image source
  */
 const CotatoPanel: React.FC<CotatoPanelProps> = ({ size, textImgSrc }) => {
   /**
    *
    */
-  const getPanelBackground = (size: SizeStateType) => {
+  const getPanelBackground = (size: SizeStateEnum) => {
     switch (size) {
-      case 'short':
+      case SizeStateEnum.SHORT:
         return <PanelShort style={{ width: '10.25rem' }} />;
-      case 'default':
+      case SizeStateEnum.DEFAULT:
         return <PanelDefault style={{ width: '14rem' }} />;
-      case 'long':
+      case SizeStateEnum.LONG:
         return <PanelLong style={{ width: '17.5rem' }} />;
       default:
         return <PanelDefault style={{ width: '14rem' }} />;

@@ -10,7 +10,7 @@ import { CotatoProjectSummaryResponse } from 'cotato-openapi-clients';
 import ProjectsCard from './ProjectsCard';
 import { ReactComponent as CotatoChip } from '@assets/cotato_chip.svg';
 import ReadyState from '@components/ReadyState';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import PanelText from '@assets/project_panel_text.svg';
 
 const Projects = () => {
@@ -74,7 +74,7 @@ const Projects = () => {
 
   return (
     <Wrapper>
-      <CotatoPanel size="short" textImgSrc={PanelText} />
+      <CotatoPanel size={SizeStateEnum.SHORT} textImgSrc={PanelText} />
       {renderSubtitle()}
       <Grid2
         container

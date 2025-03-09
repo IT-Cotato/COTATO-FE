@@ -610,6 +610,7 @@ const SessionUploadModal = ({
             {renderUplaodButton()}
           </Wrapper>
           <CotatoDatePicker
+            isAttendancePicker
             open={isDayPickerOpen}
             date={session.sessionDateTime}
             onDateChange={handleSessionDateChange}

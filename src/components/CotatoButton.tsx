@@ -1,4 +1,3 @@
-import { th } from 'date-fns/locale';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -8,7 +7,7 @@ import styled from 'styled-components';
 
 interface CotatoButtonProps {
   isEnabled: boolean;
-  buttonStyle?: 'filled' | 'line';
+  buttonStyle: 'filled' | 'line' | undefined;
   text: string;
   onClick?: React.FormEventHandler | React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -56,7 +55,12 @@ const getBackgroundColor = (theme: any, style: string) => {
  */
 const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, text, onClick }) => {
   return (
-    <StyledButton isEnabled={isEnabled} buttonStyle={buttonStyle} onClick={onClick}>
+    <StyledButton
+      isEnabled={isEnabled}
+      buttonStyle={buttonStyle}
+      onClick={onClick}
+      disabled={!isEnabled}
+    >
       {text}
     </StyledButton>
   );
@@ -73,10 +77,6 @@ const StyledButton = styled.button<{ isEnabled: boolean; buttonStyle: string | u
   border-style: solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
   font-size: ${({ theme }) => theme.fontSize.md};
-  color: ${({ buttonStyle, theme }) =>
-    buttonStyle === 'filled'
-      ? theme.colors.common.black_const
-      : theme.colors.common.black} !important;
   ${({ isEnabled, buttonStyle, theme }) =>
     isEnabled ? BUTTON_STYLE(theme, buttonStyle).enabled : BUTTON_STYLE(theme).disabled};
 `;

@@ -5,6 +5,7 @@ import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import {
   CotatoAttendanceWithSessionResponse,
+  CotatoAttendanceWithSessionResponseOpenStatusEnum,
   CotatoAttendanceWithSessionResponseSessionTypeEnum,
   CotatoGenerationInfoResponse,
 } from 'cotato-openapi-clients';
@@ -99,6 +100,7 @@ const AttendanceReportHeader = () => {
       sessionId: REPORT_ALL_ID,
       sessionTitle: '전체',
       sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.All,
+      openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
     });
     setAttendanceListWithAll(newAttendaceList);
 

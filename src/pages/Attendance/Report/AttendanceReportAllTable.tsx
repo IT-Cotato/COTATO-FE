@@ -1,11 +1,10 @@
-import { Stack, Table, TableBody, TableRow } from '@mui/material';
 import React, { useEffect } from 'react';
+import { Stack, Table, TableBody, TableRow } from '@mui/material';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import { STATUS_ASSETS } from '../constants';
 import { useAttendancesRecords } from '../hooks/useAttendancesRecords';
-
-import AttedanceTableLayout from './components/AttedanceTableLayout';
+import { TableLayout } from '@components/Table';
 
 //
 //
@@ -43,18 +42,18 @@ const AttendanceReportAllTable = () => {
    */
   const renderTableHead = () => {
     return (
-      <AttedanceTableLayout.TableHead>
+      <TableLayout.TableHead>
         <TableRow>
           {TABLE_HEAD.map((head) => (
-            <AttedanceTableLayout.TableHeadTableCell key={head.status}>
+            <TableLayout.TableHeadTableCell key={head.status}>
               <Stack direction="row" gap="0.25rem" alignItems="center" justifyContent="center">
                 {head.icon}
                 {head.text}
               </Stack>
-            </AttedanceTableLayout.TableHeadTableCell>
+            </TableLayout.TableHeadTableCell>
           ))}
         </TableRow>
-      </AttedanceTableLayout.TableHead>
+      </TableLayout.TableHead>
     );
   };
 
@@ -65,27 +64,17 @@ const AttendanceReportAllTable = () => {
     return (
       <TableBody>
         {currentRecords?.map((record) => (
-          <AttedanceTableLayout.TableRow key={record.memberInfo?.memberId}>
-            <AttedanceTableLayout.TableCell>
-              {record.memberInfo?.name}
-            </AttedanceTableLayout.TableCell>
+          <TableLayout.TableRow key={record.memberInfo?.memberId}>
+            <TableLayout.TableCell>{record.memberInfo?.name}</TableLayout.TableCell>
 
-            <AttedanceTableLayout.TableCell>
-              {record.statistic?.offline}
-            </AttedanceTableLayout.TableCell>
+            <TableLayout.TableCell>{record.statistic?.offline}</TableLayout.TableCell>
 
-            <AttedanceTableLayout.TableCell>
-              {record.statistic?.online}
-            </AttedanceTableLayout.TableCell>
+            <TableLayout.TableCell>{record.statistic?.online}</TableLayout.TableCell>
 
-            <AttedanceTableLayout.TableCell>
-              {record.statistic?.late}
-            </AttedanceTableLayout.TableCell>
+            <TableLayout.TableCell>{record.statistic?.late}</TableLayout.TableCell>
 
-            <AttedanceTableLayout.TableCell>
-              {record.statistic?.absent}
-            </AttedanceTableLayout.TableCell>
-          </AttedanceTableLayout.TableRow>
+            <TableLayout.TableCell>{record.statistic?.absent}</TableLayout.TableCell>
+          </TableLayout.TableRow>
         ))}
       </TableBody>
     );
@@ -108,12 +97,12 @@ const AttendanceReportAllTable = () => {
   //
 
   return (
-    <AttedanceTableLayout.TableContainer>
+    <TableLayout.TableContainer>
       <Table>
         {renderTableHead()}
         {renderTableBody()}
       </Table>
-    </AttedanceTableLayout.TableContainer>
+    </TableLayout.TableContainer>
   );
 };
 
