@@ -16,6 +16,7 @@ import {
 import MypageGenerationManagementMemberRoleActions from './MypageGenerationManagementMemberRoleActions';
 import { useGenerationMembersMutation } from '../hooks/useGenerationMembersMutation';
 import { toast } from 'react-toastify';
+import { useTheme } from 'styled-components';
 
 //
 //
@@ -29,6 +30,8 @@ const TABLE_HEADS = ['이름', '역할'];
 //
 
 const MypageGenerationManagementDetailContentMemberInfo = () => {
+  const theme = useTheme();
+
   const { generationId } = useNumberParams();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
@@ -84,22 +87,28 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
    */
   const renderHeader = () => {
     return (
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h6">부원 정보</Typography>
+      <Stack direction="row" justifyContent="space-between" flexWrap="wrap" gap="1rem">
+        <Typography variant="h6" color={theme.colors.common.black}>
+          부원 정보
+        </Typography>
         <Box display="flex" gap="1rem">
           <CotatoMuiButton
             startIcon={<CotatoIcon icon="plus-solid" size="1.25rem" />}
             fontFamily="YComputer"
             onClick={() => setIsOpenMemberAddDialog(true)}
           >
-            인원 추가하기
+            <Typography fontFamily="YComputer" variant="body2">
+              인원 추가하기
+            </Typography>
           </CotatoMuiButton>
           <CotatoMuiButton
             startIcon={!isEditable ? <CotatoIcon icon="pencil-solid" size="1.25rem" /> : undefined}
             fontFamily="YComputer"
             onClick={() => setIsEditable(!isEditable)}
           >
-            {isEditable ? '수정 완료' : '역할 수정 / 기수에서 제외하기'}
+            <Typography fontFamily="YComputer" variant="body1">
+              {isEditable ? '수정 완료' : '역할 수정 / 기수에서 제외하기'}
+            </Typography>
           </CotatoMuiButton>
         </Box>
       </Stack>
@@ -118,8 +127,18 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
         render={(info) => {
           return (
             <>
-              <TableCell>{info?.name}</TableCell>
-              <TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: theme.colors.const.white,
+                }}
+              >
+                {info?.name}
+              </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: theme.colors.const.white,
+                }}
+              >
                 <MypageGenerationManagementMemberRoleActions
                   memberInfo={info}
                   onChange={(id, role) =>

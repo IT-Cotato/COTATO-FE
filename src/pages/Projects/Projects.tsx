@@ -96,7 +96,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 0;
+  padding: 4rem 4em;
   gap: 2.5rem;
   min-height: calc(100vh - ${HEADER_HEIGHT});
 

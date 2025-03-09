@@ -137,11 +137,11 @@ const MypageGenerationManagementDetailContent = () => {
                   alignItems="center"
                   gap="0.5rem"
                 >
-                  <StyledCotatoTypography color={theme.colors.gray100}>
+                  <StyledCotatoTypography color={theme.colors.const.gray100}>
                     {date.format('YYYY-MM-DD')}
                   </StyledCotatoTypography>
                   <IconButton onClick={() => setIsOpenStartDatePicker(true)}>
-                    <CotatoIcon icon="calender-solid" />
+                    <CotatoIcon icon="calender-solid" color={theme.colors.const.gray100} />
                   </IconButton>
 
                   <CotatoDatePicker
@@ -178,11 +178,11 @@ const MypageGenerationManagementDetailContent = () => {
                   alignItems="center"
                   gap="0.5rem"
                 >
-                  <StyledCotatoTypography color={theme.colors.gray100}>
+                  <StyledCotatoTypography color={theme.colors.const.gray100}>
                     {date.format('YYYY-MM-DD')}
                   </StyledCotatoTypography>
                   <IconButton onClick={() => setIsOpenEndDatePicker(true)}>
-                    <CotatoIcon icon="calender-solid" />
+                    <CotatoIcon icon="calender-solid" color={theme.colors.const.gray100} />
                   </IconButton>
 
                   <CotatoDatePicker
@@ -216,12 +216,19 @@ const MypageGenerationManagementDetailContent = () => {
       <Box flex={1} display="flex" justifyContent="flex-end">
         <CotatoMuiButton
           disabled={!isDirty || !isValid}
-          startIcon={<CotatoIcon size="1.25rem" icon="pencil-solid" />}
+          startIcon={
+            <CotatoIcon size="1.25rem" icon="pencil-solid" color={theme.colors.const.gray30} />
+          }
           variant="contained"
           fontFamily="Ycomputer"
+          sx={{
+            color: theme.colors.const.gray60,
+          }}
           onClick={handleSubmit(onSubmit)}
         >
-          기수 정보 수정하기
+          <Typography fontFamily="YComputer" variant="body1">
+            기수 정보 수정하기
+          </Typography>
         </CotatoMuiButton>
       </Box>
     );
@@ -247,7 +254,11 @@ const MypageGenerationManagementDetailContent = () => {
       <StyledCard>
         <Stack gap="1.5rem">
           {renderTitle()}
-          <Stack direction="row" gap="2rem" alignItems="flex-end">
+          <Stack
+            direction={{ md: 'row', xs: 'column' }}
+            gap="2rem"
+            alignItems={{ md: 'flex-end', xs: 'flex-start' }}
+          >
             {renderCurrentGeneration()}
             {renderGenerationPeriodField()}
             {renderSubmitButton()}

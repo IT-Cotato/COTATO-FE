@@ -107,7 +107,7 @@ const StyledDayPicker = styled(DayPicker)`
   transform: translate(-50%, -50%);
   padding: 1rem;
   border-radius: 1rem;
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
 
   * {
     font-family: Roboto;

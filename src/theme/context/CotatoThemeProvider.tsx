@@ -1,8 +1,10 @@
 import React from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { COTATO_DARK_THEME, COTATO_LIGHT_THEME } from '../constants/constants';
 import { CotatoDarkTheme, CotatoLightTheme } from '../theme';
 import useCotatoTheme from '@/hooks/useCotatoTheme';
+import { theme as muiTheme } from '@theme/muiTheme';
 
 //
 //
@@ -32,11 +34,15 @@ function CotatoThemeProvider({ children }: CotatoThemeProvider) {
 
   return (
     <ThemeContext.Provider value={themeProps}>
-      <StyledThemeProvider
-        theme={themeProps.DefaultTheme === COTATO_LIGHT_THEME ? CotatoLightTheme : CotatoDarkTheme}
-      >
-        {children}
-      </StyledThemeProvider>
+      <MuiThemeProvider theme={muiTheme}>
+        <StyledThemeProvider
+          theme={
+            themeProps.DefaultTheme === COTATO_LIGHT_THEME ? CotatoLightTheme : CotatoDarkTheme
+          }
+        >
+          {children}
+        </StyledThemeProvider>
+      </MuiThemeProvider>
     </ThemeContext.Provider>
   );
 }

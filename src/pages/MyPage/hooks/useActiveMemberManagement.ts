@@ -15,8 +15,16 @@ export const useActiveMemberManagement = (view: MemberManagementView) => {
    */
   const fetchActiveMembers = async () => {
     try {
-      const response = await api.get(`/v1/api/member`, { params: { status: 'APPROVED' } });
-      setActiveMembers(response.data);
+      const response = await api.get(`/v1/api/member`, {
+        params: {
+          status: 'APPROVED',
+          page: 0,
+          size: 100,
+          sort: [],
+        },
+      });
+
+      setActiveMembers(response.data.content);
     } catch (error) {
       console.error('Failed to fetch active members:', error);
     }

@@ -53,6 +53,6 @@ export const ProfileInput = styled(TextField)<{ isPrimary?: boolean }>`
 
   & .MuiInputBase-input.Mui-disabled {
     -webkit-text-fill-color: ${({ theme, isPrimary = true }) =>
-      isPrimary ? theme.colors.common.black_const : theme.colors.sub2[40]};
+      isPrimary ? theme.colors.common.black : theme.colors.sub2[40]};
   }
 `;

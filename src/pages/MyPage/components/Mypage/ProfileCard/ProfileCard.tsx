@@ -11,6 +11,7 @@ import {
   ProfileImageSection,
 } from './subComponents';
 import { useProfileForm } from '@pages/MyPage/hooks/useProfileForm';
+import { CotatoLightTheme } from '@theme/theme';
 
 //
 //
@@ -90,7 +91,7 @@ const ProfileCardContainer = styled.div`
   border-radius: 1rem;
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
-  background-color: ${({ theme }) => theme.colors.common.real_white};
+  background-color: ${({ theme }) => (theme === CotatoLightTheme ? 'white' : '#363532')};
   ${media.tablet`
       max-width: 50rem;
   `}

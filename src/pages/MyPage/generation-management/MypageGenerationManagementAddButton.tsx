@@ -24,7 +24,7 @@ const MypageGenerationManagementAddButton = () => {
           <CotatoIcon icon="plus-solid" size="1.25rem" color={theme.colors.common.white} />
         }
         sx={{
-          backgroundColor: theme.colors.primary100_1,
+          backgroundColor: theme.colors.const.primary100_1,
           color: theme.colors.common.white,
           fontFamily: 'Ycomputer',
           fontSize: '1.125rem',

@@ -70,6 +70,7 @@ const LogoutButton = styled.button`
   text-decoration: underline;
   cursor: pointer;
   font-family: Pretender;
+  color: ${({ theme }) => theme.colors.gray60};
 `;
 
 const InfoSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`

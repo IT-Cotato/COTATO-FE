@@ -30,7 +30,7 @@ const Wrapper = styled.button<{ $isApproval: boolean }>`
   align-items: center;
   justify-content: center;
   border-radius: 0.25rem;
-  color: ${({ theme }) => theme.colors.common.white_const};
+  color: ${({ theme }) => theme.colors.const.white};
   text-align: center;
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: 400;
