@@ -19,6 +19,7 @@ import api from '@/api/api';
 interface AttendanceReportExcelExportModalProps {
   open: boolean;
   generationId: number;
+  selectedAttendanceId: number;
   onClose: () => void;
 }
 
@@ -31,6 +32,7 @@ const ALL_SESSION_ID = 0;
 const AttendanceReportExcelExportModal = ({
   open,
   generationId,
+  selectedAttendanceId,
   onClose,
 }: AttendanceReportExcelExportModalProps) => {
   const [checkedAttendances, setCheckedAttendances] = React.useState<
@@ -40,15 +42,29 @@ const AttendanceReportExcelExportModal = ({
 
   const { attendances } = useGetAttendances({ generationId: generationId });
 
-  const attendancesWithAll: CotatoAttendanceWithSessionResponse[] = [
-    {
-      sessionId: 0,
-      attendanceId: 0,
-      sessionTitle: '전체',
-      sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.NoAttend,
-      openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
-    } as CotatoAttendanceWithSessionResponse,
-  ].concat([...(attendances?.attendances || [])].reverse() || []);
+  // const attendancesWithAll: CotatoAttendanceWithSessionResponse[] = [
+  //   {
+  //     sessionId: 0,
+  //     attendanceId: 0,
+  //     sessionTitle: '전체',
+  //     sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.NoAttend,
+  //     openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
+  //   } as CotatoAttendanceWithSessionResponse,
+  // ].concat([...(attendances?.attendances || [])].reverse() || []);
+
+  const attendancesWithAll = React.useMemo(
+    () =>
+      [
+        {
+          sessionId: 0,
+          attendanceId: 0,
+          sessionTitle: '전체',
+          sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.NoAttend,
+          openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
+        } as CotatoAttendanceWithSessionResponse,
+      ].concat([...(attendances?.attendances || [])].reverse() || []),
+    [attendances],
+  );
 
   const theme = useTheme();
 
@@ -261,6 +277,27 @@ const AttendanceReportExcelExportModal = ({
       </Box>
     );
   };
+
+  //
+  //
+  //
+  React.useEffect(() => {
+    if (selectedAttendanceId === ALL_SESSION_ID) {
+      setCheckedAttendances(
+        attendancesWithAll.filter(
+          (a) => a.openStatus === CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
+        ),
+      );
+    } else {
+      setCheckedAttendances(
+        attendancesWithAll.filter(
+          (a) =>
+            a.attendanceId === selectedAttendanceId &&
+            a.openStatus === CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
+        ),
+      );
+    }
+  }, [selectedAttendanceId, attendancesWithAll]);
 
   return (
     <Modal
