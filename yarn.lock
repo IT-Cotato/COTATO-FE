@@ -4633,10 +4633,10 @@ cosmiconfig@^7, cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-cotato-openapi-clients@2.250208.0-mypage.1:
-  version "2.250208.0-mypage.1"
-  resolved "https://registry.yarnpkg.com/cotato-openapi-clients/-/cotato-openapi-clients-2.250208.0-mypage.1.tgz#308deb49cf3ddeb59725b0f0fb763edd47c1dcb1"
-  integrity sha512-y9YYt4FdS+2WiVVjGIO93UPu07Ey1bid9gRLuuVJzIWbc47zzec5TDImxQoa0KMapQuwru6H0PmAZiK0APOpew==
+cotato-openapi-clients@2.250309.0:
+  version "2.250309.0"
+  resolved "https://registry.yarnpkg.com/cotato-openapi-clients/-/cotato-openapi-clients-2.250309.0.tgz#26025abffe70d2bcd713904ccacb4bb2d01adf98"
+  integrity sha512-Q5CvDTXlrOhcJWSgNsVoRv4kuLflCBmO/W2vhglB+k7Xhh623C8mOIXjSPypGUOXbhQ3UHjPFSpweKfUEVH8Jw==
   dependencies:
     "@openapitools/openapi-generator-cli" "^2.13.4"
     "@testing-library/jest-dom" "^5.17.0"
@@ -9843,10 +9843,10 @@ react-lifecycles-compat@^3.0.0:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-modal@3.16.1:
-  version "3.16.1"
-  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.16.1.tgz#34018528fc206561b1a5467fc3beeaddafb39b2b"
-  integrity sha512-VStHgI3BVcGo7OXczvnJN7yT2TWHJPDXZWyI/a0ssFNhGZWsPmB8cF0z33ewDXq4VfYMO1vXgiv/g8Nj9NDyWg==
+react-modal@^3.16.1:
+  version "3.16.3"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.16.3.tgz#c412d41915782e3c261253435d01468e2439b11b"
+  integrity sha512-yCYRJB5YkeQDQlTt17WGAgFJ7jr2QYcWa1SHqZ3PluDmnKJ/7+tVU+E6uKyZ0nODaeEj+xCpK4LcSnKXLMC0Nw==
   dependencies:
     exenv "^1.2.0"
     prop-types "^15.7.2"
