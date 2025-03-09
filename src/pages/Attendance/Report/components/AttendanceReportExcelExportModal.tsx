@@ -42,16 +42,6 @@ const AttendanceReportExcelExportModal = ({
 
   const { attendances } = useGetAttendances({ generationId: generationId });
 
-  // const attendancesWithAll: CotatoAttendanceWithSessionResponse[] = [
-  //   {
-  //     sessionId: 0,
-  //     attendanceId: 0,
-  //     sessionTitle: '전체',
-  //     sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.NoAttend,
-  //     openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
-  //   } as CotatoAttendanceWithSessionResponse,
-  // ].concat([...(attendances?.attendances || [])].reverse() || []);
-
   const attendancesWithAll = React.useMemo(
     () =>
       [
