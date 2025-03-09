@@ -21,9 +21,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
-            
-      - name: Force Install Dependencies
-        run: yarn install --check-files --frozen-lockfile
 
       - name: Check Node v
         run: node -v
@@ -55,6 +52,9 @@ jobs:
 
       - name: Build
         run: yarn build:prod
+
+      - name: Verify Build Output
+        run: ls -l build/index.html
 
       - name: Upload sourcemaps to Sentry
         env:
