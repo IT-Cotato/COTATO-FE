@@ -8,6 +8,7 @@ import { Divider } from '@mui/material';
 import { MEMBER_POSITION } from '../constants';
 import EmptyResult from '../components/common/EmptyResult';
 import { media } from '@theme/media';
+import { useGeneration } from '@/hooks/useGeneration';
 
 //
 //
@@ -30,13 +31,13 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
   const [requestList, setRequestList] = useState([]);
 
   const theme = useTheme();
+  const { generations: generationList } = useGeneration();
 
   /**
    *
    */
   const fetchRequestList = async () => {
     await api.get(`/v1/api/member?status=${MemberStatus.REQUESTED}`).then((res) => {
-      console.log(res.data);
       setRequestList(res.data);
     });
   };
@@ -68,12 +69,15 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
     memberId: number,
   ) => {
     const target = e.target as HTMLButtonElement;
-    const targetGeneration =
+    const targetGenerationId =
       target.previousSibling?.previousSibling?.firstChild?.firstChild?.firstChild?.nextSibling
         ?.textContent;
     const targetPosition = target.previousSibling?.firstChild?.firstChild?.firstChild?.textContent;
 
-    const generation = Number(targetGeneration);
+    const generationId = Number(targetGenerationId);
+    const generationNumber = generationList?.find(
+      (_generation) => generationId === _generation.generationId,
+    )?.generationNumber;
     const position = getPosition(targetPosition as string);
 
     if (position === null) {
@@ -82,13 +86,13 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
     }
 
     const check = confirm(
-      `${name} 님을 ${targetGeneration} ${targetPosition} 부원으로 승인하시겠습니까?`,
+      `${name} 님을 ${generationNumber}기 ${targetPosition} 부원으로 승인하시겠습니까?`,
     );
     if (check) {
       api
         .patch(`/v1/api/member/${memberId}/approve`, {
-          generationId: generation,
-          position: position,
+          generationId,
+          position,
         })
         .then(() => {
           fetchRequestList();
@@ -144,7 +148,7 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
 
     return (
       <TableWrapper>
-        {requestList.map((request, i) => (
+        {requestList?.map((request, i) => (
           <Fragment key={i}>
             {renderRequestItem(request)}
             {i < requestList.length - 1 && (
@@ -161,7 +165,6 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
   //
   useEffect(() => {
     fetchRequestList();
-    console.log('!', generations);
   }, []);
 
   return <>{renderList()}</>;
