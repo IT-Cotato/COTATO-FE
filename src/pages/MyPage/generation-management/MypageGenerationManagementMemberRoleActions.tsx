@@ -93,7 +93,11 @@ const MypageGenerationManagementMemberRoleActions = ({
         ))}
       </StyledSelect>
       <IconButton onClick={() => setIsOpenDeleteDialog(true)}>
-        <CotatoIcon icon="trash-alt-solid" size="1.25rem" />
+        <CotatoIcon
+          icon="trash-alt-solid"
+          size="1.25rem"
+          color={(theme) => theme.colors.const.black}
+        />
       </IconButton>
       <MypageGenerationManagementMemberDeleteDialog
         open={isOpenDeleteDialog}

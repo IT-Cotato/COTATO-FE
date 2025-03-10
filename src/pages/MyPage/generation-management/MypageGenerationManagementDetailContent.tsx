@@ -162,7 +162,7 @@ const MypageGenerationManagementDetailContent = () => {
             }}
           />
 
-          <CotatoIcon icon="minus-solid" />
+          <CotatoIcon icon="minus-solid" color={theme.colors.const.black} />
 
           <Controller
             control={control}
