@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AccountDeletion, MyPage, PolicyCheck, RegistrationManagement } from './contents';
+import { AccountDeletion, MyPage, PolicyCheck } from './contents';
 import {
   MypageGenerationManagement,
   MypageGenerationManagementDetail,
