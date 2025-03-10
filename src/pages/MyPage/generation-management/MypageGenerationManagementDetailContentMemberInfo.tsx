@@ -8,11 +8,6 @@ import CotatoIcon from '@components/CotatoIcon';
 import MypageGenerationManagementMemberAddDialog from './MypageGenerationManagementMemberAddDialog';
 import { useGenerationMembers } from '../hooks/useGenerationMembers';
 import { useNumberParams } from '@/hooks/useNumberParams';
-import {
-  CotatoGenerationMemberInfo,
-  CotatoGenerationMemberInfoPositionEnum,
-  CotatoGenerationMemberInfoRoleEnum,
-} from 'cotato-openapi-clients';
 import MypageGenerationManagementMemberRoleActions from './MypageGenerationManagementMemberRoleActions';
 import { useGenerationMembersMutation } from '../hooks/useGenerationMembersMutation';
 import { toast } from 'react-toastify';
@@ -34,6 +29,8 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
 
   const { generationId } = useNumberParams();
   const { isLandScapeOrSmaller } = useBreakpoints();
+
+  const { generationMemberInfos } = useGenerationMembers({ generationId });
 
   const [isOpenMemberAddDialog, setIsOpenMemberAddDialog] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
@@ -60,27 +57,6 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
         toast.error('부원 역할 수정 실패');
       },
     });
-
-  const sampleData: CotatoGenerationMemberInfo[] = [
-    {
-      generationMemberId: 1,
-      name: '홍길동',
-      position: CotatoGenerationMemberInfoPositionEnum.Be,
-      role: CotatoGenerationMemberInfoRoleEnum.EducationTeam,
-    },
-    {
-      name: '홍길동',
-      position: CotatoGenerationMemberInfoPositionEnum.Be,
-      generationMemberId: 2,
-      role: CotatoGenerationMemberInfoRoleEnum.EducationTeam,
-    },
-    {
-      name: '홍길동',
-      position: CotatoGenerationMemberInfoPositionEnum.Be,
-      generationMemberId: 3,
-      role: CotatoGenerationMemberInfoRoleEnum.EducationTeam,
-    },
-  ];
 
   /**
    *
@@ -121,7 +97,7 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
   const renderTableRenderer = () => {
     return (
       <TableRenderer
-        data={sampleData}
+        data={generationMemberInfos ?? []}
         head={TABLE_HEADS}
         repeatCount={isLandScapeOrSmaller ? 1 : 2}
         render={(info) => {
