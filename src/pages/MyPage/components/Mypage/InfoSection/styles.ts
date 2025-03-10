@@ -1,3 +1,4 @@
+import { CotatoLightTheme } from '@theme/theme';
 import styled from 'styled-components';
 
 export const SectionContainer = styled.div`
@@ -10,13 +11,14 @@ export const SectionContainer = styled.div`
   border-radius: 1rem;
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.primary100_1};
-  background-color: ${({ theme }) => theme.colors.common.real_white};
+  background-color: ${({ theme }) => (theme === CotatoLightTheme ? 'white' : '#363532')};
 `;
 
 export const InfoSectionTitle = styled.div`
   font-family: Pretendard;
   font-size: 1.75rem;
   font-weight: 600;
+  color: ${({ theme }) => theme.colors.common.black};
 `;
 
 export const InfoSectionItemContainer = styled.div`
@@ -36,7 +38,7 @@ export const SectionItem = styled.div`
   align-self: stretch;
   border-radius: 0.5rem;
   border: 2px solid;
-  border-color: ${({ theme }) => theme.colors.primary90};
+  border-color: ${({ theme }) => theme.colors.primary100_1};
   background-color: ${({ theme }) => theme.colors.common.white};
   color: ${({ theme }) => theme.colors.gray60};
   font-family: Pretendard;

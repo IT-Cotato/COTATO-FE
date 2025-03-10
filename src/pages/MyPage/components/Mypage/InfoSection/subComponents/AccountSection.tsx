@@ -65,10 +65,12 @@ const InfoSectionHeader = styled(InfoSectionTitle)`
 `;
 
 const LogoutButton = styled.button`
+  background: none;
   border: none;
   text-decoration: underline;
   cursor: pointer;
   font-family: Pretender;
+  color: ${({ theme }) => theme.colors.gray60};
 `;
 
 const InfoSectionItem = styled(SectionItem)<{ $clickable?: boolean }>`

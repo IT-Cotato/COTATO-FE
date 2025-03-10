@@ -26,7 +26,14 @@ const MypageMemberManagementContent = () => {
 
   const { activeMembers, updateMemberRole, transferMemberIdsToOM } =
     useActiveMemberManagement(currentView);
-  const { filteredOMMembers, transferMemberIdToActive } = useOMManagement(currentView, searchValue);
+  const {
+    filteredOMMembers,
+    transferMemberIdToActive,
+    totalPages,
+    currentPage,
+    pageSize,
+    handlePageChange,
+  } = useOMManagement(currentView, searchValue);
 
   /**
    *
@@ -89,6 +96,10 @@ const MypageMemberManagementContent = () => {
         <MypageMemberManagementContentOMInfo
           data={filteredOMMembers}
           transferMemberIdToActive={transferMemberIdToActive}
+          totalPages={totalPages}
+          page={currentPage}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
         />
       )}
     </Stack>

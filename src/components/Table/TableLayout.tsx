@@ -44,13 +44,18 @@ const StyledTableCell = styled(CenterAlignedTableCell)<{ width?: string }>`
 const StyledPagination = styled(Pagination)`
   & .MuiPaginationItem-root {
     margin: 0 4px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid ${({ theme }) => theme.colors.gray60};
     border-radius: 4px;
+    color: ${({ theme }) => theme.colors.common.black};
 
     &.Mui-selected {
-      background-color: #ffc107;
-      color: white;
-      border-color: #ffc107;
+      background-color: ${({ theme }) => theme.colors.primary100_1};
+      color: ${({ theme }) => theme.colors.common.black};
+      border-color: ${({ theme }) => theme.colors.primary80};
+    }
+
+    &.Mui-selected:hover {
+      background-color: ${({ theme }) => theme.colors.primary100_1};
     }
   }
 `;
