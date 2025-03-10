@@ -13,6 +13,10 @@ import { CotatoMemberInfoResponse } from 'cotato-openapi-clients';
 interface MypageMemberManagementContentOMInfoProps {
   data: CotatoMemberInfoResponse[];
   transferMemberIdToActive: (memberId: number) => void;
+  totalPages: number;
+  page: number;
+  pageSize: number;
+  onPageChange: (e: React.ChangeEvent<unknown>, newPage: number) => void;
 }
 
 //
@@ -20,8 +24,6 @@ interface MypageMemberManagementContentOMInfoProps {
 //
 
 const TableCell = TableLayout.TableCell;
-
-const rowsPerPage = 10; // 한 페이지당 보여줄 아이템 수
 
 const sampleHead = ['이름', '역할'];
 
@@ -32,29 +34,29 @@ const sampleHead = ['이름', '역할'];
 const MypageMemberManagementContentOMInfo = ({
   data,
   transferMemberIdToActive,
+  totalPages,
+  page,
+  pageSize,
+  onPageChange,
 }: MypageMemberManagementContentOMInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
-
-  const [page, setPage] = useState(1);
-
-  /**
-   *
-   */
-  const handlePageChange = (e: React.ChangeEvent<unknown>, newPage: number) => {
-    setPage(newPage);
-  };
+  const theme = useTheme();
 
   /**
    *
    */
   const renderTableRenderer = () => {
-    const theme = useTheme();
     return (
       <TableRenderer
         data={data}
         head={sampleHead}
         repeatCount={isLandScapeOrSmaller ? 1 : 2}
-        pagination={{ page: page, rowsPerPage: rowsPerPage, onPageChange: handlePageChange }}
+        pagination={{
+          page: page,
+          rowsPerPage: pageSize,
+          onPageChange: onPageChange,
+          count: totalPages, // API에서 받은 totalPages 전달
+        }}
         render={(item) => {
           return (
             <>
