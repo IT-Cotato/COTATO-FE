@@ -93,7 +93,13 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
         </Typography>
         <Box display="flex" gap="1rem">
           <CotatoMuiButton
-            startIcon={<CotatoIcon icon="plus-solid" size="1.25rem" />}
+            startIcon={
+              <CotatoIcon
+                icon="plus-solid"
+                size="1.25rem"
+                color={(theme) => theme.colors.const.white}
+              />
+            }
             fontFamily="YComputer"
             onClick={() => setIsOpenMemberAddDialog(true)}
           >
@@ -102,7 +108,15 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
             </Typography>
           </CotatoMuiButton>
           <CotatoMuiButton
-            startIcon={!isEditable ? <CotatoIcon icon="pencil-solid" size="1.25rem" /> : undefined}
+            startIcon={
+              !isEditable ? (
+                <CotatoIcon
+                  icon="pencil-solid"
+                  size="1.25rem"
+                  color={(theme) => theme.colors.const.white}
+                />
+              ) : undefined
+            }
             fontFamily="YComputer"
             onClick={() => setIsEditable(!isEditable)}
           >
