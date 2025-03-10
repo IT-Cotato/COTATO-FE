@@ -22,7 +22,7 @@ const ManageSection = () => {
       <InfoSectionTitle>동아리 관리</InfoSectionTitle>
       <InfoSectionItemContainer>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.GENERATION_MANAGEMENT)}>
-          기수관리
+          기수 관리
           <RightAngle />
         </ManageSectionItem>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.MEMBERS)}>
