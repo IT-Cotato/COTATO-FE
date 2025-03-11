@@ -21,7 +21,7 @@ interface TableRendererProps<T> {
     count?: number; // 전체 아이템 수 추가
   };
   slotProps?: {
-    empty?: {
+    emptyResult?: {
       text?: string;
     };
   };
@@ -140,7 +140,7 @@ const TableRenderer = <T,>({
           {renderTableHead()}
           {renderTableBody()}
         </Table>
-        <EmptyResult text={slotProps?.empty?.text ?? '데이터가 없습니다.'} border="none" />
+        <EmptyResult text={slotProps?.emptyResult?.text ?? '데이터가 없습니다.'} border="none" />
       </TableContainer>
       {pagination.rowsPerPage !== Number.MAX_SAFE_INTEGER && renderTablePagination()}
     </>
