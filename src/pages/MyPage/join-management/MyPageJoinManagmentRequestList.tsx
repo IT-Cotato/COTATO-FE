@@ -38,7 +38,7 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
    */
   const fetchRequestList = async () => {
     await api.get(`/v1/api/member?status=${MemberStatus.REQUESTED}`).then((res) => {
-      setRequestList(res.data);
+      setRequestList(res.data.content);
     });
   };
 
