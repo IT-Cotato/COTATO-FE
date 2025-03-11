@@ -81,10 +81,14 @@ const SignUp = () => {
     new Map(AGREEMENT_ITEMS.map((item) => [item.id, false])),
   );
 
-  const { data: policiesData } = useSWR<CotatoPoliciesResponse>('/v2/api/policies', fetcher, {
-    revalidateOnFocus: false,
-    keepPreviousData: true,
-  });
+  const { data: policiesData } = useSWR<CotatoPoliciesResponse>(
+    '/v2/api/policies?category=PERSONAL_INFORMATION',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      keepPreviousData: true,
+    },
+  );
 
   /**
    *

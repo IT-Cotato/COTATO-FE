@@ -1,5 +1,5 @@
 import React from 'react';
-import { DayPicker } from 'react-day-picker';
+import { DayPicker, DayPickerBase } from 'react-day-picker';
 import { ko } from 'date-fns/locale';
 import styled, { useTheme } from 'styled-components';
 import { Modal } from '@mui/material';
@@ -9,9 +9,11 @@ import CotatoTimePicker from './CotatoTimePicker';
 //
 //
 
-interface CotatoDatePickerProps {
+interface CotatoDatePickerProps extends DayPickerBase {
   open: boolean;
   date: Date;
+  isAttendancePicker?: boolean;
+  disableTimePicker?: boolean;
   onDateChange: (date: Date) => void;
   onClose: () => void;
 }
@@ -23,15 +25,20 @@ interface CotatoDatePickerProps {
 const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
   open,
   date,
+  isAttendancePicker,
+  disableTimePicker,
   onDateChange,
   onClose,
+  ...dayPickerProps
 }) => {
   const [selectedDate, setSelectedDate] = React.useState<Date>(date);
 
   const theme = useTheme();
 
   const handleDateClick = (date: Date) => {
-    date.setHours(19, 0, 0, 0);
+    if (isAttendancePicker) {
+      date.setHours(19, 0, 0, 0);
+    }
     setSelectedDate(date);
   };
 
@@ -55,8 +62,10 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
   const renderTimePicker = () => {
     return (
       <PickerFotter>
-        <CotatoTimePicker date={selectedDate} onDateChange={handleDateChange} />
-        <ButtwonWrapper>
+        {disableTimePicker ? null : (
+          <CotatoTimePicker date={selectedDate} onDateChange={handleDateChange} />
+        )}
+        <ButtwonWrapper $disableTimePicker={disableTimePicker ?? false}>
           <StyledButton $color={theme.colors.gray50} onClick={handleCancelClick}>
             취소
           </StyledButton>
@@ -73,10 +82,12 @@ const CotatoDatePicker: React.FC<CotatoDatePickerProps> = ({
   }, [date]);
 
   return (
-    <Modal open={open}>
+    <Modal open={open} onClose={onClose}>
       <StyledDayPicker
+        {...dayPickerProps}
         mode="single"
         selected={selectedDate}
+        defaultMonth={selectedDate}
         onDayClick={handleDateClick}
         locale={ko}
         footer={renderTimePicker()}
@@ -96,7 +107,7 @@ const StyledDayPicker = styled(DayPicker)`
   transform: translate(-50%, -50%);
   padding: 1rem;
   border-radius: 1rem;
-  background: ${({ theme }) => theme.colors.common.white_const};
+  background: ${({ theme }) => theme.colors.const.white};
 
   * {
     font-family: Roboto;
@@ -123,9 +134,11 @@ const PickerFotter = styled.div`
   padding: 1rem 0.5rem 0.5rem;
 `;
 
-const ButtwonWrapper = styled.span`
+const ButtwonWrapper = styled.span<{ $disableTimePicker: boolean }>`
   display: flex;
   gap: 0.5rem;
+  justify-content: ${({ $disableTimePicker }) => ($disableTimePicker ? 'flex-end' : 'auto')};
+  width: ${({ $disableTimePicker }) => ($disableTimePicker ? '100%' : 'auto')};
 `;
 
 const StyledButton = styled.button<{ $color: string }>`

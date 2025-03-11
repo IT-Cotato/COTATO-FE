@@ -52,7 +52,7 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           ['& .MuiInputBase-root']: {
             border: `1px solid ${theme.colors.gray60}`,
             borderRadius: '0.5rem',
-            background: readonly ? theme.colors.gray20 : theme.colors.common.white_const,
+            background: readonly ? theme.colors.gray20 : theme.colors.const.white,
             width: '9rem',
           },
           ['& .MuiInputBase-input']: {

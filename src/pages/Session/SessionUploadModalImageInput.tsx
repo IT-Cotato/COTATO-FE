@@ -240,7 +240,7 @@ const SessionUploadModalImageInput = ({
   };
 
   /**
-   *
+   *node_modules/@types/react-dom/node_modules/@types/react/ts5.0/index").ReactNode
    */
   const renderImageDnd = () => {
     const dragableImages = [...sortedImageList];

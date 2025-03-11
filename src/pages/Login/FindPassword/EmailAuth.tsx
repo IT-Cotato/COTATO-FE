@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import CotatoPanel from '@components/CotatoPanel';
+import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import panelText from '@assets/find_password_auth_code_panel_text.svg';
 import CotatoButton from '@components/CotatoButton';
 import api from '@/api/api';
@@ -247,16 +247,11 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
 
   return (
     <Wrapper>
-      <CotatoPanel size="default" textImgSrc={panelText} />
+      <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={panelText} />
       {renderGuideMessage()}
       {renderInputField()}
       {renderInfoMessage()}
-      <CotatoButton
-        isEnabled={true}
-        buttonStyle="line"
-        text="인증 완료"
-        handleClick={handleSubmit}
-      />
+      <CotatoButton isEnabled={true} buttonStyle="line" text="인증 완료" onClick={handleSubmit} />
       {renderResendSection()}
     </Wrapper>
   );

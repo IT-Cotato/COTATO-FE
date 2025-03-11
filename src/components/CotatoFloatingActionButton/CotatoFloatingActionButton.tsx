@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { device } from '@theme/media';
+import { useCotatoFabOpenStore } from '@/zustand-stores/useCotatoFabOpenStore';
 
 //
 //
@@ -30,7 +31,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
   icon,
   children,
 }) => {
-  const [isFabOpen, setIsFabOpen] = React.useState(false);
+  const { isCotatoFabOpen, toggleCotatoFabOpen } = useCotatoFabOpenStore();
   const itemLength = React.Children.count(children);
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
 
@@ -42,8 +43,8 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
   };
 
   const animationProps = useSpring({
-    height: isFabOpen ? `${animationFormula(itemLength)}rem` : '0rem',
-    opacity: isFabOpen ? 1 : 0,
+    height: isCotatoFabOpen ? `${animationFormula(itemLength)}rem` : '0rem',
+    opacity: isCotatoFabOpen ? 1 : 0,
     config: { tension: 240, friction: 20 },
   });
 
@@ -57,7 +58,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
         style={animationProps}
         sx={{
           backgroundColor: 'white',
-          boxShadow: isFabOpen ? '0px 0px 10px 1px rgba(0, 0, 0, 0.25)' : 'none',
+          boxShadow: isCotatoFabOpen ? '0px 0px 10px 1px rgba(0, 0, 0, 0.25)' : 'none',
         }}
       >
         {children}
@@ -65,7 +66,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
       <StyledFab
         isMobileOrSmaller={isMobileOrSmaller}
         onClick={() => {
-          setIsFabOpen(!isFabOpen);
+          toggleCotatoFabOpen();
         }}
       >
         <Stack gap={isMobileOrSmaller ? '0.15rem' : '0.25rem'}>

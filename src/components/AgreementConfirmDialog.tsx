@@ -10,7 +10,6 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useGetPolicies } from '@/hooks/useGetPolicies';
 import { marked } from 'marked';
 import styled, { useTheme } from 'styled-components';
 import DOMPurify from 'dompurify';
@@ -21,8 +20,8 @@ import api from '@/api/api';
 import { CotatoCheckPolicyRequest } from 'cotato-openapi-clients';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import fetchUserData from '@utils/fetchUserData';
-import { useGetEssentialPolicies } from '@/hooks/useGetEssentialPolicies';
 import { MemberRole } from '@/enums';
+import { useGetPoliciesUnchecked } from '@/hooks/useGetPoliciesUnchecked';
 
 //
 //
@@ -33,8 +32,9 @@ const AgreementConfirmDialog = () => {
   const { isMobileOrSmaller } = useBreakpoints();
 
   const { data: user, isLoading: isUserLoading, mutate } = fetchUserData();
-  const { policies } = useGetPolicies();
-  const { essentialPolicies } = useGetEssentialPolicies();
+  const { uncheckedPolicies } = useGetPoliciesUnchecked();
+  const essentialPolicies = uncheckedPolicies?.essentialPolicies;
+  const policies = [...(essentialPolicies ?? []), ...(uncheckedPolicies?.optionalPolicies ?? [])];
 
   const [checkedPolicies, setCheckedPolicies] = useState<Record<string, boolean>>({});
   const [checkAll, setCheckAll] = useState(false);
@@ -62,7 +62,7 @@ const AgreementConfirmDialog = () => {
 
     setCheckedPolicies(
       produce((draft) => {
-        policies.forEach((policy) => {
+        policies?.forEach((policy) => {
           if (policy && policy.policyId) {
             draft[policy.policyId] = !checkAll;
           }
@@ -100,7 +100,7 @@ const AgreementConfirmDialog = () => {
 
     api
       .post('v2/api/policies/check', {
-        policies: policies.map((policy) => {
+        policies: policies?.map((policy) => {
           // TODO: fix after type is fixed
           if (!policy.policyId) {
             return null;
@@ -193,7 +193,7 @@ const AgreementConfirmDialog = () => {
    *
    */
   const renderPolicies = () => {
-    return policies.map((policy, index) => {
+    return policies?.map((policy, index) => {
       if (!policy || !policy.content || !policy.title || !policy.policyId) {
         return null;
       }
@@ -208,7 +208,7 @@ const AgreementConfirmDialog = () => {
           <StyledDiv
             style={{
               fontSize: theme.fontSize.xs,
-              color: theme.colors.common.black_const,
+              color: theme.colors.const.black,
               lineHeight: '1rem',
               wordBreak: 'keep-all',
               whiteSpace: 'pre-wrap',
@@ -244,7 +244,7 @@ const AgreementConfirmDialog = () => {
   //
 
   return (
-    <StyledDialog open={Boolean(essentialPolicies.length && isMember && !alreadyAgreed)}>
+    <StyledDialog open={Boolean(policies?.length && isMember && !alreadyAgreed)}>
       <DialogTitle>{renderTitle()}</DialogTitle>
       <DialogContent>
         <Stack gap="1rem">{renderPolicies()}</Stack>

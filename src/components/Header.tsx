@@ -10,7 +10,7 @@ import { device, media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MobileSideMenuDrawerButton from './MobileSideMenuDrawerButton';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
@@ -33,7 +33,7 @@ const NAV_LIST: NAV_LIST_TYPE = Object.freeze([
   { name: 'Project', path: '/projects' },
   { name: 'Session', path: '/session' },
   { name: 'FAQ', path: '/faq' },
-  { name: 'CS Quiz', path: '/cs' },
+  { name: 'CS Quiz', path: '/cs/introduce' },
 ]);
 
 export type NAV_LIST_TYPE = ReadonlyArray<Readonly<NavItem>>;
@@ -64,7 +64,9 @@ const Header = () => {
     <NavContainer>
       {NAV_LIST.map((navItem) => (
         <NavItem key={uuid()} to={navItem.path}>
-          {navItem.name}
+          <Typography variant="body2" fontFamily="YComputer">
+            {navItem.name}
+          </Typography>
         </NavItem>
       ))}
       {renderProfile()}
@@ -107,7 +109,9 @@ const Header = () => {
       <NavItem key={uuid()} to={'/mypage'}>
         <MemberNav>
           <MemberRoleIcon src={getMemberRoleIcon(user?.role)} />
-          {user?.name}
+          <Typography variant="body2" fontFamily="YComputer">
+            {user?.name}
+          </Typography>
         </MemberNav>
       </NavItem>
     );
