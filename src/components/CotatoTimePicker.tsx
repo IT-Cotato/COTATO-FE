@@ -72,8 +72,11 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           ['& .MuiFormLabel-root']: {
             fontFamily: 'Pretendard',
             fontSize: '0.875rem',
-            top: '-6px',
+            top: '-7px',
             left: '-4px',
+          },
+          ['& .MuiInputLabel-shrink']: {
+            visibility: 'hidden',
           },
         }}
         slots={{
