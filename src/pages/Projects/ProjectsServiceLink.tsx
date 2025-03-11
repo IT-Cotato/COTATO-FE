@@ -33,6 +33,7 @@ const ProjectsLink = ({ link, logo, name, bgColor, color }: ProjectsLinkProps) =
   return (
     <StyledLink
       to={link}
+      target="_blank"
       style={{
         backgroundColor: bgColor,
         color: color ? color : theme.colors.const.white,
