@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Dialog, DialogContent, Stack, Typography } from '@mui/material';
+import { Box, DialogContent, Stack, Typography } from '@mui/material';
 import fetcher from '@utils/fetcher';
 import {
   CotatoProjectDetailResponse,
@@ -12,8 +12,8 @@ import styled, { useTheme } from 'styled-components';
 import useSWR from 'swr';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
-
 import ProjectsLink from './ProjectsServiceLink';
+import { CotatoDialog } from '@components/CotatoDialog';
 
 //
 //
@@ -152,7 +152,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
   //
   //
   return (
-    <Dialog fullWidth open={open} maxWidth="lg" onClose={onClose}>
+    <CotatoDialog open={open} maxWidth="lg" onClose={onClose}>
       <StyledDialogContent>
         {thumbNail && (
           <Box
@@ -198,7 +198,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
           ))}
         </Stack>
       </StyledDialogContent>
-    </Dialog>
+    </CotatoDialog>
   );
 };
 
