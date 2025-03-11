@@ -1,8 +1,9 @@
 import React from 'react';
-import { Stack, Table } from '@mui/material';
+import { Stack, Table, TableCell } from '@mui/material';
 import TableLayout from './TableLayout';
 import { TableBody, TableRow as MuiTableRow } from '@mui/material';
 import { useTheme } from 'styled-components';
+import EmptyResult from '@pages/MyPage/components/common/EmptyResult';
 
 //
 //
@@ -18,6 +19,11 @@ interface TableRendererProps<T> {
     rowsPerPage: number;
     onPageChange: (e: React.ChangeEvent<unknown>, newPage: number) => void;
     count?: number; // 전체 아이템 수 추가
+  };
+  slotProps?: {
+    empty?: {
+      text?: string;
+    };
   };
 }
 
@@ -41,6 +47,7 @@ const TableRenderer = <T,>({
     rowsPerPage: Number.MAX_SAFE_INTEGER,
     onPageChange: () => {},
   },
+  slotProps,
 }: TableRendererProps<T>) => {
   const theme = useTheme();
   //
@@ -133,6 +140,7 @@ const TableRenderer = <T,>({
           {renderTableHead()}
           {renderTableBody()}
         </Table>
+        <EmptyResult text={slotProps?.empty?.text ?? '데이터가 없습니다.'} border="none" />
       </TableContainer>
       {pagination.rowsPerPage !== Number.MAX_SAFE_INTEGER && renderTablePagination()}
     </>
