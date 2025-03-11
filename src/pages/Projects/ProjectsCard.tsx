@@ -98,7 +98,7 @@ const ProjectsCard = ({
           style={{
             borderTopLeftRadius: '0.625rem',
             borderTopRightRadius: '0.625rem',
-            objectFit: 'cover',
+            objectFit: 'contain',
           }}
         />
       </Box>
