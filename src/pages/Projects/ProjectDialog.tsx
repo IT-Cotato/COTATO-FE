@@ -152,7 +152,7 @@ const ProjectDialog = ({ open, onClose, projectId }: ProjectsProps) => {
   //
   //
   return (
-    <CotatoDialog open={open} maxWidth="lg" onClose={onClose}>
+    <CotatoDialog fullWidth open={open} maxWidth="lg" onClose={onClose}>
       <StyledDialogContent>
         {thumbNail && (
           <Box
