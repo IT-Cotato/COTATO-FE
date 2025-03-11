@@ -5,6 +5,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ko';
 import { useTheme } from 'styled-components';
+import { Box, Button } from '@mui/material';
 
 //
 //
@@ -12,7 +13,8 @@ import { useTheme } from 'styled-components';
 
 interface CotatoTimePickerProps {
   readonly?: boolean;
-  date: Date;
+  label?: string;
+  date?: Date;
   onDateChange?: (date: Date) => void;
 }
 
@@ -22,24 +24,26 @@ interface CotatoTimePickerProps {
 
 const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
   readonly = false,
+  label,
   date,
   onDateChange,
 }) => {
   const theme = useTheme();
 
   const handleDateChange = (newDate: Dayjs | null) => {
-    if (readonly || !onDateChange) {
+    if (readonly || !onDateChange || !newDate) {
       return;
     }
 
-    onDateChange(newDate?.toDate() || date);
+    onDateChange(newDate?.toDate());
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
       <TimePicker
         readOnly={readonly}
-        value={dayjs(date)}
+        label={label}
+        value={date && dayjs(date)}
         onChange={handleDateChange}
         sx={{
           ['& .MuiFormControl-root']: {
@@ -62,8 +66,45 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           ['& .MuiOutlinedInput-notchedOutline']: {
             border: 'none',
           },
+          ['& .Mui-disabled']: {
+            '-webkit-text-fill-color': 'inherit',
+          },
+          ['& .MuiFormLabel-root']: {
+            fontFamily: 'Pretendard',
+            fontSize: '0.875rem',
+            top: '-7px',
+            left: '-4px',
+          },
+          ['& .MuiInputLabel-shrink']: {
+            visibility: 'hidden',
+          },
+        }}
+        slots={{
+          actionBar: (props) => (
+            <Box
+              {...props}
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                padding: '0.25rem',
+              }}
+            >
+              <Button
+                // eslint-disable-next-line react/prop-types
+                onClick={props.onAccept}
+                sx={{
+                  color: theme.colors.primary100,
+                }}
+              >
+                확인
+              </Button>
+            </Box>
+          ),
         }}
         slotProps={{
+          textField: {
+            disabled: true,
+          },
           inputAdornment: {
             sx: {
               ['& .MuiSvgIcon-root']: {
@@ -73,8 +114,12 @@ const CotatoTimePicker: React.FC<CotatoTimePickerProps> = ({
           },
           desktopPaper: {
             sx: {
-              '& .Mui-selected': {
-                backgroundColor: theme.colors.primary100,
+              ['& .Mui-selected']: {
+                backgroundColor: theme.colors.primary100_2 + ' !important',
+
+                '&:hover': {
+                  backgroundColor: theme.colors.primary100_2 + ' !important',
+                },
               },
             },
           },

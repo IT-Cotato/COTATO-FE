@@ -10,6 +10,7 @@ import {
 import SessionIcon from '@components/Session/SessionIcon';
 import SessionContents from '@components/Session/SessionContents';
 import CotatoIcon from '@components/CotatoIcon';
+import imageSortByOrder from '@utils/imageSortByOrder';
 
 //
 //
@@ -81,9 +82,9 @@ const SessionCard = ({ session, isActive, handleSessionClick }: SessionCardProps
         return null;
       }
 
-      const firstSessionImageInfo = session?.imageInfos?.at(
-        0,
-      ) as CotatoSessionListImageInfoResponse;
+      const firstSessionImageInfo = imageSortByOrder(
+        session.imageInfos as CotatoSessionListImageInfoResponse[],
+      )[0];
 
       return (
         <CardImage

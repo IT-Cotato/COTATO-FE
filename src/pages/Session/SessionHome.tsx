@@ -206,7 +206,13 @@ const SessionHome = () => {
         mutateSessionList();
         setIsUpdateModalOpen(false);
       })
-      .catch(() => toast.error('세션 수정에 실패했습니다.'));
+      .catch((err) => {
+        if ([400, 409].includes(err.response.status)) {
+          toast.error(err.response.data.message);
+        } else {
+          toast.error('세션 수정에 실패했습니다.');
+        }
+      });
   };
 
   /**

@@ -112,8 +112,12 @@ const SessionUploadModal = ({
         placeName: sessionWithAttendance.placeName,
         location: sessionWithAttendance.attendance?.location,
         attendTime: {
-          attendanceDeadLine: new Date(sessionWithAttendance.attendance?.attendanceDeadLine || ''),
-          lateDeadLine: new Date(sessionWithAttendance.attendance?.lateDeadLine || ''),
+          attendanceDeadLine:
+            sessionWithAttendance?.attendance?.attendanceDeadLine &&
+            new Date(sessionWithAttendance.attendance.attendanceDeadLine),
+          lateDeadLine:
+            sessionWithAttendance?.attendance?.lateDeadLine &&
+            new Date(sessionWithAttendance.attendance.lateDeadLine),
         },
         isOffline: sessionWithAttendance.isOffline,
         isOnline: sessionWithAttendance.isOnline,
@@ -128,6 +132,13 @@ const SessionUploadModal = ({
     } catch (error) {
       console.error(error);
     }
+  };
+
+  /**
+   *
+   */
+  const isAttendnace = () => {
+    return session.isOffline || session.isOnline;
   };
 
   /**
@@ -184,6 +195,18 @@ const SessionUploadModal = ({
         draft.placeName = e.target.value;
       }),
     );
+  };
+
+  /**
+   *
+   */
+  const handlePlaceClearButtonClick = () => {
+    setSession(
+      produce(session, (draft) => {
+        draft.placeName = '';
+      }),
+    );
+    setAddress('');
   };
 
   /**
@@ -413,13 +436,16 @@ const SessionUploadModal = ({
               <CotatoIcon icon="search" size="1.25rem" color={(theme) => theme.colors.gray60} />
             </button>
           </LocationInputBox>
-          <LocationInputBox $width="9rem">
+          <LocationInputBox $width="12rem">
             <input
               placeholder="장소명"
               value={session.placeName}
               readOnly={session.location === undefined}
               onChange={handlePlaceNameChange}
             />
+            <button type="button" onClick={handlePlaceClearButtonClick}>
+              <CotatoIcon icon="trash-alt" size="1.25rem" color={(theme) => theme.colors.gray60} />
+            </button>
           </LocationInputBox>
         </div>
       </InfoBox>
@@ -461,10 +487,16 @@ const SessionUploadModal = ({
       <InfoBox $bold={true}>
         <div>출석 인정 시간</div>
         <div>
-          <CotatoTimePicker readonly date={session.sessionDateTime} />
+          <CotatoTimePicker
+            readonly
+            label="출석 시작 시간"
+            date={isAttendnace() ? session.sessionDateTime : undefined}
+          />
           <Seperator />
           <CotatoTimePicker
-            date={session.attendTime?.attendanceDeadLine ?? new Date()}
+            readonly={!isAttendnace()}
+            label="출석 종료 시간"
+            date={isAttendnace() ? session.attendTime?.attendanceDeadLine : undefined}
             onDateChange={handleAttendanceDeadlineChange}
           />
         </div>
@@ -480,10 +512,16 @@ const SessionUploadModal = ({
       <InfoBox $bold={true}>
         <div>지각 인정 시간</div>
         <div>
-          <CotatoTimePicker readonly date={session.attendTime?.attendanceDeadLine ?? new Date()} />
+          <CotatoTimePicker
+            readonly
+            label="지각 시작 시간"
+            date={isAttendnace() ? session.attendTime?.attendanceDeadLine : undefined}
+          />
           <Seperator />
           <CotatoTimePicker
-            date={session.attendTime?.lateDeadLine ?? new Date()}
+            readonly={!isAttendnace()}
+            label="지각 종료 시간"
+            date={isAttendnace() ? session.attendTime?.lateDeadLine : undefined}
             onDateChange={handleLateDeadLineChange}
           />
         </div>
@@ -570,9 +608,9 @@ const SessionUploadModal = ({
     </UploadButtonWrapper>
   );
 
-  /**
-   * Set default session state
-   */
+  //
+  //
+  //
   useEffect(() => {
     if (sessionId) {
       fetchUpdateSession();
