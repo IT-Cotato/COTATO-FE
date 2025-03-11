@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, Table, TableCell } from '@mui/material';
+import { Stack, Table } from '@mui/material';
 import TableLayout from './TableLayout';
 import { TableBody, TableRow as MuiTableRow } from '@mui/material';
 import { useTheme } from 'styled-components';

@@ -5,7 +5,6 @@ import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import {
   CotatoAttendanceWithSessionResponse,
-  CotatoAttendanceWithSessionResponseOpenStatusEnum,
   CotatoAttendanceWithSessionResponseSessionTypeEnum,
   CotatoGenerationInfoResponse,
 } from 'cotato-openapi-clients';
