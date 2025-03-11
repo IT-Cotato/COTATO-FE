@@ -68,7 +68,7 @@ const HomeSecondSectionCard = ({
     >
       <StyledCardContent>
         <Stack gap="1rem" padding="0rem 1.5rem 0.5rem 1.5rem">
-          <Stack gap="0.5rem" direction="row">
+          <Stack gap="0.5rem" direction="row" alignItems="center">
             <ThemeProvider theme={CotatoDarkTheme}>{icon}</ThemeProvider>
             <Typography variant="h4" fontWeight="700" color={theme.colors.common.black}>
               {title}

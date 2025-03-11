@@ -8,11 +8,6 @@ import CotatoIcon from '@components/CotatoIcon';
 import MypageGenerationManagementMemberAddDialog from './MypageGenerationManagementMemberAddDialog';
 import { useGenerationMembers } from '../hooks/useGenerationMembers';
 import { useNumberParams } from '@/hooks/useNumberParams';
-import {
-  CotatoGenerationMemberInfo,
-  CotatoGenerationMemberInfoPositionEnum,
-  CotatoGenerationMemberInfoRoleEnum,
-} from 'cotato-openapi-clients';
 import MypageGenerationManagementMemberRoleActions from './MypageGenerationManagementMemberRoleActions';
 import { useGenerationMembersMutation } from '../hooks/useGenerationMembersMutation';
 import { toast } from 'react-toastify';
@@ -34,6 +29,8 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
 
   const { generationId } = useNumberParams();
   const { isLandScapeOrSmaller } = useBreakpoints();
+
+  const { generationMemberInfos } = useGenerationMembers({ generationId });
 
   const [isOpenMemberAddDialog, setIsOpenMemberAddDialog] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
@@ -61,27 +58,6 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
       },
     });
 
-  const sampleData: CotatoGenerationMemberInfo[] = [
-    {
-      generationMemberId: 1,
-      name: '홍길동',
-      position: CotatoGenerationMemberInfoPositionEnum.Be,
-      role: CotatoGenerationMemberInfoRoleEnum.EducationTeam,
-    },
-    {
-      name: '홍길동',
-      position: CotatoGenerationMemberInfoPositionEnum.Be,
-      generationMemberId: 2,
-      role: CotatoGenerationMemberInfoRoleEnum.EducationTeam,
-    },
-    {
-      name: '홍길동',
-      position: CotatoGenerationMemberInfoPositionEnum.Be,
-      generationMemberId: 3,
-      role: CotatoGenerationMemberInfoRoleEnum.EducationTeam,
-    },
-  ];
-
   /**
    *
    */
@@ -93,7 +69,13 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
         </Typography>
         <Box display="flex" gap="1rem">
           <CotatoMuiButton
-            startIcon={<CotatoIcon icon="plus-solid" size="1.25rem" />}
+            startIcon={
+              <CotatoIcon
+                icon="plus-solid"
+                size="1.25rem"
+                color={(theme) => theme.colors.const.white}
+              />
+            }
             fontFamily="YComputer"
             onClick={() => setIsOpenMemberAddDialog(true)}
           >
@@ -102,7 +84,15 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
             </Typography>
           </CotatoMuiButton>
           <CotatoMuiButton
-            startIcon={!isEditable ? <CotatoIcon icon="pencil-solid" size="1.25rem" /> : undefined}
+            startIcon={
+              !isEditable ? (
+                <CotatoIcon
+                  icon="pencil-solid"
+                  size="1.25rem"
+                  color={(theme) => theme.colors.const.white}
+                />
+              ) : undefined
+            }
             fontFamily="YComputer"
             onClick={() => setIsEditable(!isEditable)}
           >
@@ -121,7 +111,7 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
   const renderTableRenderer = () => {
     return (
       <TableRenderer
-        data={sampleData}
+        data={generationMemberInfos ?? []}
         head={TABLE_HEADS}
         repeatCount={isLandScapeOrSmaller ? 1 : 2}
         render={(info) => {

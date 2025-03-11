@@ -16,6 +16,7 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import api from '@/api/api';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import dayjs from 'dayjs';
 
 //
 //
@@ -83,7 +84,13 @@ const MypageGenerationManagementAddDialog = ({
    *
    */
   const postGenerationRequest = async (formData: CotatoAddGenerationRequest) => {
-    await api.post('v1/api/generations', formData);
+    const normalizedFormData = {
+      ...formData,
+      startDate: dayjs(startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(endDate).format('YYYY-MM-DD'),
+    };
+
+    await api.post('v1/api/generations', normalizedFormData);
   };
 
   /**

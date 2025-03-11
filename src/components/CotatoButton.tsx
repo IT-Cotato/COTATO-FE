@@ -55,7 +55,12 @@ const getBackgroundColor = (theme: any, style: string) => {
  */
 const CotatoButton: React.FC<CotatoButtonProps> = ({ isEnabled, buttonStyle, text, onClick }) => {
   return (
-    <StyledButton isEnabled={isEnabled} buttonStyle={buttonStyle} onClick={onClick}>
+    <StyledButton
+      isEnabled={isEnabled}
+      disabled={!isEnabled}
+      buttonStyle={buttonStyle}
+      onClick={onClick}
+    >
       {text}
     </StyledButton>
   );
