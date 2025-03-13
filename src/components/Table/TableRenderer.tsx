@@ -140,7 +140,9 @@ const TableRenderer = <T,>({
           {renderTableHead()}
           {renderTableBody()}
         </Table>
-        <EmptyResult text={slotProps?.emptyResult?.text ?? '데이터가 없습니다.'} border="none" />
+        {paginatedData.length === 0 && (
+          <EmptyResult text={slotProps?.emptyResult?.text ?? '데이터가 없습니다.'} border="none" />
+        )}
       </TableContainer>
       {pagination.rowsPerPage !== Number.MAX_SAFE_INTEGER && renderTablePagination()}
     </>

@@ -64,10 +64,13 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
     React.useState<CotatoAddableMemberInfoPositionEnum>(null as any);
 
   //
+  const { targetGeneration } = useGeneration({ generationId: selectedGeneration.toString() });
+
+  //
   const { addableMembers } = useMemberAddable({
     generationId,
     name: debouncedSearchName,
-    passedGenerationNumber: selectedGeneration,
+    passedGenerationNumber: targetGeneration?.generationNumber,
     position: selectedPosition,
   });
   const { generations } = useGeneration();
@@ -240,7 +243,7 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
           fontFamily="YComputer"
           disabled={selectedMembers.length === 0}
           onClick={() =>
-            postGenerationMembers({ generationId: selectedGeneration, memberIds: selectedMembers })
+            postGenerationMembers({ generationId: generationId, memberIds: selectedMembers })
           }
         >
           부원 추가 완료

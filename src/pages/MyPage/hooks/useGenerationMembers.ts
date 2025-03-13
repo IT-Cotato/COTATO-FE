@@ -27,9 +27,8 @@ export const useGenerationMembers = ({ generationId }: UseGenerationMembersParam
 
   //
   const { data, isLoading, error, mutate } = useSWR<CotatoGenerationMemberInfoResponse>(
-    fetcherWithParams('/v2/api/generation-members', {
-      generationId,
-    }),
+    '/v2/api/generation-members',
+    (url) => fetcherWithParams(url, { generationId }),
     {
       revalidateOnFocus: false,
     },
