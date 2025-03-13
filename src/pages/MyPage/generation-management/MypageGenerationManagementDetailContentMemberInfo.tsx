@@ -30,15 +30,12 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
   const { generationId } = useNumberParams();
   const { isLandScapeOrSmaller } = useBreakpoints();
 
-  const { generationMemberInfos } = useGenerationMembers({ generationId });
+  const { generationMemberInfos, mutateGenerationMemberInfos } = useGenerationMembers({
+    generationId,
+  });
 
   const [isOpenMemberAddDialog, setIsOpenMemberAddDialog] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
-
-  //
-  const { mutateGenerationMemberInfos } = useGenerationMembers({
-    generationId,
-  });
 
   const { delete: deleteGenerationMember, patch: patchGenerationMemberRole } =
     useGenerationMembersMutation({
