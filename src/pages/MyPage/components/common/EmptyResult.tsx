@@ -1,6 +1,6 @@
 import CotatoIcon from '@components/CotatoIcon';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 
 //
 //
@@ -8,15 +8,16 @@ import styled from 'styled-components';
 
 interface EmptyResultProps {
   text: string;
+  border?: CSSProperties['border'];
 }
 
 //
 //
 //
 
-const EmptyResult = ({ text }: EmptyResultProps) => {
+const EmptyResult = ({ text, border }: EmptyResultProps) => {
   return (
-    <Wrapper>
+    <Wrapper border={border}>
       <CotatoIcon icon="user-check-solid" size="2.5rem" color={(theme) => theme.colors.gray60} />
       <p>{text}</p>
     </Wrapper>
@@ -27,11 +28,11 @@ const EmptyResult = ({ text }: EmptyResultProps) => {
 //
 //
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ border?: CSSProperties['border'] }>`
   width: 100%;
   height: 30rem;
   border-radius: 0.25rem;
-  border: 2px solid ${({ theme }) => theme.colors.primary70};
+  border: ${({ theme, border }) => (border ? `${border}` : `2px solid ${theme.colors.primary70}`)};
   background: ${({ theme }) => theme.colors.common.white};
   display: flex;
   flex-direction: column;

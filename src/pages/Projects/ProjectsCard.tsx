@@ -141,7 +141,7 @@ const ProjectsCard = ({
     >
       {renderImage()}
       <Stack padding="0.25rem 1.5rem 1.5rem">
-        <Stack gap="1.5rem">
+        <Stack gap="1rem">
           {renderInfo()}
           {renderIntroduction()}
         </Stack>
