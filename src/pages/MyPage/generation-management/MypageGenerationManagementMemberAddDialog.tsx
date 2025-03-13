@@ -240,7 +240,7 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
           fontFamily="YComputer"
           disabled={selectedMembers.length === 0}
           onClick={() =>
-            postGenerationMembers({ generationId: selectedGeneration, memberIds: selectedMembers })
+            postGenerationMembers({ generationId: generationId, memberIds: selectedMembers })
           }
         >
           부원 추가 완료
