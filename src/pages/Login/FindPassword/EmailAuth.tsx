@@ -6,6 +6,8 @@ import CotatoButton from '@components/CotatoButton';
 import api from '@/api/api';
 import { media } from '@theme/media';
 import { CotatoThemeType } from '@theme/theme';
+import { LoadingIndicator } from '@components/LoadingIndicator';
+import { toast } from 'react-toastify';
 
 //
 //
@@ -29,6 +31,7 @@ const CODE_LENGTH = 6;
 //
 
 const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
+  const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [input, setInput] = useState<number[]>(Array(CODE_LENGTH).fill(null));
   const inputRef = useRef<InputRefType>(Array(CODE_LENGTH).fill(null));
 
@@ -160,6 +163,8 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
    *
    */
   const resendEmail = () => {
+    setIsRequestLoading(true);
+
     api
       .post('/v1/api/auth/verification', emailData, {
         params: {
@@ -167,10 +172,13 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
         },
       })
       .then(() => {
-        alert('인증 이메일이 재발송되었습니다.');
+        toast.success('인증 이메일이 재발송되었습니다.');
       })
       .catch(() => {
-        alert('인증 이메일 재발송에 실패했습니다.');
+        toast.error('인증 이메일을 재발송하는데 실패했습니다.');
+      })
+      .finally(() => {
+        setIsRequestLoading(false);
       });
   };
 
@@ -246,14 +254,17 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ goToNextStep, email }) => {
   }, []);
 
   return (
-    <Wrapper>
-      <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={panelText} />
-      {renderGuideMessage()}
-      {renderInputField()}
-      {renderInfoMessage()}
-      <CotatoButton isEnabled={true} buttonStyle="line" text="인증 완료" onClick={handleSubmit} />
-      {renderResendSection()}
-    </Wrapper>
+    <>
+      <Wrapper>
+        <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={panelText} />
+        {renderGuideMessage()}
+        {renderInputField()}
+        {renderInfoMessage()}
+        <CotatoButton isEnabled={true} buttonStyle="line" text="인증 완료" onClick={handleSubmit} />
+        {renderResendSection()}
+      </Wrapper>
+      {isRequestLoading && <LoadingIndicator isLoading />}
+    </>
   );
 };
 
