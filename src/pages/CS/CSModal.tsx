@@ -51,7 +51,7 @@ const CSModal = ({ isOpen, onCloseModal, educatoin, generationId, fetchEducation
       toast.error('입력 값을 확인해주세요.');
     } else if (!educatoin) {
       api
-        .post('/v1/api/education/add', {
+        .post('/v1/api/education', {
           generationId,
           subject: subject,
           educationNumber: parseInt(educationNum),
