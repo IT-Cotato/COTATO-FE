@@ -2,8 +2,7 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import ReactModal from 'react-modal';
 import TextBox from '@components/TextBox';
-import { ICsOnSession, IEducation } from '@/typing/db';
-import SessionSelect from '@components/SessionSelect';
+import { IEducation } from '@/typing/db';
 import api from '@/api/api';
 import { ToastContainer, toast } from 'react-toastify';
 import CotatoIcon from '@components/CotatoIcon';
@@ -18,21 +17,12 @@ interface Props {
   sessionCount?: number;
 }
 
-const CSModal = ({
-  isOpen,
-  onCloseModal,
-  educatoin,
-  generationId,
-  fetchEducations,
-  sessionCount,
-}: Props) => {
-  const [selectedSession, setSelectedSession] = useState<ICsOnSession>();
+const CSModal = ({ isOpen, onCloseModal, educatoin, generationId, fetchEducations }: Props) => {
   const [educationNum, setEducationNum] = useState('');
   const [subject, setSubject] = useState('');
 
   useEffect(() => {
     if (educatoin) {
-      setSelectedSession({ sessionId: 0, sessionNumber: educatoin.sessionNumber });
       setEducationNum(`${educatoin.educationNumber}주차 교육`);
       setSubject(educatoin.subject);
     }
@@ -43,14 +33,9 @@ const CSModal = ({
   }, []);
 
   const handleAfterClose = useCallback(() => {
-    setSelectedSession(undefined);
     setEducationNum('');
     setSubject('');
     document.body.style.overflow = 'unset';
-  }, []);
-
-  const onChangeSession = useCallback((session: ICsOnSession) => {
-    setSelectedSession(session);
   }, []);
 
   const onChangeEducationNum = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -62,14 +47,14 @@ const CSModal = ({
   }, []);
 
   const onClickAddButton = useCallback(() => {
-    if (!subject || !selectedSession?.sessionId || !parseInt(educationNum)) {
+    if (!subject || !parseInt(educationNum)) {
       toast.error('입력 값을 확인해주세요.');
     } else if (!educatoin) {
       api
         .post('/v1/api/education/add', {
+          generationId,
           subject: subject,
-          sessionId: selectedSession?.sessionId,
-          educationNum: parseInt(educationNum),
+          educationNumber: parseInt(educationNum),
         })
         .then(() => {
           fetchEducations(generationId);
@@ -89,7 +74,7 @@ const CSModal = ({
         })
         .catch((err) => console.error(err));
     }
-  }, [educatoin, educationNum, subject, selectedSession]);
+  }, [educatoin, educationNum, subject]);
 
   return (
     <ReactModal
@@ -108,13 +93,6 @@ const CSModal = ({
           <h3>{!educatoin ? '교육 추가' : '교육 수정'}</h3>
         </Header>
         <BoxContainer>
-          <SessionSelect
-            education={educatoin}
-            selectetdSession={selectedSession}
-            onChangeSession={onChangeSession}
-            generationId={generationId}
-            sessionCount={sessionCount}
-          />
           <TextBox
             value={educationNum}
             placeholder="교육 주차를 입력하세요"
