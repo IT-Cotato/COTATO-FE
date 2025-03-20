@@ -125,7 +125,7 @@ const modalStyle = {
   },
   content: {
     width: '740px',
-    height: '480px',
+    height: '412px',
     top: '55%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
