@@ -7,6 +7,7 @@ import panelText from '@assets/find_password_send_email_panel_text.svg';
 import api from '@/api/api';
 import { media } from '@theme/media';
 import { CotatoSendEmailRequest } from 'cotato-openapi-clients';
+import { LoadingIndicator } from '@components/LoadingIndicator';
 
 //
 //
@@ -30,6 +31,7 @@ const EMAIL_REGEX =
 //
 
 const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setEmail }) => {
+  const [isRequestLoading, setIsRequestLoading] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -95,6 +97,8 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
       return;
     }
 
+    setIsRequestLoading(true);
+
     api
       .post<CotatoSendEmailRequest>('/v1/api/auth/verification', emailData, {
         params: {
@@ -106,6 +110,9 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
       })
       .catch((err) => {
         handleError(err.response.data.code);
+      })
+      .finally(() => {
+        setIsRequestLoading(false);
       });
   };
 
@@ -164,16 +171,19 @@ const SendAuthEmail: React.FC<SendAuthEmailProps> = ({ goToNextStep, email, setE
   };
 
   return (
-    <Wrapper>
-      <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={panelText} />
-      {renderInputField()}
-      <CotatoButton
-        isEnabled={true}
-        buttonStyle="line"
-        text="인증 이메일 보내기"
-        onClick={handleSubmit}
-      />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <CotatoPanel size={SizeStateEnum.DEFAULT} textImgSrc={panelText} />
+        {renderInputField()}
+        <CotatoButton
+          isEnabled
+          buttonStyle="line"
+          text="인증 이메일 보내기"
+          onClick={handleSubmit}
+        />
+      </Wrapper>
+      {isRequestLoading && <LoadingIndicator isLoading />}
+    </>
   );
 };
 
