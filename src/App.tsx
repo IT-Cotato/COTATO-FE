@@ -111,8 +111,8 @@ function App() {
           </Routes>
 
           {renderFab()}
-        </CotatoThemeProvider>
-      </LocalizationProvider>
+        </LocalizationProvider>
+      </CotatoThemeProvider>
     </div>
   );
 }
