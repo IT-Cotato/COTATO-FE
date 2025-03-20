@@ -17,6 +17,7 @@ interface LoadingIndicatorProps {
 
 export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ isLoading }) => {
   const { promiseInProgress } = usePromiseTracker();
+
   return promiseInProgress || isLoading ? (
     <Loading>
       <LoadingGif />
@@ -34,6 +35,7 @@ const Loading = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 100;
   overflow: hidden;
 `;
 
