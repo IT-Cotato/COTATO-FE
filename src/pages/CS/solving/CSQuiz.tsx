@@ -32,6 +32,8 @@ interface WaitingProps {
 //
 
 const EXIT_TIMEOUT = 4000;
+const SOCKET_RETRY_INTERVAL = 1000;
+const SOCKET_RETRY_LIMIT = 3;
 
 //
 //
@@ -59,6 +61,8 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showHeader, setShowHeader] = useState<boolean>(true);
 
+  const socketRetryCount = useRef<number>(0);
+
   window.addEventListener('mousemove', (e) => {
     if (e.clientY < 150) {
       setShowHeader(true);
@@ -82,20 +86,16 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   }, []);
 
   // webSocket 초기 연결 및 메시지 수신
-  const initializeWebSocket = async () => {
-    await issueSocketToken(); // 토큰 발급이 완료된 후에 연결 요청하도록 함수 호출 타이밍 조절
+  const initializeWebSocket = () => {
+    issueSocketToken(); // 토큰 발급이 완료된 후에 연결 요청하도록 함수 호출 타이밍 조절
     connectWebSocket();
     receiveMessage();
   };
 
   // WebSocket 접속을 위한 30초 토큰 발급
-  const issueSocketToken = async () => {
-    await api
-      .post('/v1/api/socket/token', null, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+  const issueSocketToken = () => {
+    api
+      .post('/v1/api/socket/token')
       .then((res) => {
         const socketToken = res.data.socketToken;
         localStorage.setItem('socketToken', socketToken);
@@ -112,29 +112,40 @@ const CSQuiz: React.FC<WaitingProps> = () => {
         currentEducationId
       }`,
     );
+
     webSocket.current.onopen = () => {
       console.log('WebSocket connected');
     };
+
     webSocket.current.onerror = (error) => {
-      console.log(error);
+      console.log('WebSocket.onError', error);
     };
+
     webSocket.current.onclose = (event: any) => {
       console.log(event);
+
       if (event.code === 4000) {
         return;
-      } else {
-        reconnectWebSocket();
       }
+
+      reconnectWebSocket();
     };
   };
 
   const reconnectWebSocket = () => {
     console.log('WebSocket disconnected. Attempting to reconnect...');
+
+    console.log('socketRetryCount:', socketRetryCount);
+
+    if (socketRetryCount.current >= SOCKET_RETRY_LIMIT) {
+      toast.error('연결에 실패했습니다. 페이지를 새로고침해주세요.');
+      return;
+    }
+
     setTimeout(() => {
+      socketRetryCount.current += 1;
       initializeWebSocket();
-      // connectWebSocket();
-      // receiveMessage();
-    }, 1000);
+    }, SOCKET_RETRY_INTERVAL);
   };
 
   // WebSocket 메시지 수신

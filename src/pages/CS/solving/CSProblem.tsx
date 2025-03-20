@@ -18,6 +18,8 @@ import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
 import { QUIZ_END_NUMBER } from './constants';
 import { MessageType } from '../admin/upload/utils/handleWsMessage';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
+import { media } from '@theme/media';
 
 //
 //
@@ -66,6 +68,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const { data: user } = fetchUserData();
   user ? null : console.log('data is undefined');
 
+  const { isTabletOrSmaller } = useBreakpoints();
+
   const [quizData, setQuizData] = useState<Problem | undefined>();
   const [multiples, setMultiples] = useState<string[]>([]); // 객관식 선지의 내용 리스트
   const [biggerImg, setBiggerImg] = useState<boolean>(false);
@@ -84,11 +88,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const multipleRef = useRef<any>();
   const shortRef = useRef<any>();
   const choiceRef = useRef<any | null>([]);
-
-  const mulYPos = multipleRef.current?.offsetTop;
-  const mulXPos = multipleRef.current?.offsetLeft + multipleRef.current?.offsetWidth;
-  const shortYPos = shortRef.current?.offsetTop;
-  const shortXPos = shortRef.current?.offsetLeft + shortRef.current?.offsetWidth;
 
   const alignBtnHeights = () => {
     let maxHeight = 68;
@@ -279,13 +278,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
             )}
           </ImageContainer>
         )}
-        {window.innerWidth > 392 && (
-          <LightImgContainer
-            mulYPos={mulYPos}
-            mulXPos={mulXPos}
-            shortYPos={shortYPos}
-            shortXPos={shortXPos}
-          >
+        {!isTabletOrSmaller && (
+          <LightImgContainer>
             {!submitAllowed && showExplaination && (
               <Explaination>
                 불이 켜지면
@@ -448,6 +442,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: auto;
+  min-height: 100vh;
   position: relative;
   padding-bottom: 60px;
   overflow-x: hidden;
@@ -471,19 +466,22 @@ const ProgressBar = styled.div<{ progress: number }>`
 `;
 
 const QuizContainer = styled.div`
-  padding: 0 300px;
+  padding: 0 12px;
+  width: 100%;
+  max-width: 920px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     width: 100%;
     padding: 0 9px;
-  }
+  `}
 `;
 
 const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
-  width: 920px;
+  width: 100%;
   min-height: 88px;
   height: fit-content;
   border-radius: 5px;
@@ -514,7 +512,7 @@ const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
     margin: 4px 0;
   }
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     width: 100%;
     padding: 20px !important;
     p {
@@ -523,7 +521,7 @@ const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
     span {
       width: 78%;
     }
-  }
+  `}
 `;
 
 const ImageContainer = styled.div<{ bigger: boolean }>`
@@ -544,10 +542,10 @@ const ImageContainer = styled.div<{ bigger: boolean }>`
         transition: transform 0.3s;
       `};
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     width: 332px;
     height: 189px;
-  }
+  `}
 `;
 
 const Image = styled.img`
@@ -563,27 +561,11 @@ const ResizeIcon = styled(IconButton)`
   bottom: 18px;
 `;
 
-interface PosProps {
-  mulYPos: number;
-  mulXPos: number;
-  shortYPos: number;
-  shortXPos: number;
-}
-const LightImgContainer = styled.div<PosProps>`
+const LightImgContainer = styled.div`
   position: absolute;
   width: 80px;
-  ${(props) =>
-    props.mulYPos &&
-    `
-    top: ${props.mulYPos - 96}px;
-    left: ${props.mulXPos - 88}px;
-  `}
-  ${(props) =>
-    props.shortYPos &&
-    `
-    top: ${props.shortYPos - 96}px;
-    left: ${props.shortXPos - 88}px;
-  `}
+  top: 140px;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -693,9 +675,9 @@ const ChoiceContainer = styled.div<{ choiceNum: number }>`
   grid-row-gap: 12px;
   align-items: stretch !important;
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     grid-column-gap: 12px;
-  }
+  `}
 `;
 
 const ChoiceBtn = styled.div<{ clicked: boolean }>`
@@ -715,10 +697,10 @@ const ChoiceBtn = styled.div<{ clicked: boolean }>`
   }
   ${(props) => props.clicked && `background: #D2D2D2;`}
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     min-height: 100px;
     padding: 20px;
-  }
+  `}
 `;
 
 const ShortAnswerContainer = styled.div`
@@ -737,9 +719,9 @@ const ShortAnswerContainer = styled.div`
     font-weight: 400;
   }
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     padding: 20px;
-  }
+  `}
 `;
 
 const ButtonContainer = styled.div<{ disabled: boolean }>`
@@ -747,7 +729,7 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
   flex-direction: row;
   align-items: center;
   margin-top: 60px;
-  width: 920px;
+  width: 100%;
   justify-content: flex-end;
   button {
     width: 96px;
@@ -784,7 +766,7 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
     }
   }`}
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     width: 100%;
     padding: 0 9px;
     flex-direction: column;
@@ -798,7 +780,7 @@ const ButtonContainer = styled.div<{ disabled: boolean }>`
         margin-bottom: 8px;
       }
     }
-  }
+  `}
 `;
 
 export default CSProblem;

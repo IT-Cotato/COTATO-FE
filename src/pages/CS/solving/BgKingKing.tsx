@@ -6,6 +6,7 @@ import api from '@/api/api';
 import BgWaiting from './BgWaiting';
 import { CotatoKingMemberInfo } from 'cotato-openapi-clients';
 import { LoadingIndicator } from '@components/LoadingIndicator';
+import { media } from '@theme/media';
 
 interface BgKingKingProps {
   educationId: number;
@@ -137,12 +138,12 @@ const Wrapper = styled.div`
     }
   }
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     background: url(${mobile});
     /* padding-top: 180px; */
     .box {
       width: 300px;
       font-size: 1.4rem;
     }
-  }
+  `}
 `;

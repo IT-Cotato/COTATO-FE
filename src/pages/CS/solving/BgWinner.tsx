@@ -6,6 +6,7 @@ import api from '@/api/api';
 import { CotatoWinnerInfoResponse } from 'cotato-openapi-clients';
 import { useParams } from 'react-router-dom';
 import { useMount } from 'react-use';
+import { media } from '@theme/media';
 
 //
 //
@@ -118,12 +119,12 @@ const Wrapper = styled.div`
     }
   }
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     background: url(${mobile});
     /* padding-top: 180px; */
     .box {
       width: 300px;
       font-size: 1.4rem;
     }
-  }
+  `}
 `;

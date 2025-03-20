@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import background from '@assets/bg_correct.svg';
 import mobile from '@assets/bg_correct_mobile.svg';
 import check from '@assets/check_icon.svg';
+import { media } from '@theme/media';
 
 const BgCorrect = () => {
   const preloadImg = () => {
@@ -58,13 +59,13 @@ const Wrapper = styled.div`
   animation: fade_out 1s ease-in-out 1.5s;
   animation-fill-mode: forwards;
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     background: url(${mobile});
     padding-top: 200px;
     p {
       font-size: 2rem;
     }
-  }
+  `}
 `;
 
 const Check = styled.img`
@@ -73,7 +74,7 @@ const Check = styled.img`
   transform: rotate(-45deg), scale(0);
   transition: transform 0.5s ease-in-out;
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     width: 100px;
-  }
+  `}
 `;
