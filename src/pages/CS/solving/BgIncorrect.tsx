@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import background from '@assets/bg_incorrect.svg';
 import mobile from '@assets/bg_incorrect_mobile.svg';
 import x from '@assets/x.svg';
+import { media } from '@theme/media';
 
 const BgIncorrect = () => {
   return (
@@ -56,19 +57,19 @@ const Wrapper = styled.div`
     /* slide_down 1s ease-in-out, */ fade_out 1s ease-in-out 1.5s;
   animation-fill-mode: forwards;
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     background: url(${mobile});
     padding-top: 200px;
     p {
       font-size: 2rem;
     }
-  }
+  `}
 `;
 
 const X = styled.img`
   width: 200px;
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     width: 100px;
-  }
+  `}
 `;

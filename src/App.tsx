@@ -27,6 +27,7 @@ import { ToastContainer } from 'react-toastify';
 import Background from '@components/Background';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { useBreakpoints } from './hooks/useBreakpoints';
 
 function App() {
   //
@@ -35,6 +36,36 @@ function App() {
 
   //
   const isInAttendanceList = useMatch('/attendance/list/generation/:generationId');
+  const isInCsSolve = useMatch('/cs/solving/:educationId');
+
+  //
+  const { isTabletOrSmaller } = useBreakpoints();
+
+  /**
+   *
+   */
+  const renderHeader = () => {
+    if (isInCsSolve && isTabletOrSmaller) {
+      return null;
+    }
+
+    return <Header />;
+  };
+
+  /**
+   *
+   */
+  const renderFab = () => {
+    if (isInCsSolve && isTabletOrSmaller) {
+      return null;
+    }
+
+    if (isInAttendanceList) {
+      return <AttendanceFab />;
+    }
+
+    return <CotatoGlobalFab />;
+  };
 
   //
   //
@@ -59,7 +90,7 @@ function App() {
           <ToastContainer position="bottom-right" autoClose={3000} />
           <Background />
 
-          <Header />
+          {renderHeader()}
           <AgreementConfirmDialog />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -79,7 +110,7 @@ function App() {
             <Route path="/*" element={<NotFound />} />
           </Routes>
 
-          {isInAttendanceList ? <AttendanceFab /> : <CotatoGlobalFab />}
+          {renderFab()}
         </CotatoThemeProvider>
       </LocalizationProvider>
     </div>

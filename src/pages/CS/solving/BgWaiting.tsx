@@ -4,6 +4,7 @@ import { ReactComponent as Timer } from '@assets/timer.svg';
 import background from '@assets/bg_waiting.svg';
 import mobile from '@assets/bg_waiting_mobile.svg';
 import { QUIZ_END_NUMBER, MESSAGE } from './constants/index';
+import { media } from '@theme/media';
 
 //
 //
@@ -84,9 +85,9 @@ const Wrapper = styled.div`
     }
   }
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     overflow-x: hidden;
-  }
+  `}
 `;
 
 const Waiting = styled.div`
@@ -114,7 +115,7 @@ const Waiting = styled.div`
     font-weight: 700;
   }
 
-  @media screen and (max-width: 392px) {
+  ${media.tablet`
     background: url(${mobile});
     div {
       width: 360px;
@@ -122,7 +123,7 @@ const Waiting = styled.div`
       font-size: 1rem;
       border-radius: 8px;
     }
-  }
+  `}
 `;
 
 export default BgWaiting;

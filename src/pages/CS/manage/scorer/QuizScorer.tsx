@@ -41,7 +41,7 @@ const QuizScorer = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [quiz]);
-
+  console.log(quizStatus, quizStart);
   useEffect(() => {
     quizList?.quizzes.forEach((quizData: IQuizAdmin) => {
       if (quizData.quizId === Number(quizId)) {
@@ -54,10 +54,6 @@ const QuizScorer = () => {
   useEffect(() => {
     const newSubmitList: IQuizAdminSubmit[] = record?.records;
     newSubmitList?.sort((left, right) => left.ticketNumber - right.ticketNumber);
-    if (quizStart === 'QUIZ_OFF' && newSubmitList?.length) {
-      setQuizStatus('QUIZ_ON');
-      setQuizStart('QUIZ_ON');
-    }
 
     setSubmits(newSubmitList);
     setScorer(record?.scorer);
