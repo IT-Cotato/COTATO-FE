@@ -40,10 +40,13 @@ const ResetPassword = () => {
     const input = e.target.value;
     setPassword(input);
 
-    setIsPasswordLength(PASSWORD_LENGTH.test(input));
-    setIsPasswordRegex(PASSWORD_REGEX.test(input));
+    const passwordLengthTest = PASSWORD_LENGTH.test(input);
+    const passwordRegexTest = PASSWORD_REGEX.test(input);
 
-    setIsPassword(isPasswordLength && isPasswordRegex);
+    setIsPasswordLength(passwordLengthTest);
+    setIsPasswordRegex(passwordRegexTest);
+
+    setIsPassword(passwordLengthTest && passwordRegexTest);
   };
 
   /**
