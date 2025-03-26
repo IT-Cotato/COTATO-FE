@@ -242,9 +242,10 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
         <CotatoMuiButton
           fontFamily="YComputer"
           disabled={selectedMembers.length === 0}
-          onClick={() =>
-            postGenerationMembers({ generationId: generationId, memberIds: selectedMembers })
-          }
+          onClick={() => {
+            postGenerationMembers({ generationId: generationId, memberIds: selectedMembers });
+            onClose();
+          }}
         >
           부원 추가 완료
         </CotatoMuiButton>
