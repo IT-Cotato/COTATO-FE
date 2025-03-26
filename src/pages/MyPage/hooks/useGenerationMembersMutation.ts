@@ -47,13 +47,17 @@ export const useGenerationMembersMutation = (params: UseGenerationMembersMutatio
     trigger: deleteTrigger,
     isMutating: deleteIsMutating,
     error: deleteError,
-  } = useSWRMutation('/v2/api/generation-members', (url, data) => api.delete(url, data.arg));
+  } = useSWRMutation('/v2/api/generation-members', (url, data) =>
+    api.delete(url + '?generationMemberId=' + data.arg),
+  );
 
   const {
     trigger: patchTrigger,
     isMutating: patchIsMutating,
     error: patchError,
-  } = useSWRMutation('/v2/api/generation-members', (url, data) => api.patch(url, data.arg));
+  } = useSWRMutation('/v2/api/generation-members', (url, data) =>
+    api.patch(url + '?generationMemberId=' + data.arg),
+  );
 
   //
   //
@@ -69,7 +73,7 @@ export const useGenerationMembersMutation = (params: UseGenerationMembersMutatio
   };
   _return.current.delete = async (mutationParams: { generationMemberId: number }) => {
     try {
-      await deleteTrigger(mutationParams as any);
+      await deleteTrigger(mutationParams.generationMemberId as any);
       params?.onSuccessDelete?.();
     } catch (err) {
       params?.onErrorDelete?.();
@@ -77,7 +81,7 @@ export const useGenerationMembersMutation = (params: UseGenerationMembersMutatio
   };
   _return.current.patch = async (mutationParams: CotatoUpdateGenerationMemberRoleRequest) => {
     try {
-      await patchTrigger(mutationParams as any);
+      await patchTrigger(mutationParams.generationMemberId as any);
       params?.onSuccessPatch?.();
     } catch (err) {
       params?.onErrorPatch?.();
