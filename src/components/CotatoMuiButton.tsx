@@ -49,6 +49,9 @@ const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, da
       switch (color) {
         case 'error':
           return dark ? theme.colors.const.white : theme.colors.const.black;
+        case 'inherit':
+          return theme.colors.const.black;
+
         default:
           return dark ? theme.colors.const.black : theme.colors.const.white;
       }
