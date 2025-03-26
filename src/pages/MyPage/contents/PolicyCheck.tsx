@@ -8,6 +8,7 @@ import PolicyCheckImage from '@/pages/MyPage/tempAsssets/Text/PolicyCheck.svg';
 import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import { Header } from './style';
 import BackButton from '../components/common/BackButton';
+import { CotatoLightTheme } from '@theme/theme';
 
 //
 //
@@ -114,7 +115,11 @@ const NotificationContainer = styled.div`
   align-items: center;
   gap: 6.25rem;
   align-self: stretch;
-  background-color: ${({ theme }) => theme.colors.common.real_white};
+  border-radius: 1rem;
+  line-height: 1.5rem;
+  color: ${({ theme }) => theme.colors.common.black};
+  background-color: ${({ theme }) =>
+    theme === CotatoLightTheme ? theme.colors.common.real_white : '#363532'};
 `;
 
 const Notification = styled.div`

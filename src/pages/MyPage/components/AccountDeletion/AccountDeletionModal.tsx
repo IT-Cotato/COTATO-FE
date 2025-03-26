@@ -1,6 +1,6 @@
-import { Dialog, TextField } from '@mui/material';
+import { Button, Dialog, TextField } from '@mui/material';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { ReactComponent as Close } from '@/pages/MyPage/tempAsssets/close_button.svg';
 import CotatoButton from '@components/CotatoButton';
 
@@ -43,9 +43,17 @@ const AccountDeletionModal = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} style={{ borderRadius: '0.625rem' }}>
       <ModalContainer>
-        <Close style={{ position: 'absolute', right: '1rem' }} onClick={onClose} />
+        <Close
+          style={{
+            position: 'absolute',
+            right: '1rem',
+            cursor: 'pointer',
+            color: 'white',
+          }}
+          onClick={onClose}
+        />
         <HeaderSection>
           <p style={{ margin: 0 }}>회원 탈퇴 확인</p>
         </HeaderSection>
@@ -109,8 +117,9 @@ const ModalContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 2.25rem;
-  border-radius: 0.625rem;
-  background: ${({ theme }) => theme.colors.common.real_white};
+  line-height: 1.625rem;
+  color: ${({ theme }) => theme.colors.common.black};
+  background: ${({ theme }) => theme.colors.common.white};
   box-shadow: 0px 4px 24px 2px rgba(0, 0, 0, 0.1);
   font-family: Pretendard;
 `;

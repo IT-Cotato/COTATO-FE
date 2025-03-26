@@ -41,7 +41,6 @@ const Wrapper = styled.button<{ $isApproval: boolean }>`
       background: ${theme.colors.sub3[60]}`
       : `border: 1px solid ${theme.colors.secondary100};
       background: ${theme.colors.secondary80}`};
-  }
 `;
 
 export default ConfirmButton;
