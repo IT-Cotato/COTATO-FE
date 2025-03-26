@@ -465,7 +465,7 @@ const ProgressBar = styled.div<{ progress: number }>`
   transition-timing-function: ease-in;
 `;
 
-const QuizContainer = styled.div`
+export const QuizContainer = styled.div`
   padding: 0 12px;
   width: 100%;
   max-width: 920px;
@@ -480,7 +480,7 @@ const QuizContainer = styled.div`
   `}
 `;
 
-const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
+export const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
   width: 100%;
   min-height: 88px;
   height: fit-content;
@@ -524,7 +524,7 @@ const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
   `}
 `;
 
-const ImageContainer = styled.div<{ bigger: boolean }>`
+export const ImageContainer = styled.div<{ bigger: boolean }>`
   position: relative;
   width: 528px;
   height: 301px;
@@ -548,7 +548,7 @@ const ImageContainer = styled.div<{ bigger: boolean }>`
   `}
 `;
 
-const Image = styled.img`
+export const Image = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 5px;
@@ -561,7 +561,7 @@ const ResizeIcon = styled(IconButton)`
   bottom: 18px;
 `;
 
-const LightImgContainer = styled.div`
+export const LightImgContainer = styled.div`
   position: absolute;
   width: 80px;
   top: 140px;
@@ -571,7 +571,7 @@ const LightImgContainer = styled.div`
   align-items: center;
 `;
 
-const Explaination = styled.div`
+export const Explaination = styled.div`
   background-image: url(${explaination});
   position: absolute;
   bottom: 20px;
@@ -703,7 +703,7 @@ const ChoiceBtn = styled.div<{ clicked: boolean }>`
   `}
 `;
 
-const ShortAnswerContainer = styled.div`
+export const ShortAnswerContainer = styled.div`
   width: 100%;
   height: 120px;
   border-radius: 5px;

@@ -1,8 +1,17 @@
-import React, { ChangeEvent, DragEvent, useCallback, useEffect } from 'react';
+import React, { ChangeEvent, DragEvent, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { produce } from 'immer';
 import { MultipleQuiz, QuizType, ShortQuiz } from './CSAdminUploadSlides';
-import { Button, Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import CotatoMuiButton from '@components/CotatoMuiButton';
+import { CotatoDialog, CotatoDialogActions } from '@components/CotatoDialog';
+import {
+  ImageContainer,
+  QuestionContainer,
+  QuizContainer,
+  ShortAnswerContainer,
+} from '@pages/CS/solving/CSProblem';
+import { media } from '@theme/media';
 
 //
 //
@@ -20,6 +29,8 @@ interface CSAdminUploadEditQuizProps {
 
 const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   /**
    *
@@ -77,18 +88,21 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
   /**
    *
    */
-  const handleFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setQuiz(
-        produce((draft) => {
-          const files = e.target.files;
-          if (!files) return;
-          draft[selected].image = files[0];
-          draft[selected].previewUrl = URL.createObjectURL(files[0]);
-        }),
-      );
-    }
-  }, []);
+  const handleFileChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        setQuiz(
+          produce((draft) => {
+            const files = e.target.files;
+            if (!files) return;
+            draft[selected].image = files[0];
+            draft[selected].previewUrl = URL.createObjectURL(files[0]);
+          }),
+        );
+      }
+    },
+    [selected],
+  );
 
   /**
    * 객관식인지 주관식인지 판별하는 함수
@@ -341,13 +355,74 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
   const renderActions = () => {
     return (
       <Stack direction="row" width="100%" justifyContent="flex-end" padding="1.5rem" gap="0.5rem">
-        <Button onClick={handleAddChoice} variant="contained" color="primary">
+        <CotatoMuiButton
+          color="info"
+          variant="outlined"
+          onClick={() => {
+            setIsPreviewOpen(true);
+          }}
+        >
+          미리보기
+        </CotatoMuiButton>
+        <CotatoMuiButton onClick={handleAddChoice} variant="contained">
           답안 추가
-        </Button>
-        <Button onClick={handleDeleteAnswer} variant="contained" color="error">
-          답안 삭제
-        </Button>
+        </CotatoMuiButton>
+        <CotatoMuiButton onClick={handleDeleteAnswer} variant="contained" color="error">
+          <Typography color="white">답안 삭제</Typography>
+        </CotatoMuiButton>
       </Stack>
+    );
+  };
+
+  /**
+   *
+   */
+  const renderPreviewDialog = () => {
+    return (
+      <CotatoDialog fullScreen open={isPreviewOpen} onClose={() => setIsPreviewOpen(false)}>
+        <Wrapper>
+          <QuizContainer>
+            <QuestionContainer ifNoImg={!quiz[selected]?.image}>
+              <h5>문제 {quiz[selected]?.number}</h5>
+              <span>
+                {(quiz[selected]?.question as string).split('\r\n').map((sentence) => (
+                  <p key={sentence}>{sentence}</p>
+                ))}
+              </span>
+            </QuestionContainer>
+            {quiz[selected]?.image && (
+              <ImageContainer bigger={false}>
+                <Image src={quiz[selected]?.previewUrl} />
+              </ImageContainer>
+            )}
+
+            {(quiz[selected] as MultipleQuiz)?.choices ? (
+              <ChoiceContainer choiceNum={0}>
+                {(quiz[selected] as MultipleQuiz).choices?.map((choice) => (
+                  <ChoiceBtn key={choice.number}>{choice.content}</ChoiceBtn>
+                ))}
+              </ChoiceContainer>
+            ) : (
+              <ShortAnswerContainer>
+                <input
+                  type="text"
+                  id="shortAns"
+                  name="shortAns"
+                  value={''}
+                  placeholder="답안을 입력해주세요"
+                />
+              </ShortAnswerContainer>
+            )}
+          </QuizContainer>
+          <Stack width="100%" padding="0 17rem">
+            <CotatoDialogActions>
+              <CotatoMuiButton size="large" onClick={() => setIsPreviewOpen(false)}>
+                닫기
+              </CotatoMuiButton>
+            </CotatoDialogActions>
+          </Stack>
+        </Wrapper>
+      </CotatoDialog>
     );
   };
 
@@ -372,6 +447,7 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
         {renderTitle()}
         {renderUpload()}
         {renderActions()}
+        {renderPreviewDialog()}
         {isMultiples(quiz[selected]) ? renderMultiples() : renderShorts()}
       </>
     </Wrapper>
@@ -609,6 +685,53 @@ const DeleteButton = styled.div`
     width: 100%;
     height: 100%;
   }
+`;
+
+export const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
+`;
+
+const ChoiceContainer = styled.div<{ choiceNum: number }>`
+  width: 100%;
+  height: fit-content;
+  display: grid;
+  ${(props) =>
+    props.choiceNum > 4
+      ? `grid-template-columns: 1fr;`
+      : `grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr; 
+      grid-column-gap: 16px;`}
+  grid-row-gap: 12px;
+  align-items: stretch !important;
+
+  ${media.tablet`
+    grid-column-gap: 12px;
+  `}
+`;
+
+const ChoiceBtn = styled.div`
+  width: 100%;
+  min-height: 68px;
+  height: fit-content;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  padding: 20px 32px;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s;
+  }
+
+  ${media.tablet`
+    min-height: 100px;
+    padding: 20px;
+  `}
 `;
 
 export default EditQuiz;
