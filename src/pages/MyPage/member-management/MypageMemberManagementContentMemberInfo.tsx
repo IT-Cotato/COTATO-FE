@@ -29,6 +29,24 @@ const sampleHead = ['이름', '역할'];
 //
 //
 
+/**
+ *
+ */
+const getPosition = (position?: string) => {
+  switch (position) {
+    case '포지션':
+      return null;
+    case 'PM':
+      return '기획자';
+    case 'DESIGN':
+      return '디자이너';
+    case 'BE':
+      return '백엔드';
+    case 'FE':
+      return '프론트엔드';
+  }
+};
+
 const MypageMemberManagementContentMemberInfo = ({
   data,
   updateMemberRole,
@@ -61,6 +79,7 @@ const MypageMemberManagementContentMemberInfo = ({
                   }}
                 >
                   <Checkbox
+                    disabled={item.role === CotatoMemberInfoResponseRoleEnum.Dev}
                     checked={memberIds.includes(item.memberId)}
                     onChange={(event) => {
                       if (event.target.checked) {
@@ -72,11 +91,16 @@ const MypageMemberManagementContentMemberInfo = ({
                       }
                     }}
                   />
-                  <span style={{ padding: '1rem 0.75rem' }}>{item.name}</span>
+                  <span style={{ padding: '1rem 0.75rem' }}>
+                    {/* {item.passedGenerationNumber} */}
+                    {item.name + ' '}
+                    {getPosition(item.position)}
+                  </span>
                 </div>
               </TableCell>
               <TableCell>
                 <Select
+                  disabled={item.role === CotatoMemberInfoResponseRoleEnum.Dev}
                   defaultValue={item.role}
                   size="small"
                   sx={{
