@@ -9,6 +9,7 @@ import BackButton from '../components/common/BackButton';
 import CotatoButton from '@components/CotatoButton';
 import useUser from '@/hooks/useUser';
 import { useAccountDeletion } from '../hooks/useAccountDeletion';
+import { CotatoLightTheme } from '@theme/theme';
 
 //
 //
@@ -79,35 +80,40 @@ const renderNotification = () => {
     <>
       <h3 style={{ margin: 0 }}>탈퇴 안내</h3>
       <p style={{ marginBottom: 0 }}>
-        회원님께서 COTATO 동아리 페이지의 회원 탈퇴를 진행하실 경우, 아래 사항에 따라 모든 정보가
-        삭제되며, 복구가 불가능하니 탈퇴를 신청하기 전에 안내 사항을 꼭 확인해주세요.
+        회원님께서 COTATO 동아리 페이지의 회원 탈퇴를 진행하실 경우, 아래 사항에 따라 계정이
+        비활성화되며, 30일 후에는 모든 정보가 영구적으로 삭제됩니다. 탈퇴를 신청하기 전에 안내
+        사항을 꼭 확인해 주세요.
       </p>
       <ol>
         <li>
           <p>
-            부원 활동 정보 삭제
+            계정 비활성화
             <p>
-              회원 탈퇴가 완료되면, 동아리 활동 내역, 기여 기록 등 부원 활동과 관련된 모든 정보가
-              삭제됩니다. 삭제된 정보는 다시 복구할 수 없으니 주의해 주세요.
+              탈퇴 신청을 하시면 해당 계정은 30일 동안 비활성화 상태로 전환됩니다. 비활성화 기간
+              동안 COTATO 서비스 이용이 제한됩니다.
             </p>
           </p>
         </li>
         <li>
           <p>
-            개인 문제 풀이 내역 삭제
-            <p>
-              탈퇴와 함께 회원님의 개인 문제 풀이 내역이 삭제됩니다. 과거의 퀴즈 답변 기록, 풀이
-              점수 등 동아리 내 학습 활동에 관련된 모든 데이터가 삭제되며, 삭제된 내역은 다시 되돌릴
-              수 없습니다.
-            </p>
+            데이터 수정 및 보존 탈퇴 신청 후 30일이 지나면 회원 정보는 아래와 처리됩니다.
+            <ul>
+              <li>이름: 일부가 마스킹 처리되어 보관. 예) 홍길동 → 홍*동</li>
+              <li>이메일, 비밀번호, 전화번호: 삭제.</li>
+            </ul>
+            보존되는 데이터(예: 문제 풀이 기록, 출결 기록, 활동 내역)는 아래와 같이 표시됩니다.
+            <ul>
+              <li>활동 내역: 예) 6기 홍길동 백엔드 → 6기 홍*동 백엔드</li>
+              <li>개인 정보: 예) 홍길동(1234) → 홍*동(0000)</li>
+            </ul>
           </p>
         </li>
         <li>
           <p>
-            복구 불가 안내
+            계정 복구 가능 기간
             <p>
-              탈퇴 요청이 접수되면, 회원님의 데이터는 즉시 삭제 처리되며 복구가 불가능합니다. 탈퇴
-              후 다시 참여를 원하실 경우, 신규 가입을 통해 새로운 계정을 생성하셔야 합니다.
+              비활성화 기간 중(30일 이내)에 다시 로그인하면 계정이 활성화되어 서비스를 계속 이용하실
+              수 있습니다.
             </p>
           </p>
         </li>
@@ -140,7 +146,11 @@ const NotificationContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 6.25rem;
-  background-color: ${({ theme }) => theme.colors.common.real_white};
+  border-radius: 1rem;
+  line-height: 1.5rem;
+  color: ${({ theme }) => theme.colors.common.black};
+  background-color: ${({ theme }) =>
+    theme === CotatoLightTheme ? theme.colors.common.real_white : '#363532'};
 `;
 
 const Notification = styled.div`
