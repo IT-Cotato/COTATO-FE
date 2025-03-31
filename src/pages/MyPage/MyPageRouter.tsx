@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, RouteObject, Route, Routes } from 'react-router-dom';
+import { Outlet, RouteObject } from 'react-router-dom';
 import { AccountDeletion, MyPage, PolicyCheck } from './contents';
 import {
   MypageGenerationManagement,
