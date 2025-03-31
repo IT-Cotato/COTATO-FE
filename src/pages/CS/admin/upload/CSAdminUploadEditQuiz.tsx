@@ -12,6 +12,7 @@ import {
   ShortAnswerContainer,
 } from '@pages/CS/solving/CSProblem';
 import { media } from '@theme/media';
+import { useBlocker } from 'react-router';
 
 //
 //
@@ -31,6 +32,13 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const blocker = useBlocker(() => {
+    if (isPreviewOpen) {
+      return true;
+    }
+    return false;
+  });
 
   /**
    *
@@ -436,6 +444,15 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
       });
     };
   }, []);
+
+  //
+  //
+  //
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      setIsPreviewOpen(false);
+    }
+  }, [blocker.state]);
 
   //
   //
