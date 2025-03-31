@@ -510,6 +510,11 @@ export const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
   }
   p {
     margin: 4px 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
   }
 
   ${media.tablet`
