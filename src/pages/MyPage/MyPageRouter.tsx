@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, RouteObject, Route, Routes } from 'react-router-dom';
 import { AccountDeletion, MyPage, PolicyCheck } from './contents';
 import {
   MypageGenerationManagement,
@@ -31,25 +31,45 @@ export const COMMON_PATH = {
 //
 //
 
-const MyPageRouter = () => {
-  return (
-    <Routes>
-      <Route path={MY_PAGE_PATH.MYPAGE} element={<MyPage />} />
-      <Route path={MY_PAGE_PATH.POLICY.INFO} element={<PolicyCheck />} />
-      <Route
-        path={`${MY_PAGE_PATH.POLICY.INFO}/${MY_PAGE_PATH.POLICY.DELETION}`}
-        element={<AccountDeletion />}
-      />
-      <Route path={MY_PAGE_PATH.GENERATION_MANAGEMENT} element={<MypageGenerationManagement />} />
-      <Route
-        path={`${MY_PAGE_PATH.GENERATION_MANAGEMENT}/${COMMON_PATH.GENERATION}`}
-        element={<MypageGenerationManagementDetail />}
-      />
-
-      <Route path={MY_PAGE_PATH.MEMBERS} element={<MypageMemberManagement />} />
-      <Route path={MY_PAGE_PATH.REGISTRATION} element={<MyPageJoinManagement />} />
-    </Routes>
-  );
+const MyPageLayout = () => {
+  return <Outlet />;
 };
+
+// Route configuration as an array of objects
+const MyPageRouter: RouteObject[] = [
+  {
+    element: <MyPageLayout />,
+    children: [
+      {
+        path: MY_PAGE_PATH.MYPAGE,
+        element: <MyPage />,
+      },
+      {
+        path: MY_PAGE_PATH.POLICY.INFO,
+        element: <PolicyCheck />,
+      },
+      {
+        path: `${MY_PAGE_PATH.POLICY.INFO}/${MY_PAGE_PATH.POLICY.DELETION}`,
+        element: <AccountDeletion />,
+      },
+      {
+        path: MY_PAGE_PATH.GENERATION_MANAGEMENT,
+        element: <MypageGenerationManagement />,
+      },
+      {
+        path: `${MY_PAGE_PATH.GENERATION_MANAGEMENT}/${COMMON_PATH.GENERATION}`,
+        element: <MypageGenerationManagementDetail />,
+      },
+      {
+        path: MY_PAGE_PATH.MEMBERS,
+        element: <MypageMemberManagement />,
+      },
+      {
+        path: MY_PAGE_PATH.REGISTRATION,
+        element: <MyPageJoinManagement />,
+      },
+    ],
+  },
+];
 
 export default MyPageRouter;
