@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import AttendanceRedirect from './AttendanceRedirect';
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, RouteObject } from 'react-router-dom';
 
 //
 //
@@ -16,32 +16,45 @@ const AsyncAttendanceReportAll = React.lazy(() => import('./Report/AttendanceRep
 //
 //
 
-const AttendanceRoutes = () => {
-  //
-  //
-  //
-
+const AttendanceLayout = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Routes>
-        <Route path="/list/generation/:generationId" element={<AsyncAttendanceList />} />
-        <Route
-          path="/attend/generation/:generationId/session/:sessionId/*"
-          element={<AsyncAttendanceAttend />}
-        />
-        <Route
-          path="/attend/generation/:generationId/session/:sessionId/:attendanceType/:status"
-          element={<AsyncAttendanceResult />}
-        />
-        <Route
-          path="/report/generation/:generationId/session/:sessionId/attendance/:attendanceId"
-          element={<AsyncAttendanceReport />}
-        />
-        <Route path="/report/generation/:generationId/all" element={<AsyncAttendanceReportAll />} />
-        <Route path="/" element={<AttendanceRedirect />} />
-      </Routes>
+      <Outlet />
     </Suspense>
   );
 };
+
+// Route configuration
+const AttendanceRoutes: RouteObject[] = [
+  {
+    element: <AttendanceLayout />,
+    children: [
+      {
+        path: 'list/generation/:generationId',
+        element: <AsyncAttendanceList />,
+      },
+      {
+        path: 'attend/generation/:generationId/session/:sessionId/*',
+        element: <AsyncAttendanceAttend />,
+      },
+      {
+        path: 'attend/generation/:generationId/session/:sessionId/:attendanceType/:status',
+        element: <AsyncAttendanceResult />,
+      },
+      {
+        path: 'report/generation/:generationId/session/:sessionId/attendance/:attendanceId',
+        element: <AsyncAttendanceReport />,
+      },
+      {
+        path: 'report/generation/:generationId/all',
+        element: <AsyncAttendanceReportAll />,
+      },
+      {
+        path: '',
+        element: <AttendanceRedirect />,
+      },
+    ],
+  },
+];
 
 export default AttendanceRoutes;
