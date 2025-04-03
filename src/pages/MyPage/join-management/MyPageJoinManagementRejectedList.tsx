@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { ButtonContainer, ItemWrapper, TableWrapper } from './MyPageJoinManagmentRequestList';
-import { Divider } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import CotatoSelectBox from '@components/CotatoSelectBox';
 import ConfirmButton from '../components/Mypage/ConfirmButton';
 import { MEMBER_POSITION } from '../constants';
@@ -8,6 +8,7 @@ import api from '@/api/api';
 import { MemberStatus } from '@/enums/MemberStatus';
 import { useTheme } from 'styled-components';
 import EmptyResult from '../components/common/EmptyResult';
+import { TableLayout } from '@components/Table';
 
 //
 //
@@ -26,10 +27,17 @@ interface MyPageJoinManagmentRejectedListProps {
 //
 //
 
+const TablePagination = TableLayout.TablePagination;
+
+//
+//
+//
+
 const MyPageJoinManagementRejectedList = ({
   generations,
 }: MyPageJoinManagmentRejectedListProps) => {
   const [rejectedList, setRejectedList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const theme = useTheme();
 
@@ -59,6 +67,13 @@ const MyPageJoinManagementRejectedList = ({
       case '프론트엔드':
         return 'FE';
     }
+  };
+
+  /**
+   *
+   */
+  const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
   };
 
   /**
@@ -146,6 +161,22 @@ const MyPageJoinManagementRejectedList = ({
     );
   };
 
+  /**
+   *
+   */
+  const renderPagination = () => {
+    return (
+      <Stack alignItems="center" mt={'6rem'}>
+        <TablePagination
+          count={rejectedList.length}
+          page={currentPage}
+          onChange={handlePageChange}
+          shape="rounded"
+        />
+      </Stack>
+    );
+  };
+
   //
   //
   //
@@ -153,7 +184,25 @@ const MyPageJoinManagementRejectedList = ({
     fetchRejectedList();
   }, []);
 
-  return <>{renderList()}</>;
+  if (!rejectedList.length) {
+    return <EmptyResult text="거절된 항목이 없습니다." />;
+  }
+
+  return (
+    <>
+      <TableWrapper>
+        {rejectedList.map((rejected, i) => (
+          <Fragment key={i}>
+            {renderRejectedItem(rejected)}
+            {i < rejectedList.length - 1 && (
+              <Divider sx={{ width: '100%', height: '2px', background: theme.colors.primary70 }} />
+            )}
+          </Fragment>
+        ))}
+      </TableWrapper>
+      {renderPagination()}
+    </>
+  );
 };
 
 export default MyPageJoinManagementRejectedList;
