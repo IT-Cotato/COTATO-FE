@@ -189,6 +189,7 @@ export const ItemWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2.25rem;
+  background: ${({ theme }) => theme.colors.common.white};
   p {
     font-size: ${({ theme }) => theme.fontSize.md};
     color: ${({ theme }) => theme.colors.common.black};
