@@ -8,10 +8,17 @@ import InfoTooltip from '../components/member-management/InfoTooltip';
 import SearchBar from '../components/member-management/SearchBar';
 import { useActiveMemberManagement } from '../hooks/useActiveMemberManagement';
 import { useOMManagement } from '../hooks/useOMManagement';
+import { CotatoAddableMemberInfoPositionEnum } from 'cotato-openapi-clients';
 
 //
 //
 //
+
+interface SearchParams {
+  generationNumber: number | null;
+  position: CotatoAddableMemberInfoPositionEnum | null;
+  name: string;
+}
 
 export type MemberManagementView = 'MEMBER' | 'OM';
 
@@ -22,7 +29,11 @@ export type MemberManagementView = 'MEMBER' | 'OM';
 const MypageMemberManagementContent = () => {
   const [currentView, setCurrentView] = useState<MemberManagementView>('MEMBER');
   const [memberIds, setMemberIds] = useState<number[]>([]);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchParams, setSearchParams] = useState<SearchParams>({
+    generationNumber: null,
+    position: 'NONE',
+    name: '',
+  });
 
   const { activeMembers, updateMemberRole, transferMemberIdsToOM } =
     useActiveMemberManagement(currentView);
@@ -33,7 +44,7 @@ const MypageMemberManagementContent = () => {
     currentPage,
     pageSize,
     handlePageChange,
-  } = useOMManagement(currentView, searchValue);
+  } = useOMManagement(currentView, searchParams);
 
   /**
    *
@@ -71,7 +82,9 @@ const MypageMemberManagementContent = () => {
               OM으로 전환하기
             </TagButton>
           )}
-          {currentView === 'OM' && <SearchBar value={searchValue} setValue={setSearchValue} />}
+          {currentView === 'OM' && (
+            <SearchBar searchParams={searchParams} setSearchParams={setSearchParams} />
+          )}
         </Stack>
       </Stack>
     );

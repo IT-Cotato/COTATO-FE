@@ -1,13 +1,25 @@
 import api from '@/api/api';
-import { CotatoMemberInfoResponse } from 'cotato-openapi-clients';
+import {
+  CotatoMemberInfoResponse,
+  CotatoAddableMemberInfoPositionEnum,
+} from 'cotato-openapi-clients';
 import { useEffect, useState } from 'react';
 import { MemberManagementView } from '../member-management/MypageMemberManagementContent';
 
 //
 //
 //
+interface SearchParams {
+  generationNumber: number | null;
+  position: CotatoAddableMemberInfoPositionEnum | null;
+  name: string;
+}
 
-export const useOMManagement = (view: MemberManagementView, searchValue: string) => {
+//
+//
+//
+
+export const useOMManagement = (view: MemberManagementView, searchParams: SearchParams) => {
   const [OMMembers, setOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
   const [filteredOMMembers, setFilteredOMMembers] = useState<CotatoMemberInfoResponse[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -30,15 +42,15 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
   }, [OMMembers]);
 
   /**
-   * Update FilteredOMMembers when search value changes
+   * Update FilteredOMMembers when search params change
    */
   useEffect(() => {
-    if (searchValue.trim()) {
-      filterBySearchValue(searchValue);
+    if (searchParams.name.trim() || searchParams.position || searchParams.generationNumber) {
+      filterBySearchParams(searchParams);
     } else if (view === 'OM') {
       fetchOMMembers(currentPage - 1);
     }
-  }, [searchValue]);
+  }, [searchParams]);
 
   /**
    * Fetch OMMembers with pagination
@@ -70,26 +82,41 @@ export const useOMManagement = (view: MemberManagementView, searchValue: string)
   };
 
   /**
-   * Update FilteredOMMembers by searchValue
-   * 검색 API가 추가되면 이 부분을 수정해야 함
-   * @param searchValue string
+   * Update FilteredOMMembers by searchParams
+   * 검색 API로 요청하여 필터링된 결과를 가져옴
+   * @param searchParams SearchParams
    */
-  const filterBySearchValue = (searchValue: string) => {
-    if (!searchValue.trim()) {
+  const filterBySearchParams = (searchParams: SearchParams) => {
+    if (!searchParams.name.trim() && !searchParams.position && !searchParams.generationNumber) {
       setFilteredOMMembers(OMMembers);
       return;
     }
 
-    // 임시: 클라이언트 측 필터링
-    const searchLower = searchValue.toLowerCase();
+    fetchFilteredMembers(searchParams);
+  };
 
-    const filtered = OMMembers.filter(
-      (member) =>
-        member.name?.toLowerCase().includes(searchLower) ||
-        member.position?.toLowerCase().includes(searchLower),
-    );
+  /**
+   * Fetch filtered members from API
+   */
+  const fetchFilteredMembers = async (searchParams: SearchParams) => {
+    try {
+      const response = await api.get(`/v1/api/search`, {
+        params: {
+          status: 'RETIRED',
+          page: currentPage - 1,
+          size: pageSize,
+          sort: [],
+          passedGenerationNumber: searchParams.generationNumber || undefined,
+          position: searchParams.position || undefined,
+          name: searchParams.name || undefined,
+        },
+      });
 
-    setFilteredOMMembers(filtered);
+      setFilteredOMMembers(response.data.content);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error('Failed to fetch filtered members:', error);
+    }
   };
 
   /**
