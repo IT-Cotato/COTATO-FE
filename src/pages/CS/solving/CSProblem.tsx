@@ -558,6 +558,7 @@ export const Image = styled.img`
   height: 100%;
   border-radius: 5px;
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  object-fit: contain;
 `;
 
 const ResizeIcon = styled(IconButton)`
