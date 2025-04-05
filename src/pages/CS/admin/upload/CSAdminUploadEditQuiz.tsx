@@ -451,6 +451,7 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
   useEffect(() => {
     if (blocker.state === 'blocked') {
       setIsPreviewOpen(false);
+      blocker.reset();
     }
   }, [blocker.state]);
 
@@ -533,7 +534,8 @@ const UploadDiv = styled.div<any>`
   border: ${(props) => (props.$image ? 'none' : '3px dashed #6f99f2')};
   background-image: ${(props) =>
     props.$image ? `url(${props.$image})` : `rgba(255, 255, 255, 0.2)`};
-  background-size: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
   margin-top: 12px;
   p {
@@ -709,6 +711,7 @@ export const Image = styled.img`
   height: 100%;
   border-radius: 5px;
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  object-fit: contain;
 `;
 
 const ChoiceContainer = styled.div<{ choiceNum: number }>`
