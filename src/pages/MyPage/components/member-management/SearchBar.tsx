@@ -6,10 +6,6 @@ import { useGeneration } from '@/hooks/useGeneration';
 import { getMemberPostionText } from '@utils/member';
 import { styled } from 'styled-components';
 
-//
-//
-//
-
 interface SearchParams {
   generationNumber: number | null;
   position: CotatoAddableMemberInfoPositionEnum | null;
@@ -21,16 +17,9 @@ interface SearchBarProps {
   setSearchParams: Dispatch<SetStateAction<SearchParams>>;
 }
 
-//
-//
-//
-
 export default function SearchBar({ searchParams, setSearchParams }: SearchBarProps) {
   const { generations } = useGeneration();
 
-  /**
-   *
-   */
   const handlePositionSelect = (position: CotatoAddableMemberInfoPositionEnum) => {
     if (position === CotatoAddableMemberInfoPositionEnum.None) {
       setSearchParams((prev) => ({ ...prev, position: null }));
@@ -39,10 +28,6 @@ export default function SearchBar({ searchParams, setSearchParams }: SearchBarPr
 
     setSearchParams((prev) => ({ ...prev, position }));
   };
-
-  //
-  //
-  //
 
   return (
     <Stack
@@ -57,18 +42,25 @@ export default function SearchBar({ searchParams, setSearchParams }: SearchBarPr
     >
       <Stack direction="row" alignItems="center" gap="0.5rem">
         <StyledSelect
-          slotProps={{
-            input: {
-              sx: {
-                fontFamily: 'YComputer',
-              },
-            },
-          }}
-          value={searchParams.generationNumber}
+          displayEmpty
+          value={searchParams.generationNumber || ''}
           onChange={(e) =>
-            setSearchParams((prev) => ({ ...prev, generationId: e.target.value as number }))
+            setSearchParams((prev) => ({
+              ...prev,
+              generationNumber: e.target.value === 'clear' ? null : (e.target.value as number),
+            }))
           }
+          renderValue={(selected) => {
+            if (!selected || selected === 'clear') {
+              return <em style={{ fontFamily: 'YComputer', opacity: 0.7 }}>기수</em>;
+            }
+            const selectedGeneration = generations?.find((g) => g.generationId === selected);
+            return `${selectedGeneration?.generationNumber}기`;
+          }}
         >
+          <MenuItem value="clear">
+            <em>기수</em>
+          </MenuItem>
           {generations?.map((generation) => (
             <MenuItem
               key={generation.generationId}
@@ -82,21 +74,25 @@ export default function SearchBar({ searchParams, setSearchParams }: SearchBarPr
           ))}
         </StyledSelect>
         <StyledSelect
-          slotProps={{
-            input: {
-              placeholder: '포지션',
-              sx: {
-                fontFamily: 'YComputer',
-              },
-            },
-          }}
-          displayEmpty={true}
-          value={searchParams.position}
+          displayEmpty
+          value={searchParams.position === null ? '' : searchParams.position}
           onChange={(e) =>
-            handlePositionSelect(e.target.value as CotatoAddableMemberInfoPositionEnum)
+            handlePositionSelect(
+              e.target.value === ''
+                ? CotatoAddableMemberInfoPositionEnum.None
+                : (e.target.value as CotatoAddableMemberInfoPositionEnum),
+            )
           }
+          renderValue={(selected) => {
+            if (!selected || selected === CotatoAddableMemberInfoPositionEnum.None) {
+              return <em style={{ fontFamily: 'YComputer', opacity: 0.7 }}>포지션</em>;
+            }
+            return getMemberPostionText(selected as CotatoAddableMemberInfoPositionEnum);
+          }}
         >
-          <MenuItem value={null as any}>포지션</MenuItem>
+          <MenuItem value={CotatoAddableMemberInfoPositionEnum.None}>
+            <em>포지션</em>
+          </MenuItem>
           {Object.values(CotatoAddableMemberInfoPositionEnum)
             .filter((position) => position !== CotatoAddableMemberInfoPositionEnum.None)
             .map((position) => (
@@ -123,5 +119,5 @@ export default function SearchBar({ searchParams, setSearchParams }: SearchBarPr
 const StyledSelect = styled(Select)`
   background-color: ${({ theme }) => theme.colors.gray20};
   width: 8rem;
-  height: 3.25rem;
+  height: 2.5rem;
 `;
