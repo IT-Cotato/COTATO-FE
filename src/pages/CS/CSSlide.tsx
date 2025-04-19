@@ -3,6 +3,7 @@ import { HEADER_HEIGHT } from '@theme/constants/constants';
 import styled from 'styled-components';
 import CSFirstSection from './CSFirstSection/CSFirstSection';
 import { media } from '@theme/media';
+import CSSecondSection from './CSSecondSection/CSSecondSection';
 
 //
 //
@@ -14,9 +15,9 @@ const CSSlide = () => {
       <SlideSection>
         <CSFirstSection />
       </SlideSection>
-      {/* <SlideSection>
-        <div>slide2</div>
-      </SlideSection> */}
+      <SlideSection>
+        <CSSecondSection />
+      </SlideSection>
     </SlideContainer>
   );
 };
