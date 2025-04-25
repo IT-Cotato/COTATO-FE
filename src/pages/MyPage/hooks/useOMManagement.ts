@@ -107,7 +107,8 @@ export const useOMManagement = (view: MemberManagementView, searchParams: Search
           size: pageSize,
           sort: [],
           passedGenerationNumber: searchParams.generationNumber || undefined,
-          position: searchParams.position || undefined,
+          position:
+            (searchParams.position == 'NONE' ? undefined : searchParams.position) || undefined,
           name: searchParams.name || undefined,
         },
       });
