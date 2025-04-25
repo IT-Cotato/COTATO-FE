@@ -1,34 +1,14 @@
-import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
-import React from 'react';
-import cotatoCharacterFront from '@assets/cotato_character_front.svg';
-import cotatoCharacterBack from '@assets/cotato_character_back.svg';
-import cotatoCharacterPM from '@assets/cotato_character_pm.svg';
-import cotatoCharacterDesign from '@assets/cotato_character_design.svg';
-import cotatoCharacter from '@assets/crown_character.svg';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
-
-//
-//
-//
-
-/**
- * user.positin : 포지션 이미지 src
- */
-const COTATO_CHARCTER_SVG_MAP: Record<CotatoMemberInfoResponsePositionEnum, string> = {
-  FE: cotatoCharacterFront,
-  BE: cotatoCharacterBack,
-  PM: cotatoCharacterPM,
-  DESIGN: cotatoCharacterDesign,
-  NONE: cotatoCharacter,
-};
+import { ReactComponent as Pencil } from '@/pages/MyPage/tempAsssets/Pencil.svg';
+import { ReactComponent as Trash } from '@/pages/MyPage/tempAsssets/Trash.svg';
 
 //
 //
 //
 
 interface ProfileImageSectionProps {
-  position?: CotatoMemberInfoResponsePositionEnum;
-  onImageChange: (file: File) => void;
+  onImageChange: (file: File | null) => void;
   isModifying: boolean;
   value: File | string | null;
 }
@@ -41,12 +21,9 @@ interface ProfileImageSectionProps {
  * 프로필 이미지 영역
  * @param position 사용자의 파트
  */
-const ProfileImageSection = ({
-  position,
-  onImageChange,
-  isModifying,
-  value,
-}: ProfileImageSectionProps) => {
+const ProfileImageSection = ({ onImageChange, isModifying, value }: ProfileImageSectionProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -54,30 +31,59 @@ const ProfileImageSection = ({
     }
   };
 
+  const handleClickEdit = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleClickDelete = () => {
+    onImageChange(null);
+  };
+
   return (
-    <div style={{ position: 'relative' }}>
-      <ProfileImage
-        src={
-          value
-            ? (value as string)
-            : COTATO_CHARCTER_SVG_MAP[position ?? CotatoMemberInfoResponsePositionEnum.None]
-        }
-      />
+    <ProfileImageContainer>
+      <ProfileImage src={value as string} />
       {isModifying && (
-        <ProfileImageInput
-          type="file"
-          accept="image/png, image/jpeg"
-          onChange={handleFileChange}
-          id="profile-image-input"
-        />
+        <ProfileImageEditOverlay>
+          <IconButton
+            onClick={handleClickEdit}
+            style={{ left: '30%' }}
+            aria-label="Edit profile image"
+          >
+            <Pencil />
+          </IconButton>
+          <IconButton
+            onClick={handleClickDelete}
+            style={{ right: '30%' }}
+            aria-label="Remove profile image"
+          >
+            <Trash />
+          </IconButton>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+            id="profile-image-input"
+          />
+        </ProfileImageEditOverlay>
       )}
-    </div>
+    </ProfileImageContainer>
   );
 };
 
 //
 //
 //
+
+const ProfileImageContainer = styled.div`
+  position: relative;
+  width: 11.25rem;
+  height: 11.25rem;
+  border-radius: 50%;
+`;
 
 const ProfileImage = styled.div<{ src: string }>`
   width: 11.25rem;
@@ -87,14 +93,27 @@ const ProfileImage = styled.div<{ src: string }>`
   background-size: cover;
 `;
 
-const ProfileImageInput = styled.input`
+const ProfileImageEditOverlay = styled.div`
   position: absolute;
-  width: 11.25rem;
-  height: 11.25rem;
-  border-radius: 15rem;
   top: 0;
-  background-color: gray;
-  opacity: 0.5;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(128, 128, 128, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const IconButton = styled.button`
+  position: absolute;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default ProfileImageSection;
