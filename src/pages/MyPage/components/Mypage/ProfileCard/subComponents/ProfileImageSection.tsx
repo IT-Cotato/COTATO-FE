@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Pencil } from '@/pages/MyPage/tempAsssets/Pencil.svg';
 import { ReactComponent as Trash } from '@/pages/MyPage/tempAsssets/Trash.svg';
@@ -19,10 +19,25 @@ interface ProfileImageSectionProps {
 
 /**
  * 프로필 이미지 영역
- * @param position 사용자의 파트
  */
 const ProfileImageSection = ({ onImageChange, isModifying, value }: ProfileImageSectionProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (value instanceof File) {
+      const url = URL.createObjectURL(value);
+      setPreviewUrl(url);
+
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else if (typeof value === 'string') {
+      setPreviewUrl(value);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [value]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,11 +54,12 @@ const ProfileImageSection = ({ onImageChange, isModifying, value }: ProfileImage
 
   const handleClickDelete = () => {
     onImageChange(null);
+    setPreviewUrl(null);
   };
 
   return (
     <ProfileImageContainer>
-      <ProfileImage src={value as string} />
+      <ProfileImage src={previewUrl || ''} />
       {isModifying && (
         <ProfileImageEditOverlay>
           <IconButton
@@ -89,7 +105,7 @@ const ProfileImage = styled.div<{ src: string }>`
   width: 11.25rem;
   height: 11.25rem;
   border-radius: 15rem;
-  background-image: url(${({ src }) => src});
+  background-image: ${({ src }) => (src ? `url(${src})` : 'none')};
   background-size: cover;
 `;
 
@@ -105,6 +121,7 @@ const ProfileImageEditOverlay = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const IconButton = styled.button`
   position: absolute;
   background: transparent;
