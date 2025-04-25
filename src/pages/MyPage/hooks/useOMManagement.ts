@@ -100,7 +100,7 @@ export const useOMManagement = (view: MemberManagementView, searchParams: Search
    */
   const fetchFilteredMembers = async (searchParams: SearchParams) => {
     try {
-      const response = await api.get(`/v1/api/search`, {
+      const response = await api.get(`/v1/api/member/search`, {
         params: {
           status: 'RETIRED',
           page: currentPage - 1,
