@@ -68,12 +68,9 @@ const Login = () => {
 
       localStorage.setItem('token', res.headers.accesstoken);
       const updatedUser = await mutate();
-      console.log(updatedUser);
       if (updatedUser?.status === MemberStatus.INACTIVE) {
-        console.log(1);
         setIsDialogOpen(true);
       } else {
-        console.log(2);
         handleLoginSuccess();
       }
     } catch {
@@ -174,7 +171,14 @@ const Login = () => {
   const renderDialog = () => {
     if (!isDialogOpen) return;
 
-    return <AccountActivateDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />;
+    return (
+      <AccountActivateDialog
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        memberId={user.memberId}
+        onSuccess={handleLoginSuccess}
+      />
+    );
   };
 
   return (

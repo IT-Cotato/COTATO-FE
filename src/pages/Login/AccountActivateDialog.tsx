@@ -1,6 +1,8 @@
+import api from '@/api/api';
 import CotatoButton from '@components/CotatoButton';
 import { CotatoDialog, CotatoDialogContent, CotatoDialogTitle } from '@components/CotatoDialog';
 import { Stack } from '@mui/material';
+import { logout } from '@utils/logout';
 import React from 'react';
 
 //
@@ -10,13 +12,20 @@ import React from 'react';
 interface AccountActivateDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  memberId: number;
+  onSuccess: () => void;
 }
 
 //
 //
 //
 
-const AccountActivateDialog = ({ isOpen, setIsOpen }: AccountActivateDialogProps) => {
+const AccountActivateDialog = ({
+  isOpen,
+  setIsOpen,
+  memberId,
+  onSuccess,
+}: AccountActivateDialogProps) => {
   /**
    *
    */
@@ -27,8 +36,24 @@ const AccountActivateDialog = ({ isOpen, setIsOpen }: AccountActivateDialogProps
   /**
    *
    */
+  const handleCancel = () => {
+    handleClose();
+    logout();
+  };
+
+  /**
+   *
+   */
   const handleClick = () => {
-    // TODO: 계정 활성화 API 호출
+    api
+      .patch(`v1/api/member/${memberId}/activate`)
+      .then(() => {
+        setIsOpen(false);
+        onSuccess();
+      })
+      .catch(() => {
+        alert('계정 활성화에 실패했습니다. 다시 시도해주세요.');
+      });
   };
 
   return (
@@ -41,7 +66,7 @@ const AccountActivateDialog = ({ isOpen, setIsOpen }: AccountActivateDialogProps
         },
       }}
       open={isOpen}
-      onClose={handleClose}
+      onClose={handleCancel}
     >
       <CotatoDialogTitle alignCenter>계정 활성화</CotatoDialogTitle>
       <CotatoDialogContent>
