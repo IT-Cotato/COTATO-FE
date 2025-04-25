@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import WelcomeImg from '@assets/login_welcome_img.svg';
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,7 +12,8 @@ import CotatoPixelButton from '@components/CotatoPixelButton';
 import { ReactComponent as ButtonText } from '@assets/login_btn_text.svg';
 import CotatoIcon from '@components/CotatoIcon';
 import { Divider } from '@mui/material';
-
+import AccountActivateDialog from './AccountActivateDialog';
+import { MemberStatus } from '@/enums/MemberStatus';
 //
 //
 //
@@ -29,14 +30,14 @@ const Login = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const navigate = useNavigate();
 
-  const { mutate } = useSWR('/v1/api/member/info', fetcher, {
+  const { data: user, mutate } = useSWR('/v1/api/member/info', fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
-    // 서버 리소스를 한번 받아오고 나서는 다시 받아오지 않음
   });
 
   /**
@@ -56,26 +57,31 @@ const Login = () => {
   /**
    *
    */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsError(false);
-    api
-      .post('/login', {
+    try {
+      const res = await api.post('/login', {
         email: id,
         password: password,
-      })
-      .then((res) => {
-        localStorage.setItem('token', res.headers.accesstoken);
-        mutate('/v1/api/member/info');
-        handleLoginSuccess();
-      })
-      .catch(() => {
-        setIsError(true);
-        // will be changed to toast
-        !id || !password
-          ? alert('아이디 또는 비밀번호를 입력해주세요')
-          : alert('아이디 또는 비밀번호가 일치하지 않습니다.');
       });
+
+      localStorage.setItem('token', res.headers.accesstoken);
+      const updatedUser = await mutate();
+      console.log(updatedUser);
+      if (updatedUser?.status === MemberStatus.INACTIVE) {
+        console.log(1);
+        setIsDialogOpen(true);
+      } else {
+        console.log(2);
+        handleLoginSuccess();
+      }
+    } catch {
+      setIsError(true);
+      !id || !password
+        ? alert('아이디 또는 비밀번호를 입력해주세요')
+        : alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+    }
   };
 
   /**
@@ -162,10 +168,20 @@ const Login = () => {
     return <LoginSuccess />;
   };
 
+  /**
+   *
+   */
+  const renderDialog = () => {
+    if (!isDialogOpen) return;
+
+    return <AccountActivateDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />;
+  };
+
   return (
     <Wrapper>
       {renderLogin()}
       {renderLoginSuccess()}
+      {renderDialog()}
     </Wrapper>
   );
 };
