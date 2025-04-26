@@ -44,7 +44,6 @@ const ProfileCard = () => {
   return (
     <ProfileCardContainer>
       <ProfileImageSection
-        position={form.position}
         value={form.profileImage}
         onImageChange={handleImageChange}
         isModifying={isModifying}

@@ -55,7 +55,7 @@ const MypageMemberManagementContentOMInfo = ({
           page: page,
           rowsPerPage: pageSize,
           onPageChange: onPageChange,
-          count: totalPages, // API에서 받은 totalPages 전달
+          count: totalPages,
         }}
         render={(item) => {
           return (

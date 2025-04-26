@@ -75,12 +75,7 @@ export default function InfoTooltip() {
         },
       }}
     >
-      <IconButton
-        onClick={() => setOpen(!open)}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        className="focus:outline-none"
-      >
+      <IconButton onClick={() => setOpen(!open)} className="focus:outline-none">
         <Info />
       </IconButton>
     </Tooltip>
