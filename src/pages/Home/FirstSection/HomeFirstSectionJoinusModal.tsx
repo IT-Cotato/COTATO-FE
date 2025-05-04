@@ -23,7 +23,31 @@ const CONSETN_FORM_TEXT = `개인정보보호법에 따라 코테이토의 모�
 //
 
 const HomeFirstSectionJoinusModal = () => {
+  const [isConsentChecked, setIsConsentChecked] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+
   const theme = useTheme();
+
+  /**
+   *
+   */
+  const handleConsentChange = () => {
+    setIsConsentChecked((prev) => !prev);
+  };
+
+  /**
+   *
+   */
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  /**
+   *
+   */
+  const handleSubmit = () => {
+    //
+  };
 
   /**
    *
@@ -60,6 +84,8 @@ const HomeFirstSectionJoinusModal = () => {
     return (
       <TextField
         label="이메일"
+        value={email}
+        onChange={handleEmailChange}
         slotProps={{
           inputLabel: {
             shrink: true,
@@ -81,6 +107,7 @@ const HomeFirstSectionJoinusModal = () => {
           '& .MuiOutlinedInput-root': {
             '& input': {
               backgroundColor: theme.colors.primary20,
+              padding: '0.875rem 0.75rem',
             },
 
             '& fieldset': {
@@ -121,8 +148,10 @@ const HomeFirstSectionJoinusModal = () => {
           }}
         >
           <Checkbox
+            checked={isConsentChecked}
             icon={<CotatoIcon icon="check-circle-solid" color={theme.colors.gray20} />}
             checkedIcon={<CotatoIcon icon="check-circle-solid" />}
+            onChange={handleConsentChange}
           />
           <Typography
             sx={{
@@ -150,7 +179,11 @@ const HomeFirstSectionJoinusModal = () => {
           justifyContent: 'center',
         }}
       >
-        <CotatoButton isEnabled text="모집 알림 신청하기" />
+        <CotatoButton
+          isEnabled={isConsentChecked && email.length > 0}
+          text="모집 알림 신청하기"
+          onClick={handleSubmit}
+        />
       </Box>
     );
   };
