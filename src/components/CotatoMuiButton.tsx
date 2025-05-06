@@ -37,6 +37,8 @@ const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, da
   '&.MuiButton-root': {
     backgroundColor: (() => {
       switch (color) {
+        case 'info':
+          return theme.colors.const.sub2[20];
         case 'error':
           return dark ? theme.colors.secondary80 : theme.colors.const.secondary80;
         case 'inherit':
@@ -74,13 +76,25 @@ const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, da
           return 'none';
       }
     })(),
-    '&:hover': {
-      backgroundColor:
-        variant === 'outlined'
-          ? 'transparent'
-          : dark
-            ? theme.colors.primary100_2
-            : theme.colors.const.primary100_2,
+    '&:hover': ({ variant, color, dark }) => {
+      return {
+        backgroundColor:
+          variant === 'outlined'
+            ? 'transparent'
+            : dark
+              ? theme.colors.primary100_2
+              : theme.colors.const.primary100_2,
+        color:
+          color === 'info'
+            ? 'none'
+            : color === 'error'
+              ? 'none'
+              : color === 'inherit'
+                ? theme.colors.const.black
+                : dark
+                  ? theme.colors.primary100_2
+                  : theme.colors.const.primary100_2,
+      };
     },
     '&:disabled': {
       backgroundColor: dark ? theme.colors.gray30 : theme.colors.const.gray30,

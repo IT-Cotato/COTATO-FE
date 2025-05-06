@@ -28,7 +28,7 @@ const CSAdminUploadLayout: React.FC<CSAdminUploadLayoutProps> = ({
           style={{
             position: 'absolute',
             left: '2rem',
-            top: '2rem',
+            top: '8rem',
           }}
           onClick={() => {
             const confirm = window.confirm('저장하지 않고 나가면 변경사항이 사라질 수 있어요!');
