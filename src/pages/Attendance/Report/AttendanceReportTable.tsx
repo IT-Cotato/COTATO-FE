@@ -90,7 +90,7 @@ const AttendanceReportTable = () => {
       data={currentRecords}
       repeatCount={isLandScapeOrSmaller ? 1 : 2}
       render={(record) => (
-        <>
+        <React.Fragment key={record.memberInfo?.memberId}>
           <TableLayout.TableCell>{record.memberInfo?.name}</TableLayout.TableCell>
           <TableLayout.TableCell>
             <AttendanceStatusDropdown
@@ -99,7 +99,7 @@ const AttendanceReportTable = () => {
               attendanceId={attendanceId}
             />
           </TableLayout.TableCell>
-        </>
+        </React.Fragment>
       )}
     />
   );
