@@ -15,7 +15,7 @@ import offlineTwoCharacter from '@/assets/offline_two_character.svg';
 import styled, { useTheme } from 'styled-components';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
-import { useGeolocation } from 'react-use';
+import { GEOLOCATION_ERROR_CODE, useGeolocation } from '@/hooks/useGeolocation';
 import api from '@/api/api';
 import {
   CotatoAttendanceResponse,
@@ -27,6 +27,8 @@ import { LoadingIndicator } from '@components/LoadingIndicator';
 import CotatoIcon from '@components/CotatoIcon';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import { GEOLOCATION_ERROR_MESSAGE } from '../constants/geolocation';
+import CotatoMuiButton from '@components/CotatoMuiButton';
 
 //
 //
@@ -43,24 +45,23 @@ const AttendanceStatusEnum = {
 
 const AttendanceAttend: React.FC = () => {
   const theme = useTheme();
-  const params = useParams();
+  const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
 
   const { isMobileOrSmaller, isLandScapeOrSmaller } = useBreakpoints();
-
-  const geolocationOptions = {
-    enableHighAccuracy: true,
-    timeout: 1000 * 10,
-  };
-
-  const sessionId = Number(params.sessionId);
   const { currentGeneration, isGenerationLoading } = useGeneration();
-  const { latitude, longitude, error: geoLocationError } = useGeolocation(geolocationOptions);
+
+  const {
+    location: geoLocation,
+    error: geoLocationError,
+    retry: retryGeoLocation,
+    isLoading: isGeoLocationLoading,
+  } = useGeolocation();
 
   const { currentAttendance, isAttendanceLoading, isAttendanceError } = useGetAttendances({
     generationId: currentGeneration?.generationId,
-    sessionId: sessionId,
+    sessionId: Number(sessionId),
   });
 
   const { data: attendanceData } = useSWR<CotatoAttendanceResponse>(
@@ -81,8 +82,6 @@ const AttendanceAttend: React.FC = () => {
 
     return now.toISOString();
   };
-
-  console.log('currentGeneration', getCurrentISOTime(), new Date());
 
   /**
    *
@@ -123,10 +122,20 @@ const AttendanceAttend: React.FC = () => {
 
     if (attendanceType === 'OFFLINE') {
       const data = await postOfflineAttendance();
-      handleNavigate(data.data, data.error, attendanceType);
+
+      if (!data) {
+        return;
+      }
+
+      handleNavigate(data.data, data?.error, attendanceType);
     } else {
       const data = await postOnlineAttendance();
-      handleNavigate(data.data, data.error, attendanceType);
+
+      if (!data) {
+        return;
+      }
+
+      handleNavigate(data?.data, data?.error, attendanceType);
     }
   };
 
@@ -134,20 +143,23 @@ const AttendanceAttend: React.FC = () => {
    *
    */
   const postOfflineAttendance = async () => {
+    if (!geoLocation) {
+      return;
+    }
+
     const result = await api
       .post<CotatoAttendResponse>('/v2/api/attendances/records/offline', {
         attendanceId: currentAttendance?.attendanceId,
         requestTime: getCurrentISOTime(),
         location: {
-          latitude: latitude,
-          longitude: longitude,
+          latitude: geoLocation.coords.latitude,
+          longitude: geoLocation.coords.longitude,
         },
       })
       .then((res) => {
         return { data: res.data, error: null };
       })
       .catch((err) => {
-        console.error(err);
         return { data: null, error: err.response.data.code };
       });
 
@@ -167,11 +179,33 @@ const AttendanceAttend: React.FC = () => {
         return { data: res.data, error: null };
       })
       .catch((err) => {
-        console.error(err);
         return { data: null, error: err.response.data.code };
       });
 
     return result;
+  };
+
+  /**
+   *
+   */
+  const handleGeoLocationError = (code: number) => {
+    switch (code) {
+      case GEOLOCATION_ERROR_CODE.PERMISSION_DENIED:
+        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+          if (result.state === 'denied') {
+            window.alert('위치 정보 제공에 동의하여야 출석이 가능합니다!');
+          }
+        });
+        break;
+
+      case GEOLOCATION_ERROR_CODE.POSITION_UNAVAILABLE:
+      case GEOLOCATION_ERROR_CODE.TIMEOUT:
+        retryGeoLocation();
+        break;
+
+      default:
+        break;
+    }
   };
 
   /**
@@ -277,15 +311,70 @@ const AttendanceAttend: React.FC = () => {
   /**
    *
    */
+  const renderGeolocationError = () => {
+    switch (true) {
+      case !geoLocationError && !geoLocation:
+        return '위치를 불러오지 못했습니다. 위치 설정을 확인해주세요.';
+
+      case Boolean(geoLocationError):
+        return GEOLOCATION_ERROR_MESSAGE[
+          geoLocationError?.code as keyof typeof GEOLOCATION_ERROR_MESSAGE
+        ];
+
+      case Boolean(geoLocation):
+        return '위치 정보를 성공적으로 불러왔습니다.';
+
+      default:
+        return null;
+    }
+  };
+
+  /**
+   *
+   */
   const renderActionButton = () => {
     if (isAttendanceLoading || isAttendanceError) {
       return renderLoadingButton();
     }
 
+    const isInvalidLocation = geoLocationError || !geoLocation;
+
     return (
-      <StyledButton $disabled={!attendanceType} disabled={!attendanceType} onClick={handleSubmit}>
-        출석
-      </StyledButton>
+      <Stack gap="1rem" alignItems="center">
+        <Box>
+          {isInvalidLocation ? (
+            <CotatoMuiButton
+              color="primary"
+              sx={{ gap: '0.5rem' }}
+              onClick={() => handleGeoLocationError(geoLocationError?.code ?? 1)}
+            >
+              {isGeoLocationLoading && !geoLocationError ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                <>
+                  <CotatoIcon icon="refresh-solid" color={theme.colors.gray100} size="1.25rem" />
+                  <Typography variant="body2" color={theme.colors.const.black}>
+                    위치 정보 다시 불러오기
+                  </Typography>
+                </>
+              )}
+            </CotatoMuiButton>
+          ) : null}
+        </Box>
+        <Box display="flex" alignItems="center" gap="0.5rem">
+          <CotatoIcon
+            icon={isInvalidLocation ? 'exclaimation-solid' : 'check-circle-solid'}
+            color={isInvalidLocation ? theme.colors.secondary80 : theme.colors.sub3[40]}
+            size="1rem"
+          />
+          <Typography variant="body2" color={theme.colors.common.black}>
+            {renderGeolocationError()}
+          </Typography>
+        </Box>
+        <StyledButton $disabled={!attendanceType} disabled={!attendanceType} onClick={handleSubmit}>
+          출석
+        </StyledButton>
+      </Stack>
     );
   };
 
@@ -352,15 +441,15 @@ const AttendanceAttend: React.FC = () => {
   //
   // 위치 정보 제공 동의 여부 확인
   //
-  React.useEffect(() => {
-    if (geoLocationError) {
-      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        if (result.state === 'denied') {
-          window.alert('위치 정보 제공에 동의하여야 출석이 가능합니다!');
-        }
-      });
-    }
-  }, [geoLocationError]);
+  // React.useEffect(() => {
+  //   if (geoLocationError) {
+  //     navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+  //       if (result.state === 'denied') {
+  //         window.alert('위치 정보 제공에 동의하여야 출석이 가능합니다!');
+  //       }
+  //     });
+  //   }
+  // }, [geoLocationError]);
 
   //
   //

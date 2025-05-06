@@ -33,7 +33,7 @@ const CotatoMuiButton: React.FC<CotatoMuiButtonProps> = ({
   );
 };
 
-const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, dark }) => ({
+const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, dark, variant }) => ({
   '&.MuiButton-root': {
     backgroundColor: (() => {
       switch (color) {
@@ -42,6 +42,10 @@ const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, da
         case 'inherit':
           return 'transparent';
         default:
+          if (variant === 'outlined') {
+            return 'transparent';
+          }
+
           return dark ? theme.colors.primary100_1 : theme.colors.const.primary100_1;
       }
     })(),
@@ -63,11 +67,20 @@ const StyledMuiButton = styled(Button)<CotatoMuiButtonProps>(({ theme, color, da
         case 'inherit':
           return `1px solid ${dark ? theme.colors.gray30 : theme.colors.const.gray30}`;
         default:
+          if (variant === 'outlined') {
+            return `1px solid ${dark ? theme.colors.primary50 : theme.colors.const.primary70}`;
+          }
+
           return 'none';
       }
     })(),
     '&:hover': {
-      backgroundColor: dark ? theme.colors.primary100_2 : theme.colors.const.primary100_2,
+      backgroundColor:
+        variant === 'outlined'
+          ? 'transparent'
+          : dark
+            ? theme.colors.primary100_2
+            : theme.colors.const.primary100_2,
     },
     '&:disabled': {
       backgroundColor: dark ? theme.colors.gray30 : theme.colors.const.gray30,
