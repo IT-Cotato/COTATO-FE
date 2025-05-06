@@ -1,5 +1,5 @@
-import React from 'react';
-import { Stack, Table } from '@mui/material';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Stack, Table, TableCell } from '@mui/material';
 import TableLayout from './TableLayout';
 import { TableBody, TableRow as MuiTableRow } from '@mui/material';
 import { useTheme } from 'styled-components';
@@ -50,38 +50,12 @@ const TableRenderer = <T,>({
   slotProps,
 }: TableRendererProps<T>) => {
   const theme = useTheme();
-  //
-  const arr: T[][] = Array.from({ length: repeatCount }, () => []);
-
-  const paginatedData = data;
-
-  /**
-   * 수정 필요 (임시 페이지네이션 구현)
-   */
-  if (pagination) {
-    paginatedData.forEach((item, index) => {
-      const rowIndex = Math.floor(index / repeatCount);
-      if (arr[rowIndex] === undefined) {
-        arr[rowIndex] = [];
-      }
-      arr[rowIndex].push(item);
-    });
-  } else {
-    data.forEach((data, index) => {
-      const rowIndex = Math.floor(index / repeatCount);
-
-      if (arr[rowIndex] === undefined) {
-        arr[rowIndex] = [];
-      }
-
-      arr[rowIndex].push(data);
-    });
-  }
+  const [groupedData, setGroupedData] = useState<T[][]>([]);
 
   /**
    *
    */
-  const renderTableHead = () => {
+  const renderTableHead = useMemo(() => {
     return (
       <TableHead>
         <MuiTableRow>
@@ -93,41 +67,75 @@ const TableRenderer = <T,>({
         </MuiTableRow>
       </TableHead>
     );
-  };
+  }, [head, repeatCount]);
 
   /**
    *
    */
-  const renderTableBody = () => {
+  const renderTableBody = useMemo(() => {
+    if (!data.length) {
+      return (
+        <TableCell colSpan={head.length * 2} sx={{ padding: 0 }}>
+          <EmptyResult text={slotProps?.emptyResult?.text ?? '데이터가 없습니다.'} border="none" />
+        </TableCell>
+      );
+    }
+
+    const uid = Math.random().toString(36).substring(2, 15);
+
     return (
       <TableBody>
-        {Array.from({ length: Math.ceil(data.length / repeatCount) }).map((_, rowIndex) => (
-          <TableRow key={`body-${rowIndex}`}>
-            {arr[rowIndex] && arr[rowIndex].map((item: T) => render(item))}
-          </TableRow>
+        {groupedData.map((row, rowIndex) => (
+          <TableRow key={`body-${uid}-${rowIndex}`}>{row.map((item) => render(item))}</TableRow>
         ))}
       </TableBody>
     );
-  };
+  }, [groupedData, render, data.length]);
 
   /**
    *
-   * @returns
    */
-  const renderTablePagination = () => {
+  const renderTablePagination = useMemo(() => {
+    const showPagination = pagination.rowsPerPage !== Number.MAX_SAFE_INTEGER;
+
+    if (!showPagination) {
+      return null;
+    }
+
     const totalItems = pagination.count !== undefined ? pagination.count : data.length;
 
     return (
       <Stack alignItems="center" mt={'6rem'}>
         <TablePagination
-          count={totalItems} // 전체 아이템 수 전달
+          count={totalItems}
           page={pagination.page}
           onChange={pagination.onPageChange}
           shape="rounded"
         />
       </Stack>
     );
-  };
+  }, [data.length, pagination]);
+
+  //
+  // Group data into rows based on repeatCount
+  //
+  useEffect(() => {
+    const groupDataIntoRows = () => {
+      const rowCount = Math.ceil(data.length / repeatCount);
+      const rows: T[][] = [];
+
+      for (let i = 0; i < rowCount; i++) {
+        const startIndex = i * repeatCount;
+        const endIndex = Math.min(startIndex + repeatCount, data.length);
+        const row = data.slice(startIndex, endIndex);
+        rows.push(row);
+      }
+
+      return rows;
+    };
+
+    setGroupedData(groupDataIntoRows());
+  }, [data, repeatCount]);
 
   //
   //
@@ -137,16 +145,13 @@ const TableRenderer = <T,>({
     <>
       <TableContainer>
         <Table sx={{ backgroundColor: `${theme.colors.const.white} !important` }}>
-          {renderTableHead()}
-          {renderTableBody()}
+          {renderTableHead}
+          {renderTableBody}
         </Table>
-        {paginatedData.length === 0 && (
-          <EmptyResult text={slotProps?.emptyResult?.text ?? '데이터가 없습니다.'} border="none" />
-        )}
       </TableContainer>
-      {pagination.rowsPerPage !== Number.MAX_SAFE_INTEGER && renderTablePagination()}
+      {renderTablePagination}
     </>
   );
 };
 
-export default TableRenderer;
+export default React.memo(TableRenderer) as typeof TableRenderer;

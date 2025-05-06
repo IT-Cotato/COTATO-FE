@@ -1,5 +1,16 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * 1: 위치 정보 획득 거부
+ * 2: 위치 정보 획득 불가능
+ * 3: 위치 정보 획득 타임아웃
+ */
+export enum GEOLOCATION_ERROR_CODE {
+  PERMISSION_DENIED = 1,
+  POSITION_UNAVAILABLE = 2,
+  TIMEOUT = 3,
+}
+
 export const useGeolocation = (maxRetries = 3, retryDelay = 3000) => {
   const [location, setLocation] = useState<GeolocationPosition | null>(null);
   const [error, setError] = useState<GeolocationPositionError | null>(null);

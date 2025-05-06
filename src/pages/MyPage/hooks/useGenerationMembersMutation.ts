@@ -55,9 +55,10 @@ export const useGenerationMembersMutation = (params: UseGenerationMembersMutatio
     trigger: patchTrigger,
     isMutating: patchIsMutating,
     error: patchError,
-  } = useSWRMutation('/v2/api/generation-members', (url, data) =>
-    api.patch(url + '?generationMemberId=' + data.arg),
-  );
+  } = useSWRMutation(`/v2/api/generation-members`, (url, data) => {
+    const arg = data.arg as CotatoUpdateGenerationMemberRoleRequest;
+    return api.patch(url + `/${arg.generationMemberId}/role`, { role: arg.role });
+  });
 
   //
   //
@@ -81,7 +82,7 @@ export const useGenerationMembersMutation = (params: UseGenerationMembersMutatio
   };
   _return.current.patch = async (mutationParams: CotatoUpdateGenerationMemberRoleRequest) => {
     try {
-      await patchTrigger(mutationParams.generationMemberId as any);
+      await patchTrigger(mutationParams as any);
       params?.onSuccessPatch?.();
     } catch (err) {
       params?.onErrorPatch?.();
