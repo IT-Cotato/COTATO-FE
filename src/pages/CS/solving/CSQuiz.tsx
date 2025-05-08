@@ -67,47 +67,30 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const location = useLocation();
   const currentGenerationId = location.state.generationId;
 
-  window.addEventListener('mousemove', (e) => {
-    if (e.clientY < 150) {
-      setShowHeader(true);
-    } else {
-      setShowHeader(false);
-    }
-  });
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    initializeWebSocket();
-
-    return () => {
-      webSocket.current?.close(4000, 'disconnect websocket on purpose');
-
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
 
   // webSocket 초기 연결 및 메시지 수신
   const initializeWebSocket = async () => {
-    await issueSocketToken(); // 토큰 발급이 완료된 후에 연결 요청하도록 함수 호출 타이밍 조절
-    connectWebSocket();
-    receiveMessage();
+    try {
+      await issueSocketToken();
+      connectWebSocket();
+      receiveMessage();
+    } catch (err) {
+      console.error('WebSocket 통신 초기화 실패: 소켓 토큰 발급 실패');
+    }
   };
 
   // WebSocket 접속을 위한 30초 토큰 발급
-  const issueSocketToken = () => {
-    api
-      .post('/v1/api/socket/token')
-      .then((res) => {
-        const socketToken = res.data.socketToken;
-        console.log(socketToken);
-        localStorage.setItem('socketToken', socketToken);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const issueSocketToken = async () => {
+    try {
+      const res = await api.post('/v1/api/socket/token');
+      const socketToken = res.data.socketToken;
+      localStorage.setItem('socketToken', socketToken);
+      console.log('소켓토큰 발급 완료');
+    } catch (err) {
+      console.error('소켓토큰 발급 실패', err);
+      throw err; // 실패 시 재연결에서도 잡힐 수 있도록
+    }
   };
 
   // WebSocket 연결
@@ -147,7 +130,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
   const reconnectWebSocket = () => {
     console.log('WebSocket disconnected. Attempting to reconnect...');
-
     console.log('socketRetryCount:', socketRetryCount);
 
     if (socketRetryCount.current >= SOCKET_RETRY_LIMIT) {
@@ -190,7 +172,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
                 navigate('/cs');
               }, EXIT_TIMEOUT);
             }
-
             break;
 
           case SHOW_KING_EVENT:
@@ -210,6 +191,14 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       }
     });
   };
+
+  window.addEventListener('mousemove', (e) => {
+    if (e.clientY < 150) {
+      setShowHeader(true);
+    } else {
+      setShowHeader(false);
+    }
+  });
 
   /***
    *
@@ -250,6 +239,17 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   //
   //
   //
+  useEffect(() => {
+    initializeWebSocket();
+
+    return () => {
+      webSocket.current?.close(4000, 'disconnect websocket on purpose');
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Wrapper>
@@ -283,7 +283,9 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   );
 };
 
-export default CSQuiz;
+//
+//
+//
 
 const Wrapper = styled.div`
   display: flex;
@@ -340,3 +342,5 @@ const Waiting = styled.div`
     }
   }
 `;
+
+export default CSQuiz;
