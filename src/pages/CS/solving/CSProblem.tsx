@@ -103,7 +103,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === 'Escape') {
         setCount((prevCount) => prevCount + 1);
       }
     };
@@ -112,7 +112,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
     const intervalId = setInterval(() => {
       setCount(0);
-    }, 1000);
+    }, 3000);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -204,7 +204,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     } else {
       if (!submitAllowed) {
         alert('아직 제출 기한이 아닙니다.');
-        if (count >= 3) {
+        if (count >= 2) {
           setNotice(true);
           setTimeout(() => setNotice(false), 5000);
         }
