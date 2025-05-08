@@ -102,7 +102,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     );
 
     webSocket.current.onopen = () => {
-      console.log('WebSocket connected', localStorage.getItem('socketToken'));
+      console.log('WebSocket connected');
     };
 
     webSocket.current.onerror = (error) => {
