@@ -725,13 +725,14 @@ export const ShortAnswerContainer = styled.div`
   background: #fff;
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
   display: flex;
-  padding-left: 80px;
+  padding: 0 80px;
   input {
     border: none;
     outline: none;
     font-family: NanumSquareRound;
     font-size: 1rem;
     font-weight: 400;
+    width: 100%;
   }
 
   ${media.tablet`
