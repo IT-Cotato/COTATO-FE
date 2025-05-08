@@ -86,7 +86,13 @@ const CSHome = () => {
         <CSWrapper>
           <CSHeader>CS 문제풀이</CSHeader>
           <CSSetting>
-            {generations && <CotatoDropBox list={generations} onChange={onChangeGeneration} />}
+            {generations && (
+              <CotatoDropBox
+                list={generations}
+                title={(generation) => generation?.generationNumber + '기'}
+                onChange={onChangeGeneration}
+              />
+            )}
             {checkIsAtLeastManager(user?.role) && (
               <ButtonWrapper>
                 <IconButton onClick={onClickAddButton}>

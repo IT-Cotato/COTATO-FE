@@ -103,7 +103,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === 'Escape') {
         setCount((prevCount) => prevCount + 1);
       }
     };
@@ -112,7 +112,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
     const intervalId = setInterval(() => {
       setCount(0);
-    }, 1000);
+    }, 3000);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -204,7 +204,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     } else {
       if (!submitAllowed) {
         alert('아직 제출 기한이 아닙니다.');
-        if (count >= 3) {
+        if (count >= 2) {
           setNotice(true);
           setTimeout(() => setNotice(false), 5000);
         }
@@ -255,7 +255,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
         <img
           src={podori}
           alt="포돌짱"
-          style={{ position: 'fixed', marginTop: '60px', width: '500px' }}
+          style={{ position: 'fixed', marginTop: '60px', width: '500px', zIndex: '100' }}
         />
       )}
       <ProgressContainer>
@@ -310,6 +310,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
             contents={multiples}
             multipleRef={multipleRef}
             choiceRef={choiceRef}
+            notice={notice}
           />
         )}
         {!quizData?.choices && (
@@ -319,6 +320,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
             inputRef={inputRef}
             problemId={problemId}
             shortRef={shortRef}
+            notice={notice}
           />
         )}
         <ButtonContainer disabled={!submitAllowed}>
@@ -351,6 +353,7 @@ interface choiceProps {
   contents: string[]; // 객관식 선지의 내용 리스트
   multipleRef: React.MutableRefObject<any>;
   choiceRef: React.MutableRefObject<any>;
+  notice: boolean;
 }
 
 //
@@ -364,6 +367,7 @@ const Choice: React.FC<choiceProps> = ({
   contents,
   multipleRef,
   choiceRef,
+  notice,
 }) => {
   return (
     <ChoiceContainer ref={multipleRef} choiceNum={contents.length}>
@@ -375,6 +379,8 @@ const Choice: React.FC<choiceProps> = ({
             key={idx}
             clicked={selected.includes(choiceNum.toString())}
             onClick={() => {
+              if (notice) return;
+
               setSelectNum(choiceNum);
               if (selected.includes(choiceNum.toString()) === false) {
                 setSelected([...selected, choiceNum.toString()]);
@@ -402,6 +408,7 @@ interface ShortAnsProps {
   inputRef: React.MutableRefObject<any>;
   shortRef: React.MutableRefObject<any>;
   problemId: number;
+  notice: boolean;
 }
 
 //
@@ -414,6 +421,7 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
   inputRef,
   shortRef,
   problemId,
+  notice,
 }) => {
   useEffect(() => inputRef.current.focus(), [problemId]); // 컴포넌트 마운트 즉시 포커싱
 
@@ -427,6 +435,7 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
         onChange={onChangeShortAns}
         placeholder="답안을 입력해주세요"
         ref={inputRef}
+        disabled={notice}
       />
     </ShortAnswerContainer>
   );

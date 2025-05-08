@@ -9,4 +9,5 @@ export const enum MemberStatus {
   RETIRED = 'RETIRED',
   REQUESTED = 'REQUESTED',
   REJECTED = 'REJECTED',
+  INACTIVE = 'INACTIVE',
 }
