@@ -5,6 +5,7 @@ import { useGeneration } from '@/hooks/useGeneration';
 import CotatoDropBox from '@components/CotatoDropBox';
 import {
   CotatoAttendanceWithSessionResponse,
+  CotatoAttendanceWithSessionResponseOpenStatusEnum,
   CotatoAttendanceWithSessionResponseSessionTypeEnum,
   CotatoGenerationInfoResponse,
 } from 'cotato-openapi-clients';
@@ -13,6 +14,7 @@ import CotatoIcon from '@components/CotatoIcon';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import useGetAttendances from '@/hooks/useGetAttendances';
 import { getAttendanceReportPath } from '../utils/util';
+import AttendanceReportExcelExportModal from './components/AttendanceReportExcelExportModal';
 
 //
 //
@@ -35,10 +37,11 @@ const AttendanceReportHeader = () => {
   const [selectedGenerationId, setSelectedGenerationId] = useState<number>(Number(generationId));
   const [selectedAttendanceId, setSelectedAttendanceId] = useState<number>(Number(attendanceId));
   const [attendanceListWithAll, setAttendanceListWithAll] = useState<
-    Omit<CotatoAttendanceWithSessionResponse, 'openStatus'>[]
+    CotatoAttendanceWithSessionResponse[]
   >([]);
+  const [excelModalOpen, setExcelModalOpen] = useState(false);
 
-  const { generations } = useGeneration({
+  const { generations, targetGeneration } = useGeneration({
     generationId: selectedGenerationId.toString(),
   });
 
@@ -81,8 +84,15 @@ const AttendanceReportHeader = () => {
   /**
    *
    */
-  const handleExportExcelClick = () => {
-    alert('출시 예정입니다 :)');
+  const handleExportExcelClick = async () => {
+    setExcelModalOpen(true);
+  };
+
+  /**
+   *
+   */
+  const handleExcelModalClose = () => {
+    setExcelModalOpen(false);
   };
 
   /**
@@ -93,15 +103,13 @@ const AttendanceReportHeader = () => {
       return;
     }
 
-    const newAttendaceList: Omit<CotatoAttendanceWithSessionResponse, 'openStatus'>[] = [
-      ...attendances.attendances,
-    ];
+    const newAttendaceList: CotatoAttendanceWithSessionResponse[] = [...attendances.attendances];
     newAttendaceList.push({
       attendanceId: REPORT_ALL_ID,
       sessionId: REPORT_ALL_ID,
       sessionTitle: '전체',
       sessionType: CotatoAttendanceWithSessionResponseSessionTypeEnum.All,
-      //openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
+      openStatus: CotatoAttendanceWithSessionResponseOpenStatusEnum.Closed,
     });
     setAttendanceListWithAll(newAttendaceList);
 
@@ -125,76 +133,84 @@ const AttendanceReportHeader = () => {
   }, [attendances]);
 
   return (
-    <Stack
-      direction="column"
-      spacing="3rem"
-      padding="2.5rem 0"
-      sx={{
-        width: '100%',
-      }}
-    >
-      <Box sx={{ position: 'relative' }}>
-        <StyledIcon
-          icon="chevron-down-solid"
-          color={theme.colors.primary90}
-          onClick={handlePreviousClick}
-        />
-        <Typography
-          align="center"
-          color={theme.colors.common.black}
-          sx={{
-            fontFamily: 'Ycomputer',
-            fontSize: '1.75rem',
-          }}
-        >
-          출석부 확인하기
-        </Typography>
-      </Box>
-      <Stack direction="row" justifyContent="space-between" gap="1rem">
-        <Stack direction="row" spacing="1rem">
-          {generations && (
-            <CotatoDropBox
-              list={generations}
-              onChange={handleGenerationChange}
-              defaultItemId={selectedGenerationId}
-              color="yellow"
-            />
-          )}
-          {attendanceListWithAll && (
-            <CotatoDropBox
-              list={attendanceListWithAll as CotatoAttendanceWithSessionResponse[]}
-              onChange={handleAttendanceChange}
-              defaultItemId={selectedAttendanceId}
-              width="12rem"
-              color="yellow"
-            />
-          )}
-        </Stack>
-        <Stack direction="column-reverse">
-          <Button
-            disableElevation
-            disabled
-            variant="contained"
-            onClick={handleExportExcelClick}
-            startIcon={<CotatoIcon icon="upload-alt-solid" color={theme.colors.const.black} />}
+    <>
+      <Stack
+        direction="column"
+        spacing="3rem"
+        padding="2.5rem 0"
+        sx={{
+          width: '100%',
+        }}
+      >
+        <Box sx={{ position: 'relative' }}>
+          <StyledIcon
+            icon="chevron-down-solid"
+            color={theme.colors.primary90}
+            onClick={handlePreviousClick}
+          />
+          <Typography
+            align="center"
+            color={theme.colors.common.black}
             sx={{
-              backgroundColor: theme.colors.primary80,
-              borderRadius: '0.325rem',
+              fontFamily: 'Ycomputer',
+              fontSize: '1.75rem',
             }}
           >
-            <Typography
-              color={theme.colors.const.black}
+            출석부 확인하기
+          </Typography>
+        </Box>
+        <Stack direction="row" justifyContent="space-between" gap="1rem">
+          <Stack direction="row" spacing="1rem">
+            <CotatoDropBox
+              list={generations}
+              defaultItem={targetGeneration}
+              color="yellow"
+              title={(generation) => generation?.generationNumber + '기'}
+              onChange={handleGenerationChange}
+            />
+            <CotatoDropBox
+              list={attendanceListWithAll}
+              defaultItem={attendanceListWithAll.find(
+                (attendance) => attendance.attendanceId === selectedAttendanceId,
+              )}
+              size="lg"
+              width="12rem"
+              color="yellow"
+              title={(attendance) => attendance?.sessionTitle}
+              onChange={handleAttendanceChange}
+            />
+          </Stack>
+          <Stack direction="column-reverse">
+            <Button
+              disableElevation
+              variant="contained"
+              onClick={handleExportExcelClick}
+              startIcon={<CotatoIcon icon="upload-alt-solid" color={theme.colors.const.black} />}
               sx={{
-                fontFamily: 'Ycomputer',
-                fontSize: '1rem',
+                backgroundColor: theme.colors.primary80,
+                borderRadius: '0.325rem',
               }}
             >
-              {!isLandScapeOrSmaller && '엑셀로 내보내기'}
-            </Typography>
-          </Button>
+              <Typography
+                color={theme.colors.const.black}
+                sx={{
+                  fontFamily: 'Ycomputer',
+                  fontSize: '1rem',
+                }}
+              >
+                {!isLandScapeOrSmaller && '엑셀로 내보내기'}
+              </Typography>
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
-    </Stack>
+      <AttendanceReportExcelExportModal
+        open={excelModalOpen}
+        generationId={selectedGenerationId}
+        selectedAttendanceId={selectedAttendanceId}
+        onClose={handleExcelModalClose}
+      />
+    </>
   );
 };
 

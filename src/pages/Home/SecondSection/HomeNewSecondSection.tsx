@@ -191,6 +191,7 @@ const Title = styled.div`
     font-size: ${({ theme }) => theme.fontSize.xl};
     font-weight: 700;
     color: ${({ theme }) => theme.colors.gray80_2};
+    font-family: 'Pretendard';
   }
 
   ${media.tablet`

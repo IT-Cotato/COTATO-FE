@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import styled from 'styled-components';
 import { QuizType } from './CSAdminUploadSlides';
 

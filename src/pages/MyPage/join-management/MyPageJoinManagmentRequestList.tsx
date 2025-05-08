@@ -4,11 +4,12 @@ import styled, { useTheme } from 'styled-components';
 import ConfirmButton from '../components/Mypage/ConfirmButton';
 import api from '@/api/api';
 import { MemberStatus } from '@/enums/MemberStatus';
-import { Divider } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { MEMBER_POSITION } from '../constants';
 import EmptyResult from '../components/common/EmptyResult';
 import { media } from '@theme/media';
 import { useGeneration } from '@/hooks/useGeneration';
+import { TableLayout } from '@components/Table';
 
 //
 //
@@ -27,8 +28,15 @@ interface MyPageJoinManagmentRequestListProps {
 //
 //
 
+const TablePagination = TableLayout.TablePagination;
+
+//
+//
+//
+
 const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequestListProps) => {
   const [requestList, setRequestList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const theme = useTheme();
   const { generations: generationList } = useGeneration();
@@ -58,6 +66,13 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
       case '프론트엔드':
         return 'FE';
     }
+  };
+
+  /**
+   *
+   */
+  const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
   };
 
   /**
@@ -141,22 +156,19 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
     );
   };
 
-  const renderList = () => {
-    if (requestList.length === 0) {
-      return <EmptyResult text="가입 요청이 없습니다." />;
-    }
-
+  /**
+   *
+   */
+  const renderPagination = () => {
     return (
-      <TableWrapper>
-        {requestList?.map((request, i) => (
-          <Fragment key={i}>
-            {renderRequestItem(request)}
-            {i < requestList.length - 1 && (
-              <Divider sx={{ width: '100%', height: '2px', background: theme.colors.primary70 }} />
-            )}
-          </Fragment>
-        ))}
-      </TableWrapper>
+      <Stack alignItems="center" mt={'6rem'}>
+        <TablePagination
+          count={requestList.length}
+          page={currentPage}
+          onChange={handlePageChange}
+          shape="rounded"
+        />
+      </Stack>
     );
   };
 
@@ -167,7 +179,25 @@ const MyPageJoinManagmentRequestList = ({ generations }: MyPageJoinManagmentRequ
     fetchRequestList();
   }, []);
 
-  return <>{renderList()}</>;
+  if (requestList.length === 0) {
+    return <EmptyResult text="가입 요청이 없습니다." />;
+  }
+
+  return (
+    <>
+      <TableWrapper>
+        {requestList?.map((request, i) => (
+          <Fragment key={i}>
+            {renderRequestItem(request)}
+            {i < requestList.length - 1 && (
+              <Divider sx={{ width: '100%', height: '2px', background: theme.colors.primary70 }} />
+            )}
+          </Fragment>
+        ))}
+      </TableWrapper>
+      {renderPagination()}
+    </>
+  );
 };
 
 //
@@ -189,6 +219,7 @@ export const ItemWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2.25rem;
+  background: ${({ theme }) => theme.colors.common.white};
   p {
     font-size: ${({ theme }) => theme.fontSize.md};
     color: ${({ theme }) => theme.colors.common.black};

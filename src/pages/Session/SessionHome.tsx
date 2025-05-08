@@ -12,6 +12,7 @@ import { useMediaQuery } from '@mui/material';
 import { device } from '@theme/media';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Scrollbar } from 'swiper/modules';
+import fetchUserData from '@utils/fetchUserData';
 import { ReactComponent as AddCircleIcon } from '@assets/add_circle_dotted.svg';
 import SessionDetailModal from '@pages/Session/SessionDetailModal';
 import 'swiper/css';
@@ -21,7 +22,6 @@ import { toast } from 'react-toastify';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGeneration } from '@/hooks/useGeneration';
 import getDateString from '@utils/getDateString';
-import useUser from '@/hooks/useUser';
 import { checkIsAtLeastAdmin } from '@utils/role';
 
 //
@@ -36,7 +36,7 @@ const SessionHome = () => {
     '/v1/api/session',
     (url: string) => fetcherWithParams(url, { generationId: selectedGeneration?.generationId }),
   );
-  const { user } = useUser();
+  const { data: userData } = fetchUserData();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -287,14 +287,15 @@ const SessionHome = () => {
         {generations && (
           <CotatoDropBox
             list={generations}
-            onChange={handleGenerationChange}
-            defaultItemId={selectedGeneration?.generationId}
+            title={(generation) => generation?.generationNumber + '기'}
+            defaultItem={selectedGeneration}
             color="blue"
             width={isTabletOrSmaller ? '7.2rem' : '8rem'}
             height={isTabletOrSmaller ? '2.8rem' : '3.2rem'}
+            onChange={handleGenerationChange}
           />
         )}
-        {checkIsAtLeastAdmin(user?.role) && !isTabletOrSmaller && (
+        {checkIsAtLeastAdmin(userData?.role) && !isTabletOrSmaller && (
           <AddCircleIcon onClick={() => setIsAddModalOpen(true)} />
         )}
       </SettingTab>

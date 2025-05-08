@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
 import { Box, CircularProgress } from '@mui/material';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
 import SessionUploadModalImageInputThumnail from '@pages/Session/SessionUploadModalImageInputThumnail';
 import { SessionListImageInfo } from '@/typing/session';
 import { ReactComponent as ImageCloseIcon } from '@assets/close_dotted.svg';

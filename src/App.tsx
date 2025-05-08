@@ -73,8 +73,8 @@ function App() {
 
   return (
     <div className="App">
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-        <CotatoThemeProvider>
+      <CotatoThemeProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
           <GlobalStyle />
           <ToastContainer position="bottom-right" autoClose={3000} />
           <Background />
@@ -83,8 +83,8 @@ function App() {
           <AgreementConfirmDialog />
           <Outlet />
           {renderFab()}
-        </CotatoThemeProvider>
-      </LocalizationProvider>
+        </LocalizationProvider>
+      </CotatoThemeProvider>
     </div>
   );
 }
