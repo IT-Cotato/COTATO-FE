@@ -5,7 +5,7 @@ import mobile from '@assets/bg_waiting_mobile.svg';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import api from '@/api/api';
 import CSProblem from './CSProblem';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import BgWinner from './BgWinner';
 import {
@@ -18,6 +18,7 @@ import {
   SHOW_WAITING_EVENT,
   SHOW_WINNER_EVENT,
 } from '../admin/upload/utils/handleWsMessage';
+import SocketCloseAlert from './SocketCloseAlert';
 
 //
 //
@@ -57,11 +58,14 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const [showWinner, setShowWinner] = useState<boolean>(false);
   const [allowSubmit, setAllowSubmit] = useState<boolean>(false);
   const [problemId, setProblemId] = useState<number>(0); // = quizId
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showHeader, setShowHeader] = useState<boolean>(true);
+  const [alertError, setAlertError] = useState<boolean>(false);
 
   const socketRetryCount = useRef<number>(0);
+
+  const location = useLocation();
+  const currentGenerationId = location.state.generationId;
 
   window.addEventListener('mousemove', (e) => {
     if (e.clientY < 150) {
@@ -86,8 +90,8 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   }, []);
 
   // webSocket 초기 연결 및 메시지 수신
-  const initializeWebSocket = () => {
-    issueSocketToken(); // 토큰 발급이 완료된 후에 연결 요청하도록 함수 호출 타이밍 조절
+  const initializeWebSocket = async () => {
+    await issueSocketToken(); // 토큰 발급이 완료된 후에 연결 요청하도록 함수 호출 타이밍 조절
     connectWebSocket();
     receiveMessage();
   };
@@ -98,6 +102,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       .post('/v1/api/socket/token')
       .then((res) => {
         const socketToken = res.data.socketToken;
+        console.log(socketToken);
         localStorage.setItem('socketToken', socketToken);
       })
       .catch((err) => {
@@ -114,20 +119,28 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     );
 
     webSocket.current.onopen = () => {
-      console.log('WebSocket connected');
+      console.log('WebSocket connected', localStorage.getItem('socketToken'));
     };
 
     webSocket.current.onerror = (error) => {
-      console.log('WebSocket.onError', error);
+      console.log(error);
     };
 
     webSocket.current.onclose = (event: any) => {
       console.log(event);
 
+      // 클라이언트에서 의도적 종료 (페이지 언마운트 시)
       if (event.code === 4000) {
         return;
       }
 
+      // 서버에서 의도적 종료 (새로운 세션 연결 시)
+      if (event.code === 4001) {
+        setAlertError(true);
+        return;
+      }
+
+      // 그 외 비정상 종료 -> 재연결
       reconnectWebSocket();
     };
   };
@@ -218,6 +231,22 @@ const CSQuiz: React.FC<WaitingProps> = () => {
     );
   };
 
+  /**
+   *  동시 접속으로 현재 세션 연결이 끊겼을 때 alert창 노출
+   */
+  const renderSocketCloseAlert = () => {
+    if (!alertError) {
+      return;
+    }
+
+    return (
+      <SocketCloseAlert
+        generationId={currentGenerationId}
+        educationId={Number(currentEducationId)}
+      />
+    );
+  };
+
   //
   //
   //
@@ -249,6 +278,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
       )}
       {showWinner && <BgWinner />}
       {renderToast()}
+      {renderSocketCloseAlert()}
     </Wrapper>
   );
 };
