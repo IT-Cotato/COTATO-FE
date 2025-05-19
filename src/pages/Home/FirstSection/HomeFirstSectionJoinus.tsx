@@ -4,6 +4,7 @@ import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { styled } from 'styled-components';
 import { media } from '@theme/media';
 import { ReactComponent as JoinusText } from '@assets/joinus_text_svg.svg';
+import { useJoinusModalOpenStore } from '@/zustand-stores/useJoinusModalOpenStore';
 
 //
 //
@@ -16,13 +17,15 @@ const FORM_LINK = 'https://forms.gle/hGQyVwQexVbYDP2B6';
 //
 
 const HomeFirstSectionJoinus = () => {
+  const { isJoinusModalOpen, setIsJoinusModalOpen } = useJoinusModalOpenStore();
+
   const { isLandScapeOrSmaller } = useBreakpoints();
 
   /**
    *
    */
   const handleJoinusButtonClick = () => {
-    open(FORM_LINK);
+    setIsJoinusModalOpen(!isJoinusModalOpen);
   };
 
   return (

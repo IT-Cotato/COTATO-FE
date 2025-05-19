@@ -4,6 +4,7 @@ import { Box, Checkbox, DialogTitle, Stack, TextField, Typography } from '@mui/m
 import styled, { useTheme } from 'styled-components';
 import CotatoIcon from '@components/CotatoIcon';
 import CotatoButton from '@components/CotatoButton';
+import { useJoinusModalOpenStore } from '@/zustand-stores/useJoinusModalOpenStore';
 
 //
 //
@@ -26,7 +27,16 @@ const HomeFirstSectionJoinusModal = () => {
   const [isConsentChecked, setIsConsentChecked] = React.useState(false);
   const [email, setEmail] = React.useState('');
 
+  const { isJoinusModalOpen, setIsJoinusModalOpen } = useJoinusModalOpenStore();
+
   const theme = useTheme();
+
+  /**
+   *
+   */
+  const handleClose = () => {
+    setIsJoinusModalOpen(false);
+  };
 
   /**
    *
@@ -190,8 +200,8 @@ const HomeFirstSectionJoinusModal = () => {
 
   return (
     <CotatoDialog
-      open
-      onClose={() => {}}
+      open={isJoinusModalOpen}
+      onClose={handleClose}
       sx={{
         '& .MuiPaper-root': {
           width: '35rem',
