@@ -446,6 +446,22 @@ const EditQuiz = ({ quiz, selected, setQuiz }: CSAdminUploadEditQuizProps) => {
   }, []);
 
   //
+  // 컴포넌트 마운트 시 preview_url 생성
+  //
+  useEffect(() => {
+    const hasNoPreviewUrl = quiz[selected]?.image && typeof quiz[selected].image === 'string';
+
+    if (hasNoPreviewUrl) {
+      fetch(quiz[selected].image as unknown as string)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const img = new File([blob], 'image.png', { type: 'image/png' });
+          quiz[selected].previewUrl = URL.createObjectURL(img);
+        });
+    }
+  }, [quiz[selected]?.image]);
+
+  //
   //
   //
   useEffect(() => {
