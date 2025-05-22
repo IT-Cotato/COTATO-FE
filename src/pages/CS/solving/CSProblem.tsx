@@ -238,7 +238,10 @@ const CSProblem: React.FC<CSProblemProps> = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            if (err.response.data.code === 'R-301') {
+              alert('이미 정답 처리되었습니다.');
+              nextProblem();
+            }
           });
       }
     }
