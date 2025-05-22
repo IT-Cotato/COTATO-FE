@@ -33,7 +33,13 @@ const SocketCloseAlert = ({ generationId, educationId }: SocketCloseAlertProps) 
           확인
         </Button>
       }
-      sx={{ position: 'absolute', top: '20px', zIndex: '100' }}
+      sx={{
+        position: 'fixed',
+        bottom: '100px',
+        zIndex: '100',
+        fontSize: '1rem',
+        padding: '0.75rem 1.75rem',
+      }}
     >
       새로운 창에서 동시 접속하여 연결이 끊어졌습니다.
     </Alert>
