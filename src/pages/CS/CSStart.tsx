@@ -44,11 +44,7 @@ const CSStart = () => {
    *
    */
   const handleClickStartButton = () => {
-    navigate(`/cs/solving/${educationId}`, {
-      state: {
-        generationId,
-      },
-    });
+    navigate(`/cs/solving/${generationId}/${educationId}`);
   };
 
   /**

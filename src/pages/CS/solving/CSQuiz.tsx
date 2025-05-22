@@ -5,7 +5,7 @@ import mobile from '@assets/bg_waiting_mobile.svg';
 import { ReactComponent as Timer } from '@assets/timer.svg';
 import api from '@/api/api';
 import CSProblem from './CSProblem';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import BgWinner from './BgWinner';
 import {
@@ -42,6 +42,7 @@ const SOCKET_RETRY_LIMIT = 3;
 
 const CSQuiz: React.FC<WaitingProps> = () => {
   const params = useParams();
+  const currentGenerationId = params.generationId;
   const currentEducationId = params.educationId;
 
   const webSocket = React.useRef<WebSocket | undefined>(undefined);
@@ -63,9 +64,6 @@ const CSQuiz: React.FC<WaitingProps> = () => {
   const [alertError, setAlertError] = useState<boolean>(false);
 
   const socketRetryCount = useRef<number>(0);
-
-  const location = useLocation();
-  const currentGenerationId = location.state.generationId;
 
   const navigate = useNavigate();
 
@@ -230,7 +228,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
 
     return (
       <SocketCloseAlert
-        generationId={currentGenerationId}
+        generationId={Number(currentGenerationId)}
         educationId={Number(currentEducationId)}
       />
     );
@@ -273,6 +271,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
             }
             showKingKing={showKingKing}
             setShowKingKing={setShowKingKing}
+            alertError={alertError}
           />
         </div>
       )}
