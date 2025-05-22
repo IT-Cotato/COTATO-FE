@@ -1,6 +1,6 @@
 {
   "name": "cs-quiz-fe",
-  "version": "0.1.0",
+  "version": "2.250523.0",
   "private": true,
   "dependencies": {
     "@atlaskit/css-reset": "^6.6.2",
