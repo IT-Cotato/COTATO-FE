@@ -142,28 +142,6 @@ const MyPageJoinManagementRejectedList = ({
   /**
    *
    */
-  const renderList = () => {
-    if (!rejectedList.length) {
-      return <EmptyResult text="거절된 항목이 없습니다." />;
-    }
-
-    return (
-      <TableWrapper>
-        {rejectedList.map((rejected, i) => (
-          <Fragment key={i}>
-            {renderRejectedItem(rejected)}
-            {i < rejectedList.length - 1 && (
-              <Divider sx={{ width: '100%', height: '2px', background: theme.colors.primary70 }} />
-            )}
-          </Fragment>
-        ))}
-      </TableWrapper>
-    );
-  };
-
-  /**
-   *
-   */
   const renderPagination = () => {
     return (
       <Stack alignItems="center" mt={'6rem'}>
