@@ -15,7 +15,7 @@ import offlineTwoCharacter from '@/assets/offline_two_character.svg';
 import styled, { useTheme } from 'styled-components';
 import { media } from '@theme/media';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
-import { useGeolocation } from '@/hooks/useGeolocation';
+import { GEOLOCATION_ERROR_CODE, useGeolocation } from '@/hooks/useGeolocation';
 import api from '@/api/api';
 import {
   CotatoAttendanceResponse,
@@ -190,7 +190,7 @@ const AttendanceAttend: React.FC = () => {
    */
   const handleGeoLocationError = (code: number) => {
     switch (code) {
-      case 1:
+      case GEOLOCATION_ERROR_CODE.PERMISSION_DENIED:
         navigator.permissions.query({ name: 'geolocation' }).then((result) => {
           if (result.state === 'denied') {
             window.alert('위치 정보 제공에 동의하여야 출석이 가능합니다!');
@@ -198,8 +198,8 @@ const AttendanceAttend: React.FC = () => {
         });
         break;
 
-      case 2:
-      case 3:
+      case GEOLOCATION_ERROR_CODE.POSITION_UNAVAILABLE:
+      case GEOLOCATION_ERROR_CODE.TIMEOUT:
         retryGeoLocation();
         break;
 
