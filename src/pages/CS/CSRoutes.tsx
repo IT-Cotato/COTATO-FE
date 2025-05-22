@@ -53,7 +53,7 @@ const CSRoutes: RouteObject[] = [
         element: <AsyncCSUpload />,
       },
       {
-        path: 'solving/:educationId',
+        path: 'solving/:generationId/:educationId',
         element: <AsyncCSQuiz />,
       },
       {

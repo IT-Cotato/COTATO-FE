@@ -50,6 +50,7 @@ interface CSProblemProps {
   showKingKing: boolean;
   educationId?: number;
   setShowKingKing: React.Dispatch<React.SetStateAction<boolean>>;
+  alertError: boolean;
 }
 
 //
@@ -64,6 +65,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   educationId,
   showKingKing,
   setShowKingKing,
+  alertError,
 }) => {
   const { data: user } = fetchUserData();
   user ? null : console.log('data is undefined');
@@ -236,7 +238,10 @@ const CSProblem: React.FC<CSProblemProps> = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            if (err.response.data.code === 'R-301') {
+              alert('이미 정답 처리되었습니다.');
+              nextProblem();
+            }
           });
       }
     }
@@ -250,7 +255,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   }
 
   return (
-    <Wrapper>
+    <Wrapper disabled={alertError}>
       {notice && (
         <img
           src={podori}
@@ -445,7 +450,7 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
 //
 //
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ disabled: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -456,6 +461,10 @@ const Wrapper = styled.div`
   padding-bottom: 60px;
   overflow-x: hidden;
   overflow-y: visible;
+  ${({ disabled }) =>
+    disabled &&
+    `pointer-events: none;
+     user-select: none;`}
 `;
 
 const ProgressContainer = styled.div`

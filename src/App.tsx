@@ -25,7 +25,7 @@ function App() {
 
   //
   const isInAttendanceList = useMatch('/attendance/list/generation/:generationId');
-  const isInCsSolve = useMatch('/cs/solving/:educationId');
+  const isInCsSolve = useMatch('/cs/solving/:generationId/:educationId');
 
   //
   const { isTabletOrSmaller } = useBreakpoints();
