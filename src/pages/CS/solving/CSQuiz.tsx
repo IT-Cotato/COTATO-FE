@@ -271,6 +271,7 @@ const CSQuiz: React.FC<WaitingProps> = () => {
             }
             showKingKing={showKingKing}
             setShowKingKing={setShowKingKing}
+            alertError={alertError}
           />
         </div>
       )}
