@@ -76,7 +76,7 @@ jobs:
 
   production-deploy:
     needs: build
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -105,13 +105,45 @@ jobs:
 
       - name: Deploy
         run: |
-          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
-            DEPLOYMENT_GROUP_NAME="cotato-deploy-fe-production"
-          elif [ "${GITHUB_REF}" == "refs/heads/release" ]; then
-            DEPLOYMENT_GROUP_NAME="cotato-deploy-fe-release"
-          fi
           aws deploy create-deployment \
             --application-name cotato-deploy \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name ${DEPLOYMENT_GROUP_NAME} \
+            --deployment-group-name cotato-deploy-fe-production \
+            --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},key=build-fe.zip,bundleType=zip
+
+  qa-deploy:
+    needs: build
+    if: github.ref == 'refs/heads/release'
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Zip Build Folder
+        run: zip -qq -r build-fe.zip build appspec.yml deploy.sh
+        shell: bash
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp build-fe.zip s3://${{ secrets.AWS_S3_BUCKET_NAME }}/build-fe.zip --region ap-northeast-2
+
+      - name: Deploy
+        run: |
+          aws deploy create-deployment \
+            --application-name cotato-deploy \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name cotato-deploy-fe-release \
             --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},key=build-fe.zip,bundleType=zip
