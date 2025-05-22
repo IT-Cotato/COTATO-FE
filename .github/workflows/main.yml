@@ -50,8 +50,13 @@ jobs:
       - name: Install Sentry CLI
         run: yarn global add @sentry/cli
 
+      - name: Lint
+        run: yarn lint
+        continue-on-error: false
+
       - name: Build
         run: yarn build:prod
+        continue-on-error: false
 
       - name: Upload sourcemaps to Sentry
         env:
