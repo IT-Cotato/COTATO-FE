@@ -51,7 +51,7 @@ jobs:
         run: yarn global add @sentry/cli
 
       - name: Lint
-        run: yarn lint
+        run: yarn lint --max-warnings=0
         continue-on-error: false
 
       - name: Build
