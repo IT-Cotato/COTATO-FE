@@ -27,7 +27,7 @@ const CSRoutes = () => {
     <React.Suspense fallback={<div>Loading...</div>}>
       <CSGuard>
         <Routes>
-          <Route path="/introduce" element={<AsyncCSSlide />} />
+          <Route path="/introduce/*" element={<AsyncCSSlide />} />
           <Route path="/:generationId" element={<AsyncCSHome />} />
           <Route path="/manage/*" element={<AsyncCSManage />} />
           <Route

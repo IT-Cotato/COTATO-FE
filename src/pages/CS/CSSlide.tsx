@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CSFirstSection from './CSFirstSection/CSFirstSection';
 import { media } from '@theme/media';
 import CSSecondSection from './CSSecondSection/CSSecondSection';
+import CSThirdSection from './CSThirdSection/CSThirdSection';
 
 //
 //
@@ -17,6 +18,9 @@ const CSSlide = () => {
       </SlideSection>
       <SlideSection>
         <CSSecondSection />
+      </SlideSection>
+      <SlideSection>
+        <CSThirdSection />
       </SlideSection>
     </SlideContainer>
   );

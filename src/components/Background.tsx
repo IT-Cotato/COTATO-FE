@@ -4,7 +4,9 @@ import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
 import lightBackgroundImage from '@/assets/light_background.svg';
 import darkBackgroundImage from '@/assets/dark_background.svg';
+import csBackgroundImage from '@assets/cs_tinroduce_background.png';
 import useCotatoTheme from '@/hooks/useCotatoTheme';
+import { useIsInCSThirdSection } from '@/zustand-stores/useInCSThirdSection';
 
 //
 //
@@ -17,8 +19,17 @@ const Background = () => {
   const { theme: cotatoTheme } = useCotatoTheme();
 
   //
-  //
-  //
+  const { isInCSThridSecion } = useIsInCSThirdSection();
+
+  const commonStyle = {
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover' as const,
+    transition: 'opacity 0.2s ease-in-out',
+  };
 
   return (
     <Stack
@@ -29,8 +40,6 @@ const Background = () => {
         width: '100%',
         height: '100vh',
         zIndex: -1,
-        backgroundRepeat: 'repeat',
-        backgroundSize: 'cover',
         backgroundColor: theme.colors.common.white,
         transition: THEME_CHANGE_TRANSITION,
       }}
@@ -39,8 +48,16 @@ const Background = () => {
         component="img"
         src={cotatoTheme === 'light' ? lightBackgroundImage : darkBackgroundImage}
         sx={{
-          objectFit: 'cover',
-          height: '100vh',
+          ...commonStyle,
+          opacity: isInCSThridSecion ? 0 : 1,
+        }}
+      />
+      <Box
+        component="img"
+        src={csBackgroundImage}
+        sx={{
+          ...commonStyle,
+          opacity: isInCSThridSecion ? 1 : 0,
         }}
       />
     </Stack>
