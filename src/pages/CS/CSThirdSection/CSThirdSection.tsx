@@ -21,22 +21,37 @@ const CSThirdSection = () => {
   //
   //
   React.useEffect(() => {
-    const observer = new IntersectionObserver(
+    const observerIn = new IntersectionObserver(
       ([entry]) => {
-        setIsInCSThirdSection(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setIsInCSThirdSection(true);
+        }
       },
       {
         threshold: OBSERVER_THRESHOLD,
       },
     );
 
+    const observerOut = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setIsInCSThirdSection(false);
+        }
+      },
+      {
+        threshold: 1 - OBSERVER_THRESHOLD,
+      },
+    );
+
     if (thirdSectionRef.current) {
-      observer.observe(thirdSectionRef.current);
+      observerIn.observe(thirdSectionRef.current);
+      observerOut.observe(thirdSectionRef.current);
     }
 
     return () => {
       if (thirdSectionRef.current) {
-        observer.unobserve(thirdSectionRef.current);
+        observerIn.unobserve(thirdSectionRef.current);
+        observerOut.unobserve(thirdSectionRef.current);
       }
     };
   }, []);
