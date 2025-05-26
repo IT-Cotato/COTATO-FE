@@ -54,7 +54,7 @@ const CSThirdSection = () => {
         observerOut.unobserve(thirdSectionRef.current);
       }
     };
-  }, []);
+  }, [thirdSectionRef]);
 
   return (
     <Box
