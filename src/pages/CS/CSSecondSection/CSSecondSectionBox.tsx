@@ -19,14 +19,58 @@ interface CSSecondSectionBoxProps {
 
 const CSSecondSectionBox = ({ title, description, caption }: CSSecondSectionBoxProps) => {
   const theme = useTheme();
+  const { isLaptopOrSmaller, isTabletOrSmaller } = useBreakpoints();
 
-  const { isTabletOrSmaller } = useBreakpoints();
+  /**
+   *
+   */
+  const getPadding = () => {
+    if (isTabletOrSmaller) {
+      return '1.25rem 1.5rem';
+    }
+
+    if (isLaptopOrSmaller) {
+      return '1.5rem 2rem';
+    }
+
+    return '1.875rem 2.375rem';
+  };
+
+  /**
+   *
+   */
+  const getTitleWidth = () => {
+    if (isTabletOrSmaller) {
+      return '10rem';
+    }
+
+    if (isLaptopOrSmaller) {
+      return '12rem';
+    }
+
+    return '16rem';
+  };
+
+  /**
+   *
+   */
+  const getDescriptionWidth = () => {
+    if (isTabletOrSmaller) {
+      return '10rem';
+    }
+
+    if (isLaptopOrSmaller) {
+      return '20rem';
+    }
+
+    return '28.5rem';
+  };
 
   return (
     <Box
       sx={{
         display: 'flex',
-        padding: isTabletOrSmaller ? '1.25rem 1.5rem' : '1.875rem 2.375rem',
+        padding: getPadding(),
         alignItems: 'center',
         backgroundColor: theme.colors.common.white,
         borderRadius: '0.3125rem',
@@ -37,7 +81,7 @@ const CSSecondSectionBox = ({ title, description, caption }: CSSecondSectionBoxP
         variant="body1"
         sx={{
           fontWeight: 600,
-          width: isTabletOrSmaller ? '10rem' : '16rem',
+          width: getTitleWidth(),
         }}
       >
         {title}
@@ -46,7 +90,7 @@ const CSSecondSectionBox = ({ title, description, caption }: CSSecondSectionBoxP
         variant="body1"
         sx={{
           fontWeight: 500,
-          width: isTabletOrSmaller ? '10rem' : '28.5rem',
+          width: getDescriptionWidth(),
         }}
       >
         {description}

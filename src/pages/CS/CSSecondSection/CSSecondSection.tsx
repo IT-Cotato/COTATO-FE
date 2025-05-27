@@ -2,7 +2,6 @@ import { Box, Stack } from '@mui/material';
 import React from 'react';
 import CSSecondSectionHeader from './CSSecondSectionHeader';
 import CSSecondSectionBox from './CSSecondSectionBox';
-import { TABLET_BREAKPOINT } from '../../../theme/media';
 
 //
 //
@@ -43,18 +42,25 @@ const CSSecondSection = () => {
       sx={(theme) => ({
         width: '100%',
         height: '100%',
+        overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: [theme.breakpoints.down('tablet') ? 'flex-start' : 'space-evenly'],
         padding: '2.5rem 0',
+
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
       })}
     >
       <CSSecondSectionHeader />
       <Stack
         spacing="1.25rem"
         sx={{
-          marginTop: '2.25rem',
+          marginTop: '2.5rem',
         }}
       >
         {CS_SECOND_SECTION_CURRICULUM_LIST.map(({ title, description, caption }) => (
