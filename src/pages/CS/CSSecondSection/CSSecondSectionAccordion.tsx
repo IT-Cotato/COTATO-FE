@@ -8,6 +8,8 @@ import {
 } from '@mui/material';
 import { useTheme } from 'styled-components';
 import CotatoIcon from '@components/CotatoIcon';
+import useCotatoTheme from '@/hooks/useCotatoTheme';
+import { COTATO_LIGHT_THEME } from '@theme/constants/constants';
 
 //
 //
@@ -32,6 +34,8 @@ const CSSecondSectionAccordion: React.FC<CSSecondSectionAccordionProps> = ({
 
   const theme = useTheme();
 
+  const { theme: currentTheme } = useCotatoTheme();
+
   /**
    *
    */
@@ -45,9 +49,10 @@ const CSSecondSectionAccordion: React.FC<CSSecondSectionAccordionProps> = ({
       onChange={handleChange}
       sx={{
         boxShadow: 'none',
-        border: `1px solid ${theme.colors.primary80}`,
+        border: `1px solid ${currentTheme === COTATO_LIGHT_THEME ? theme.colors.primary80 : theme.colors.secondary60}`,
         borderRadius: '0.25rem',
         backgroundColor: theme.colors.common.white,
+        color: theme.colors.common.black,
 
         '&.MuiAccordion-root::before': {
           display: 'none',

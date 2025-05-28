@@ -2,6 +2,8 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { useTheme } from 'styled-components';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
+import useCotatoTheme from '@/hooks/useCotatoTheme';
+import { COTATO_LIGHT_THEME } from '@theme/constants/constants';
 
 //
 //
@@ -19,7 +21,10 @@ interface CSSecondSectionBoxProps {
 
 const CSSecondSectionBox = ({ title, description, caption }: CSSecondSectionBoxProps) => {
   const theme = useTheme();
+
   const { isLaptopOrSmaller, isTabletOrSmaller } = useBreakpoints();
+
+  const { theme: currentTheme } = useCotatoTheme();
 
   /**
    *
@@ -74,7 +79,8 @@ const CSSecondSectionBox = ({ title, description, caption }: CSSecondSectionBoxP
         alignItems: 'center',
         backgroundColor: theme.colors.common.white,
         borderRadius: '0.3125rem',
-        border: `1px solid ${theme.colors.primary80}`,
+        border: `1px solid ${currentTheme === COTATO_LIGHT_THEME ? theme.colors.primary80 : theme.colors.secondary60}`,
+        color: theme.colors.common.black,
       }}
     >
       <Typography

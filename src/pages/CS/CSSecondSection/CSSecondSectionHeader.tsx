@@ -1,11 +1,14 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
+import { useTheme } from 'styled-components';
 
 //
 //
 //
 
 const CSSecondSectionHeader = () => {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -16,6 +19,7 @@ const CSSecondSectionHeader = () => {
         gap: '1rem',
         padding: '0 3rem',
         textAlign: 'center',
+        color: theme.colors.common.black,
       }}
     >
       <Typography
