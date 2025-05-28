@@ -2,6 +2,8 @@ import { Box, Stack } from '@mui/material';
 import React from 'react';
 import CSSecondSectionHeader from './CSSecondSectionHeader';
 import CSSecondSectionBox from './CSSecondSectionBox';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
+import CSSecondSectionAccordion from './CSSecondSectionAccordion';
 
 //
 //
@@ -37,6 +39,8 @@ const CS_SECOND_SECTION_CURRICULUM_LIST = [
 //
 
 const CSSecondSection = () => {
+  const { isTabletOrSmaller } = useBreakpoints();
+
   return (
     <Box
       sx={(theme) => ({
@@ -63,14 +67,23 @@ const CSSecondSection = () => {
           marginTop: '2.5rem',
         }}
       >
-        {CS_SECOND_SECTION_CURRICULUM_LIST.map(({ title, description, caption }) => (
-          <CSSecondSectionBox
-            key={title}
-            title={title}
-            description={description}
-            caption={caption}
-          />
-        ))}
+        {CS_SECOND_SECTION_CURRICULUM_LIST.map(({ title, description, caption }) =>
+          isTabletOrSmaller ? (
+            <CSSecondSectionAccordion
+              key={title}
+              title={title}
+              description={description}
+              caption={caption}
+            />
+          ) : (
+            <CSSecondSectionBox
+              key={title}
+              title={title}
+              description={description}
+              caption={caption}
+            />
+          ),
+        )}
       </Stack>
     </Box>
   );
