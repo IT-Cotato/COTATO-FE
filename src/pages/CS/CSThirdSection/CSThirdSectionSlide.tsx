@@ -11,9 +11,23 @@ import { Swiper as SwiperClass } from 'swiper/types';
 //
 //
 
-const CSThirdSectionSlide = () => {
-  const [swiperInstance, setSwiperInstance] = React.useState<SwiperClass | null>(null);
+interface CSThirdSecionSlideProps {
+  onChangeSlide: (index: number) => void;
+}
 
+//
+//
+//
+
+const CSThirdSectionSlide = ({ onChangeSlide }: CSThirdSecionSlideProps) => {
+  const [swiperInstance, setSwiperInstance] = React.useState<SwiperClass | null>(null);
+  const [isBeginning, setIsBeginning] = React.useState(true);
+  const [isEnd, setIsEnd] = React.useState(false);
+
+  const handleSlideChange = (_swiper: SwiperClass) => {
+    setIsBeginning(_swiper.isBeginning);
+    setIsEnd(_swiper.isEnd);
+  };
   /**
    *
    */
@@ -29,10 +43,19 @@ const CSThirdSectionSlide = () => {
 
   return (
     <Box sx={{ position: 'relative', width: '100%', padding: '0 2rem', marginTop: '4rem' }}>
-      <CSThirdSectionSlideButton direction="left" onClick={() => handleSlideButtonClick('left')} />
-      <StyledSwiper slidesPerView="auto" spaceBetween="16rem" onSwiper={setSwiperInstance}>
+      <CSThirdSectionSlideButton
+        isEnd={isBeginning}
+        direction="left"
+        onClick={() => handleSlideButtonClick('left')}
+      />
+      <StyledSwiper
+        slidesPerView="auto"
+        spaceBetween="16rem"
+        onSwiper={setSwiperInstance}
+        onSlideChange={handleSlideChange}
+      >
         {CSPPTImages.map((image, index) => (
-          <StyledSwiperSlide key={index}>
+          <StyledSwiperSlide key={index} onClick={() => onChangeSlide(index)}>
             <Box
               component="img"
               src={image}
@@ -47,6 +70,7 @@ const CSThirdSectionSlide = () => {
         ))}
       </StyledSwiper>
       <CSThirdSectionSlideButton
+        isEnd={isEnd}
         direction="right"
         onClick={() => handleSlideButtonClick('right')}
       />

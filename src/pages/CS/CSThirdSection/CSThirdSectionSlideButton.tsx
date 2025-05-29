@@ -7,6 +7,7 @@ import { Button } from '@mui/material';
 //
 
 interface CSThirdSectionSlideButtonProps {
+  isEnd: boolean;
   direction: 'left' | 'right';
   onClick: () => void;
 }
@@ -15,7 +16,15 @@ interface CSThirdSectionSlideButtonProps {
 //
 //
 
-const CSThirdSectionSlideButton = ({ direction, onClick }: CSThirdSectionSlideButtonProps) => {
+const CSThirdSectionSlideButton = ({
+  isEnd,
+  direction,
+  onClick,
+}: CSThirdSectionSlideButtonProps) => {
+  if (isEnd) {
+    return null;
+  }
+
   return (
     <Button
       sx={{

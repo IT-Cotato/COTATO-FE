@@ -17,7 +17,16 @@ const OBSERVER_THRESHOLD = 0.2;
 const CSThirdSection = () => {
   const thirdSectionRef = React.useRef<HTMLDivElement>(null);
 
+  const [selectedSlideIndex, setSelectedSlideIndex] = React.useState(0);
+
   const { setIsInCSThirdSection } = useIsInCSThirdSection();
+
+  /**
+   *
+   */
+  const handleSlideChange = (index: number) => {
+    setSelectedSlideIndex(index);
+  };
 
   //
   //
@@ -70,8 +79,8 @@ const CSThirdSection = () => {
         padding: '4rem 6rem',
       }}
     >
-      <CSThirdSectionMain />
-      <CSThirdSectionSlide />
+      <CSThirdSectionMain selectedSlideIndex={selectedSlideIndex} />
+      <CSThirdSectionSlide onChangeSlide={handleSlideChange} />
     </Box>
   );
 };

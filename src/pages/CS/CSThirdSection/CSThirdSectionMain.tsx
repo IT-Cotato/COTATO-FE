@@ -1,10 +1,15 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import macbook from '@/assets/macbook.png';
+import CSPPTImages from '@assets/cs_ppt';
 
 //
 //
 //
+
+interface CSThirdSectionMainProps {
+  selectedSlideIndex: number;
+}
 
 const CS_EDUCATION_DESCRIPTION = `
 교육팀 활동을 통해 CS 지식을 깊이 있게 학습하고, 직접 교육 자료와 퀴즈를 제작하며 함께
@@ -16,7 +21,7 @@ const CS_EDUCATION_DESCRIPTION = `
 //
 //
 
-const CSThirdSectionMain = () => {
+const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => {
   return (
     <Box
       sx={{
@@ -53,15 +58,33 @@ const CSThirdSectionMain = () => {
         </Typography>
       </Box>
       <Box
-        component="img"
-        src={macbook}
         sx={{
-          width: '35rem',
-          height: 'auto',
-          objectFit: 'contain',
-          // marginTop: '-5rem',
+          position: 'relative',
         }}
-      ></Box>
+      >
+        <Box
+          component="img"
+          src={macbook}
+          sx={{
+            width: '35rem',
+            height: 'auto',
+            objectFit: 'contain',
+            // marginTop: '-5rem',
+          }}
+        />
+        <Box
+          component="img"
+          src={CSPPTImages[selectedSlideIndex]}
+          sx={{
+            position: 'absolute',
+            width: '26.5rem',
+            top: '3rem',
+            left: '4.3125rem',
+            height: 'auto',
+            objectFit: 'contain',
+          }}
+        />
+      </Box>
     </Box>
   );
 };
