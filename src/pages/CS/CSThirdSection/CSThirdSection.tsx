@@ -74,10 +74,23 @@ const CSThirdSection = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
-        width: '100vw',
-        height: '100vh',
-        padding: '4rem 6rem',
+        justifyContent: {
+          tablet: 'space-evenly',
+        },
+        width: '100%',
+        height: '100%',
+        padding: {
+          tablet: '2rem 2rem',
+          labtop: '2rem 4rem',
+          desktop: '4rem 6rem',
+        },
+        overflow: 'scroll',
+
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
       }}
     >
       <CSThirdSectionMain selectedSlideIndex={selectedSlideIndex} />

@@ -30,7 +30,6 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
-        gap: '3.25rem',
         marginTop: '2rem',
       }}
     >
@@ -38,7 +37,6 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '3.25rem',
           color: theme.colors.common.black,
         }}
       >
@@ -46,6 +44,10 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           variant="h3"
           sx={{
             fontFamily: 'YComputer',
+            fontSize: {
+              tablet: '2.25rem',
+              desktop: '3rem',
+            },
           }}
         >
           CS 교육
@@ -53,10 +55,21 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
         <Typography
           variant="subtitle1"
           sx={{
-            lineHeight: '2.15rem',
             fontWeight: '500',
             letterSpacing: '-0.025em',
             wordBreak: 'keep-all',
+            fontSize: {
+              tablet: '1rem',
+              desktop: '1.125rem',
+            },
+            marginTop: {
+              tablet: '0.5rem',
+              desktop: '2rem',
+            },
+            lineHeight: {
+              tablet: '1.75rem',
+              desktop: '2.15rem',
+            },
           }}
         >
           {CS_EDUCATION_DESCRIPTION}
@@ -66,10 +79,24 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
             display: 'flex',
             flex: '1',
             alignItems: 'flex-end',
-            paddingBottom: '1.625rem',
+            paddingBottom: {
+              tablet: '1.5rem',
+              desktop: '2rem',
+            },
           }}
         >
-          <Typography variant="subtitle1">링크를 내놔라</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: {
+                tablet: '0.875rem',
+                desktop: '1rem',
+              },
+              fontWeight: '500',
+            }}
+          >
+            링크를 내놔라
+          </Typography>
         </Box>
       </Box>
       <Box
@@ -81,7 +108,10 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           component="img"
           src={macbook}
           sx={{
-            width: '40rem',
+            width: {
+              tablet: '25rem',
+              desktop: '40rem',
+            },
             height: 'auto',
             objectFit: 'contain',
           }}
@@ -91,9 +121,18 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           src={CSPPTImages[selectedSlideIndex]}
           sx={{
             position: 'absolute',
-            width: '30rem',
-            top: '1.375rem',
-            left: '5rem',
+            width: {
+              tablet: '18.75rem',
+              desktop: '30rem',
+            },
+            top: {
+              tablet: '0.825rem',
+              desktop: '1.375rem',
+            },
+            left: {
+              tablet: '3.125rem',
+              desktop: '5rem',
+            },
             height: 'auto',
             objectFit: 'contain',
           }}
