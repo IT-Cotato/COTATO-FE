@@ -60,6 +60,13 @@ const Background = () => {
           opacity: isInCSThridSecion ? 1 : 0,
         }}
       />
+      <Box
+        sx={{
+          ...commonStyle,
+          backgroundColor: theme.colors.common.white,
+          opacity: 0.8,
+        }}
+      />
     </Stack>
   );
 };
