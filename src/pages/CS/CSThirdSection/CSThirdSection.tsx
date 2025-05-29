@@ -74,13 +74,11 @@ const CSThirdSection = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: {
-          tablet: 'space-evenly',
-        },
+        justifyContent: 'space-evenly',
         width: '100%',
         height: '100%',
         padding: {
-          tablet: '2rem 2rem',
+          xs: '0 2.5rem',
           labtop: '2rem 4rem',
           desktop: '4rem 6rem',
         },

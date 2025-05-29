@@ -21,16 +21,16 @@ const CSThirdSectionSlideButton = ({
   direction,
   onClick,
 }: CSThirdSectionSlideButtonProps) => {
-  if (isEnd) {
-    return null;
-  }
-
   return (
     <Button
       sx={{
+        visibility: isEnd ? 'hidden' : 'visible',
         position: 'absolute',
         top: '50%',
-        [direction]: '0.5rem',
+        [direction]: {
+          xs: '-3rem',
+          landscape: '0.5rem',
+        },
         transform: 'translateY(-50%)',
         padding: 0,
         minWidth: 0,

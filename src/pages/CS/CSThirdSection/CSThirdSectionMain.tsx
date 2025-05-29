@@ -31,6 +31,14 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
         display: 'flex',
         justifyContent: 'space-between',
         marginTop: '2rem',
+        flexDirection: {
+          xs: 'column',
+          tablet: 'row',
+        },
+        alignItems: {
+          xs: 'center',
+          tablet: 'flex-start',
+        },
       }}
     >
       <Box
@@ -38,13 +46,19 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           display: 'flex',
           flexDirection: 'column',
           color: theme.colors.common.black,
+          flex: '1',
+          height: '100%',
         }}
       >
         <Typography
           variant="h3"
           sx={{
             fontFamily: 'YComputer',
+            fontWeight: {
+              xs: '600',
+            },
             fontSize: {
+              xs: '2rem',
               tablet: '2.25rem',
               desktop: '3rem',
             },
@@ -59,14 +73,15 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
             letterSpacing: '-0.025em',
             wordBreak: 'keep-all',
             fontSize: {
-              tablet: '1rem',
+              xs: '1rem',
               desktop: '1.125rem',
             },
             marginTop: {
-              tablet: '0.5rem',
+              xs: '1rem',
               desktop: '2rem',
             },
             lineHeight: {
+              xs: '1.5rem',
               tablet: '1.75rem',
               desktop: '2.15rem',
             },
@@ -83,6 +98,10 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
               tablet: '1.5rem',
               desktop: '2rem',
             },
+            marginTop: {
+              xs: '1.5rem',
+              tablet: '0',
+            },
           }}
         >
           <Typography
@@ -93,6 +112,7 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
                 desktop: '1rem',
               },
               fontWeight: '500',
+              textDecoration: 'underline',
             }}
           >
             링크를 내놔라
@@ -109,11 +129,16 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           src={macbook}
           sx={{
             width: {
+              xs: '18rem',
               tablet: '25rem',
               desktop: '40rem',
             },
             height: 'auto',
             objectFit: 'contain',
+            marginTop: {
+              xs: '2rem',
+              tablet: '0',
+            },
           }}
         />
         <Box
@@ -122,14 +147,17 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           sx={{
             position: 'absolute',
             width: {
+              xs: '13.5rem',
               tablet: '18.75rem',
               desktop: '30rem',
             },
             top: {
+              xs: '2.625rem',
               tablet: '0.825rem',
               desktop: '1.375rem',
             },
             left: {
+              xs: '2.25rem',
               tablet: '3.125rem',
               desktop: '5rem',
             },
