@@ -74,6 +74,7 @@ const CSThirdSection = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         width: '100vw',
         height: '100vh',
         padding: '4rem 6rem',

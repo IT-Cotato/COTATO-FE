@@ -42,7 +42,7 @@ const CSThirdSectionSlide = ({ onChangeSlide }: CSThirdSecionSlideProps) => {
   };
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', padding: '0 2rem', marginTop: '4rem' }}>
+    <Box sx={{ position: 'relative', width: '100%', padding: '0 3.375rem', marginTop: '4rem' }}>
       <CSThirdSectionSlideButton
         isEnd={isBeginning}
         direction="left"

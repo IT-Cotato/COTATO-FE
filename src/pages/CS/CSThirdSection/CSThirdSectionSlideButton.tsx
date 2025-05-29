@@ -30,7 +30,7 @@ const CSThirdSectionSlideButton = ({
       sx={{
         position: 'absolute',
         top: '50%',
-        [direction]: '-1rem',
+        [direction]: '0.5rem',
         transform: 'translateY(-50%)',
         padding: 0,
         minWidth: 0,

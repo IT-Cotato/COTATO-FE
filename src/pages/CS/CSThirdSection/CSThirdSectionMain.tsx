@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import macbook from '@/assets/macbook.png';
 import CSPPTImages from '@assets/cs_ppt';
+import { useTheme } from 'styled-components';
 
 //
 //
@@ -22,12 +23,15 @@ const CS_EDUCATION_DESCRIPTION = `
 //
 
 const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
         gap: '3.25rem',
+        marginTop: '2rem',
       }}
     >
       <Box
@@ -35,11 +39,11 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           display: 'flex',
           flexDirection: 'column',
           gap: '3.25rem',
-          paddingTop: '2.5rem',
+          color: theme.colors.common.black,
         }}
       >
         <Typography
-          variant="h1"
+          variant="h3"
           sx={{
             fontFamily: 'YComputer',
           }}
@@ -51,11 +55,22 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           sx={{
             lineHeight: '2.15rem',
             fontWeight: '500',
+            letterSpacing: '-0.025em',
             wordBreak: 'keep-all',
           }}
         >
           {CS_EDUCATION_DESCRIPTION}
         </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flex: '1',
+            alignItems: 'flex-end',
+            paddingBottom: '1.625rem',
+          }}
+        >
+          <Typography variant="subtitle1">링크를 내놔라</Typography>
+        </Box>
       </Box>
       <Box
         sx={{
@@ -66,10 +81,9 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           component="img"
           src={macbook}
           sx={{
-            width: '35rem',
+            width: '40rem',
             height: 'auto',
             objectFit: 'contain',
-            // marginTop: '-5rem',
           }}
         />
         <Box
@@ -77,9 +91,9 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
           src={CSPPTImages[selectedSlideIndex]}
           sx={{
             position: 'absolute',
-            width: '26.5rem',
-            top: '3rem',
-            left: '4.3125rem',
+            width: '30rem',
+            top: '1.375rem',
+            left: '5rem',
             height: 'auto',
             objectFit: 'contain',
           }}

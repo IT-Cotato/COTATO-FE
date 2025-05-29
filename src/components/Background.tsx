@@ -79,6 +79,7 @@ const Background = () => {
             height: '100%',
             backgroundColor: theme.colors.common.white,
             opacity: 0.8,
+            transition: THEME_CHANGE_TRANSITION,
           }}
         />
       </Box>
