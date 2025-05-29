@@ -21,16 +21,6 @@ const Background = () => {
   //
   const { isInCSThridSecion } = useIsInCSThirdSection();
 
-  const commonStyle = {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover' as const,
-    // transition: 'opacity 0.2s ease-in-out',
-  };
-
   return (
     <Stack
       sx={{
