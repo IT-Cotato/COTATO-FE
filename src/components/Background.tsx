@@ -28,7 +28,7 @@ const Background = () => {
     width: '100%',
     height: '100%',
     objectFit: 'cover' as const,
-    transition: 'opacity 0.2s ease-in-out',
+    // transition: 'opacity 0.2s ease-in-out',
   };
 
   return (
@@ -48,25 +48,49 @@ const Background = () => {
         component="img"
         src={cotatoTheme === 'light' ? lightBackgroundImage : darkBackgroundImage}
         sx={{
-          ...commonStyle,
+          position: 'absolute' as const,
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
           opacity: isInCSThridSecion ? 0 : 1,
         }}
       />
       <Box
-        component="img"
-        src={csBackgroundImage}
         sx={{
-          ...commonStyle,
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
           opacity: isInCSThridSecion ? 1 : 0,
+          transition: 'opacity 0.2s ease-in-out',
         }}
-      />
-      <Box
-        sx={{
-          ...commonStyle,
-          backgroundColor: theme.colors.common.white,
-          opacity: 0.8,
-        }}
-      />
+      >
+        <Box
+          component="img"
+          src={csBackgroundImage}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: theme.colors.common.white,
+            opacity: 0.8,
+          }}
+        />
+      </Box>
     </Stack>
   );
 };
