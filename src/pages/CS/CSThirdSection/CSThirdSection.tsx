@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import { useIsInCSThirdSection } from '@/zustand-stores/useInCSThirdSection';
+import CSThirdSectionMain from './CSThirdSectionMain';
+import CSThirdSectionSlide from './CSThirdSectionSlide';
 
 //
 //
@@ -65,9 +67,11 @@ const CSThirdSection = () => {
         alignItems: 'center',
         width: '100vw',
         height: '100vh',
+        padding: '4rem 6rem',
       }}
     >
-      asdf
+      <CSThirdSectionMain />
+      <CSThirdSectionSlide />
     </Box>
   );
 };
