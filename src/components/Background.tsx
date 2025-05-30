@@ -4,7 +4,7 @@ import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
 import lightBackgroundImage from '@/assets/light_background.svg';
 import darkBackgroundImage from '@/assets/dark_background.svg';
-import csBackgroundImage from '@assets/cs_tinroduce_background.png';
+import csBackgroundImage from '@assets/cs_introduce_background.png';
 import useCotatoTheme from '@/hooks/useCotatoTheme';
 import { useIsInCSThirdSection } from '@/zustand-stores/useIsInCSThirdSection';
 
