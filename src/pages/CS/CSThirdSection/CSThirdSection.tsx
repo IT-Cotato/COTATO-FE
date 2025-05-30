@@ -8,7 +8,7 @@ import CSThirdSectionSlide from './CSThirdSectionSlide';
 //
 //
 
-const OBSERVER_THRESHOLD = 0.2;
+const OBSERVER_THRESHOLD = 0.5;
 
 //
 //
@@ -32,38 +32,24 @@ const CSThirdSection = () => {
   //
   //
   React.useEffect(() => {
-    const observerIn = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInCSThirdSection(true);
-        }
-      },
-      {
-        threshold: OBSERVER_THRESHOLD,
-      },
-    );
-
-    const observerOut = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          setIsInCSThirdSection(false);
-        }
-      },
-      {
-        threshold: 1 - OBSERVER_THRESHOLD,
-      },
-    );
-
-    if (thirdSectionRef.current) {
-      observerIn.observe(thirdSectionRef.current);
-      observerOut.observe(thirdSectionRef.current);
+    if (!thirdSectionRef.current) {
+      return;
     }
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        console.log(entry);
+        const inView = entry.intersectionRatio >= OBSERVER_THRESHOLD;
+        setIsInCSThirdSection(inView);
+      },
+      {
+        threshold: [OBSERVER_THRESHOLD],
+      },
+    );
+
+    observer.observe(thirdSectionRef.current);
     return () => {
-      if (thirdSectionRef.current) {
-        observerIn.unobserve(thirdSectionRef.current);
-        observerOut.unobserve(thirdSectionRef.current);
-      }
+      observer.disconnect();
     };
   }, [thirdSectionRef]);
 
