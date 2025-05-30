@@ -38,7 +38,6 @@ const CSThirdSection = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        console.log(entry);
         const inView = entry.intersectionRatio >= OBSERVER_THRESHOLD;
         setIsInCSThirdSection(inView);
       },
