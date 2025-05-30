@@ -15,14 +15,14 @@ import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
 import CotatoIcon from './CotatoIcon';
-import { useIsInCSThirdSection } from '@/zustand-stores/useInCSThirdSection';
+import { useIsInCSThirdSection } from '@/zustand-stores/useIsInCSThirdSection';
 
 //
 //
 //
 
 interface HeaderWrapperProps {
-  $isInCSThirdSecion?: boolean;
+  $isInCSThirdSection?: boolean;
 }
 
 type NavItemName = 'Home' | 'About us' | 'Project' | 'Session' | 'FAQ' | 'CS Quiz';
@@ -54,7 +54,7 @@ const Header = () => {
   const { DefaultTheme, onChangeTheme } = React.useContext(ThemeContext);
 
   //
-  const { isInCSThridSecion } = useIsInCSThirdSection();
+  const { isInCSThirdSection } = useIsInCSThirdSection();
 
   /**
    *
@@ -131,7 +131,7 @@ const Header = () => {
     }
 
     return (
-      <HeaderWrapper $isInCSThirdSecion={isInCSThridSecion}>
+      <HeaderWrapper $isInCSThirdSection={isInCSThirdSection}>
         {renderLogo()}
         {renderNav()}
       </HeaderWrapper>
@@ -179,8 +179,8 @@ const HeaderWrapper = styled.header<HeaderWrapperProps>`
   padding: 0.5rem 6rem;
   align-items: center;
   justify-content: space-between;
-  background: ${({ theme, $isInCSThirdSecion }) =>
-    $isInCSThirdSecion ? 'transparent' : theme.colors.common.white};
+  background: ${({ theme, $isInCSThirdSection }) =>
+    $isInCSThirdSection ? 'transparent' : theme.colors.common.white};
   position: fixed;
   top: 0;
   z-index: 100;

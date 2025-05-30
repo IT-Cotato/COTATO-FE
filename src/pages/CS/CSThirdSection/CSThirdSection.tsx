@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import { useIsInCSThirdSection } from '@/zustand-stores/useInCSThirdSection';
+import { useIsInCSThirdSection } from '@/zustand-stores/useIsInCSThirdSection';
 import CSThirdSectionMain from './CSThirdSectionMain';
 import CSThirdSectionSlide from './CSThirdSectionSlide';
 
