@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { device } from '@theme/media';
 import { useCotatoFabOpenStore } from '@/zustand-stores/useCotatoFabOpenStore';
-import { useIsInCSThirdSection } from '@/zustand-stores/useInCSThirdSection';
+import { useIsInCSThirdSection } from '@/zustand-stores/useIsInCSThirdSection';
 
 //
 //
@@ -35,7 +35,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
   const { isCotatoFabOpen, toggleCotatoFabOpen } = useCotatoFabOpenStore();
   const itemLength = React.Children.count(children);
   const isMobileOrSmaller = useMediaQuery(`(max-width:${device.mobile})`);
-  const { isInCSThridSecion } = useIsInCSThirdSection();
+  const { isInCSThirdSection } = useIsInCSThirdSection();
 
   /**
    *
@@ -50,7 +50,7 @@ const CotatoFloatingActionButton: React.FC<CotatoFloatingActionButtonProps> = ({
     config: { tension: 240, friction: 20 },
   });
 
-  if (isInCSThridSecion) {
+  if (isInCSThirdSection) {
     return null;
   }
 

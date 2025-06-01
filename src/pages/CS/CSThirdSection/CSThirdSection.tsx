@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import { useIsInCSThirdSection } from '@/zustand-stores/useInCSThirdSection';
+import { useIsInCSThirdSection } from '@/zustand-stores/useIsInCSThirdSection';
 import CSThirdSectionMain from './CSThirdSectionMain';
 import CSThirdSectionSlide from './CSThirdSectionSlide';
 
@@ -38,7 +38,6 @@ const CSThirdSection = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        console.log(entry);
         const inView = entry.intersectionRatio >= OBSERVER_THRESHOLD;
         setIsInCSThirdSection(inView);
       },
@@ -52,6 +51,15 @@ const CSThirdSection = () => {
       observer.disconnect();
     };
   }, [thirdSectionRef]);
+
+  //
+  //
+  //
+  React.useEffect(() => {
+    return () => {
+      setIsInCSThirdSection(false);
+    };
+  }, []);
 
   return (
     <Box

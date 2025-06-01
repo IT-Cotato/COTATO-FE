@@ -4,9 +4,9 @@ import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useTheme } from 'styled-components';
 import lightBackgroundImage from '@/assets/light_background.svg';
 import darkBackgroundImage from '@/assets/dark_background.svg';
-import csBackgroundImage from '@assets/cs_tinroduce_background.png';
+import csBackgroundImage from '@assets/cs_introduce_background.png';
 import useCotatoTheme from '@/hooks/useCotatoTheme';
-import { useIsInCSThirdSection } from '@/zustand-stores/useInCSThirdSection';
+import { useIsInCSThirdSection } from '@/zustand-stores/useIsInCSThirdSection';
 
 //
 //
@@ -19,7 +19,7 @@ const Background = () => {
   const { theme: cotatoTheme } = useCotatoTheme();
 
   //
-  const { isInCSThridSecion } = useIsInCSThirdSection();
+  const { isInCSThirdSection } = useIsInCSThirdSection();
 
   return (
     <Stack
@@ -44,7 +44,7 @@ const Background = () => {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          opacity: isInCSThridSecion ? 0 : 1,
+          opacity: isInCSThirdSection ? 0 : 1,
         }}
       />
       <Box
@@ -54,7 +54,7 @@ const Background = () => {
           left: 0,
           width: '100%',
           height: '100%',
-          opacity: isInCSThridSecion ? 1 : 0,
+          opacity: isInCSThirdSection ? 1 : 0,
           transition: 'opacity 0.2s ease-in-out',
         }}
       >
