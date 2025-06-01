@@ -52,6 +52,15 @@ const CSThirdSection = () => {
     };
   }, [thirdSectionRef]);
 
+  //
+  //
+  //
+  React.useEffect(() => {
+    return () => {
+      setIsInCSThirdSection(false);
+    };
+  }, []);
+
   return (
     <Box
       ref={thirdSectionRef}
