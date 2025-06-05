@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Checkbox, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
 import TableLayout from '@components/Table/TableLayout';
 import TableRenderer from '@components/Table/TableRenderer';
@@ -54,6 +54,22 @@ const MypageMemberManagementContentMemberInfo = ({
   setMemberIds,
 }: MypageMemberManagementContentMemberInfoProps) => {
   const { isLandScapeOrSmaller } = useBreakpoints();
+  const [localRoles, setLocalRoles] = useState<{ [key: number]: CotatoMemberInfoResponseRoleEnum }>(
+    {},
+  );
+
+  /**
+   *
+   */
+  useEffect(() => {
+    const roles: { [key: number]: CotatoMemberInfoResponseRoleEnum } = {};
+    data.forEach((item) => {
+      if (item.role) {
+        roles[item.memberId] = item.role as CotatoMemberInfoResponseRoleEnum;
+      }
+    });
+    setLocalRoles(roles);
+  }, [data]);
 
   /**
    *
@@ -101,7 +117,9 @@ const MypageMemberManagementContentMemberInfo = ({
               <TableCell>
                 <Select
                   disabled={item.role === CotatoMemberInfoResponseRoleEnum.Dev}
-                  value={item.role}
+                  value={
+                    localRoles[item.memberId] || (item.role as CotatoMemberInfoResponseRoleEnum)
+                  }
                   size="small"
                   sx={{
                     fontFamily: 'YComputer',
@@ -114,18 +132,24 @@ const MypageMemberManagementContentMemberInfo = ({
                   }}
                   fullWidth
                   onChange={(e: SelectChangeEvent) => {
-                    if (e.target.value === CotatoMemberInfoResponseRoleEnum.Dev) {
+                    const newRole = e.target.value as CotatoMemberInfoResponseRoleEnum;
+                    setLocalRoles((prev) => ({
+                      ...prev,
+                      [item.memberId]: newRole,
+                    }));
+
+                    if (newRole === CotatoMemberInfoResponseRoleEnum.Dev) {
                       if (window.confirm('정말 개발팀으로 변경하시겠습니까?')) {
-                        updateMemberRole(
-                          item.memberId,
-                          e.target.value as CotatoMemberInfoResponseRoleEnum,
-                        );
+                        updateMemberRole(item.memberId, newRole);
+                      } else {
+                        // 취소시 원래 값으로 되돌리기
+                        setLocalRoles((prev) => ({
+                          ...prev,
+                          [item.memberId]: item.role as CotatoMemberInfoResponseRoleEnum,
+                        }));
                       }
                     } else {
-                      updateMemberRole(
-                        item.memberId,
-                        e.target.value as CotatoMemberInfoResponseRoleEnum,
-                      );
+                      updateMemberRole(item.memberId, newRole);
                     }
                   }}
                 >
