@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Upload } from '@/pages/MyPage/tempAsssets/upload.svg';
 import { CotatoLightTheme } from '@theme/theme';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -36,7 +37,17 @@ const ButtonSection = ({ isModifying, setIsModifying, onSubmit }: ButtonSectionP
           }
         }}
       >
-        {isModifying ? '취소' : <Upload />}
+        {isModifying ? (
+          '취소'
+        ) : (
+          <CotatoIcon
+            icon="upload"
+            color={(theme) =>
+              isModifying ? theme.colors.common.real_white : theme.colors.common.white
+            }
+            size="18px"
+          />
+        )}
       </ProfileCardButton>
       <ProfileCardButton
         onClick={() => {

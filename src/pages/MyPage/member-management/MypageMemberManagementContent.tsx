@@ -3,12 +3,12 @@ import { Stack } from '@mui/material';
 import MypageMemberManagementContentMemberInfo from './MypageMemberManagementContentMemberInfo';
 import MypageMemberManagementContentOMInfo from './MypageMemberManagementContentOMInfo';
 import { TagButton } from '../components/member-management/TagButton';
-import { ReactComponent as Refresh } from '@/pages/MyPage/tempAsssets/refresh.svg';
 import InfoTooltip from '../components/member-management/InfoTooltip';
 import SearchBar from '../components/member-management/SearchBar';
 import { useActiveMemberManagement } from '../hooks/useActiveMemberManagement';
 import { useOMManagement } from '../hooks/useOMManagement';
 import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -78,7 +78,10 @@ const MypageMemberManagementContent = () => {
               disabled={memberIds.length <= 0}
               onClick={() => transferMemberIdsToOM(memberIds, setMemberIds)}
             >
-              <Refresh />
+              <CotatoIcon
+                icon="refresh"
+                color={(t) => (memberIds.length > 0 ? t.colors.common.black : t.colors.gray40)}
+              />
               OM으로 전환하기
             </TagButton>
           )}
