@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Upload } from '@/pages/MyPage/tempAsssets/upload.svg';
 import { CotatoLightTheme } from '@theme/theme';
 import CotatoIcon from '@components/CotatoIcon';
 
