@@ -1,5 +1,5 @@
 import api from '@/api/api';
-import { CotatoMemberInfoResponse, CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
+import { CotatoMemberResponse, CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 import { useEffect, useState } from 'react';
 import { MemberManagementView } from '../member-management/MypageMemberManagementContent';
 
@@ -8,7 +8,7 @@ import { MemberManagementView } from '../member-management/MypageMemberManagemen
 //
 
 export const useActiveMemberManagement = (view: MemberManagementView) => {
-  const [activeMembers, setActiveMembers] = useState<CotatoMemberInfoResponse[]>([]);
+  const [activeMembers, setActiveMembers] = useState<CotatoMemberResponse[]>([]);
 
   /**
    *

@@ -127,6 +127,7 @@ const MypageGenerationManagementDetailContentMemberInfo = () => {
                 }}
               >
                 <MypageGenerationManagementMemberRoleActions
+                  isEditable={isEditable}
                   memberInfo={info}
                   onChange={(id, role) =>
                     patchGenerationMemberRole({ generationMemberId: id, role })

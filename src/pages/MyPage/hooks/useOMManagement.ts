@@ -1,7 +1,7 @@
 import api from '@/api/api';
 import {
   CotatoMemberInfoResponse,
-  CotatoAddableMemberInfoPositionEnum,
+  CotatoMemberInfoResponsePositionEnum,
 } from 'cotato-openapi-clients';
 import { useEffect, useState } from 'react';
 import { MemberManagementView } from '../member-management/MypageMemberManagementContent';
@@ -11,7 +11,7 @@ import { MemberManagementView } from '../member-management/MypageMemberManagemen
 //
 interface SearchParams {
   generationNumber: number | null;
-  position: CotatoAddableMemberInfoPositionEnum | null;
+  position: CotatoMemberInfoResponsePositionEnum | null;
   name: string;
 }
 

@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MY_PAGE_PATH } from '../MyPageRouter';
 import { Button } from '@mui/material';
-import { ReactComponent as RightAngle } from '@/pages/MyPage/tempAsssets/angle_right.svg';
 import PolicyCheckImage from '@/pages/MyPage/tempAsssets/Text/PolicyCheck.svg';
 import CotatoPanel, { SizeStateEnum } from '@components/CotatoPanel';
 import { Header } from './style';
 import BackButton from '../components/common/BackButton';
 import { CotatoLightTheme } from '@theme/theme';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -28,7 +28,9 @@ const PolicyCheck = () => {
         <ButtonContainer>
           <Button
             variant="text"
-            endIcon={<RightAngle />}
+            endIcon={
+              <CotatoIcon icon="angle-right-solid" color={(t) => t.colors.gray60}></CotatoIcon>
+            }
             onClick={() => navigate(MY_PAGE_PATH.POLICY.DELETION)}
           >
             <ButtonText>회원 탈퇴</ButtonText>
