@@ -4,14 +4,14 @@ import TableLayout from '@components/Table/TableLayout';
 import TableRenderer from '@components/Table/TableRenderer';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { useTheme } from 'styled-components';
-import { CotatoMemberInfoResponse, CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
+import { CotatoMemberResponse, CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 
 //
 //
 //
 
 interface MypageMemberManagementContentMemberInfoProps {
-  data: CotatoMemberInfoResponse[];
+  data: CotatoMemberResponse[];
   updateMemberRole: (memberId: number, newRole: CotatoMemberInfoResponseRoleEnum) => void;
   memberIds: number[];
   setMemberIds: Dispatch<SetStateAction<number[]>>;
@@ -92,7 +92,7 @@ const MypageMemberManagementContentMemberInfo = ({
                     }}
                   />
                   <span style={{ padding: '1rem 0.75rem' }}>
-                    {/* {item.passedGenerationNumber} */}
+                    {item.passedGenerationNumber + '기 '}
                     {item.name + ' '}
                     {getPosition(item.position)}
                   </span>
@@ -101,7 +101,7 @@ const MypageMemberManagementContentMemberInfo = ({
               <TableCell>
                 <Select
                   disabled={item.role === CotatoMemberInfoResponseRoleEnum.Dev}
-                  defaultValue={item.role}
+                  value={item.role}
                   size="small"
                   sx={{
                     fontFamily: 'YComputer',
@@ -114,10 +114,19 @@ const MypageMemberManagementContentMemberInfo = ({
                   }}
                   fullWidth
                   onChange={(e: SelectChangeEvent) => {
-                    updateMemberRole(
-                      item.memberId,
-                      e.target.value as CotatoMemberInfoResponseRoleEnum,
-                    );
+                    if (e.target.value === CotatoMemberInfoResponseRoleEnum.Dev) {
+                      if (window.confirm('정말 개발팀으로 변경하시겠습니까?')) {
+                        updateMemberRole(
+                          item.memberId,
+                          e.target.value as CotatoMemberInfoResponseRoleEnum,
+                        );
+                      }
+                    } else {
+                      updateMemberRole(
+                        item.memberId,
+                        e.target.value as CotatoMemberInfoResponseRoleEnum,
+                      );
+                    }
                   }}
                 >
                   <MenuItem value={CotatoMemberInfoResponseRoleEnum.Dev}>개발팀</MenuItem>

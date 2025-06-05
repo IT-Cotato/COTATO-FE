@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '@/api/api';
 
 //
@@ -14,10 +14,19 @@ interface DeactivationForm {
 interface DeactivateRequestBody {
   email: string;
   password: string;
-  checkedPolicies: Array<{
+  checkedPolicies: {
     policyId: number;
     isChecked: boolean;
-  }>;
+  }[];
+}
+
+interface PolicyResponse {
+  policies: {
+    policyId: number;
+    type: string;
+    title: string;
+    content: string;
+  }[];
 }
 
 //
@@ -30,6 +39,23 @@ export const useAccountDeletion = (memberId: number | undefined) => {
     password: '',
     isTermsAgreed: false,
   });
+  const [leavingPolicies, setLeavingPolicies] = useState<PolicyResponse['policies']>([]);
+
+  /**
+   *
+   */
+  useEffect(() => {
+    const fetchLeavingPolicies = async () => {
+      try {
+        const response = await api.get<PolicyResponse>('/v2/api/policies?category=LEAVING');
+        setLeavingPolicies(response.data.policies);
+      } catch (error) {
+        console.error('Failed to fetch leaving policies:', error);
+      }
+    };
+
+    fetchLeavingPolicies();
+  }, []);
 
   /**
    *
@@ -53,16 +79,13 @@ export const useAccountDeletion = (memberId: number | undefined) => {
       const requestBody: DeactivateRequestBody = {
         email: form.email,
         password: form.password,
-        checkedPolicies: [
-          {
-            policyId: 0,
-            isChecked: form.isTermsAgreed,
-          },
-        ],
+        checkedPolicies: leavingPolicies.map((policy) => ({
+          policyId: policy.policyId,
+          isChecked: form.isTermsAgreed,
+        })),
       };
 
       await api.post(`/v1/api/member/${memberId}/deactivate`, requestBody);
-
       return true;
     } catch (error) {
       console.error('Failed to deactivate account:', error);
@@ -74,5 +97,6 @@ export const useAccountDeletion = (memberId: number | undefined) => {
     form,
     updateForm,
     deactivateAccount,
+    leavingPolicies,
   };
 };

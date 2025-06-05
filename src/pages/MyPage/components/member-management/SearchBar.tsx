@@ -1,14 +1,14 @@
 import { Box, MenuItem, Select, Stack } from '@mui/material';
 import React, { Dispatch, SetStateAction } from 'react';
 import CotatoSearchTextField from '@components/CotatoSearchTextField/CotatoSearchTextField';
-import { CotatoAddableMemberInfoPositionEnum } from 'cotato-openapi-clients';
+import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
 import { useGeneration } from '@/hooks/useGeneration';
 import { getMemberPostionText } from '@utils/member';
 import { styled } from 'styled-components';
 
 interface SearchParams {
   generationNumber: number | null;
-  position: CotatoAddableMemberInfoPositionEnum | null;
+  position: CotatoMemberInfoResponsePositionEnum | null;
   name: string;
 }
 
@@ -20,8 +20,8 @@ interface SearchBarProps {
 export default function SearchBar({ searchParams, setSearchParams }: SearchBarProps) {
   const { generations } = useGeneration();
 
-  const handlePositionSelect = (position: CotatoAddableMemberInfoPositionEnum) => {
-    if (position === CotatoAddableMemberInfoPositionEnum.None) {
+  const handlePositionSelect = (position: CotatoMemberInfoResponsePositionEnum) => {
+    if (position === CotatoMemberInfoResponsePositionEnum.None) {
       setSearchParams((prev) => ({ ...prev, position: null }));
       return;
     }
@@ -79,22 +79,22 @@ export default function SearchBar({ searchParams, setSearchParams }: SearchBarPr
           onChange={(e) =>
             handlePositionSelect(
               e.target.value === ''
-                ? CotatoAddableMemberInfoPositionEnum.None
-                : (e.target.value as CotatoAddableMemberInfoPositionEnum),
+                ? CotatoMemberInfoResponsePositionEnum.None
+                : (e.target.value as CotatoMemberInfoResponsePositionEnum),
             )
           }
           renderValue={(selected) => {
-            if (!selected || selected === CotatoAddableMemberInfoPositionEnum.None) {
+            if (!selected || selected === CotatoMemberInfoResponsePositionEnum.None) {
               return <em style={{ fontFamily: 'YComputer', opacity: 0.7 }}>포지션</em>;
             }
-            return getMemberPostionText(selected as CotatoAddableMemberInfoPositionEnum);
+            return getMemberPostionText(selected as CotatoMemberInfoResponsePositionEnum);
           }}
         >
-          <MenuItem value={CotatoAddableMemberInfoPositionEnum.None}>
+          <MenuItem value={CotatoMemberInfoResponsePositionEnum.None}>
             <em>포지션</em>
           </MenuItem>
-          {Object.values(CotatoAddableMemberInfoPositionEnum)
-            .filter((position) => position !== CotatoAddableMemberInfoPositionEnum.None)
+          {Object.values(CotatoMemberInfoResponsePositionEnum)
+            .filter((position) => position !== CotatoMemberInfoResponsePositionEnum.None)
             .map((position) => (
               <MenuItem key={position} value={position}>
                 {getMemberPostionText(position)}

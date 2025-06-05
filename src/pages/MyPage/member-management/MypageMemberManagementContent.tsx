@@ -8,7 +8,7 @@ import InfoTooltip from '../components/member-management/InfoTooltip';
 import SearchBar from '../components/member-management/SearchBar';
 import { useActiveMemberManagement } from '../hooks/useActiveMemberManagement';
 import { useOMManagement } from '../hooks/useOMManagement';
-import { CotatoAddableMemberInfoPositionEnum } from 'cotato-openapi-clients';
+import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
 
 //
 //
@@ -16,7 +16,7 @@ import { CotatoAddableMemberInfoPositionEnum } from 'cotato-openapi-clients';
 
 interface SearchParams {
   generationNumber: number | null;
-  position: CotatoAddableMemberInfoPositionEnum | null;
+  position: CotatoMemberInfoResponsePositionEnum | null;
   name: string;
 }
 

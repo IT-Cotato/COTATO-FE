@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import {
-  CotatoAddableMemberInfo,
+  CotatoMemberInfoResponse,
   FindAddableMembersForGenerationMemberRequest,
 } from 'cotato-openapi-clients';
 import useSWR from 'swr';
@@ -13,11 +13,11 @@ import fetcherWithParams from '@utils/fetcherWithParams';
 type UseMemberAddableParams = FindAddableMembersForGenerationMemberRequest;
 
 type UseAddableMemberResponse = {
-  memberInfos: CotatoAddableMemberInfo[];
+  memberInfos: CotatoMemberInfoResponse[];
 };
 
 interface UseMemberAddableReturn {
-  addableMembers: UseAddableMemberResponse | undefined;
+  addableMembers: UseAddableMemberResponse;
   isAddableMembersLoading: boolean;
   isAddableMembersError: any;
   mutateAddableMembers: () => void;
@@ -44,7 +44,7 @@ export const useMemberAddable = (params: UseMemberAddableParams) => {
   //
   //
 
-  _return.current.addableMembers = data ?? undefined;
+  _return.current.addableMembers = data ?? ({ memberInfos: [] } as UseAddableMemberResponse);
   _return.current.isAddableMembersLoading = isLoading;
   _return.current.isAddableMembersError = error;
   _return.current.mutateAddableMembers = mutate;
