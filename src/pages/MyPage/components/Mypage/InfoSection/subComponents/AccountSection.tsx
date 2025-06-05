@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MY_PAGE_PATH } from '@pages/MyPage/MyPageRouter';
-import { ReactComponent as RightAngle } from '@/pages/MyPage/tempAsssets/angle_right.svg';
 import {
   InfoSectionItemContainer,
   InfoSectionTitle,
@@ -10,6 +9,7 @@ import {
 } from '../styles';
 import styled from 'styled-components';
 import { logout } from '@utils/logout';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -42,11 +42,19 @@ const AccountSection = ({ email, phoneNum }: AccountSectionProps) => {
         <InfoSectionItem>{phoneNum}</InfoSectionItem>
         <InfoSectionItem $clickable onClick={() => navigate('/findpw')}>
           비밀번호 재설정
-          <RightAngle style={{ position: 'absolute', right: '1.25rem' }} />
+          <CotatoIcon
+            icon="angle-right-solid"
+            style={{ position: 'absolute', right: '1.25rem' }}
+            color={(t) => t.colors.gray60}
+          ></CotatoIcon>
         </InfoSectionItem>
         <InfoSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.POLICY.INFO)}>
           개인정보 관리
-          <RightAngle style={{ position: 'absolute', right: '1.25rem' }} />
+          <CotatoIcon
+            icon="angle-right-solid"
+            style={{ position: 'absolute', right: '1.25rem' }}
+            color={(t) => t.colors.gray60}
+          ></CotatoIcon>
         </InfoSectionItem>
       </InfoSectionItemContainer>
     </SectionContainer>
