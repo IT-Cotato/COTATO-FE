@@ -5,6 +5,8 @@ import styled, { useTheme } from 'styled-components';
 import CotatoIcon from '@components/CotatoIcon';
 import CotatoButton from '@components/CotatoButton';
 import { useJoinusModalOpenStore } from '@/zustand-stores/useJoinusModalOpenStore';
+import api from '@/api/api';
+import { toast } from 'react-toastify';
 
 //
 //
@@ -55,8 +57,32 @@ const HomeFirstSectionJoinusModal = () => {
   /**
    *
    */
-  const handleSubmit = () => {
-    //
+  const handleSubmit = async () => {
+    if (!isConsentChecked) {
+      alert('개인정보 수집·이용 동의서를 확인해주세요.');
+      return;
+    }
+
+    if (email.length === 0) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+
+    try {
+      await api.post('/v2/api/recruitments/notification', {
+        policyCheck: isConsentChecked,
+        email,
+      });
+
+      toast.success('모집 알림 신청이 완료되었습니다!');
+
+      setEmail('');
+      setIsConsentChecked(false);
+
+      setIsJoinusModalOpen(false);
+    } catch (error) {
+      toast.error('모집 알림 신청에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   /**

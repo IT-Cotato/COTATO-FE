@@ -5,18 +5,20 @@ import { styled } from 'styled-components';
 import { media } from '@theme/media';
 import { ReactComponent as JoinusText } from '@assets/joinus_text_svg.svg';
 import { useJoinusModalOpenStore } from '@/zustand-stores/useJoinusModalOpenStore';
-
-//
-//
-//
-
-const FORM_LINK = 'https://forms.gle/hGQyVwQexVbYDP2B6';
+import useSWRImmutable from 'swr/immutable';
+import fetcher from '@utils/fetcher';
+import { CotatoRecruitmentInfoResponse } from 'cotato-openapi-clients';
 
 //
 //
 //
 
 const HomeFirstSectionJoinus = () => {
+  const { data: recreuitmentStaus, isLoading } = useSWRImmutable<CotatoRecruitmentInfoResponse>(
+    '/v2/api/recruitments',
+    fetcher,
+  );
+
   const { isJoinusModalOpen, setIsJoinusModalOpen } = useJoinusModalOpenStore();
 
   const { isLandScapeOrSmaller } = useBreakpoints();
@@ -25,6 +27,16 @@ const HomeFirstSectionJoinus = () => {
    *
    */
   const handleJoinusButtonClick = () => {
+    if (isLoading) {
+      return;
+    }
+
+    if (recreuitmentStaus?.isOpened) {
+      window.open(recreuitmentStaus.recruitmentUrl, '_blank', 'noopener noreferrer');
+
+      return;
+    }
+
     setIsJoinusModalOpen(!isJoinusModalOpen);
   };
 
