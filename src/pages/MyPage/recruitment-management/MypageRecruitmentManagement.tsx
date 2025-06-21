@@ -4,6 +4,10 @@ import RecruitmentManagementText from '@assets/mypage_recruitment_management_tex
 import { SizeStateEnum } from '@components/CotatoPanel';
 import MypageRecruitmentManagementContent from './MypageRecruitmentManagementContent';
 
+//
+//
+//
+
 const MypageRecruitmentManagement = () => {
   return (
     <MypageCommonLayout
@@ -17,5 +21,9 @@ const MypageRecruitmentManagement = () => {
     />
   );
 };
+
+//
+//
+//
 
 export default MypageRecruitmentManagement;
