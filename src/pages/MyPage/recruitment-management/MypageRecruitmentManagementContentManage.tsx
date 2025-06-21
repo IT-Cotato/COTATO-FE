@@ -5,7 +5,6 @@ import MypageRecruitmentManagementContentManageInputField from './MypageRecruitm
 import useRecruitmentManagement from '../hooks/useRecruitmentManagement';
 import MypageRecruitmentManagementContentManageTextInput from './MypageRecruitmentManagementContentManageTextInput';
 import CotatoIcon from '@components/CotatoIcon';
-import { Dayjs } from 'dayjs';
 import CotatoThemeToggleSwitch from '@components/CotatoToggleSwitch';
 import { useTheme } from 'styled-components';
 import MypageRecruitmentManagementContentManageTextarea from './MypageRecruitmentManagementContentManageTextarea';
@@ -39,17 +38,6 @@ const MypageRecruitmentManagementContentManage = () => {
    *
    */
   const renderInputCard = () => {
-    /**
-     *
-     */
-    const getDateValue = (date: Dayjs | undefined) => {
-      if (date === undefined) {
-        return 'YYYY.MM.DD';
-      }
-
-      return date.format('YYYY.MM.DD');
-    };
-
     return (
       <MypageRecruitmentManagementContentManageCard>
         <MypageRecruitmentManagementContentManageInputField
@@ -69,7 +57,8 @@ const MypageRecruitmentManagementContentManage = () => {
             <Box sx={{ display: 'flex', gap: '0.5rem', width: '100%', alignItems: 'center' }}>
               <MypageRecruitmentManagementContentManageTextInput
                 iconName="calender-solid"
-                value={getDateValue(startDate)}
+                value={startDate && startDate.format('YYYY-MM-DD')}
+                placeholder="YYYY-MM-DD"
                 onClick={() => setIsStartDatePickerOpen(true)}
                 style={{
                   cursor: 'pointer',
@@ -83,11 +72,12 @@ const MypageRecruitmentManagementContentManage = () => {
                 onClose={() => setIsStartDatePickerOpen(false)}
               />
 
-              <CotatoIcon icon="minus-solid" size="1.25rem" />
+              <CotatoIcon icon="minus-solid" size="2rem" />
 
               <MypageRecruitmentManagementContentManageTextInput
                 iconName="calender-solid"
-                value={getDateValue(endDate)}
+                value={endDate && endDate.format('YYYY-MM-DD')}
+                placeholder="YYYY-MM-DD"
                 onClick={() => setIsEndDatePickerOpen(true)}
                 style={{
                   cursor: 'pointer',
