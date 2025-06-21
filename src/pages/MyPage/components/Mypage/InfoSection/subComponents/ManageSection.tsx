@@ -47,7 +47,7 @@ const ManageSection = () => {
         </ManageSectionItem>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.RECRUITMENT_MANAGEMENT)}>
           모집 기수 관리
-          <RightAngle />
+          {/* <RightAngle /> */}
         </ManageSectionItem>
       </InfoSectionItemContainer>
     </SectionContainer>
