@@ -26,24 +26,24 @@ const ManageSection = () => {
           <CotatoIcon
             icon="angle-right-solid"
             style={{ position: 'absolute', right: '1.25rem' }}
-            color={(t) => t.colors.gray60}
-          ></CotatoIcon>{' '}
+            color={(theme) => theme.colors.gray60}
+          />
         </ManageSectionItem>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.MEMBERS)}>
           부원 관리
           <CotatoIcon
             icon="angle-right-solid"
             style={{ position: 'absolute', right: '1.25rem' }}
-            color={(t) => t.colors.gray60}
-          ></CotatoIcon>{' '}
+            color={(theme) => theme.colors.gray60}
+          />
         </ManageSectionItem>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.REGISTRATION)}>
           신입기수 관리
           <CotatoIcon
             icon="angle-right-solid"
             style={{ position: 'absolute', right: '1.25rem' }}
-            color={(t) => t.colors.gray60}
-          ></CotatoIcon>{' '}
+            color={(theme) => theme.colors.gray60}
+          />
         </ManageSectionItem>
       </InfoSectionItemContainer>
     </SectionContainer>

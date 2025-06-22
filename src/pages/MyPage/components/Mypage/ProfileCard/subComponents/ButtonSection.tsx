@@ -44,7 +44,7 @@ const ButtonSection = ({ isModifying, setIsModifying, onSubmit }: ButtonSectionP
             color={(theme) =>
               isModifying ? theme.colors.common.real_white : theme.colors.common.white
             }
-            size="18px"
+            size="1.125rem"
           />
         )}
       </ProfileCardButton>
