@@ -7,6 +7,7 @@ import { ReactComponent as Cafe } from '@/assets/footer_cafe.svg';
 import { device, media } from '@theme/media';
 import { THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import { useMediaQuery } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 //
 //
@@ -38,6 +39,11 @@ const URL_LIST: { [key: string]: string } = {
 //
 
 const Footer = () => {
+  //
+  const location = useLocation();
+  const isInHome = location.pathname === '/';
+  const isInCsIntroduce = location.pathname === '/cs/introduce';
+
   const isTablet = useMediaQuery(`(max-width: ${device.tablet})`);
   const isLandScape = useMediaQuery(`(max-width: ${device.landscape})`);
   const isMobile = useMediaQuery(`(max-width: ${device.mobile})`);
@@ -74,7 +80,7 @@ const Footer = () => {
     </DescriptionWrapper>
   );
 
-  return (
+  return isInHome || isInCsIntroduce ? null : (
     <FooterWrapper>
       {renderSns()}
       {renderDescription()}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { RouteObject, Outlet } from 'react-router-dom';
 import CSRedirect from './CSRedirect';
 import CSGuard from './CSGuard';
 
@@ -18,32 +18,50 @@ const AsyncCSSlide = React.lazy(() => import('./CSSlide'));
 //
 //
 
-const CSRoutes = () => {
-  //
-  //
-  //
-
+const CSLayout = () => {
   return (
     <React.Suspense fallback={<div>Loading...</div>}>
       <CSGuard>
-        <Routes>
-          <Route path="/introduce/*" element={<AsyncCSSlide />} />
-          <Route path="/:generationId" element={<AsyncCSHome />} />
-          <Route path="/manage/*" element={<AsyncCSManage />} />
-          <Route
-            path="/start/generation/:generationId/education/:educationId"
-            element={<AsyncCSStart />}
-          />
-          <Route
-            path="/upload/generation/:generationId/education/:educationId"
-            element={<AsyncCSUpload />}
-          />
-          <Route path="/solving/:educationId" element={<AsyncCSQuiz />} />
-          <Route path="*" element={<CSRedirect />} />
-        </Routes>
+        <Outlet />
       </CSGuard>
     </React.Suspense>
   );
 };
+
+const CSRoutes: RouteObject[] = [
+  {
+    element: <CSLayout />,
+    children: [
+      {
+        path: 'introduce',
+        element: <AsyncCSSlide />,
+      },
+      {
+        path: ':generationId',
+        element: <AsyncCSHome />,
+      },
+      {
+        path: 'manage/*',
+        element: <AsyncCSManage />,
+      },
+      {
+        path: 'start/generation/:generationId/education/:educationId',
+        element: <AsyncCSStart />,
+      },
+      {
+        path: 'upload/generation/:generationId/education/:educationId',
+        element: <AsyncCSUpload />,
+      },
+      {
+        path: 'solving/:generationId/:educationId',
+        element: <AsyncCSQuiz />,
+      },
+      {
+        path: '',
+        element: <CSRedirect />,
+      },
+    ],
+  },
+];
 
 export default CSRoutes;

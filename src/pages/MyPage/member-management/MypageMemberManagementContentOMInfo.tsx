@@ -47,7 +47,7 @@ const MypageMemberManagementContentOMInfo = ({
    */
   const renderTableRenderer = () => {
     return (
-      <TableRenderer
+      <TableRenderer<CotatoMemberInfoResponse>
         data={data}
         head={sampleHead}
         repeatCount={isLandScapeOrSmaller ? 1 : 2}
@@ -55,11 +55,11 @@ const MypageMemberManagementContentOMInfo = ({
           page: page,
           rowsPerPage: pageSize,
           onPageChange: onPageChange,
-          count: totalPages, // API에서 받은 totalPages 전달
+          count: totalPages,
         }}
-        render={(item) => {
+        render={(memberInfo) => {
           return (
-            <>
+            <React.Fragment key={memberInfo.memberId}>
               <TableCell>
                 <span
                   style={{
@@ -70,7 +70,7 @@ const MypageMemberManagementContentOMInfo = ({
                     fontSize: theme.fontSize.lg,
                   }}
                 >
-                  {item?.name}
+                  {memberInfo?.name}
                 </span>
               </TableCell>
               <TableCell>
@@ -82,12 +82,12 @@ const MypageMemberManagementContentOMInfo = ({
                     backgroundColor: theme.colors.primary20,
                     maxWidth: '8rem',
                   }}
-                  onClick={() => transferMemberIdToActive(item.memberId)}
+                  onClick={() => transferMemberIdToActive(memberInfo.memberId)}
                 >
                   부원으로 전환
                 </Button>
               </TableCell>
-            </>
+            </React.Fragment>
           );
         }}
       />

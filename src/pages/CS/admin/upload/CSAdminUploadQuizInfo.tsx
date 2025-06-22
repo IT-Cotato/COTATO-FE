@@ -9,6 +9,7 @@ import { produce } from 'immer';
 import { createMultipleQuiz } from './utils/createMultipleQuiz';
 import { createShortQuiz } from './utils/createShortQuiz';
 import api from '@/api/api';
+import { useNavigate, useParams } from 'react-router-dom';
 
 //
 //
@@ -27,6 +28,9 @@ const CSAdminUploadQuizInfo = ({
   selected,
   educationId,
 }: CSAdminUploadQuizInfoProps) => {
+  const navigate = useNavigate();
+  const { generationId } = useParams();
+
   // 타입 가드
   const isMultiples = (quiz: MultipleQuiz | ShortQuiz): quiz is MultipleQuiz => {
     return (quiz as MultipleQuiz)?.choices !== undefined;
@@ -271,7 +275,16 @@ const CSAdminUploadQuizInfo = ({
         </MobileOption>
         <NavBox>
           <SaveButton onClick={checkUpload}>저장</SaveButton>
-          <ExitButton>나가기</ExitButton>
+          <ExitButton
+            onClick={() => {
+              const confirm = window.confirm('저장하지 않고 나가면 변경사항이 사라질 수 있어요!');
+              if (confirm) {
+                navigate(`/cs/start/generation/${generationId}/education/${educationId}`);
+              }
+            }}
+          >
+            나가기
+          </ExitButton>
         </NavBox>
       </MobileSection>{' '}
       <LoadingIndicator />

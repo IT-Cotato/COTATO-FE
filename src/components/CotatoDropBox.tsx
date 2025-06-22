@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled, useTheme } from 'styled-components';
-import {
-  CotatoAttendanceWithSessionResponse,
-  CotatoGenerationInfoResponse,
-  CotatoSessionListResponse,
-} from 'cotato-openapi-clients';
 import drop_box_background_blue from '@assets/drop_box_background_blue.svg';
 import drop_box_background_yellow from '@assets/drop_box_background_yellow.svg';
 import drop_box_background_yellow_lg from '@assets/drop_box_background_yellow_lg.svg';
@@ -14,20 +9,22 @@ import CotatoIcon from './CotatoIcon';
 //
 //
 
-type CotatoDropBoxType =
-  | CotatoGenerationInfoResponse
-  | CotatoSessionListResponse
-  | CotatoAttendanceWithSessionResponse;
+type CotatoDropBoxSize = 'md' | 'lg';
 
-interface CotatoDropBoxProps<T extends CotatoDropBoxType> {
-  list: T[];
-  onChange: (item: T) => void;
+//
+//
+//
+
+interface CotatoDropBoxProps<T> {
   reversed?: boolean;
-  defaultItemId?: number;
+  list?: T[];
+  defaultItem?: T;
   color?: string;
+  size?: CotatoDropBoxSize;
   width?: string;
   height?: string;
-  disableQueryParams?: boolean;
+  onChange: (item: T) => void;
+  title: (item: T | null) => string | undefined;
 }
 
 interface DropBoxProps {
@@ -46,22 +43,27 @@ const FADE_DURATION = 300;
 //
 
 /**
- * cotato drop box component
- * @param list drop box list
- * @param onChange list value change event
- * @param reversed drop box list reversed (default: true)
- * @param color drop box color (default: blue)
- * @param width drop box width (default: 8rem)
- * @param height drop box height (default: 3.2rem)
+ * Drop box component
+ * @param reversed reverse list
+ * @param list list of items
+ * @param defaultItem default item
+ * @param color color of drop box
+ * @param size size of drop box
+ * @param width width of drop box
+ * @param height height of drop box
+ * @param onChange function to handle change event
+ * @param title function to get title of item
  */
-const CotatoDropBox = <T extends CotatoDropBoxType>({
+const CotatoDropBox = <T,>({
   list,
-  onChange,
   reversed = true,
-  defaultItemId,
+  defaultItem,
   color = 'blue',
+  size = 'md',
   width = '8rem',
   height = '3.2rem',
+  onChange,
+  title,
 }: CotatoDropBoxProps<T>) => {
   const theme = useTheme();
 
@@ -72,52 +74,6 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
   const dropBoxRef = useRef<HTMLDivElement>(null);
 
   // const isInProduction = process.env.NODE_ENV === 'production';
-
-  /**
-   *
-   */
-  const isTypeGeneration = (item: CotatoDropBoxType): item is CotatoGenerationInfoResponse => {
-    return (item as CotatoGenerationInfoResponse).generationNumber !== undefined;
-  };
-
-  /**
-   *
-   */
-  const isTypeSession = (item: CotatoDropBoxType): item is CotatoSessionListResponse => {
-    return (item as CotatoSessionListResponse).sessionNumber !== undefined;
-  };
-
-  /**
-   *
-   */
-  const isTypeAttendance = (
-    item: CotatoDropBoxType,
-  ): item is CotatoAttendanceWithSessionResponse => {
-    return (item as CotatoAttendanceWithSessionResponse).attendanceId !== undefined;
-  };
-
-  /**
-   *
-   */
-  const StringFormatter = (item: T | null) => {
-    if (!item) {
-      return '';
-    }
-
-    if (isTypeGeneration(item)) {
-      return `${item.generationNumber}기`;
-    }
-
-    if (isTypeSession(item)) {
-      return `${item.title}`;
-    }
-
-    if (isTypeAttendance(item)) {
-      return `${item.sessionTitle}`;
-    }
-
-    return '';
-  };
 
   /**
    * get drop box style of color
@@ -133,7 +89,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     if (color === 'yellow') {
       return {
-        background: `url(${width === '12rem' ? drop_box_background_yellow_lg : drop_box_background_yellow})`,
+        background: `url(${size === 'lg' ? drop_box_background_yellow_lg : drop_box_background_yellow})`,
         arrowColor: theme.colors.primary40,
       };
     }
@@ -168,7 +124,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     return (
       <DropBox onClick={handleDropDownChange} $height={height} $background={background}>
-        <SelectText>{StringFormatter(selectedItem)}</SelectText>
+        <SelectText>{selectedItem && title(selectedItem)}</SelectText>
         {isDropBoxOpen ? (
           <StyledCotatoIcon icon="angle-up-solid" color={arrowColor} />
         ) : (
@@ -194,7 +150,7 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
               {item === selectedItem && (
                 <StyledCheckIcon icon="check-solid" color={theme.colors.sub3[40]} />
               )}
-              {StringFormatter(item)}
+              {title(item)}
             </li>
           ))}
         </ul>
@@ -206,6 +162,10 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
    *
    */
   useEffect(() => {
+    if (!list || list.length === 0) {
+      return;
+    }
+
     let newList = [...list];
 
     if (reversed) {
@@ -214,28 +174,14 @@ const CotatoDropBox = <T extends CotatoDropBoxType>({
 
     setDropBoxList(newList);
 
-    if (defaultItemId) {
-      const defaultItem = newList.find((item) => {
-        if (isTypeGeneration(item)) {
-          return item.generationId === defaultItemId;
-        }
+    if (defaultItem) {
+      const foundItem = newList.find((item) => item === defaultItem);
 
-        if (isTypeSession(item)) {
-          return item.sessionId === defaultItemId;
-        }
-
-        if (isTypeAttendance(item)) {
-          return item.attendanceId === defaultItemId;
-        }
-
-        return false;
-      });
-
-      setSelecedItem(defaultItem ?? newList[0]);
+      setSelecedItem(foundItem ?? newList[0]);
     } else {
       setSelecedItem(newList[0]);
     }
-  }, [list, defaultItemId]);
+  }, [list, defaultItem, reversed]);
 
   /**
    *

@@ -21,7 +21,7 @@ type UseGenerationMembersMutationParams = {
 
 type UseGenerationMembersMutationReturn = {
   post: (params: CotatoCreateGenerationMemberRequest) => void;
-  patch: (params: CotatoUpdateGenerationMemberRoleRequest) => void;
+  patch: (params: CotatoUpdateGenerationMemberRoleRequest & { generationMemberId: number }) => void;
   delete: (params: { generationMemberId: number }) => void;
   isMutating: boolean;
   error: any;
@@ -55,9 +55,12 @@ export const useGenerationMembersMutation = (params: UseGenerationMembersMutatio
     trigger: patchTrigger,
     isMutating: patchIsMutating,
     error: patchError,
-  } = useSWRMutation('/v2/api/generation-members', (url, data) =>
-    api.patch(url + '?generationMemberId=' + data.arg),
-  );
+  } = useSWRMutation(`/v2/api/generation-members`, (url, data) => {
+    const arg = data.arg as CotatoUpdateGenerationMemberRoleRequest & {
+      generationMemberId: number;
+    };
+    return api.patch(url + `/${arg.generationMemberId}/role`, { role: arg.role });
+  });
 
   //
   //
@@ -81,7 +84,7 @@ export const useGenerationMembersMutation = (params: UseGenerationMembersMutatio
   };
   _return.current.patch = async (mutationParams: CotatoUpdateGenerationMemberRoleRequest) => {
     try {
-      await patchTrigger(mutationParams.generationMemberId as any);
+      await patchTrigger(mutationParams as any);
       params?.onSuccessPatch?.();
     } catch (err) {
       params?.onErrorPatch?.();

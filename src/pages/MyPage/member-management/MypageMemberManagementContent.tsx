@@ -3,15 +3,22 @@ import { Stack } from '@mui/material';
 import MypageMemberManagementContentMemberInfo from './MypageMemberManagementContentMemberInfo';
 import MypageMemberManagementContentOMInfo from './MypageMemberManagementContentOMInfo';
 import { TagButton } from '../components/member-management/TagButton';
-import { ReactComponent as Refresh } from '@/pages/MyPage/tempAsssets/refresh.svg';
 import InfoTooltip from '../components/member-management/InfoTooltip';
 import SearchBar from '../components/member-management/SearchBar';
 import { useActiveMemberManagement } from '../hooks/useActiveMemberManagement';
 import { useOMManagement } from '../hooks/useOMManagement';
+import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
 //
+
+interface SearchParams {
+  generationNumber: number | null;
+  position: CotatoMemberInfoResponsePositionEnum | null;
+  name: string;
+}
 
 export type MemberManagementView = 'MEMBER' | 'OM';
 
@@ -22,7 +29,11 @@ export type MemberManagementView = 'MEMBER' | 'OM';
 const MypageMemberManagementContent = () => {
   const [currentView, setCurrentView] = useState<MemberManagementView>('MEMBER');
   const [memberIds, setMemberIds] = useState<number[]>([]);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchParams, setSearchParams] = useState<SearchParams>({
+    generationNumber: null,
+    position: 'NONE',
+    name: '',
+  });
 
   const { activeMembers, updateMemberRole, transferMemberIdsToOM } =
     useActiveMemberManagement(currentView);
@@ -33,7 +44,7 @@ const MypageMemberManagementContent = () => {
     currentPage,
     pageSize,
     handlePageChange,
-  } = useOMManagement(currentView, searchValue);
+  } = useOMManagement(currentView, searchParams);
 
   /**
    *
@@ -67,11 +78,16 @@ const MypageMemberManagementContent = () => {
               disabled={memberIds.length <= 0}
               onClick={() => transferMemberIdsToOM(memberIds, setMemberIds)}
             >
-              <Refresh />
+              <CotatoIcon
+                icon="refresh"
+                color={(t) => (memberIds.length > 0 ? t.colors.common.black : t.colors.gray40)}
+              />
               OM으로 전환하기
             </TagButton>
           )}
-          {currentView === 'OM' && <SearchBar value={searchValue} setValue={setSearchValue} />}
+          {currentView === 'OM' && (
+            <SearchBar searchParams={searchParams} setSearchParams={setSearchParams} />
+          )}
         </Stack>
       </Stack>
     );

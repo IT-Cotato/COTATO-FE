@@ -1,5 +1,5 @@
 import React from 'react';
-import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
+import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd';
 import { createPortal } from 'react-dom';
 import { styled } from 'styled-components';
 import { SessionListImageInfo } from '@/typing/session';

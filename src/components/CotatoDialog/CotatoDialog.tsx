@@ -9,6 +9,7 @@ import { styled } from 'styled-components';
 
 interface CotatoDialogProps extends DialogProps {
   hideCloseButton?: boolean;
+  disableBackdropClick?: boolean;
   open: boolean;
   onClose: () => void;
 }
@@ -17,10 +18,25 @@ interface CotatoDialogProps extends DialogProps {
 //
 //
 
-const CotatoDialog = ({ hideCloseButton = false, children, ...DialogProps }: CotatoDialogProps) => {
+const CotatoDialog = ({
+  hideCloseButton = false,
+  disableBackdropClick = false,
+  children,
+  onClose,
+  ...DialogProps
+}: CotatoDialogProps) => {
   return (
-    <Dialog fullWidth {...DialogProps}>
-      {hideCloseButton ? null : <StyledCloseIcon onClick={DialogProps.onClose} />}
+    <Dialog
+      fullWidth
+      onClose={(_, reason) => {
+        if (disableBackdropClick && reason === 'backdropClick') {
+          return;
+        }
+        onClose();
+      }}
+      {...DialogProps}
+    >
+      {hideCloseButton ? null : <StyledCloseIcon onClick={() => onClose()} />}
       {children}
     </Dialog>
   );

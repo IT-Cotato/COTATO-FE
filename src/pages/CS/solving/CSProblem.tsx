@@ -50,6 +50,7 @@ interface CSProblemProps {
   showKingKing: boolean;
   educationId?: number;
   setShowKingKing: React.Dispatch<React.SetStateAction<boolean>>;
+  alertError: boolean;
 }
 
 //
@@ -64,6 +65,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
   educationId,
   showKingKing,
   setShowKingKing,
+  alertError,
 }) => {
   const { data: user } = fetchUserData();
   user ? null : console.log('data is undefined');
@@ -103,7 +105,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' || e.key === 'Escape') {
         setCount((prevCount) => prevCount + 1);
       }
     };
@@ -112,7 +114,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
     const intervalId = setInterval(() => {
       setCount(0);
-    }, 1000);
+    }, 3000);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -204,7 +206,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
     } else {
       if (!submitAllowed) {
         alert('아직 제출 기한이 아닙니다.');
-        if (count >= 3) {
+        if (count >= 2) {
           setNotice(true);
           setTimeout(() => setNotice(false), 5000);
         }
@@ -236,7 +238,10 @@ const CSProblem: React.FC<CSProblemProps> = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            if (err.response.data.code === 'R-301') {
+              alert('이미 정답 처리되었습니다.');
+              nextProblem();
+            }
           });
       }
     }
@@ -250,12 +255,12 @@ const CSProblem: React.FC<CSProblemProps> = ({
   }
 
   return (
-    <Wrapper>
+    <Wrapper disabled={alertError}>
       {notice && (
         <img
           src={podori}
           alt="포돌짱"
-          style={{ position: 'fixed', marginTop: '60px', width: '500px' }}
+          style={{ position: 'fixed', marginTop: '60px', width: '500px', zIndex: '100' }}
         />
       )}
       <ProgressContainer>
@@ -310,6 +315,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
             contents={multiples}
             multipleRef={multipleRef}
             choiceRef={choiceRef}
+            notice={notice}
           />
         )}
         {!quizData?.choices && (
@@ -319,6 +325,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
             inputRef={inputRef}
             problemId={problemId}
             shortRef={shortRef}
+            notice={notice}
           />
         )}
         <ButtonContainer disabled={!submitAllowed}>
@@ -351,6 +358,7 @@ interface choiceProps {
   contents: string[]; // 객관식 선지의 내용 리스트
   multipleRef: React.MutableRefObject<any>;
   choiceRef: React.MutableRefObject<any>;
+  notice: boolean;
 }
 
 //
@@ -364,6 +372,7 @@ const Choice: React.FC<choiceProps> = ({
   contents,
   multipleRef,
   choiceRef,
+  notice,
 }) => {
   return (
     <ChoiceContainer ref={multipleRef} choiceNum={contents.length}>
@@ -375,6 +384,8 @@ const Choice: React.FC<choiceProps> = ({
             key={idx}
             clicked={selected.includes(choiceNum.toString())}
             onClick={() => {
+              if (notice) return;
+
               setSelectNum(choiceNum);
               if (selected.includes(choiceNum.toString()) === false) {
                 setSelected([...selected, choiceNum.toString()]);
@@ -402,6 +413,7 @@ interface ShortAnsProps {
   inputRef: React.MutableRefObject<any>;
   shortRef: React.MutableRefObject<any>;
   problemId: number;
+  notice: boolean;
 }
 
 //
@@ -414,6 +426,7 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
   inputRef,
   shortRef,
   problemId,
+  notice,
 }) => {
   useEffect(() => inputRef.current.focus(), [problemId]); // 컴포넌트 마운트 즉시 포커싱
 
@@ -427,6 +440,7 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
         onChange={onChangeShortAns}
         placeholder="답안을 입력해주세요"
         ref={inputRef}
+        disabled={notice}
       />
     </ShortAnswerContainer>
   );
@@ -436,7 +450,7 @@ const ShortAnswer: React.FC<ShortAnsProps> = ({
 //
 //
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ disabled: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -447,6 +461,10 @@ const Wrapper = styled.div`
   padding-bottom: 60px;
   overflow-x: hidden;
   overflow-y: visible;
+  ${({ disabled }) =>
+    disabled &&
+    `pointer-events: none;
+     user-select: none;`}
 `;
 
 const ProgressContainer = styled.div`
@@ -465,7 +483,7 @@ const ProgressBar = styled.div<{ progress: number }>`
   transition-timing-function: ease-in;
 `;
 
-const QuizContainer = styled.div`
+export const QuizContainer = styled.div`
   padding: 0 12px;
   width: 100%;
   max-width: 920px;
@@ -480,7 +498,7 @@ const QuizContainer = styled.div`
   `}
 `;
 
-const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
+export const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
   width: 100%;
   min-height: 88px;
   height: fit-content;
@@ -510,6 +528,11 @@ const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
   }
   p {
     margin: 4px 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
   }
 
   ${media.tablet`
@@ -524,7 +547,7 @@ const QuestionContainer = styled.div<{ ifNoImg: boolean }>`
   `}
 `;
 
-const ImageContainer = styled.div<{ bigger: boolean }>`
+export const ImageContainer = styled.div<{ bigger: boolean }>`
   position: relative;
   width: 528px;
   height: 301px;
@@ -548,11 +571,12 @@ const ImageContainer = styled.div<{ bigger: boolean }>`
   `}
 `;
 
-const Image = styled.img`
+export const Image = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 5px;
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  object-fit: contain;
 `;
 
 const ResizeIcon = styled(IconButton)`
@@ -561,7 +585,7 @@ const ResizeIcon = styled(IconButton)`
   bottom: 18px;
 `;
 
-const LightImgContainer = styled.div`
+export const LightImgContainer = styled.div`
   position: absolute;
   width: 80px;
   top: 140px;
@@ -571,7 +595,7 @@ const LightImgContainer = styled.div`
   align-items: center;
 `;
 
-const Explaination = styled.div`
+export const Explaination = styled.div`
   background-image: url(${explaination});
   position: absolute;
   bottom: 20px;
@@ -703,20 +727,21 @@ const ChoiceBtn = styled.div<{ clicked: boolean }>`
   `}
 `;
 
-const ShortAnswerContainer = styled.div`
+export const ShortAnswerContainer = styled.div`
   width: 100%;
   height: 120px;
   border-radius: 5px;
   background: #fff;
   box-shadow: 2px 4px 10px 0px rgba(0, 0, 0, 0.25);
   display: flex;
-  padding-left: 80px;
+  padding: 0 80px;
   input {
     border: none;
     outline: none;
     font-family: NanumSquareRound;
     font-size: 1rem;
     font-weight: 400;
+    width: 100%;
   }
 
   ${media.tablet`

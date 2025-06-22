@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import MyPageRouter from './MyPageRouter';
+import { Outlet, useNavigate } from 'react-router-dom';
 import useUser from '@/hooks/useUser';
 import Footer from '@components/Footer';
 import styled from 'styled-components';
@@ -12,7 +11,6 @@ import { media } from '@theme/media';
 
 const MyPage = () => {
   const { user, isUserLoading } = useUser();
-
   const navigate = useNavigate();
 
   //
@@ -27,7 +25,7 @@ const MyPage = () => {
   return (
     <FlexBox>
       <ContentWrapper>
-        <MyPageRouter />
+        <Outlet />
       </ContentWrapper>
       <div style={{ padding: '6.25rem' }}>
         <Footer />

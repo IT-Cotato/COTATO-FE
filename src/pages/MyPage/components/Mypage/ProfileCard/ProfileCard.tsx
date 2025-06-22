@@ -44,7 +44,6 @@ const ProfileCard = () => {
   return (
     <ProfileCardContainer>
       <ProfileImageSection
-        position={form.position}
         value={form.profileImage}
         onImageChange={handleImageChange}
         isModifying={isModifying}
@@ -87,6 +86,8 @@ const ProfileCardContainer = styled.div`
   padding: 1.5rem 1rem;
   flex-direction: column;
   align-items: center;
+  align-self: stretch;
+  justify-content: center;
   gap: 1rem;
   border-radius: 1rem;
   border: 1px solid;
