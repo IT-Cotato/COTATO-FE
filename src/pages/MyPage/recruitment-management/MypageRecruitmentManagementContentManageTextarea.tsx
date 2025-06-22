@@ -18,7 +18,7 @@ const MypageRecruitmentManagementContentManageTextarea = ({
   value,
   onChange,
 }: MypageRecruitmentManagementContentManageTextareaProps) => {
-  return <TextArea value={value} onChange={onChange} />;
+  return <TextArea readOnly value={value} onChange={onChange} />;
 };
 
 //

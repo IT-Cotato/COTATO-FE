@@ -1,7 +1,11 @@
 import { TableRenderer } from '@components/Table';
 import { Box, TableCell, Typography } from '@mui/material';
+import fetcher from '@utils/fetcher';
+import { CotatoRecruitmentNotificationLogResponse } from 'cotato-openapi-clients';
+import dayjs from 'dayjs';
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
+import useSWR from 'swr';
 
 //
 //
@@ -14,24 +18,15 @@ const TABLE_HEADS = ['전송시간', '전송자', '전송 수', '전송 상태']
 //
 
 const MypageRecruitmentManagementContentSendRecord = () => {
+  const { data: recruitmentNotificationLogs } = useSWR(
+    '/v2/api/recruitments/notifications/logs',
+    fetcher,
+  );
+
   const theme = useTheme();
 
-  const mock = [
-    {
-      sendTime: 'YYYY.MM.DD. TT',
-      senderName: '전송자',
-      sendCount: 'NNN',
-      sendSuccess: 9999,
-      sendFail: 0,
-    },
-    {
-      sendTime: 'YYYY.MM.DD. TT',
-      senderName: '전송자',
-      sendCount: 'NNN',
-      sendSuccess: 0,
-      sendFail: 0,
-    },
-  ];
+  const sendLogs = (recruitmentNotificationLogs?.notificationLogs ||
+    []) as CotatoRecruitmentNotificationLogResponse[];
 
   /**
    *
@@ -53,11 +48,13 @@ const MypageRecruitmentManagementContentSendRecord = () => {
   /**
    *
    */
-  const tableRender = (data: (typeof mock)[0]) => {
+  const tableRender = (data: CotatoRecruitmentNotificationLogResponse) => {
     return (
       <>
         <TableCell>
-          <TableCellTypography variant="body1">{data.sendTime}</TableCellTypography>
+          <TableCellTypography variant="body1">
+            {dayjs(data.sendTime).format('YYYY.MM.DD. HH:mm')}
+          </TableCellTypography>
         </TableCell>
         <TableCell>
           <TableCellTypography variant="body1">{data.senderName}</TableCellTypography>
@@ -79,7 +76,7 @@ const MypageRecruitmentManagementContentSendRecord = () => {
               }}
             >
               <TableCellTypography variant="body1">성공: {data.sendSuccess}</TableCellTypography>
-            </StatusBox>{' '}
+            </StatusBox>
             <StatusBox
               sx={{
                 borderColor: theme.colors.secondary100,
@@ -97,7 +94,7 @@ const MypageRecruitmentManagementContentSendRecord = () => {
   return (
     <TableRenderer
       repeatCount={1}
-      data={mock}
+      data={sendLogs}
       head={TABLE_HEADS.map(tableHeadRender)}
       render={tableRender}
       slotProps={{

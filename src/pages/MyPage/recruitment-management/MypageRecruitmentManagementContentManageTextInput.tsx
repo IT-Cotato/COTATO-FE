@@ -2,7 +2,7 @@ import { RegularIconName } from '@/types/regularIconNames';
 import { SolidIconName } from '@/types/solidIconNames';
 import CotatoIcon from '@components/CotatoIcon';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 //
 //
@@ -31,9 +31,16 @@ const MypageRecruitmentManagementContentManageTextInput = ({
   onClick,
   style,
 }: MypageRecruitmentManagementContentManageTextInputProps) => {
+  const theme = useTheme();
+
   return (
     <InputWrapper style={style}>
-      {iconName !== undefined && <CotatoIcon icon={iconName as RegularIconName | SolidIconName} />}
+      {iconName !== undefined && (
+        <CotatoIcon
+          icon={iconName as RegularIconName | SolidIconName}
+          color={theme.colors.const.black}
+        />
+      )}
       <Input
         type="text"
         placeholder={placeholder}

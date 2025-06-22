@@ -26,7 +26,14 @@ const MypageRecruitmentManagementContentLayout = ({
   return (
     <Stack spacing="1rem">
       <Stack spacing="0.5rem">
-        <Typography variant="h6">{title}</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            color: theme.colors.common.black,
+          }}
+        >
+          {title}
+        </Typography>
         <Typography
           variant="body1"
           sx={{

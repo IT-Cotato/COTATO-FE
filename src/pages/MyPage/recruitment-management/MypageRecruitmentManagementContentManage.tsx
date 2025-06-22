@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import React from 'react';
 import MypageRecruitmentManagementContentManageCard from './MypageRecruitmentManagementContentManageCard';
 import MypageRecruitmentManagementContentManageInputField from './MypageRecruitmentManagementContentManageInputField';
@@ -10,6 +10,7 @@ import { useTheme } from 'styled-components';
 import MypageRecruitmentManagementContentManageTextarea from './MypageRecruitmentManagementContentManageTextarea';
 import CotatoButton from '@components/CotatoButton';
 import CotatoDatePicker from '@components/CotatoDatePicker';
+import { useBreakpoints } from '@/hooks/useBreakpoints';
 
 //
 //
@@ -20,18 +21,22 @@ const MypageRecruitmentManagementContentManage = () => {
   const [isEndDatePickerOpen, setIsEndDatePickerOpen] = React.useState(false);
 
   const theme = useTheme();
+  const { isTabletOrSmaller } = useBreakpoints();
 
   const {
+    isLoading,
     isRecruitmentActive,
     formLink,
     startDate,
     endDate,
     mailContent,
+    notificationCount,
     handleIsRecruitmentActiveChange,
     handleFormLinkChange,
     handleMailContentChange,
     handleStartDateChange,
     handleEndDateChange,
+    handleMailSubmit,
   } = useRecruitmentManagement();
 
   /**
@@ -117,7 +122,7 @@ const MypageRecruitmentManagementContentManage = () => {
           slot={
             <MypageRecruitmentManagementContentManageTextInput
               readonly
-              placeholder="NN명"
+              placeholder={`${notificationCount}명`}
               style={{
                 border: 'none',
                 backgroundColor: theme.colors.primary20,
@@ -127,7 +132,7 @@ const MypageRecruitmentManagementContentManage = () => {
         />
         <MypageRecruitmentManagementContentManageInputField
           label="메일 문구"
-          description="내용을 입력하세요."
+          description="내용을 입력하세요. (사실 수정은 안됨)"
           slot={
             <MypageRecruitmentManagementContentManageTextarea
               value={mailContent}
@@ -135,10 +140,54 @@ const MypageRecruitmentManagementContentManage = () => {
             />
           }
         />
-        <CotatoButton isEnabled buttonStyle="line" text="모집 메일 전송하기" />
+        <CotatoButton
+          isEnabled
+          buttonStyle="line"
+          text="모집 메일 전송하기"
+          onClick={handleMailSubmit}
+        />
       </MypageRecruitmentManagementContentManageCard>
     );
   };
+
+  if (isLoading) {
+    return (
+      <Box sx={{ width: '100%', display: 'flex', gap: '4rem' }}>
+        <Box
+          sx={{
+            width: '100%',
+            backgroundColor: theme.colors.common.real_white,
+          }}
+        >
+          <Skeleton
+            animation="wave"
+            variant="rectangular"
+            width="100%"
+            height={400}
+            sx={{
+              borderRadius: '0.25rem',
+            }}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: '100%',
+            backgroundColor: theme.colors.common.real_white,
+          }}
+        >
+          <Skeleton
+            animation="wave"
+            variant="rectangular"
+            width="100%"
+            height={400}
+            sx={{
+              borderRadius: '0.25rem',
+            }}
+          />
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -146,6 +195,7 @@ const MypageRecruitmentManagementContentManage = () => {
         display: 'flex',
         width: '100%',
         gap: '4rem',
+        flexDirection: isTabletOrSmaller ? 'column' : 'row',
       }}
     >
       {renderInputCard()}

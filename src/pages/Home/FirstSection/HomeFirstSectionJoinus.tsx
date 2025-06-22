@@ -32,7 +32,12 @@ const HomeFirstSectionJoinus = () => {
     }
 
     if (recreuitmentStaus?.isOpened) {
-      window.open(recreuitmentStaus.recruitmentUrl, '_blank', 'noopener noreferrer');
+      let url = recreuitmentStaus.recruitmentUrl || '';
+
+      if (!/^https?:\/\//.test(url)) {
+        url = 'https://' + url;
+      }
+      window.open(url, '_blank', 'noopener noreferrer');
 
       return;
     }

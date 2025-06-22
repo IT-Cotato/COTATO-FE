@@ -47,7 +47,11 @@ const ManageSection = () => {
         </ManageSectionItem>
         <ManageSectionItem $clickable onClick={() => navigate(MY_PAGE_PATH.RECRUITMENT_MANAGEMENT)}>
           모집 기수 관리
-          {/* <RightAngle /> */}
+          <CotatoIcon
+            icon="angle-right-solid"
+            style={{ position: 'absolute', right: '1.25rem' }}
+            color={(t) => t.colors.gray60}
+          ></CotatoIcon>
         </ManageSectionItem>
       </InfoSectionItemContainer>
     </SectionContainer>

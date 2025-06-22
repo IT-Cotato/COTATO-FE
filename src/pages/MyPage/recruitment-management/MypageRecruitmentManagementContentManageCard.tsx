@@ -32,6 +32,7 @@ const MypageRecruitmentManagementContentManageCard = ({
         borderRadius: '0.5rem',
         border: `2px solid ${theme.colors.gray30}`,
         backgroundColor: theme.colors.common.real_white,
+        minHeight: 'fit-content',
       }}
     >
       {children}
