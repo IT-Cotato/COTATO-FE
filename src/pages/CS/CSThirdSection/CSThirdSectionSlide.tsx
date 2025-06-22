@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CSPPTImages from '@assets/cs_ppt';
 import { Box } from '@mui/material';
-import 'swiper/css';
 import CSThirdSectionSlideButton from './CSThirdSectionSlideButton';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { media } from '@theme/media';
+import { Mousewheel } from 'swiper/modules';
+import 'swiper/css';
 
 //
 //
@@ -31,10 +32,18 @@ const CSThirdSectionSlide = ({ onChangeSlide }: CSThirdSecionSlideProps) => {
 
   const { isLandScapeOrSmaller } = useBreakpoints();
 
+  /**
+   *
+   */
   const handleSlideChange = (_swiper: SwiperClass) => {
     setIsBeginning(_swiper.isBeginning);
     setIsEnd(_swiper.isEnd);
+
+    if (isLandScapeOrSmaller) {
+      onChangeSlide(_swiper.activeIndex);
+    }
   };
+
   /**
    *
    */
@@ -71,8 +80,8 @@ const CSThirdSectionSlide = ({ onChangeSlide }: CSThirdSecionSlideProps) => {
         onClick={() => handleSlideButtonClick('left')}
       />
       <StyledSwiper
-        // centeredSlides={isLandScapeOrSmaller}
-        centeredSlides
+        mousewheel
+        modules={[Mousewheel]}
         width={isLandScapeOrSmaller ? MOBILE_SLIDE_WIDTH : DESKTOP_SLIDE_WIDTH}
         spaceBetween={DESKTOP_SLIDE_WIDTH / 8}
         onSwiper={setSwiperInstance}

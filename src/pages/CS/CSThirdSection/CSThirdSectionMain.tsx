@@ -18,6 +18,8 @@ const CS_EDUCATION_DESCRIPTION = `
 배우는 것을 넘어 실제로 활용할 수 있는 경험을 찾고 있다면, 코테이토 교육팀과 함께해요!
 `;
 
+const CS_EDUCATION_LINK = 'https://www.youtube.com/watch?v=UJnR2SMOHGo';
+
 //
 //
 //
@@ -104,19 +106,27 @@ const CSThirdSectionMain = ({ selectedSlideIndex }: CSThirdSectionMainProps) => 
             },
           }}
         >
-          <Typography
-            variant="body1"
-            sx={{
-              fontSize: {
-                tablet: '0.875rem',
-                desktop: '1rem',
-              },
-              fontWeight: '500',
-              textDecoration: 'underline',
+          <a
+            href={CS_EDUCATION_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: theme.colors.common.black,
             }}
           >
-            링크를 내놔라
-          </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: {
+                  tablet: '0.875rem',
+                  desktop: '1rem',
+                },
+                fontWeight: '500',
+              }}
+            >
+              CS 교육 세션 영상 링크
+            </Typography>
+          </a>
         </Box>
       </Box>
       <Box
