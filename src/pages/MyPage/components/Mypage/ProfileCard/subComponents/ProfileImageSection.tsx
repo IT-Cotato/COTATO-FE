@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Pencil } from '@/pages/MyPage/tempAsssets/Pencil.svg';
-import { ReactComponent as Trash } from '@/pages/MyPage/tempAsssets/Trash.svg';
+import CotatoIcon from '@components/CotatoIcon';
 
 //
 //
@@ -67,14 +66,14 @@ const ProfileImageSection = ({ onImageChange, isModifying, value }: ProfileImage
             style={{ left: '30%' }}
             aria-label="Edit profile image"
           >
-            <Pencil />
+            <CotatoIcon icon="pencil" />
           </IconButton>
           <IconButton
             onClick={handleClickDelete}
             style={{ right: '30%' }}
             aria-label="Remove profile image"
           >
-            <Trash />
+            <CotatoIcon icon="trash" />
           </IconButton>
           <input
             ref={fileInputRef}

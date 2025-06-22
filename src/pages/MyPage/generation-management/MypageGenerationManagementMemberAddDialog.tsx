@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { getMemberPostionText } from '@utils/member';
-import { CotatoAddableMemberInfoPositionEnum } from 'cotato-openapi-clients';
+import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
 import { useDebounce } from 'react-use';
 import { styled, useTheme } from 'styled-components';
 import { xor } from 'lodash';
@@ -61,7 +61,7 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
   const [selectedMembers, setSelectedMembers] = React.useState<number[]>([]);
   const [selectedGeneration, setSelectedGeneration] = React.useState<number>(generationId ?? 0);
   const [selectedPosition, setSelectedPosition] =
-    React.useState<CotatoAddableMemberInfoPositionEnum>(null as any);
+    React.useState<CotatoMemberInfoResponsePositionEnum>(null as any);
 
   //
   const { targetGeneration } = useGeneration({ generationId: selectedGeneration.toString() });
@@ -89,8 +89,7 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
   const handleSelectMember = (memberId: number) => {
     setSelectedMembers(xor(selectedMembers, [memberId]));
   };
-  console.log(addableMembers?.memberInfos);
-  const isAllSelected = selectedMembers.length === addableMembers?.memberInfos.length ?? false;
+  const isAllSelected = selectedMembers.length === addableMembers?.memberInfos.length;
 
   /**
    *
@@ -104,8 +103,8 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
   /**
    *
    */
-  const handlePositionSelect = (position: CotatoAddableMemberInfoPositionEnum) => {
-    if (position === CotatoAddableMemberInfoPositionEnum.None) {
+  const handlePositionSelect = (position: CotatoMemberInfoResponsePositionEnum) => {
+    if (position === CotatoMemberInfoResponsePositionEnum.None) {
       setSelectedPosition(null as any);
       return;
     }
@@ -165,12 +164,12 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
             displayEmpty={true}
             value={selectedPosition}
             onChange={(e) =>
-              handlePositionSelect(e.target.value as CotatoAddableMemberInfoPositionEnum)
+              handlePositionSelect(e.target.value as CotatoMemberInfoResponsePositionEnum)
             }
           >
             <MenuItem value={null as any}>포지션</MenuItem>
-            {Object.values(CotatoAddableMemberInfoPositionEnum)
-              .filter((position) => position !== CotatoAddableMemberInfoPositionEnum.None)
+            {Object.values(CotatoMemberInfoResponsePositionEnum)
+              .filter((position) => position !== CotatoMemberInfoResponsePositionEnum.None)
               .map((position) => (
                 <MenuItem key={position} value={position}>
                   {getMemberPostionText(position)}
