@@ -14,19 +14,6 @@ import useSWR, { useSWRConfig } from 'swr';
 //
 //
 
-const INITIAL_MAIL_CONTENT = (nextGenerationNumber: number) =>
-  `
-코테이토 ${nextGenerationNumber}기 모집이 시작되었습니다! 
-
-무엇이라도 해내야겠다는 마음가짐, 발전하고자 하는 열정이면 충분합니다.
-
-코테이토 홈페이지 에 접속하여 지원해주세요!
-`.trim();
-
-//
-//
-//
-
 const useRecruitmentManagement = () => {
   const {
     data: recruitmentPending,
@@ -53,11 +40,9 @@ const useRecruitmentManagement = () => {
 
   const [isRecruitmentActive, setIsRecruitmentActive] = React.useState<boolean>(false);
   const [formLink, setFormLink] = React.useState<string>('');
-  const [mailContent, setMailContent] = React.useState<string>('');
+  const [nextGenerationNumber, setNextGenerationNumber] = React.useState<number>();
   const [startDate, setStartDate] = React.useState<Dayjs>();
   const [endDate, setEndDate] = React.useState<Dayjs>();
-
-  const nextGenerationNumber = Number(currentGeneration?.generationNumber) + 1;
 
   /**
    *
@@ -116,8 +101,8 @@ const useRecruitmentManagement = () => {
   /**
    *
    */
-  const handleMailContentChange = (value: string) => {
-    setMailContent(value);
+  const handleNextGenerationNumberChange = (value: number | undefined) => {
+    setNextGenerationNumber(value);
   };
 
   /**
@@ -142,8 +127,8 @@ const useRecruitmentManagement = () => {
       return;
     }
 
-    if (!mailContent) {
-      toast.error('메일 내용을 입력해주세요.');
+    if (nextGenerationNumber === undefined) {
+      toast.error('기수를 입력해주세요.');
       return;
     }
 
@@ -181,6 +166,7 @@ const useRecruitmentManagement = () => {
     if (
       isRecruitmentPendingLoading ||
       isRecruitmentStatusLoading ||
+      !currentGeneration ||
       recruimentPendingError ||
       recruitmentStatusError
     ) {
@@ -189,22 +175,22 @@ const useRecruitmentManagement = () => {
 
     setIsRecruitmentActive(recruitmentStatus?.isOpened ?? false);
     setFormLink(recruitmentStatus?.recruitmentUrl ?? '');
-    setMailContent(INITIAL_MAIL_CONTENT(nextGenerationNumber));
+    setNextGenerationNumber(Number(currentGeneration.generationNumber) + 1);
     setStartDate(recruitmentStatus?.startDate ? dayjs(recruitmentStatus?.startDate) : undefined);
     setEndDate(recruitmentStatus?.endDate ? dayjs(recruitmentStatus.endDate) : undefined);
-  }, [isRecruitmentPendingLoading, isRecruitmentStatusLoading]);
+  }, [isRecruitmentPendingLoading, isRecruitmentStatusLoading, currentGeneration]);
 
   return {
     isLoading: isRecruitmentPendingLoading || isRecruitmentStatusLoading,
     isRecruitmentActive,
     formLink,
-    mailContent,
+    nextGenerationNumber,
     startDate,
     endDate,
     notificationCount: recruitmentPending?.notificationCount ?? 0,
     handleIsRecruitmentActiveChange,
     handleFormLinkChange,
-    handleMailContentChange,
+    handleNextGenerationNumberChange,
     handleStartDateChange,
     handleEndDateChange,
     handleMailSubmit,
