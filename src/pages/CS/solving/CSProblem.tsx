@@ -230,7 +230,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
             },
           )
           .then((res) => {
-            if (res.data.result === 'true') {
+            if (res.data.result) {
               setShowCorrect(true);
               setTimeout(() => setReturnToWaiting(true), 2500);
             } else {
