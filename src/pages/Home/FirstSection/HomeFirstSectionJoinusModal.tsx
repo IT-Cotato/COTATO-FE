@@ -90,7 +90,10 @@ const HomeFirstSectionJoinusModal = () => {
    */
   const renderTitle = () => {
     return (
-      <DialogTitle variant="subtitle2" sx={{ textAlign: 'center', padding: '1.25rem' }}>
+      <DialogTitle
+        variant="subtitle2"
+        sx={{ textAlign: 'center', padding: '1.25rem', color: theme.colors.common.black }}
+      >
         모집 지원하기
       </DialogTitle>
     );
@@ -105,7 +108,12 @@ const HomeFirstSectionJoinusModal = () => {
         <Typography variant="body1" color={theme.colors.secondary70}>
           *지금은 모집 기간이 아닙니다.
         </Typography>
-        <Typography variant="body1">
+        <Typography
+          variant="body1"
+          sx={{
+            color: theme.colors.common.black,
+          }}
+        >
           이메일을 남겨주시면 다음 기수 감자 모집 시<br />
           메일을 보내드릴게요!
         </Typography>
@@ -137,7 +145,7 @@ const HomeFirstSectionJoinusModal = () => {
         }}
         sx={{
           '& .Mui-focused': {
-            color: 'inherit !important',
+            color: `${theme.colors.common.black} !important`,
           },
 
           '& .MuiOutlinedInput-root': {
@@ -232,6 +240,7 @@ const HomeFirstSectionJoinusModal = () => {
         '& .MuiPaper-root': {
           width: '35rem',
           padding: '1rem 4.5rem',
+          backgroundColor: theme.colors.common.white,
         },
       }}
     >
@@ -259,6 +268,7 @@ const StyledTextarea = styled.textarea`
   color: ${({ theme }) => theme.colors.common.black};
   font-size: 0.75rem;
   line-height: 1.5rem;
+  background-color: ${({ theme }) => theme.colors.common.white};
 
   &:focus-visible {
     outline: none;

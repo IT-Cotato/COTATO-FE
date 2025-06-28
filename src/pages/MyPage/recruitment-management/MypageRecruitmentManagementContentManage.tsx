@@ -29,11 +29,11 @@ const MypageRecruitmentManagementContentManage = () => {
     formLink,
     startDate,
     endDate,
-    mailContent,
+    nextGenerationNumber,
     notificationCount,
     handleIsRecruitmentActiveChange,
     handleFormLinkChange,
-    handleMailContentChange,
+    handleNextGenerationNumberChange,
     handleStartDateChange,
     handleEndDateChange,
     handleMailSubmit,
@@ -132,11 +132,11 @@ const MypageRecruitmentManagementContentManage = () => {
         />
         <MypageRecruitmentManagementContentManageInputField
           label="메일 문구"
-          description="내용을 입력하세요. (사실 수정은 안됨)"
+          description="기수를 입력하세요."
           slot={
             <MypageRecruitmentManagementContentManageTextarea
-              value={mailContent}
-              onChange={(e) => handleMailContentChange(e.target.value)}
+              nextGenerationNumber={nextGenerationNumber}
+              onChange={handleNextGenerationNumberChange}
             />
           }
         />
