@@ -7,6 +7,7 @@ import HomeFirstSectionCotato from './HomeFirstSectionCotato';
 import { media } from '@theme/media';
 import SloganSvgComponent from './SvgComponent/SloganSvgComponent';
 import HomeFirstSectionJoinusModal from './HomeFirstSectionJoinusModal';
+import CursorFollower from './CursorFollower';
 
 //
 //
@@ -62,6 +63,13 @@ const HomeFirstSection = () => {
     return <HomeFirstSectionJoinusModal />;
   };
 
+  /**
+   *
+   */
+  const renderCursorFollower = () => {
+    return <CursorFollower />;
+  };
+
   return (
     <Wrapper>
       {renderTitle()}
@@ -69,6 +77,7 @@ const HomeFirstSection = () => {
       {renderFry()}
       {renderCotato()}
       {renderJoinusModal()}
+      {renderCursorFollower()}
     </Wrapper>
   );
 };
