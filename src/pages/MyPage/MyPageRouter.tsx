@@ -7,6 +7,7 @@ import {
 } from './generation-management';
 import { MypageMemberManagement } from './member-management';
 import MyPageJoinManagement from './join-management/MyPageJoinManagement';
+import { MypageRecruitmentManagement } from './recruitment-management';
 
 //
 //
@@ -21,6 +22,7 @@ export const MY_PAGE_PATH = {
   MEMBERS: 'members',
   REGISTRATION: 'registration',
   GENERATION_MANAGEMENT: 'generation-management',
+  RECRUITMENT_MANAGEMENT: 'recruitment-management',
 } as const;
 
 export const COMMON_PATH = {
@@ -67,6 +69,10 @@ const MyPageRouter: RouteObject[] = [
       {
         path: MY_PAGE_PATH.REGISTRATION,
         element: <MyPageJoinManagement />,
+      },
+      {
+        path: MY_PAGE_PATH.RECRUITMENT_MANAGEMENT,
+        element: <MypageRecruitmentManagement />,
       },
     ],
   },

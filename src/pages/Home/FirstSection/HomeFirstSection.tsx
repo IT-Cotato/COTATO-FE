@@ -6,6 +6,7 @@ import styled, { useTheme } from 'styled-components';
 import HomeFirstSectionCotato from './HomeFirstSectionCotato';
 import { media } from '@theme/media';
 import SloganSvgComponent from './SvgComponent/SloganSvgComponent';
+import HomeFirstSectionJoinusModal from './HomeFirstSectionJoinusModal';
 
 //
 //
@@ -54,12 +55,20 @@ const HomeFirstSection = () => {
     return <HomeFirstSectionCotato />;
   };
 
+  /**
+   *
+   */
+  const renderJoinusModal = () => {
+    return <HomeFirstSectionJoinusModal />;
+  };
+
   return (
     <Wrapper>
       {renderTitle()}
       {renderSlogan()}
       {renderFry()}
       {renderCotato()}
+      {renderJoinusModal()}
     </Wrapper>
   );
 };

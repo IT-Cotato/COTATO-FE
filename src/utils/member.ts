@@ -1,22 +1,22 @@
 import {
-  CotatoAddableMemberInfoPositionEnum,
+  CotatoMemberInfoResponsePositionEnum,
   CotatoGenerationMemberInfoRoleEnum,
 } from 'cotato-openapi-clients';
 
 /**
  *
  */
-export const getMemberPostionText = (position: CotatoAddableMemberInfoPositionEnum) => {
+export const getMemberPostionText = (position?: CotatoMemberInfoResponsePositionEnum) => {
   switch (position) {
-    case CotatoAddableMemberInfoPositionEnum.Fe:
+    case CotatoMemberInfoResponsePositionEnum.Fe:
       return '프론트엔드';
-    case CotatoAddableMemberInfoPositionEnum.Be:
+    case CotatoMemberInfoResponsePositionEnum.Be:
       return '백엔드';
-    case CotatoAddableMemberInfoPositionEnum.Design:
+    case CotatoMemberInfoResponsePositionEnum.Design:
       return '디자인';
-    case CotatoAddableMemberInfoPositionEnum.Pm:
+    case CotatoMemberInfoResponsePositionEnum.Pm:
       return '기획자';
-    case CotatoAddableMemberInfoPositionEnum.None:
+    case CotatoMemberInfoResponsePositionEnum.None:
       return '없음';
   }
 };

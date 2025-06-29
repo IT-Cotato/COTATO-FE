@@ -15,6 +15,7 @@ import MypageGenerationManagementMemberDeleteDialog from './MypageGenerationMana
 //
 
 type MypageGenerationManagementMemberRoleActionsProps = Omit<SelectProps, 'onChange'> & {
+  isEditable: boolean;
   memberInfo: CotatoGenerationMemberInfo;
   onDelete?: (generationMemberId: number) => void;
   onChange: (
@@ -28,6 +29,7 @@ type MypageGenerationManagementMemberRoleActionsProps = Omit<SelectProps, 'onCha
 //
 
 const MypageGenerationManagementMemberRoleActions = ({
+  isEditable,
   memberInfo,
   onDelete,
   onChange,
@@ -69,6 +71,7 @@ const MypageGenerationManagementMemberRoleActions = ({
   return (
     <Stack direction="row" alignItems="center" gap="0.5rem">
       <StyledSelect
+        disabled={!isEditable}
         value={memberInfo.role}
         slotProps={{
           input: {
@@ -92,13 +95,15 @@ const MypageGenerationManagementMemberRoleActions = ({
           </MenuItem>
         ))}
       </StyledSelect>
-      <IconButton onClick={() => setIsOpenDeleteDialog(true)}>
-        <CotatoIcon
-          icon="trash-alt-solid"
-          size="1.25rem"
-          color={(theme) => theme.colors.const.black}
-        />
-      </IconButton>
+      {isEditable && (
+        <IconButton onClick={() => setIsOpenDeleteDialog(true)}>
+          <CotatoIcon
+            icon="trash-alt-solid"
+            size="1.25rem"
+            color={(theme) => theme.colors.const.black}
+          />
+        </IconButton>
+      )}
       <MypageGenerationManagementMemberDeleteDialog
         open={isOpenDeleteDialog}
         onClose={() => setIsOpenDeleteDialog(false)}
