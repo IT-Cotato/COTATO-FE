@@ -23,6 +23,8 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
           <ProfileInput
             size="small"
             disabled={!isModifying}
+            placeholder="Link to github profile"
+            type="url"
             value={
               links.find((link) => link.urlType === CotatoProfileLinkResponseUrlTypeEnum.Github)
                 ?.url ?? ''
@@ -35,6 +37,8 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
           <ProfileInput
             size="small"
             disabled={!isModifying}
+            placeholder="Link to social profile"
+            type="url"
             value={
               links.find((link) => link.urlType === CotatoProfileLinkResponseUrlTypeEnum.Blog)
                 ?.url ?? ''
