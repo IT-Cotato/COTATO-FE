@@ -15,10 +15,15 @@ import { ThemeContext } from '@theme/context/CotatoThemeProvider';
 import { COTATO_LIGHT_THEME, THEME_CHANGE_TRANSITION } from '@theme/constants/constants';
 import CotatoThemeToggleSwitch from './CotatoToggleSwitch';
 import CotatoIcon from './CotatoIcon';
+import { useIsInCSThirdSection } from '@/zustand-stores/useIsInCSThirdSection';
 
 //
 //
 //
+
+interface HeaderWrapperProps {
+  $isInCSThirdSection?: boolean;
+}
 
 type NavItemName = 'Home' | 'About us' | 'Project' | 'Session' | 'FAQ' | 'CS Quiz';
 
@@ -47,6 +52,9 @@ const Header = () => {
   const location = useLocation();
   const isTabletOrSmaller = useMediaQuery(`(max-width:${device.tablet})`);
   const { DefaultTheme, onChangeTheme } = React.useContext(ThemeContext);
+
+  //
+  const { isInCSThirdSection } = useIsInCSThirdSection();
 
   /**
    *
@@ -121,8 +129,9 @@ const Header = () => {
     if (isTabletOrSmaller) {
       return null;
     }
+
     return (
-      <HeaderWrapper>
+      <HeaderWrapper $isInCSThirdSection={isInCSThirdSection}>
         {renderLogo()}
         {renderNav()}
       </HeaderWrapper>
@@ -164,13 +173,14 @@ export default Header;
 //
 //
 
-const HeaderWrapper = styled.header`
+const HeaderWrapper = styled.header<HeaderWrapperProps>`
   display: flex;
   width: 100%;
   padding: 0.5rem 6rem;
   align-items: center;
   justify-content: space-between;
-  background: ${({ theme }) => theme.colors.common.white};
+  background: ${({ theme, $isInCSThirdSection }) =>
+    $isInCSThirdSection ? 'transparent' : theme.colors.common.white};
   position: fixed;
   top: 0;
   z-index: 100;
