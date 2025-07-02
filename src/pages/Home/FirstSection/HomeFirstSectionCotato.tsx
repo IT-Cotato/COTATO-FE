@@ -40,8 +40,8 @@ const HomeFirstSectionCotato = () => {
       <HomeFirstSectionJoinus />
       <DefaultCharacter src={DefaultC} hoversrc={HoverC} margin="100px 0 0 0" />
       <DefaultCharacter src={DefaultO} hoversrc={HoverO} margin="30px 0 0 30px" />
-      <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="60px 0 0 0" scale={1.2} />
-      <DefaultCharacter src={DefaultA} hoversrc={HoverA} margin="140px 0 0 0" />
+      <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="40px 0 0 0" scale={1.2} />
+      <DefaultCharacter src={DefaultA} hoversrc={HoverA} margin="120px 0 0 0" />
       <DefaultCharacter src={DefaultT} hoversrc={HoverT} margin="20px 0 0 0" scale={1.2} />
       <DefaultCharacter src={DefaultO} hoversrc={HoverO} margin="120px 0 0 0" />
     </Wrapper>
@@ -62,6 +62,7 @@ const Wrapper = styled.div`
   align-items: center;
   position: absolute;
   top: 63%;
+  top: 52%;
   left: 50%;
   transform: translate(-50%, -50%);
   ${media.landscape`
@@ -74,9 +75,11 @@ const Wrapper = styled.div`
   `}
 `;
 
+// 145 200
+// 120 164
 const Character = styled.div<CharacterProps>`
-  width: 145px;
-  height: 200px;
+  width: 120px;
+  height: 164px;
   margin: ${({ margin }) => margin};
   background: ${({ src }) => `url(${src}) no-repeat center`};
   background-size: ${({ scale }) => `${140 * scale}px ${140 * scale}px`};
