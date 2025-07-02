@@ -7,17 +7,14 @@ import { ReactComponent as JoinusText } from '@assets/joinus_text_svg.svg';
 import { useJoinusModalOpenStore } from '@/zustand-stores/useJoinusModalOpenStore';
 import useSWRImmutable from 'swr/immutable';
 import fetcher from '@utils/fetcher';
-import { CotatoRecruitmentInfoResponse } from 'cotato-openapi-clients';
+// import { CotatoRecruitmentInfoResponse } from 'cotato-openapi-clients';
 
 //
 //
 //
 
 const HomeFirstSectionJoinus = () => {
-  const { data: recreuitmentStaus, isLoading } = useSWRImmutable<CotatoRecruitmentInfoResponse>(
-    '/v2/api/recruitments',
-    fetcher,
-  );
+  const { data: recreuitmentStaus, isLoading } = useSWRImmutable('/v2/api/recruitments', fetcher);
 
   const { isJoinusModalOpen, setIsJoinusModalOpen } = useJoinusModalOpenStore();
 
@@ -64,7 +61,7 @@ export default HomeFirstSectionJoinus;
 
 const JoinusButtonWrapper = styled.div`
   position: absolute;
-  top: 8.5rem;
+  top: 12rem;
 
   ${media.tablet`
     top: 8rem;

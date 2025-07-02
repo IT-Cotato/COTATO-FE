@@ -15,12 +15,13 @@ const SloganSvgComponent = () => {
   const hoverBackgroundColor = theme.colors.common.white;
   const hoverStrokeColor = theme.colors.gray80_1;
   const hoverPointColor = theme.colors.secondary60;
-
+  // 588 86 / 710 126
+  // 400 58 / 483 86
   const DefaultSlogan = () => {
     return (
       <svg
-        width="588"
-        height="86"
+        width="400"
+        height="58"
         viewBox="0 0 588 86"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -50,8 +51,8 @@ const SloganSvgComponent = () => {
   const HoveredSlogan = () => {
     return (
       <svg
-        width="710"
-        height="126"
+        width="483"
+        height="86"
         viewBox="0 0 710 126"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

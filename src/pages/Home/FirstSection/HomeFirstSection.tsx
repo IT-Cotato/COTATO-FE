@@ -111,10 +111,6 @@ const StyledTitleDiv = styled.div`
   width: 100%;
   height: fit-content;
   color: ${({ theme }) => theme.colors.gray80_2};
-  margin-top: 1rem;
-  ${media.landscape`
-    margin-top: 0;
-  `}
 `;
 
 const HomeSlogan = styled.div`
@@ -124,7 +120,6 @@ const HomeSlogan = styled.div`
   justify-content: center;
   width: 100%;
   min-height: 126px;
-  margin-top: 0.5rem;
   ${media.landscape`
     min-height: 100px;
     height: 100px;
@@ -144,8 +139,8 @@ const FryDiv = styled.div`
 `;
 
 const StyledFries = styled.div`
-  width: 18rem;
-  height: 24rem;
+  width: 15rem;
+  height: 20rem;
   background: url(${Fries}) no-repeat center;
   background-size: contain;
   animation: anim__fries__default 0.2s ease-in-out 0s;
