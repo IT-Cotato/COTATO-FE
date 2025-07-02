@@ -73,9 +73,9 @@ const JoinusButtonWrapper = styled.div`
 `;
 
 const StyledJoinText = styled(JoinusText)`
-  width: 8rem;
+  width: 7rem;
 
   ${media.landscape`
-    width: 7rem;
+    width: 6rem;
   `}
 `;
