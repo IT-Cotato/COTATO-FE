@@ -91,6 +91,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const shortRef = useRef<any>();
   const choiceRef = useRef<any | null>([]);
 
+  const mountRef = useRef(false);
+
   const alignBtnHeights = () => {
     let maxHeight = 68;
     choiceRef?.current.forEach((el: any) => {
@@ -102,88 +104,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
       if (el) el.style.height = `${maxHeight}px`;
     });
   };
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === 'Escape') {
-        setCount((prevCount) => prevCount + 1);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    const intervalId = setInterval(() => {
-      setCount(0);
-    }, 3000);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      clearInterval(intervalId);
-    };
-  }, [count]);
-
-  useEffect(() => {
-    alignBtnHeights();
-  }, [quizData]);
-
-  // 최초 마운트 이후부터 문제 변경을 감지하여 다음 문제 보여주기
-  const mountRef = useRef(false);
-  useEffect(() => {
-    if (!mountRef.current) {
-      mountRef.current = true;
-    } else {
-      setReturnToWaiting(false);
-    }
-  }, [problemId]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await api
-        .get(`/v1/api/quiz/${quizId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((res) => {
-          setQuizData(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
-
-    const initializeData = async () => {
-      await setMultiples([]); // 문제 바뀔 때 이전 선지 초기화
-      fetchData();
-    };
-
-    initializeData();
-  }, [problemId]); // quizId가 바뀌면 문제 데이터를 다시 불러옴
-
-  useEffect(() => {
-    // 객관식 선지의 내용을 리스트에 담기 (quizData가 업데이트된 후에 선지 내용 설정)
-    if (quizData?.choices) {
-      quizData.choices.forEach((item) => {
-        setMultiples((prev) => [...prev, item.content]);
-      });
-    }
-    // 문제 바뀔 때 이전 입력 답안 초기화
-    setShortAns('');
-    setSelectNum(0);
-    setSelected([]);
-  }, [quizData]);
-
-  useEffect(() => {
-    // 정답/오답 화면 표시 후 위에 깔리지 않도록 삭제
-    if (showCorrect) {
-      const timeoutId = setTimeout(() => setShowCorrect(false), 2500);
-      return () => clearTimeout(timeoutId);
-    }
-    if (showIncorrect) {
-      const timeoutId = setTimeout(() => setShowIncorrect(false), 2500);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [showCorrect, showIncorrect]);
 
   // 주관식 문제 입력 이벤트
   const onChangeShortAns = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -253,6 +173,91 @@ const CSProblem: React.FC<CSProblemProps> = ({
       setReturnToWaiting(true);
     }, 8000);
   }
+
+  //
+  //
+  //
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === 'Escape') {
+        setCount((prevCount) => prevCount + 1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    const intervalId = setInterval(() => {
+      setCount(0);
+    }, 3000);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      clearInterval(intervalId);
+    };
+  }, [count]);
+
+  useEffect(() => {
+    alignBtnHeights();
+  }, [quizData]);
+
+  // 최초 마운트 이후부터 문제 변경을 감지하여 다음 문제 보여주기
+  useEffect(() => {
+    if (!mountRef.current) {
+      mountRef.current = true;
+    } else {
+      setReturnToWaiting(false);
+    }
+  }, [problemId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await api
+        .get(`/v1/api/quiz/${quizId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((res) => {
+          setQuizData(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+
+    const initializeData = async () => {
+      await setMultiples([]); // 문제 바뀔 때 이전 선지 초기화
+      fetchData();
+    };
+
+    initializeData();
+  }, [problemId]); // quizId가 바뀌면 문제 데이터를 다시 불러옴
+
+  useEffect(() => {
+    // 객관식 선지의 내용을 리스트에 담기 (quizData가 업데이트된 후에 선지 내용 설정)
+    if (quizData?.choices) {
+      quizData.choices.forEach((item) => {
+        setMultiples((prev) => [...prev, item.content]);
+      });
+    }
+    // 문제 바뀔 때 이전 입력 답안 초기화
+    setShortAns('');
+    setSelectNum(0);
+    setSelected([]);
+  }, [quizData]);
+
+  useEffect(() => {
+    // 정답/오답 화면 표시 후 위에 깔리지 않도록 삭제
+    if (showCorrect) {
+      const timeoutId = setTimeout(() => setShowCorrect(false), 2500);
+      return () => clearTimeout(timeoutId);
+    }
+    if (showIncorrect) {
+      const timeoutId = setTimeout(() => setShowIncorrect(false), 2500);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [showCorrect, showIncorrect]);
 
   return (
     <Wrapper disabled={alertError}>
