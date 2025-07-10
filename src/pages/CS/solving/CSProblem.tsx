@@ -280,10 +280,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
     setCurrentKey(answerKey);
   }, [selected, shortAns]);
 
-  useEffect(() => {
-    console.log('currentKey', currentKey);
-  }, [currentKey]);
-
   return (
     <Wrapper disabled={alertError}>
       {notice && (
