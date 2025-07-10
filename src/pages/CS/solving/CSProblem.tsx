@@ -20,6 +20,7 @@ import { QUIZ_END_NUMBER } from './constants';
 import { MessageType } from '../admin/upload/utils/handleWsMessage';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { media } from '@theme/media';
+import { v4 as uuidv4 } from 'uuid';
 
 //
 //
@@ -86,6 +87,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const [count, setCount] = useState(0);
   const [notice, setNotice] = useState(false);
 
+  const [currentKey, setCurrentKey] = useState<string | null>(null);
+
   const inputRef = useRef<any>();
   const multipleRef = useRef<any>();
   const shortRef = useRef<any>();
@@ -135,6 +138,13 @@ const CSProblem: React.FC<CSProblemProps> = ({
         alert('답안을 입력 후 제출해주세요.');
         return;
       } else {
+        const rawLastSubmitInfo = JSON.parse(localStorage.getItem('lastSubmitInfo') || '{}');
+        const lastSubmitAnswer = rawLastSubmitInfo.answer;
+        const lastSubmitKey = rawLastSubmitInfo.answerKey;
+
+        const isSameAnswer = JSON.stringify(input) === JSON.stringify(lastSubmitAnswer);
+        const idempotencyKey = isSameAnswer ? lastSubmitKey : currentKey;
+
         api
           .post(
             '/v1/api/record/reply',
@@ -146,6 +156,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Idempotency-Key': idempotencyKey,
               },
             },
           )
@@ -156,6 +167,11 @@ const CSProblem: React.FC<CSProblemProps> = ({
             } else {
               setShowIncorrect(true);
             }
+
+            localStorage.setItem(
+              'lastSubmitInfo',
+              JSON.stringify({ answer: input, answerKey: currentKey }),
+            );
           })
           .catch((err) => {
             if (err.response.data.code === 'R-301') {
@@ -258,6 +274,15 @@ const CSProblem: React.FC<CSProblemProps> = ({
       return () => clearTimeout(timeoutId);
     }
   }, [showCorrect, showIncorrect]);
+
+  useEffect(() => {
+    const answerKey = uuidv4();
+    setCurrentKey(answerKey);
+  }, [selected, shortAns]);
+
+  useEffect(() => {
+    console.log('currentKey', currentKey);
+  }, [currentKey]);
 
   return (
     <Wrapper disabled={alertError}>
