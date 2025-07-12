@@ -87,8 +87,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const [count, setCount] = useState(0);
   const [notice, setNotice] = useState(false);
 
-  const [currentKey, setCurrentKey] = useState<string | null>(null);
-
   const inputRef = useRef<any>();
   const multipleRef = useRef<any>();
   const shortRef = useRef<any>();
@@ -138,13 +136,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
         alert('답안을 입력 후 제출해주세요.');
         return;
       } else {
-        const rawLastSubmitInfo = JSON.parse(localStorage.getItem('lastSubmitInfo') || '{}');
-        const lastSubmitAnswer = rawLastSubmitInfo.answer;
-        const lastSubmitKey = rawLastSubmitInfo.answerKey;
-
-        const isSameAnswer = JSON.stringify(input) === JSON.stringify(lastSubmitAnswer);
-        const idempotencyKey = isSameAnswer ? lastSubmitKey : currentKey;
-
         api
           .post(
             '/v1/api/record/reply',
@@ -156,7 +147,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Idempotency-Key': idempotencyKey,
+                'Idempotency-Key': localStorage.getItem('lastSubmitKey'),
               },
             },
           )
@@ -168,10 +159,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
               setShowIncorrect(true);
             }
 
-            localStorage.setItem(
-              'lastSubmitInfo',
-              JSON.stringify({ answer: input, answerKey: currentKey }),
-            );
+            localStorage.removeItem('lastSubmitKey');
           })
           .catch((err) => {
             if (err.response.data.code === 'R-301') {
@@ -277,7 +265,7 @@ const CSProblem: React.FC<CSProblemProps> = ({
 
   useEffect(() => {
     const answerKey = uuidv4();
-    setCurrentKey(answerKey);
+    localStorage.setItem('lastSubmitKey', answerKey);
   }, [selected, shortAns]);
 
   return (
