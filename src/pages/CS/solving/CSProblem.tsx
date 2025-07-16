@@ -117,6 +117,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
     if (submitAllowed) {
       setReturnToWaiting(true);
     }
+
+    localStorage.removeItem('lastSubmitKey');
   };
 
   const submitProblem = () => {
@@ -158,8 +160,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
             } else {
               setShowIncorrect(true);
             }
-
-            localStorage.removeItem('lastSubmitKey');
           })
           .catch((err) => {
             if (err.response.data.code === 'R-301') {
