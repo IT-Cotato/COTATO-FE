@@ -13,13 +13,15 @@ import { CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 const InfoSection = () => {
   const { user } = useUser();
   const { form } = useInfoForm(user?.memberId);
+
+  const isAdminOrDev =
+    user?.role === CotatoMemberInfoResponseRoleEnum.Admin ||
+    user?.role === CotatoMemberInfoResponseRoleEnum.Dev;
+
   return (
     <InfoSectionContainer>
       <AccountSection email={form.email} phoneNum={form.phoneNumber} />
-      {user?.role ==
-        (CotatoMemberInfoResponseRoleEnum.Admin || CotatoMemberInfoResponseRoleEnum.Dev) && (
-        <ManageSection />
-      )}
+      {isAdminOrDev && <ManageSection />}
     </InfoSectionContainer>
   );
 };
