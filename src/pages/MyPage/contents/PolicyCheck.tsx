@@ -28,9 +28,7 @@ const PolicyCheck = () => {
         <ButtonContainer>
           <Button
             variant="text"
-            endIcon={
-              <CotatoIcon icon="angle-right-solid" color={(t) => t.colors.gray60}></CotatoIcon>
-            }
+            endIcon={<CotatoIcon icon="angle-right-solid" color={(theme) => theme.colors.gray60} />}
             onClick={() => navigate(MY_PAGE_PATH.POLICY.DELETION)}
           >
             <ButtonText>회원 탈퇴</ButtonText>

@@ -4,6 +4,7 @@ import { media } from '@theme/media';
 import { AccountSection, ManageSection } from './subComponents';
 import { useInfoForm } from '@pages/MyPage/hooks/useInfoForm';
 import useUser from '@/hooks/useUser';
+import { CotatoMemberInfoResponseRoleEnum } from 'cotato-openapi-clients';
 
 //
 //
@@ -12,10 +13,15 @@ import useUser from '@/hooks/useUser';
 const InfoSection = () => {
   const { user } = useUser();
   const { form } = useInfoForm(user?.memberId);
+
+  const isAdminOrDev =
+    user?.role === CotatoMemberInfoResponseRoleEnum.Admin ||
+    user?.role === CotatoMemberInfoResponseRoleEnum.Dev;
+
   return (
     <InfoSectionContainer>
       <AccountSection email={form.email} phoneNum={form.phoneNumber} />
-      {user?.role !== 'MEMBER' && <ManageSection />}
+      {isAdminOrDev && <ManageSection />}
     </InfoSectionContainer>
   );
 };

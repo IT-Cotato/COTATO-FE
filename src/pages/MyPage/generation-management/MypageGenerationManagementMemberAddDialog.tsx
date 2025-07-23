@@ -89,7 +89,6 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
   const handleSelectMember = (memberId: number) => {
     setSelectedMembers(xor(selectedMembers, [memberId]));
   };
-  console.log(addableMembers?.memberInfos);
   const isAllSelected = selectedMembers.length === addableMembers?.memberInfos.length;
 
   /**
