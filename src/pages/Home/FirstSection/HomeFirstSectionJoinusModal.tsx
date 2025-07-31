@@ -81,6 +81,13 @@ const HomeFirstSectionJoinusModal = () => {
 
       setIsJoinusModalOpen(false);
     } catch (error) {
+      const data = (error as any)?.response?.data;
+
+      if (data?.code === 'RE-301') {
+        toast.error('이미 신청한 이메일입니다.');
+        return;
+      }
+
       toast.error('모집 알림 신청에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -146,6 +153,10 @@ const HomeFirstSectionJoinusModal = () => {
         sx={{
           '& .MuiInputLabel-root': {
             color: theme.colors.common.black,
+
+            '&.Mui-focused': {
+              color: theme.colors.common.black,
+            },
           },
 
           '& .MuiOutlinedInput-root': {
