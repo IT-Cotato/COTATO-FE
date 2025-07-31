@@ -137,30 +137,31 @@ const HomeFirstSectionJoinusModal = () => {
               position: 'relative',
               transform: 'none',
               marginBottom: '0.5rem',
-              color: theme.colors.common.black,
+              color: theme.colors.const.black,
               fontSize: '1rem',
               fontWeight: 500,
             },
           },
         }}
         sx={{
-          '& .Mui-focused': {
-            color: `${theme.colors.common.black} !important`,
+          '& .MuiInputLabel-root': {
+            color: theme.colors.common.black,
           },
 
           '& .MuiOutlinedInput-root': {
             '& input': {
               backgroundColor: theme.colors.primary20,
+              borderRadius: '0.25rem',
               padding: '0.875rem 0.75rem',
             },
 
             '& fieldset': {
               top: 0,
-              borderColor: theme.colors.common.black,
+              borderColor: theme.colors.const.black,
             },
 
             '&.Mui-focused fieldset': {
-              borderColor: theme.colors.common.black,
+              borderColor: theme.colors.const.black,
             },
           },
 
