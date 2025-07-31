@@ -27,7 +27,7 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
             type="url"
             value={
               links.find((link) => link.urlType === CotatoProfileLinkResponseUrlTypeEnum.Github)
-                ?.url ?? 'Link to github profile'
+                ?.url ?? ''
             }
             onChange={(e) => onChange(CotatoProfileLinkResponseUrlTypeEnum.Github, e.target.value)}
           />
@@ -41,7 +41,7 @@ const LinksSection = ({ isModifying, links, onChange }: LinksSectionProps) => {
             type="url"
             value={
               links.find((link) => link.urlType === CotatoProfileLinkResponseUrlTypeEnum.Blog)
-                ?.url ?? 'Link to social profile'
+                ?.url ?? ''
             }
             onChange={(e) => onChange(CotatoProfileLinkResponseUrlTypeEnum.Blog, e.target.value)}
           />

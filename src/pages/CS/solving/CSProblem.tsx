@@ -20,6 +20,7 @@ import { QUIZ_END_NUMBER } from './constants';
 import { MessageType } from '../admin/upload/utils/handleWsMessage';
 import { useBreakpoints } from '@/hooks/useBreakpoints';
 import { media } from '@theme/media';
+import { v4 as uuidv4 } from 'uuid';
 
 //
 //
@@ -91,6 +92,8 @@ const CSProblem: React.FC<CSProblemProps> = ({
   const shortRef = useRef<any>();
   const choiceRef = useRef<any | null>([]);
 
+  const mountRef = useRef(false);
+
   const alignBtnHeights = () => {
     let maxHeight = 68;
     choiceRef?.current.forEach((el: any) => {
@@ -102,6 +105,82 @@ const CSProblem: React.FC<CSProblemProps> = ({
       if (el) el.style.height = `${maxHeight}px`;
     });
   };
+
+  // 주관식 문제 입력 이벤트
+  const onChangeShortAns = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setShortAns(e.target.value);
+  }, []);
+
+  const nextProblem = () => {
+    // 다음 문제로 이동
+    // 아직 다음 문제 안열렸으면 대기 상태로
+    if (submitAllowed) {
+      setReturnToWaiting(true);
+    }
+
+    localStorage.removeItem('lastSubmitKey');
+  };
+
+  const submitProblem = () => {
+    const input = quizData?.choices ? selected : [shortAns];
+
+    if (!user || notice) {
+      return;
+    } else {
+      if (!submitAllowed) {
+        alert('아직 제출 기한이 아닙니다.');
+        if (count >= 2) {
+          setNotice(true);
+          setTimeout(() => setNotice(false), 5000);
+        }
+        return;
+      } else if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
+        alert('답안을 입력 후 제출해주세요.');
+        return;
+      } else {
+        api
+          .post(
+            '/v1/api/record/reply',
+            {
+              quizId: quizId,
+              memberId: user.memberId,
+              inputs: input,
+            } as CotatoReplyRequest,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Idempotency-Key': localStorage.getItem('lastSubmitKey'),
+              },
+            },
+          )
+          .then((res) => {
+            if (res.data.result) {
+              setShowCorrect(true);
+              setTimeout(() => setReturnToWaiting(true), 2500);
+            } else {
+              setShowIncorrect(true);
+            }
+          })
+          .catch((err) => {
+            if (err.response.data.code === 'R-301') {
+              alert('이미 정답 처리되었습니다.');
+              nextProblem();
+            }
+          });
+      }
+    }
+  };
+
+  if (showKingKing) {
+    setTimeout(() => {
+      setShowKingKing(false);
+      setReturnToWaiting(true);
+    }, 8000);
+  }
+
+  //
+  //
+  //
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -127,7 +206,6 @@ const CSProblem: React.FC<CSProblemProps> = ({
   }, [quizData]);
 
   // 최초 마운트 이후부터 문제 변경을 감지하여 다음 문제 보여주기
-  const mountRef = useRef(false);
   useEffect(() => {
     if (!mountRef.current) {
       mountRef.current = true;
@@ -185,74 +263,10 @@ const CSProblem: React.FC<CSProblemProps> = ({
     }
   }, [showCorrect, showIncorrect]);
 
-  // 주관식 문제 입력 이벤트
-  const onChangeShortAns = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setShortAns(e.target.value);
-  }, []);
-
-  const nextProblem = () => {
-    // 다음 문제로 이동
-    // 아직 다음 문제 안열렸으면 대기 상태로
-    if (submitAllowed) {
-      setReturnToWaiting(true);
-    }
-  };
-
-  const submitProblem = () => {
-    const input = quizData?.choices ? selected : [shortAns];
-
-    if (!user || notice) {
-      return;
-    } else {
-      if (!submitAllowed) {
-        alert('아직 제출 기한이 아닙니다.');
-        if (count >= 2) {
-          setNotice(true);
-          setTimeout(() => setNotice(false), 5000);
-        }
-        return;
-      } else if (submitAllowed && (quizData?.choices ? selected.length === 0 : shortAns === '')) {
-        alert('답안을 입력 후 제출해주세요.');
-        return;
-      } else {
-        api
-          .post(
-            '/v1/api/record/reply',
-            {
-              quizId: quizId,
-              memberId: user.memberId,
-              inputs: input,
-            } as CotatoReplyRequest,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            },
-          )
-          .then((res) => {
-            if (res.data.result) {
-              setShowCorrect(true);
-              setTimeout(() => setReturnToWaiting(true), 2500);
-            } else {
-              setShowIncorrect(true);
-            }
-          })
-          .catch((err) => {
-            if (err.response.data.code === 'R-301') {
-              alert('이미 정답 처리되었습니다.');
-              nextProblem();
-            }
-          });
-      }
-    }
-  };
-
-  if (showKingKing) {
-    setTimeout(() => {
-      setShowKingKing(false);
-      setReturnToWaiting(true);
-    }, 8000);
-  }
+  useEffect(() => {
+    const answerKey = uuidv4();
+    localStorage.setItem('lastSubmitKey', answerKey);
+  }, [selected, shortAns]);
 
   return (
     <Wrapper disabled={alertError}>

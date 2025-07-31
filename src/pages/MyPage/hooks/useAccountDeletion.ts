@@ -1,5 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useMount } from 'react-use';
+import * as Sentry from '@sentry/react';
 import api from '@/api/api';
+
+//
+//
+//
+
+export enum PolicyCategory {
+  LEAVING = 'LEAVING',
+}
 
 //
 //
@@ -44,18 +54,24 @@ export const useAccountDeletion = (memberId: number | undefined) => {
   /**
    *
    */
-  useEffect(() => {
-    const fetchLeavingPolicies = async () => {
-      try {
-        const response = await api.get<PolicyResponse>('/v2/api/policies?category=LEAVING');
-        setLeavingPolicies(response.data.policies);
-      } catch (error) {
-        console.error('Failed to fetch leaving policies:', error);
-      }
-    };
+  const fetchLeavingPolicies = async () => {
+    try {
+      const response = await api.get<PolicyResponse>(
+        `/v2/api/policies?category=${PolicyCategory.LEAVING}`,
+      );
+      setLeavingPolicies(response.data.policies);
+    } catch (error) {
+      console.error('Failed to fetch leaving policies:', error);
+      Sentry.captureException(error);
+    }
+  };
 
+  /**
+   *
+   */
+  useMount(() => {
     fetchLeavingPolicies();
-  }, []);
+  });
 
   /**
    *
@@ -72,7 +88,7 @@ export const useAccountDeletion = (memberId: number | undefined) => {
    */
   const deactivateAccount = async () => {
     if (!memberId) {
-      return;
+      return false;
     }
 
     try {
@@ -88,7 +104,7 @@ export const useAccountDeletion = (memberId: number | undefined) => {
       await api.post(`/v1/api/member/${memberId}/deactivate`, requestBody);
       return true;
     } catch (error) {
-      console.error('Failed to deactivate account:', error);
+      Sentry.captureException(error);
       return false;
     }
   };
