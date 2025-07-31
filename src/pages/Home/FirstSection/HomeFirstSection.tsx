@@ -8,12 +8,15 @@ import { media } from '@theme/media';
 import SloganSvgComponent from './SvgComponent/SloganSvgComponent';
 import HomeFirstSectionJoinusModal from './HomeFirstSectionJoinusModal';
 import CursorFollower from './CursorFollower';
+import useRecruitmentManagement from '../../MyPage/hooks/useRecruitmentManagement';
 
 //
 //
 //
 
 const HomeFirstSection = () => {
+  const { isRecruitmentActive } = useRecruitmentManagement();
+
   const theme = useTheme();
 
   /**
@@ -67,6 +70,10 @@ const HomeFirstSection = () => {
    *
    */
   const renderCursorFollower = () => {
+    if (!isRecruitmentActive) {
+      return null;
+    }
+
     return <CursorFollower />;
   };
 
