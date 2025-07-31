@@ -59,12 +59,19 @@ const HomeFirstSectionJoinusModal = () => {
    */
   const handleSubmit = async () => {
     if (!isConsentChecked) {
-      alert('개인정보 수집·이용 동의서를 확인해주세요.');
+      toast.error('개인정보 수집·이용 동의서를 확인해주세요.');
       return;
     }
 
     if (email.length === 0) {
-      alert('이메일을 입력해주세요.');
+      toast.error('이메일을 입력해주세요.');
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(email)) {
+      toast.error('유효한 이메일 주소를 입력해주세요.');
       return;
     }
 
