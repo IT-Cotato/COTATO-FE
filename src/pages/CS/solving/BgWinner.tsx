@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import background from '@assets/bg_kingking.svg';
 import mobile from '@assets/bg_kingking_mobile.svg';
 import api from '@/api/api';
 import { CotatoWinnerInfoResponse } from 'cotato-openapi-clients';
 import { useParams } from 'react-router-dom';
-import { useMount } from 'react-use';
 import { media } from '@theme/media';
 
 //
@@ -37,9 +36,9 @@ const BgWinner: React.FC = () => {
   //
   //
   //
-  useMount(() => {
+  useEffect(() => {
     fetchWinner();
-  });
+  }, []);
 
   //
   //
