@@ -16,13 +16,11 @@ jobs:
         with:
           version: 10
 
-      - name: Cache pnpm store
-        uses: actions/cache@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Check Node v
         run: node -v
