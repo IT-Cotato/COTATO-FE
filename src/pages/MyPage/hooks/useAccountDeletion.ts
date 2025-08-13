@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useMount } from 'react-use';
+import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react';
 import api from '@/api/api';
 
@@ -69,13 +68,6 @@ export const useAccountDeletion = (memberId: number | undefined) => {
   /**
    *
    */
-  useMount(() => {
-    fetchLeavingPolicies();
-  });
-
-  /**
-   *
-   */
   const updateForm = (field: keyof DeactivationForm, value: string | boolean) => {
     setForm((prev) => ({
       ...prev,
@@ -108,6 +100,13 @@ export const useAccountDeletion = (memberId: number | undefined) => {
       return false;
     }
   };
+
+  //
+  //
+  //
+  useEffect(() => {
+    fetchLeavingPolicies();
+  }, []);
 
   return {
     form,
