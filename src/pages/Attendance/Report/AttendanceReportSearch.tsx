@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import CotatoSearchTextField from '@components/CotatoSearchTextField/CotatoSearchTextField';
 import { Box } from '@mui/material';
-import { useDebounce } from 'react-use';
+import { debounce } from 'es-toolkit';
 import { useAttendanceReportFilter } from '../hooks/useAttendanceReportFilter';
 
 //
@@ -22,16 +22,23 @@ const AttendanceReportSearch = () => {
   const [searchValue, setSearchValue] = React.useState('');
   const [debouncedSearchValue, setDebouncedSearchValue] = React.useState('');
 
-  //
-  //
-  //
-  useDebounce(
-    () => {
-      setDebouncedSearchValue(searchValue);
-    },
-    DEBOUNCE_TIME,
-    [searchValue],
+  const debouncedUpdateSearchValue = React.useMemo(
+    () =>
+      debounce((value: string) => {
+        setDebouncedSearchValue(value);
+      }, DEBOUNCE_TIME),
+    [],
   );
+
+  //
+  //
+  //
+  useEffect(() => {
+    debouncedUpdateSearchValue(searchValue);
+    return () => {
+      debouncedUpdateSearchValue.cancel();
+    };
+  }, [searchValue, debouncedUpdateSearchValue]);
 
   //
   //
