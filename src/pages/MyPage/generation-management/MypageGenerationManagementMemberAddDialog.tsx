@@ -23,7 +23,7 @@ import { getMemberPostionText } from '@utils/member';
 import { CotatoMemberInfoResponsePositionEnum } from 'cotato-openapi-clients';
 import { useDebounce } from 'react-use';
 import { styled, useTheme } from 'styled-components';
-import { xor } from 'lodash';
+import { xor } from 'es-toolkit';
 
 import { useGeneration } from '@/hooks/useGeneration';
 import { useGenerationMembersMutation } from '../hooks/useGenerationMembersMutation';
