@@ -191,6 +191,7 @@ const MypageGenerationManagementMemberAddDialog: React.FC<
             placeholder="이름 검색"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
+            color={(theme) => theme.colors.const.black}
             iconColor={(theme) => theme.colors.const.black}
           />
         </Box>
