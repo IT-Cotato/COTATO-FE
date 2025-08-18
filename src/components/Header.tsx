@@ -183,7 +183,7 @@ const HeaderWrapper = styled.header<HeaderWrapperProps>`
     $isInCSThirdSection ? 'transparent' : theme.colors.common.white};
   position: fixed;
   top: 0;
-  z-index: 100;
+  z-index: var(--z-index-header);
   transition: ${THEME_CHANGE_TRANSITION};
   ${media.desktop`
     padding: 0.5rem 4rem;
