@@ -11,16 +11,16 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: |
-            ~/.npm
-            ~/.yarn
-            node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Check Node v
         run: node -v
@@ -45,17 +45,17 @@ jobs:
           REACT_APP_QA_SOCKET_URL: ${{ secrets.REACT_APP_QA_SOCKET_URL }}
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm i --frozen-lockfile
 
       - name: Install Sentry CLI
-        run: yarn global add @sentry/cli
+        run: pnpm add -g @sentry/cli
 
       - name: Lint
-        run: yarn lint --max-warnings=0
+        run: pnpm run lint --max-warnings=0
         continue-on-error: false
 
       - name: Build
-        run: yarn build:prod
+        run: pnpm run build:prod
         continue-on-error: false
 
       - name: Upload sourcemaps to Sentry

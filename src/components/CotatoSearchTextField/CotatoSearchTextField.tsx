@@ -1,14 +1,15 @@
 import React from 'react';
 import CotatoIcon, { CotatoIconProps } from '@components/CotatoIcon';
 import { Box, IconButton, TextField, TextFieldProps } from '@mui/material';
-import { useTheme } from 'styled-components';
+import { DefaultTheme, useTheme } from 'styled-components';
 
 //
 //
 //
 
-type CotatoSearchTextFieldProps = TextFieldProps & {
+type CotatoSearchTextFieldProps = Omit<TextFieldProps, 'color'> & {
   isEndAdornment?: boolean;
+  color?: string | ((theme: DefaultTheme) => string);
   iconColor?: CotatoIconProps['color'];
 };
 
@@ -18,6 +19,7 @@ type CotatoSearchTextFieldProps = TextFieldProps & {
 
 const CotatoSearchTextField = ({
   isEndAdornment = false,
+  color = (theme) => theme.colors.common.black,
   iconColor = (theme) => theme.colors.common.black,
   ...props
 }: CotatoSearchTextFieldProps) => {
@@ -75,7 +77,7 @@ const CotatoSearchTextField = ({
       }}
       sx={{
         '& .MuiInputBase-input': {
-          color: theme.colors.common.black,
+          color: typeof color === 'function' ? color(theme) : color,
           fontSize: '1rem',
           fontFamily: 'Prentendard',
         },
