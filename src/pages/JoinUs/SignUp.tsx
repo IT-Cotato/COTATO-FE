@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import api from '@/api/api';
 import {
@@ -21,6 +21,7 @@ import { IconButton } from '@mui/material';
 import { toast } from 'react-toastify';
 import * as Sentry from '@sentry/react';
 import { LoadingIndicator } from '@components/LoadingIndicator';
+import { debounce } from 'es-toolkit';
 
 //
 //
@@ -96,21 +97,43 @@ const SignUp = () => {
   );
 
   /**
-   *
+   * 이메일 검증 함수
    */
-  const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isValidEmail && !isAuthorized) {
-      const emailCurrent = e.target.value;
-      setEmail(emailCurrent);
-      if (!EMAIL_REGEX.test(emailCurrent)) {
-        setEmailErrorMessage('잘못된 이메일 형식입니다.');
-        setValidEmail(false);
-      } else {
-        setEmailErrorMessage('');
-        setValidEmail(true);
-      }
+  const validateEmail = useCallback((email: string) => {
+    if (!email) {
+      setEmailErrorMessage('');
+      setValidEmail(false);
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailErrorMessage('잘못된 이메일 형식입니다.');
+      setValidEmail(false);
+    } else {
+      setEmailErrorMessage('');
+      setValidEmail(true);
     }
   }, []);
+
+  /**
+   *
+   */
+  const debouncedValidateEmail = useMemo(() => debounce(validateEmail, 500), [validateEmail]);
+
+  /**
+   *
+   */
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const emailCurrent = e.target.value;
+      setEmail(emailCurrent);
+
+      if (!isAuthorized) {
+        debouncedValidateEmail(emailCurrent);
+      }
+    },
+    [isAuthorized, debouncedValidateEmail],
+  );
 
   /**
    *
@@ -411,11 +434,11 @@ const SignUp = () => {
             />
             <InputBox
               type="text"
-              id="id"
-              name="id"
+              id="email"
+              name="email"
               placeholder="이메일 형식으로 작성해주세요."
               value={email}
-              onChange={handleIdChange}
+              onChange={handleEmailChange}
             />
             <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
               인증 메일 발송
