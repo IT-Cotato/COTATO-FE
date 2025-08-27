@@ -10,7 +10,7 @@ import btnClicked from '@assets/pixel_button_clicked.svg';
 
 type btnStateType = 'default' | 'hover' | 'clicked';
 
-interface Props {
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   BtnTextImg: React.FC<React.SVGProps<SVGSVGElement>>;
   width?: string;
   onClick?: () => void;
@@ -24,7 +24,12 @@ interface Props {
  * @param {React.FC<React.SVGProps<SVGSVGElement>>} BtnTextImg button text image(.svg) imported as React component
  * @returns pixel button component with animation
  */
-const CotatoPixelButton: React.FC<Props> = ({ BtnTextImg, width, onClick }) => {
+const CotatoPixelButton: React.FC<Props> = ({
+  BtnTextImg,
+  width,
+  onClick,
+  ...buttonElementProps
+}) => {
   const [btnState, setBtnState] = useState<btnStateType>('default');
 
   const theme = useTheme();
@@ -90,6 +95,7 @@ const CotatoPixelButton: React.FC<Props> = ({ BtnTextImg, width, onClick }) => {
         onMouseOver={() => setBtnState('hover')}
         onMouseLeave={() => setBtnState('default')}
         onClick={handleClick}
+        {...buttonElementProps}
       >
         <BtnImg src={getImgSrcByState(btnState)} $width={width} />
         <BtnTextDiv $btnState={btnState} $getTextPositionByState={getTextPositionByState}>
