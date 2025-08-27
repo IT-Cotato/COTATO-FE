@@ -36,11 +36,13 @@ const CSFirstSectionContent = () => {
         <CSFirstSectionContentStatus
           icon={<BulletListSolidIcon />}
           status={statusValue?.quizCount ?? 0}
+          unit="개"
           title="전체 문제 수"
         />
         <CSFirstSectionContentStatus
           icon={<CSIcon />}
           status={statusValue?.educationCount ?? 0}
+          unit="회"
           title="교육 횟수"
         />
       </StatusBox>
