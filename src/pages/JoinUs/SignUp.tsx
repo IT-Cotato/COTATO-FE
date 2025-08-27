@@ -18,11 +18,15 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import CotatoIcon from '@components/CotatoIcon';
 import { IconButton } from '@mui/material';
+import { toast } from 'react-toastify';
+import * as Sentry from '@sentry/react';
+import { LoadingIndicator } from '@components/LoadingIndicator';
 
 //
 //
 //
 
+const AUTH_CODE_MAX_LENGTH = 6;
 const EMAIL_REGEX = /^[^@]+@[^@]+$/;
 const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/;
 const PASSWORD_LENTH_REGEX = /^.{8,16}$/;
@@ -50,23 +54,24 @@ const AGREEMENT_ITEMS = [
 //
 
 const SignUp = () => {
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [name, setName] = useState('');
   const [tel, setTel] = useState('');
   const [mismatchError, setMismatchError] = useState(false);
   const [authNum, setAuthNum] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // 오류 메시지
-  const [idMessage, setIdMessage] = useState('');
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordCheckMessage, setPasswordCheckMessage] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [nameMessage, setNameMessage] = useState('');
   const [telMessage, setTelMessage] = useState('');
 
   // 유효성 검사
-  const [isId, setIsId] = useState(false);
+  const [isValidEmail, setValidEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordLength, setIsPasswordLength] = useState(false);
   const [isPasswordRegex, setIsPasswordRegex] = useState(false);
@@ -94,15 +99,15 @@ const SignUp = () => {
    *
    */
   const handleIdChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isId && !isAuthorized) {
+    if (!isValidEmail && !isAuthorized) {
       const emailCurrent = e.target.value;
-      setId(emailCurrent);
+      setEmail(emailCurrent);
       if (!EMAIL_REGEX.test(emailCurrent)) {
-        setIdMessage('잘못된 이메일 형식입니다.');
-        setIsId(false);
+        setEmailErrorMessage('잘못된 이메일 형식입니다.');
+        setValidEmail(false);
       } else {
-        setIdMessage('');
-        setIsId(true);
+        setEmailErrorMessage('');
+        setValidEmail(true);
       }
     }
   }, []);
@@ -169,16 +174,16 @@ const SignUp = () => {
   }, []);
 
   const emailData = {
-    email: id,
+    email: email,
   } as CotatoSendEmailRequest;
 
   /**
    *
    */
   const handleEmailSend = async () => {
-    if (isId) {
-      alert('인증 메일이 발송되었습니다.');
-    }
+    let errorMessage = '';
+    setIsLoading(true);
+
     await api
       .post('/v1/api/auth/verification', emailData, {
         params: {
@@ -186,12 +191,30 @@ const SignUp = () => {
         },
       })
       .catch((err) => {
-        if (err.response.status === 409) {
-          alert('이미 가입된 이메일입니다.');
-        } else if (err.response.status === 400) {
-          alert('이메일 형식을 다시 확인해주세요.');
+        switch (err.response.status) {
+          case 409:
+            errorMessage = '이미 가입된 이메일입니다.';
+            break;
+
+          case 400:
+            errorMessage = '이메일 형식을 다시 확인해주세요.';
+
+            break;
+
+          default:
+            Sentry.captureException(err);
+            errorMessage = '인증 메일 발송에 실패하였습니다. 다시 시도해주세요.';
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
+
+    if (errorMessage) {
+      toast.error(errorMessage);
+    } else {
+      toast.success('인증 메일이 발송되었습니다.');
+    }
   };
 
   /**
@@ -200,13 +223,13 @@ const SignUp = () => {
   const handleEmailAuthError = (errorCode: string) => {
     switch (errorCode) {
       case 'A-101':
-        alert('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
+        toast.error('인증번호가 일치하지 않습니다. 다시 확인해주세요.');
         break;
       case 'A-102':
-        alert('인증번호가 만료되었습니다. 다시 인증해주세요.');
+        toast.error('인증번호가 만료되었습니다. 다시 인증해주세요.');
         break;
       case 'A-202':
-        alert('인증번호 발급에 실패하였습니다. 다시 시도해주세요.');
+        toast.error('인증번호 발급에 실패하였습니다. 다시 시도해주세요.');
         break;
       default:
         console.log('Exception Error: 이메일 인증 실패');
@@ -221,13 +244,13 @@ const SignUp = () => {
     await api
       .get('/v1/api/auth/verification', {
         params: {
-          email: id,
+          email: email,
           code: authNum,
           type: 'sign-up',
         },
       })
       .then(() => {
-        alert('이메일 인증이 완료되었습니다.');
+        toast.success('이메일 인증이 완료되었습니다.');
         setIsAuthorized(true);
       })
       .catch((err) => {
@@ -242,31 +265,40 @@ const SignUp = () => {
    */
   const handleAuthNumChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isAuthorized) setAuthNum(e.target.value);
+    if (e.target.value.length === AUTH_CODE_MAX_LENGTH) {
+      handleAuthButtonClick();
+    }
   }, []);
 
   /**
    *
    */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (!policiesData?.policies) {
-      return;
+    const policies = policiesData?.policies ?? [];
+    const isPoliciesCheckedAll = policies.every((policy) => isChecked.get(policy.policyId ?? 0));
+
+    e.preventDefault();
+
+    if (!isPoliciesCheckedAll) {
+      return toast.error('이용 약관에 동의해주세요.');
     }
 
     if (
-      policiesData.policies.map((policy) => isChecked.get(policy.policyId ?? 0)).includes(false)
+      isName &&
+      isValidEmail &&
+      isAuthorized &&
+      isTel &&
+      isPassword &&
+      !mismatchError &&
+      isCheckedAll
     ) {
-      alert('이용 약관에 동의해주세요.');
-    }
-
-    e.preventDefault();
-    if (isName && isId && isAuthorized && isTel && isPassword && !mismatchError && isCheckedAll) {
       api
         .post<CotatoJoinResponse>('/v1/api/auth/join', {
-          email: id,
+          email: email,
           password: password,
           name: name,
           phoneNumber: tel,
-          policies: policiesData.policies.map((policy) => {
+          policies: policies.map((policy) => {
             // TODO: remove if statement after api type is fixed
             if (!policy.policyId) {
               throw new (Error as any)('policyId is undefined');
@@ -283,22 +315,22 @@ const SignUp = () => {
         })
         .catch((err) => {
           const errorCode = err.response.data.code;
-          if (errorCode === 'A-302') alert('이미 가입된 전화번호입니다.');
-          if (errorCode === 'A-401') alert('이메일 인증을 완료해주세요.');
+          if (errorCode === 'A-302') toast.error('이미 가입된 전화번호입니다.');
+          if (errorCode === 'A-401') toast.error('이메일 인증을 완료해주세요.');
         });
     } else {
       if (
         isName &&
-        isId &&
+        isValidEmail &&
         isAuthorized &&
         isTel &&
         isPassword &&
         !mismatchError &&
         !isCheckedAll
       ) {
-        alert('이용 약관에 동의해주세요.');
+        toast.error('이용 약관에 동의해주세요.');
       } else {
-        alert('입력값을 확인해주세요.');
+        toast.error('입력값을 확인해주세요.');
       }
     }
   };
@@ -382,14 +414,14 @@ const SignUp = () => {
               id="id"
               name="id"
               placeholder="이메일 형식으로 작성해주세요."
-              value={id}
+              value={email}
               onChange={handleIdChange}
             />
             <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
               인증 메일 발송
             </AuthButton>
           </InputDiv>
-          {!isId && idMessage && renderErrorMsg(idMessage)}
+          {!isValidEmail && emailErrorMessage && renderErrorMsg(emailErrorMessage)}
           <InputDiv>
             <InputBox
               type="text"
@@ -528,8 +560,13 @@ const SignUp = () => {
     return <SignUpSuccess />;
   };
 
+  //
+  //
+  //
+
   return (
     <Wrapper>
+      <LoadingIndicator isLoading={isLoading} />
       {renderSignUp()}
       {renderSignUpSuccess()}
     </Wrapper>
