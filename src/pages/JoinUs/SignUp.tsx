@@ -689,6 +689,14 @@ const InputBox = styled.input`
   &:focus {
     outline: none;
   }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-transition: background-color 9999s ease-out;
+  }
 `;
 
 const AuthButton = styled.button<{ disable: boolean }>`
