@@ -74,7 +74,7 @@ const StyledMobileSideMenuDrawerButton = styled.div<{ $slidein: boolean }>`
   align-items: center;
   border-radius: 1rem 0rem 0rem 1rem;
   background-color: ${({ theme }) => theme.colors.primary60};
-  z-index: 1000;
+  z-index: var(--z-index-mobile-side-menu-drawer);
   cursor: pointer;
   animation: ${({ $slidein }) =>
     $slidein ? 'anim__slide__in 0.5s forwards' : 'anim__slide__out 0.3s forwards'};

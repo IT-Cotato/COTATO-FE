@@ -202,7 +202,7 @@ const StyledDiv = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: var(--z-index-mobile-side-menu-drawer);
   background-color: rgba(0, 0, 0, 0.1);
 `;
 

@@ -1,6 +1,6 @@
 {
   "name": "cs-quiz-fe",
-  "version": "2.250523.0",
+  "version": "2.250818.0",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
