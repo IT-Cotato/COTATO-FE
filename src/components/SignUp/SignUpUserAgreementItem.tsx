@@ -91,14 +91,13 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
   };
 
   return (
-    <Wrapper>
-      <ItemDiv>
+    <Wrapper onClick={handleCheck}>
+      <ItemButton type="button">
         <CheckSection>
           <CotatoIcon
             style={{ cursor: 'pointer' }}
             icon="check-box-solid"
-            color={isChecked.get(policyId) ? theme.colors.sub3[60] : theme.colors.gray80_2}
-            onClick={handleCheck}
+            color={isChecked.get(policyId) ? theme.colors.sub3[60] : theme.colors.gray60}
           />
           <p>
             {title} ({necessaryOrOptional})
@@ -108,7 +107,7 @@ const SignUpUserAgreementItem: React.FC<SignUpUserAgreementItemProps> = ({
           <p>내용보기</p>
           <ArrowButton />
         </ContentSection>
-      </ItemDiv>
+      </ItemButton>
       {renderContent()}
     </Wrapper>
   );
@@ -129,8 +128,12 @@ const Wrapper = styled.div`
   }
 `;
 
-const ItemDiv = styled.div`
+const ItemButton = styled.button`
   display: flex;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
