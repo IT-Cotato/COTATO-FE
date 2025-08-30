@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { styled } from 'styled-components';
 import status_background from '@assets/cs_status_background.svg';
 import { Box } from '@mui/material';
@@ -20,6 +20,7 @@ const BOX_HEIGHT_SMALL = 6.25;
 interface CSFirstSectionContentStatusProps {
   icon: React.ReactNode;
   status: string | number;
+  unit: string;
   title: string;
 }
 
@@ -27,8 +28,25 @@ interface CSFirstSectionContentStatusProps {
 //
 //
 
-const CSFirstSectionContentStatus = ({ icon, status, title }: CSFirstSectionContentStatusProps) => {
+const CSFirstSectionContentStatus = ({
+  icon,
+  status,
+  unit,
+  title,
+}: CSFirstSectionContentStatusProps) => {
   const { isTabletOrSmaller } = useBreakpoints();
+
+  /**
+   * Abandon the ones place of the number
+   * 81 -> 80, 157 -> 150,
+   */
+  const roundDownOnesPlace = useCallback((number: string) => {
+    return number.replace(/\d$/, '0');
+  }, []);
+
+  //
+  //
+  //
 
   return (
     <Box
@@ -40,7 +58,10 @@ const CSFirstSectionContentStatus = ({ icon, status, title }: CSFirstSectionCont
     >
       <StatusBox>
         {icon}
-        <span>{status}회+</span>
+        <span>
+          {roundDownOnesPlace(status.toString())}
+          {unit}+
+        </span>
       </StatusBox>
       <StyledTypo>{title}</StyledTypo>
     </Box>
