@@ -371,7 +371,7 @@ const SignUp = () => {
               onChange={handleIdChange}
               disabled={isAuthorized}
             />
-            <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
+            <AuthButton type="button" onClick={handleEmailSend} disabled={isAuthorized}>
               인증 메일 발송
             </AuthButton>
           </InputDiv>
@@ -386,7 +386,7 @@ const SignUp = () => {
               onChange={handleAuthNumChange}
               disabled={isAuthorized}
             />
-            <AuthButton type="button" onClick={handleAuthButtonClick} disable={isAuthorized}>
+            <AuthButton type="button" onClick={handleAuthButtonClick} disabled={isAuthorized}>
               인증하기
             </AuthButton>
           </InputDiv>
@@ -623,7 +623,7 @@ const InputBox = styled.input<{ disabled?: boolean }>`
   `}
 `;
 
-const AuthButton = styled.button<{ disable: boolean }>`
+const AuthButton = styled.button<{ disabled: boolean }>`
   width: 6rem;
   height: 1.725rem;
   font-size: 0.8rem;
@@ -643,6 +643,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
     disabled: true;
     background-color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
     color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray60};
+    cursor: not-allowed;
   `}
 
   ${media.mobile`
