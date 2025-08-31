@@ -439,8 +439,9 @@ const SignUp = () => {
               placeholder="이메일 형식으로 작성해주세요."
               value={email}
               onChange={handleEmailChange}
+              disabled={isAuthorized}
             />
-            <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
+            <AuthButton type="button" onClick={handleEmailSend} disabled={isAuthorized}>
               인증 메일 발송
             </AuthButton>
           </InputDiv>
@@ -453,8 +454,9 @@ const SignUp = () => {
               placeholder="발송된 인증번호를 입력해주세요."
               value={authNum}
               onChange={handleAuthNumChange}
+              disabled={isAuthorized}
             />
-            <AuthButton type="button" onClick={handleAuthButtonClick} disable={isAuthorized}>
+            <AuthButton type="button" onClick={handleAuthButtonClick} disabled={isAuthorized}>
               인증하기
             </AuthButton>
           </InputDiv>
@@ -679,7 +681,7 @@ const StyledCotatoIcon = styled(CotatoIcon)`
   `}
 `;
 
-const InputBox = styled.input`
+const InputBox = styled.input<{ disabled?: boolean }>`
   border: none;
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
@@ -689,6 +691,13 @@ const InputBox = styled.input`
   &:focus {
     outline: none;
   }
+  ${({ disabled }) =>
+    disabled &&
+    `
+    disabled: true;
+    background-color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
+    color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray60};
+  `}
 `;
 
 const AuthButton = styled.button<{ disable: boolean }>`
@@ -705,12 +714,12 @@ const AuthButton = styled.button<{ disable: boolean }>`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  ${(props) =>
-    props.disable &&
+  ${({ disabled }) =>
+    disabled &&
     `
     background: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
     pointer-events: none;
-    cursor: default;
+    cursor: not-allowed;
   `}
 
   ${media.mobile`
