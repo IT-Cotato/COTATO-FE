@@ -700,7 +700,7 @@ const InputBox = styled.input<{ disabled?: boolean }>`
   `}
 `;
 
-const AuthButton = styled.button<{ disable: boolean }>`
+const AuthButton = styled.button<{ disabled: boolean }>`
   width: 6rem;
   height: 1.725rem;
   font-size: 0.8rem;
@@ -717,9 +717,9 @@ const AuthButton = styled.button<{ disable: boolean }>`
   ${({ disabled }) =>
     disabled &&
     `
-    background: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
-    pointer-events: none;
-    cursor: not-allowed;
+    disabled: true;
+    background-color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
+    color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray60};
   `}
 
   ${media.mobile`
