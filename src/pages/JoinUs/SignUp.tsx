@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import api from '@/api/api';
 import {
@@ -604,7 +604,7 @@ const StyledCotatoIcon = styled(CotatoIcon)`
   `}
 `;
 
-const InputBox = styled.input<{ disabled: boolean }>`
+const InputBox = styled.input<{ disabled?: boolean }>`
   border: none;
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
@@ -614,7 +614,7 @@ const InputBox = styled.input<{ disabled: boolean }>`
   &:focus {
     outline: none;
   }
-  ${({ disabled, theme }) =>
+  ${({ disabled }) =>
     disabled &&
     `
     disabled: true;
@@ -637,7 +637,7 @@ const AuthButton = styled.button<{ disable: boolean }>`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  ${({ disabled, theme }) =>
+  ${({ disabled }) =>
     disabled &&
     `
     disabled: true;
