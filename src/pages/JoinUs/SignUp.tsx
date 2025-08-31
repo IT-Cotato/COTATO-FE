@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import api from '@/api/api';
 import {
@@ -84,7 +84,10 @@ const SignUp = () => {
   const { data: policiesData } = useSWR<CotatoPoliciesResponse>(
     '/v2/api/policies?category=PERSONAL_INFORMATION',
     fetcher,
-    { revalidateOnFocus: false, keepPreviousData: true },
+    {
+      revalidateOnFocus: false,
+      keepPreviousData: true,
+    },
   );
 
   /**
@@ -165,7 +168,9 @@ const SignUp = () => {
     }
   }, []);
 
-  const emailData = { email: id } as CotatoSendEmailRequest;
+  const emailData = {
+    email: id,
+  } as CotatoSendEmailRequest;
 
   /**
    *
@@ -175,7 +180,11 @@ const SignUp = () => {
       alert('인증 메일이 발송되었습니다.');
     }
     await api
-      .post('/v1/api/auth/verification', emailData, { params: { type: 'sign-up' } })
+      .post('/v1/api/auth/verification', emailData, {
+        params: {
+          type: 'sign-up',
+        },
+      })
       .catch((err) => {
         if (err.response.status === 409) {
           alert('이미 가입된 이메일입니다.');
@@ -210,7 +219,13 @@ const SignUp = () => {
    */
   const handleAuthButtonClick = async () => {
     await api
-      .get('/v1/api/auth/verification', { params: { email: id, code: authNum, type: 'sign-up' } })
+      .get('/v1/api/auth/verification', {
+        params: {
+          email: id,
+          code: authNum,
+          type: 'sign-up',
+        },
+      })
       .then(() => {
         alert('이메일 인증이 완료되었습니다.');
         setIsAuthorized(true);
@@ -369,7 +384,6 @@ const SignUp = () => {
               placeholder="이메일 형식으로 작성해주세요."
               value={id}
               onChange={handleIdChange}
-              disabled={isAuthorized}
             />
             <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
               인증 메일 발송
@@ -384,7 +398,6 @@ const SignUp = () => {
               placeholder="발송된 인증번호를 입력해주세요."
               value={authNum}
               onChange={handleAuthNumChange}
-              disabled={isAuthorized}
             />
             <AuthButton type="button" onClick={handleAuthButtonClick} disable={isAuthorized}>
               인증하기
@@ -396,7 +409,9 @@ const SignUp = () => {
           <InputDiv>
             <CotatoIcon
               icon="phone-ringing-low-solid"
-              style={{ marginRight: '0.6rem' }}
+              style={{
+                marginRight: '0.6rem',
+              }}
               size="1.5rem"
               color={(theme) => theme.colors.gray30}
             />
@@ -604,7 +619,7 @@ const StyledCotatoIcon = styled(CotatoIcon)`
   `}
 `;
 
-const InputBox = styled.input<{ disabled: boolean }>`
+const InputBox = styled.input`
   border: none;
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
@@ -614,13 +629,6 @@ const InputBox = styled.input<{ disabled: boolean }>`
   &:focus {
     outline: none;
   }
-  ${({ disabled, theme }) =>
-    disabled &&
-    `
-    disabled: true;
-    background-color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
-    color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray60};
-  `}
 `;
 
 const AuthButton = styled.button<{ disable: boolean }>`
@@ -637,12 +645,12 @@ const AuthButton = styled.button<{ disable: boolean }>`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  ${({ disabled, theme }) =>
-    disabled &&
+  ${(props) =>
+    props.disable &&
     `
-    disabled: true;
-    background-color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
-    color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray60};
+    background: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
+    pointer-events: none;
+    cursor: default;
   `}
 
   ${media.mobile`
