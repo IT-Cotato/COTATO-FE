@@ -668,7 +668,7 @@ const StyledCotatoIcon = styled(CotatoIcon)`
   `}
 `;
 
-const InputBox = styled.input<{ disabled?: boolean }>`
+const InputBox = styled.input`
   border: none;
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
@@ -693,7 +693,7 @@ const InputBox = styled.input<{ disabled?: boolean }>`
   }
 `;
 
-const AuthButton = styled.button<{ disabled: boolean }>`
+const AuthButton = styled.button`
   width: 6rem;
   height: 1.725rem;
   font-size: 0.8rem;
@@ -707,14 +707,12 @@ const AuthButton = styled.button<{ disabled: boolean }>`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  ${({ disabled }) =>
-    disabled &&
-    `
-    disabled: true;
+
+  &:disabled {
     background-color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
     color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray60};
     cursor: not-allowed;
-  `}
+  }
 
   ${media.mobile`
     width: 4.25rem;
