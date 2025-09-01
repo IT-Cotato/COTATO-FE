@@ -251,7 +251,7 @@ const SignUp = () => {
   /**
    *
    */
-  const verifyAuthCode = async (code: string) => {
+  const verifyAuthCode = useCallback(async (email: string, code: string) => {
     await api
       .get('/v1/api/auth/verification', { params: { email, code, type: 'sign-up' } })
       .then(() => {
@@ -263,27 +263,30 @@ const SignUp = () => {
         const errorCode = err.response.data.code;
         handleEmailAuthError(errorCode);
       });
-  };
+  }, []);
 
   /**
    *
    */
   const handleAuthButtonClick = async () => {
-    await verifyAuthCode(authNum);
+    await verifyAuthCode(email, authNum);
   };
 
   /**
    *
    */
-  const handleAuthNumChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentAuthNum = e.target.value;
-    if (!isAuthorized) {
-      setAuthNum(currentAuthNum);
-    }
-    if (currentAuthNum.length === AUTH_CODE_MAX_LENGTH) {
-      await verifyAuthCode(currentAuthNum);
-    }
-  }, []);
+  const handleAuthNumChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const currentAuthNum = e.target.value;
+      if (!isAuthorized) {
+        setAuthNum(currentAuthNum);
+      }
+      if (currentAuthNum.length === AUTH_CODE_MAX_LENGTH) {
+        await verifyAuthCode(email, currentAuthNum);
+      }
+    },
+    [email, isAuthorized, verifyAuthCode],
+  );
 
   /**
    *
