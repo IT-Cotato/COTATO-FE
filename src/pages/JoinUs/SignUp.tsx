@@ -5,7 +5,6 @@ import {
   CotatoJoinRequest,
   CotatoJoinResponse,
   CotatoPoliciesResponse,
-  CotatoSendEmailRequest,
 } from 'cotato-openapi-clients';
 import { CotatoThemeType } from '@theme/theme';
 import { media } from '@theme/media';
@@ -193,10 +192,6 @@ const SignUp = () => {
     }
   }, []);
 
-  const emailData = {
-    email,
-  } as CotatoSendEmailRequest;
-
   /**
    *
    */
@@ -205,7 +200,7 @@ const SignUp = () => {
     setIsLoading(true);
 
     await api
-      .post('/v1/api/auth/verification', emailData, { params: { type: 'sign-up' } })
+      .post('/v1/api/auth/verification', { email }, { params: { type: 'sign-up' } })
       .catch((err) => {
         switch (err.response.status) {
           case 409:
@@ -304,9 +299,9 @@ const SignUp = () => {
     ) {
       api
         .post<CotatoJoinResponse>('/v1/api/auth/join', {
-          email: email,
-          password: password,
-          name: name,
+          email,
+          password,
+          name,
           phoneNumber: tel,
           policies: policies.map((policy) => {
             // TODO: remove if statement after api type is fixed
@@ -325,8 +320,15 @@ const SignUp = () => {
         })
         .catch((err) => {
           const errorCode = err.response.data.code;
-          if (errorCode === 'A-302') toast.error('이미 가입된 전화번호입니다.');
-          if (errorCode === 'A-401') toast.error('이메일 인증을 완료해주세요.');
+          switch (errorCode) {
+            case 'A-302': {
+              toast.error('이미 가입된 전화번호입니다.');
+              break;
+            }
+            case 'A-401':
+              toast.error('이메일 인증을 완료해주세요.');
+              break;
+          }
         });
     } else {
       if (
