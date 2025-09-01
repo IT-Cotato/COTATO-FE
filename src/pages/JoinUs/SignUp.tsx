@@ -90,10 +90,7 @@ const SignUp = () => {
   const { data: policiesData } = useSWR<CotatoPoliciesResponse>(
     '/v2/api/policies?category=PERSONAL_INFORMATION',
     fetcher,
-    {
-      revalidateOnFocus: false,
-      keepPreviousData: true,
-    },
+    { revalidateOnFocus: false, keepPreviousData: true },
   );
 
   /**
@@ -197,7 +194,7 @@ const SignUp = () => {
   }, []);
 
   const emailData = {
-    email: email,
+    email,
   } as CotatoSendEmailRequest;
 
   /**
@@ -208,11 +205,7 @@ const SignUp = () => {
     setIsLoading(true);
 
     await api
-      .post('/v1/api/auth/verification', emailData, {
-        params: {
-          type: 'sign-up',
-        },
-      })
+      .post('/v1/api/auth/verification', emailData, { params: { type: 'sign-up' } })
       .catch((err) => {
         switch (err.response.status) {
           case 409:
@@ -265,13 +258,7 @@ const SignUp = () => {
    */
   const handleAuthButtonClick = async () => {
     await api
-      .get('/v1/api/auth/verification', {
-        params: {
-          email: email,
-          code: authNum,
-          type: 'sign-up',
-        },
-      })
+      .get('/v1/api/auth/verification', { params: { email, code: authNum, type: 'sign-up' } })
       .then(() => {
         toast.success('이메일 인증이 완료되었습니다.');
         setIsAuthorized(true);
@@ -436,11 +423,12 @@ const SignUp = () => {
               type="text"
               id="email"
               name="email"
+              disabled={isAuthorized}
               placeholder="이메일 형식으로 작성해주세요."
               value={email}
               onChange={handleEmailChange}
             />
-            <AuthButton type="button" onClick={handleEmailSend} disable={isAuthorized}>
+            <AuthButton type="button" onClick={handleEmailSend} disabled={isAuthorized}>
               인증 메일 발송
             </AuthButton>
           </InputDiv>
@@ -453,8 +441,9 @@ const SignUp = () => {
               placeholder="발송된 인증번호를 입력해주세요."
               value={authNum}
               onChange={handleAuthNumChange}
+              disabled={isAuthorized}
             />
-            <AuthButton type="button" onClick={handleAuthButtonClick} disable={isAuthorized}>
+            <AuthButton type="button" onClick={handleAuthButtonClick} disabled={isAuthorized}>
               인증하기
             </AuthButton>
           </InputDiv>
@@ -464,9 +453,7 @@ const SignUp = () => {
           <InputDiv>
             <CotatoIcon
               icon="phone-ringing-low-solid"
-              style={{
-                marginRight: '0.6rem',
-              }}
+              style={{ marginRight: '0.6rem' }}
               size="1.5rem"
               color={(theme) => theme.colors.gray30}
             />
@@ -679,7 +666,7 @@ const StyledCotatoIcon = styled(CotatoIcon)`
   `}
 `;
 
-const InputBox = styled.input`
+const InputBox = styled.input<{ disabled?: boolean }>`
   border: none;
   width: 100%;
   background: ${({ theme }) => theme.colors.common.white};
@@ -688,6 +675,11 @@ const InputBox = styled.input`
   color: ${({ theme }) => theme.colors.common.black};
   &:focus {
     outline: none;
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.gray20};
+    color: ${({ theme }) => theme.colors.gray60};
   }
 
   &:-webkit-autofill,
@@ -699,7 +691,7 @@ const InputBox = styled.input`
   }
 `;
 
-const AuthButton = styled.button<{ disable: boolean }>`
+const AuthButton = styled.button<{ disabled: boolean }>`
   width: 6rem;
   height: 1.725rem;
   font-size: 0.8rem;
@@ -713,12 +705,13 @@ const AuthButton = styled.button<{ disable: boolean }>`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  ${(props) =>
-    props.disable &&
+  ${({ disabled }) =>
+    disabled &&
     `
-    background: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
-    pointer-events: none;
-    cursor: default;
+    disabled: true;
+    background-color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray20};
+    color: ${({ theme }: { theme: CotatoThemeType }) => theme.colors.gray60};
+    cursor: not-allowed;
   `}
 
   ${media.mobile`

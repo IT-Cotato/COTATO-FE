@@ -57,7 +57,7 @@ const CotatoGlobalFab = () => {
       },
     },
     errorReport: {
-      name: 'Report a Bug!',
+      name: '버그 문의',
       icon: <ReportIcon width="100%" height="100%" />,
       disabled: false,
       onClick: () => {},
