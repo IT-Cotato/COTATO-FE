@@ -63,15 +63,14 @@ const SignUpUserAgreement: React.FC<SignUpUserAgreementItemProps> = ({
    */
   const renderEntireAgreement = () => {
     return (
-      <TotalDiv>
+      <SelectAllButton type="button" onClick={handleEntireClick}>
         <CotatoIcon
           icon="check-box-solid"
           size="1.5rem"
           color={(theme) => (isCheckedAll ? theme.colors.sub3[60] : theme.colors.gray60)}
-          onClick={handleEntireClick}
         />
         <p>이용약관 전체 동의</p>
-      </TotalDiv>
+      </SelectAllButton>
     );
   };
 
@@ -126,9 +125,13 @@ const Wrapper = styled.div`
   height: fit-content;
 `;
 
-const TotalDiv = styled.div`
+const SelectAllButton = styled.button`
   display: flex;
   flex-direction: row;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
   align-items: center;
   width: 100%;
   p {
