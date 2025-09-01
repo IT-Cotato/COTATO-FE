@@ -12,6 +12,16 @@ import useSWRImmutable from 'swr/immutable';
 import { CotatoEducationCountResponse } from 'cotato-openapi-clients';
 import { DESKTOP_HEIGHT } from './constants';
 
+//
+//
+//
+
+const ICON_SIZE = 45;
+
+//
+//
+//
+
 const CSFirstSectionContent = () => {
   const { data: statusValue } = useSWRImmutable<CotatoEducationCountResponse>(
     'v1/api/education/counts',
@@ -20,6 +30,10 @@ const CSFirstSectionContent = () => {
 
   const theme = useTheme();
   const { isTabletOrSmaller } = useBreakpoints();
+
+  //
+  //
+  //
 
   return (
     <ContentWrapper>
@@ -34,13 +48,15 @@ const CSFirstSectionContent = () => {
       </Box>
       <StatusBox>
         <CSFirstSectionContentStatus
-          icon={<BulletListSolidIcon />}
+          icon={<BulletListSolidIcon height={ICON_SIZE} />}
           status={statusValue?.quizCount ?? 0}
+          unit="개"
           title="전체 문제 수"
         />
         <CSFirstSectionContentStatus
-          icon={<CSIcon />}
+          icon={<CSIcon height={ICON_SIZE} />}
           status={statusValue?.educationCount ?? 0}
+          unit="회"
           title="교육 횟수"
         />
       </StatusBox>
