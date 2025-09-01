@@ -251,9 +251,9 @@ const SignUp = () => {
   /**
    *
    */
-  const handleAuthButtonClick = async () => {
+  const verifyAuthCode = async (code: string) => {
     await api
-      .get('/v1/api/auth/verification', { params: { email, code: authNum, type: 'sign-up' } })
+      .get('/v1/api/auth/verification', { params: { email, code, type: 'sign-up' } })
       .then(() => {
         toast.success('이메일 인증이 완료되었습니다.');
         setIsAuthorized(true);
@@ -268,10 +268,20 @@ const SignUp = () => {
   /**
    *
    */
-  const handleAuthNumChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isAuthorized) setAuthNum(e.target.value);
-    if (e.target.value.length === AUTH_CODE_MAX_LENGTH) {
-      handleAuthButtonClick();
+  const handleAuthButtonClick = async () => {
+    await verifyAuthCode(authNum);
+  };
+
+  /**
+   *
+   */
+  const handleAuthNumChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const currentAuthNum = e.target.value;
+    if (!isAuthorized) {
+      setAuthNum(currentAuthNum);
+    }
+    if (currentAuthNum.length === AUTH_CODE_MAX_LENGTH) {
+      await verifyAuthCode(currentAuthNum);
     }
   }, []);
 
